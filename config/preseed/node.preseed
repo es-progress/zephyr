@@ -1,0 +1,157 @@
+##################
+## ESubuntu     ##
+##              ##
+## Preseed file ##
+## Node         ##
+##################
+
+# Localization
+##############
+
+# Language
+d-i debian-installer/language string en_GB:en
+# Country
+d-i debian-installer/country string GB
+# Locale
+d-i debian-installer/locale string en_GB.UTF-8
+
+# Keyboard
+
+# Disable automatic detection
+d-i console-setup/ask_detect boolean false
+# Keymap
+d-i keyboard-configuration/xkb-keymap select en
+# Layout
+d-i	keyboard-configuration/layout	select English (UK)
+d-i	keyboard-configuration/variant select English (UK)
+d-i	keyboard-configuration/layoutcode	string	gb
+d-i	keyboard-configuration/modelcode string pc105
+
+# Store defaults
+d-i keyboard-configuration/store_defaults_in_debconf_db boolean true
+keyboard-configuration keyboard-configuration/store_defaults_in_debconf_db boolean true
+
+# APT
+#####
+
+# Repository
+
+# Suite
+d-i mirror/suite string focal
+# Components
+d-i mirror/udeb/components multiselect main, universe
+d-i apt-setup/universe boolean true
+d-i apt-setup/backports boolean true
+d-i apt-setup/restricted boolean false
+apt-mirror-setup apt-setup/restricted boolean false
+apt-mirror-setup apt-setup/multiverse boolean false
+# Updates
+d-i apt-setup/services-select-ubuntu multiselect security
+d-i apt-setup/security_host string security.ubuntu.com
+d-i apt-setup/security_path string /ubuntu
+# Multiarch configuration
+d-i apt-setup/multiarch string i386
+
+# Mirroring
+
+# Use mirror
+d-i apt-setup/use_mirror boolean true
+apt-mirror-setup apt-setup/use_mirror boolean true
+# Protocol
+d-i mirror/protocol string http
+# Country
+d-i mirror/country string HU
+# URL
+d-i mirror/http/hostname string hu.archive.ubuntu.com
+d-i mirror/http/mirror select hu.archive.ubuntu.com
+# Directory
+d-i mirror/http/directory string /ubuntu
+apt-setup-udeb apt-setup/security_path string /ubuntu
+# HTTP proxy information (blank for none)
+d-i mirror/http/proxy string
+
+# Users
+#######
+
+# Create root account
+d-i passwd/root-login boolean true
+# Create admin user account
+d-i passwd/make-user boolean false
+
+# Root password in clear text
+d-i passwd/root-password password kulapapa
+d-i passwd/root-password-again password kulapapa
+# Root password in encrypted hash.
+#d-i passwd/root-password-crypted password [crypt(3) hash]
+
+# Warn about weak passwords
+d-i user-setup/allow-password-weak boolean true
+# Enable shadow passwords?
+user-setup-udeb	passwd/shadow	boolean	true
+
+# Timezone
+##########
+
+# Set hardware clock to UTC
+d-i clock-setup/utc boolean true
+# Timezone
+d-i time/zone string Europe/Budapest
+# Use NTP
+d-i clock-setup/ntp boolean true
+# NTP server
+d-i clock-setup/ntp-server string ntp.ubuntu.com
+
+# Packages
+##########
+
+# Install recommended packages
+d-i base-installer/install-recommends boolean true
+# Kernel image
+d-i base-installer/kernel/image string linux-generic
+
+# Package groups
+tasksel	tasksel/first	multiselect	openssh-server
+d-i pkgsel/include string apt-transport-https
+# Language packs
+d-i pkgsel/language-packs multiselect
+# Auto updates
+d-i pkgsel/update-policy select none
+# Popularity contest
+popularity-contest popularity-contest/participate boolean false
+
+# Run `apt update`
+d-i pkgsel/updatedb boolean true
+# Upgrade packages
+d-i pkgsel/upgrade select none
+
+# Boot loader
+#############
+
+# Skip GRUB install
+d-i grub-installer/skip boolean false
+# Skip lilo install
+d-i lilo-installer/skip boolean true
+
+# Install GRUB to the MBR
+d-i grub-installer/only_debian boolean true
+
+# SSH
+#####
+
+# Password login
+d-i openssh-server/password-authentication string true
+openssh-server openssh-server/password-authentication boolean true
+# Root login
+d-i openssh-server/permit-root-login string true
+openssh-server openssh-server/permit-root-login boolean true
+d-i preseed/late_command string \
+    in-target sed -i '/PermitRootLogin/ c PermitRootLogin yes' /etc/ssh/sshd_config
+
+# Random
+########
+
+# Avoid message about the install being complete
+d-i finish-install/reboot_in_progress note
+
+# Power off when finished
+d-i debian-installer/exit/poweroff boolean true
