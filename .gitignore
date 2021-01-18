@@ -1,3 +1,11 @@
-# Git-ignore
+################
+## ESubuntu   ##
+##            ##
+## git-ignore ##
+################
+
+# ISO files
 /iso
+
+# Mounted images
 /mnt
