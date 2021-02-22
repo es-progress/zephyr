@@ -1,5 +1,0 @@
-"*":
-  "file-types":
-    "*.cnf": "source.apache-config"
-    "*.yml": "source.ansible-advanced"
-    ".bash*": "source.shell"
