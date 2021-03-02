@@ -9,3 +9,6 @@
 
 # Mounted images
 /mnt
+
+# Static generated content
+/docs/site
