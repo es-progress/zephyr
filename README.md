@@ -4,7 +4,7 @@ This is a custom Ubuntu remix. It is packaged as a bootable ISO file,
 which can be burned to an USB stick and can act like a rescue (live) CD.
 Then you can install ESubuntu.
 
-If you implement your own customizations (maybe not ones that I prefer :wink:),
+If you implement your own customizations (probably not the ones I prefer :wink:),
 you can have an installer that creates an Ubuntu system which is already configured for you.
 
 Basically you can fully automate Ubuntu customization & configuration.
