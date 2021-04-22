@@ -1,4 +1,4 @@
 "*":
   "file-types":
     "**/shell/**": "source.shell"
-    "**/.bash*": "source.shell"
+    "**/bash/**": "source.shell"
