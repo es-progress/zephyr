@@ -2,3 +2,4 @@
   "file-types":
     "**/shell/**": "source.shell"
     "**/bash/**": "source.shell"
+    "**/.ssh/**": "source.git-config"
