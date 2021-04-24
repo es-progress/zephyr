@@ -1,0 +1,57 @@
+# shellcheck shell=bash
+###############
+## ES-Ubuntu ##
+##           ##
+## .inputrc  ##
+###############
+
+############
+# SETTINGS #
+############
+
+# Colors
+set colored-completion-prefix on
+set colored-stats on
+
+# Show completions instantly (on first TAB)
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+
+###############
+# KEYBINDINGS #
+###############
+
+# Alt + arrows
+# Delete
+##############
+
+# Right: delete from cursor
+"\e[1;3C": kill-line
+
+# Left: delete behind cursor
+"\e[1;3D": backward-kill-line
+
+# Down: delete word behind cursor
+"\e[1;3B": backward-kill-word
+
+# Up: delete current word
+"\e[1;3A": kill-word
+
+# Ctrl + DEL clear screen
+"\e[3;5~": clear-screen
+
+# Ctrl + arrows
+# Move
+###############
+
+# Right: Forward one word
+"\e[1;5C": forward-word
+
+# Left: Back one word
+"\e[1;5D": backward-word
+
+# Down: Start of line
+"\e[1;5B": beginning-of-line
+
+# Up: End of line
+"\e[1;5A": end-of-line
