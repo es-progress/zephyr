@@ -2,4 +2,8 @@
   "file-types":
     "**/shell/**": "source.shell"
     "**/bash/**": "source.shell"
-    "**/.ssh/**": "source.git-config"
+    "**/.bash/**": "source.shell"
+    "**/.inputrc": "source.shell"
+    "**/ssh/**": "source.git-config"
+    "**/*nanorc": "source.git-config"
+    "**/custom/mc/*": "source.ini"
