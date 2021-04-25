@@ -1,0 +1,3 @@
+[submodule "files/shell/es-progress"]
+    path = files/shell/es-progress
+    url = git@github.com:es-progress/shell.git
