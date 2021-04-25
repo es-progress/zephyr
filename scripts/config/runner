@@ -17,6 +17,6 @@ filter="${1:-}"
 base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Bash init
-run-parts --regex="${filter}" "${base_dir}/init"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/init"
 # Tools
-run-parts --regex="${filter}" "${base_dir}/tools"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/tools"
