@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Runner    ##
+## Configs   ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Parse options
+filter="${1:-}"
+
+# Get script dir
+base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+# Bash init
+run-parts --regex="${filter}" "${base_dir}/01_init"
+# Tools
+run-parts --regex="${filter}" "${base_dir}/02_tools"
