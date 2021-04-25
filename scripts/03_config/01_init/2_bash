@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Bash      ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Allow dot globbing
+shopt -s dotglob
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    print-error "Don't run as root!"
+    exit 1
+fi
+
+# Global
+echo -n "Copy global Bash files..."
+cd "${ESUBUNTU_HOME}/custom/bash/global"
+for file in *; do
+    sudo cp -r "${file}" /root/
+    sudo cp -r "${file}" /etc/skel/
+    cp -r "${file}" ~
+done
+echo "Done."
+
+# Root
+echo -n "Copy root Bash files..."
+cd "${ESUBUNTU_HOME}/custom/bash/root"
+for file in *; do
+    sudo cp -r "${file}" /root/
+done
+echo "Done."
+
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -d custom/bash ]]; then # Local Bash files exists
+        echo -n "Copy local Bash files..."
+        cd custom/bash
+        for file in *; do
+            cp -a "${file}" ~
+        done
+        echo "Done."
+    fi
+fi
+
+exit 0

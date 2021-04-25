@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Scripts   ##
+###############
+
+##########
+# CONFIG #
+##########
+
+# Global shell programs destination
+dest_global_bin=/usr/local/bin
+# Global shell library destination
+dest_global_lib=/usr/local/lib/esubuntu
+# Local shell programs destination
+dest_local_bin=~/bin
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    print-error "Don't run as root!"
+    exit 1
+fi
+
+# Shell programs
+echo -n "Copy global shell scripts..."
+sudo mkdir -p "${dest_global_bin}"
+cd "${ESUBUNTU_HOME}/files/shell/es-progress/bin"
+for file in *; do
+    sudo cp "${file}" "${dest_global_bin}"
+    sudo chown root:root "${dest_global_bin}/${file}"
+    sudo chmod =0755 "${dest_global_bin}/${file}"
+done
+echo "Done."
+
+# Shell library
+echo -n "Copy global shell library..."
+sudo mkdir -p "${dest_global_lib}"
+cd "${ESUBUNTU_HOME}/files/shell/es-progress/lib"
+for file in *; do
+    sudo cp "${file}" "${dest_global_lib}"
+    sudo chown root:root "${dest_global_lib}/${file}"
+    sudo chmod =0755 "${dest_global_lib}/${file}"
+done
+echo "Done."
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -d files/shell ]]; then # Local shell files exits
+        echo -n "Copy local shell scripts..."
+        mkdir -p "${dest_local_bin}"
+        cd files/shell
+        for file in *; do
+            cp -a "${file}" "${dest_local_bin}"
+        done
+        echo "Done."
+    fi
+fi
+
+exit 0
