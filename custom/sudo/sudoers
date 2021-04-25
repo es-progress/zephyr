@@ -1,0 +1,14 @@
+#################
+## ES-Ubuntu   ##
+##             ##
+## sudo        ##
+## User config ##
+#################
+
+# Settings
+Defaults  timestamp_timeout=360
+Defaults  insults
+Defaults  env_keep="PATH_ENV_VARS PATH_SOURCER DIR_SHELL_LIB"
+
+# Give sudo
+{{ user }} ALL=(ALL:ALL) ALL

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## sudoers   ##
+###############
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    print-error "Don't run as root!"
+    exit 1
+fi
+
+echo "Customizing sudoers..."
+
+# Add user name to template
+tmp_file=$(mktemp)
+sed "s/{{ user }}/${USER}/g" <"${ESUBUNTU_HOME}/custom/sudo/sudoers" >"${tmp_file}"
+
+# Verify new file
+visudo -c -s "${tmp_file}"
+
+# Copy file
+sudo cp "${tmp_file}" "/etc/sudoers.d/${USER}"
+
+# Verify full sudoers
+sudo visudo -c -s
+
+echo "Done."
+
+exit 0
