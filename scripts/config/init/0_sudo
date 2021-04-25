@@ -20,20 +20,20 @@ if [[ $(id -u) -eq 0 ]]; then
     exit 1
 fi
 
-echo "Customizing sudoers..."
+echo -n "Customizing sudoers..."
 
 # Add user name to template
 tmp_file=$(mktemp)
 sed "s/{{ user }}/${USER}/g" <"${ESUBUNTU_HOME}/custom/sudo/sudoers" >"${tmp_file}"
 
 # Verify new file
-visudo -c -s "${tmp_file}"
+visudo -c -s "${tmp_file}" >/dev/null
 
 # Copy file
 sudo cp "${tmp_file}" "/etc/sudoers.d/${USER}"
 
 # Verify full sudoers
-sudo visudo -c -s
+sudo visudo -c -s >/dev/null
 
 echo -e "\e[32m\e[1mDone\e[0m"
 
