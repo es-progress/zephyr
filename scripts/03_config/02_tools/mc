@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## mc        ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root
+
+echo -n "Copy mc config files..."
+
+sudo mkdir -p /root/.config/mc
+mkdir -p ~/.config/mc
+
+sudo cp ${ESUBUNTU_HOME}/custom/mc/* /root/.config/mc/
+cp ${ESUBUNTU_HOME}/custom/mc/* ~/.config/mc
+
+print-finish
+
+exit 0
