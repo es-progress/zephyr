@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## SSH       ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Allow dot globbing
+shopt -s dotglob
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root
+
+echo -n "Copy SSH config files..."
+mkdir -p ~/.ssh
+cp -a ${ESUBUNTU_HOME}/custom/ssh/* ~/.ssh/
+print-finish
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -d custom/ssh ]]; then # Local SSH files exists
+        echo -n "Copy local SSH config files..."
+        cd custom/ssh
+        for file in *; do
+            cp -a "${file}" ~/.ssh/
+        done
+        print-finish
+    fi
+fi
+
+exit 0
