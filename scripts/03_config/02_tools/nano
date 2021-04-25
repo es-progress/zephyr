@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## nano      ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root
+
+echo -n "Copy nano config files..."
+
+# Global
+sudo cp "${ESUBUNTU_HOME}/custom/nano/nanorc" /etc/
+sudo cp "${ESUBUNTU_HOME}/custom/nano/conf.nanorc" /usr/share/nano/
+sudo cp "${ESUBUNTU_HOME}/custom/nano/markdown.nanorc" /usr/share/nano/
+
+print-finish
+
+exit 0
