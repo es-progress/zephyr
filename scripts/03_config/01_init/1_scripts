@@ -40,7 +40,7 @@ for file in *; do
     sudo chown root:root "${dest_global_bin}/${file}"
     sudo chmod =0755 "${dest_global_bin}/${file}"
 done
-echo "Done."
+echo -e "\e[32m\e[1mDone\e[0m"
 
 # Shell library
 echo -n "Copy global shell library..."
@@ -51,7 +51,7 @@ for file in *; do
     sudo chown root:root "${dest_global_lib}/${file}"
     sudo chmod =0755 "${dest_global_lib}/${file}"
 done
-echo "Done."
+echo -e "\e[32m\e[1mDone\e[0m"
 
 # Local
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
@@ -64,7 +64,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
         for file in *; do
             cp -a "${file}" "${dest_local_bin}"
         done
-        echo "Done."
+        echo -e "\e[32m\e[1mDone\e[0m"
     fi
 fi
 

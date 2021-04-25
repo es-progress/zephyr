@@ -27,7 +27,7 @@ for file in *; do
     sudo cp -r "${file}" /etc/skel/
     cp -r "${file}" ~
 done
-echo "Done."
+echo -e "\e[32m\e[1mDone\e[0m"
 
 # Root
 echo -n "Copy root Bash files..."
@@ -35,7 +35,7 @@ cd "${ESUBUNTU_HOME}/custom/bash/root"
 for file in *; do
     sudo cp -r "${file}" /root/
 done
-echo "Done."
+echo -e "\e[32m\e[1mDone\e[0m"
 
 
 # Local
@@ -48,7 +48,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
         for file in *; do
             cp -a "${file}" ~
         done
-        echo "Done."
+        echo -e "\e[32m\e[1mDone\e[0m"
     fi
 fi
 
