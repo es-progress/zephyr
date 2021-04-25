@@ -12,3 +12,6 @@
 
 # Static generated content
 /docs/site
+
+# Local content
+/local
