@@ -10,9 +10,6 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Allow dot globbing
-shopt -s dotglob
-
 # Import library
 source "${PATH_SOURCER}"
 
