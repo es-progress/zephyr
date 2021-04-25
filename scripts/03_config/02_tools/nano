@@ -19,9 +19,12 @@ check-not-root
 echo -n "Copy nano config files..."
 
 # Global
-sudo cp "${ESUBUNTU_HOME}/custom/nano/nanorc" /etc/
-sudo cp "${ESUBUNTU_HOME}/custom/nano/conf.nanorc" /usr/share/nano/
-sudo cp "${ESUBUNTU_HOME}/custom/nano/markdown.nanorc" /usr/share/nano/
+sudo cp "${ESUBUNTU_HOME}/custom/nano/nanorc" /etc/nanorc
+sudo chmod =0644 /etc/nanorc
+sudo cp "${ESUBUNTU_HOME}/custom/nano/conf.nanorc" /usr/share/nano/conf.nanorc
+sudo chmod =0644 /usr/share/nano/conf.nanorc
+sudo cp "${ESUBUNTU_HOME}/custom/nano/markdown.nanorc" /usr/share/nano/markdown.nanorc
+sudo chmod =0644 /usr/share/nano/markdown.nanorc
 
 print-finish
 
