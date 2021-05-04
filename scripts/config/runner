@@ -16,7 +16,24 @@ filter="${1:-}"
 # Get script dir
 base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-# Bash init
+# Init
+echo
+echo "Initialize"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/init"
+
+# shell
+echo
+echo "Setup shell"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/shell"
+
 # Tools
+echo
+echo "Config tools"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/tools"
+
+# GNOME
+echo
+echo "Config GNOME"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/gnome"
+
+exit 0
