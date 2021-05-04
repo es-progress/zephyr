@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Gnome     ##
+## Shortcuts ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root || exit 1
+
+echo -n "Setting keyboard shortcuts.."
+
+# Remove defaults
+#################
+dconf write /org/gnome/settings-daemon/plugins/media-keys/area-screenshot "['']"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/screenshot "['']"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/window-screenshot "['']"
+dconf write /org/gnome/shell/keybindings/toggle-application-view "['']"
+dconf write /org/gnome/shell/keybindings/toggle-message-tray "['']"
+dconf write /org/gnome/shell/keybindings/toggle-overview "['']"
+
+# Add new
+#########
+
+# Launch terminal
+dconf write /org/gnome/settings-daemon/plugins/media-keys/terminal "['<Super>t']"
+
+# Mouse single click
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Single click'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'xdetool click 1'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'Menu'"
+
+# Mouse double click
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name "'Double click'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command "'xdetool click --repeat 2 1'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Primary>Menu'"
+
+# Window screenshot
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/name "'Take a window shot'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/command "'gnome-screenshot -w'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/binding "'Print'"
+
+# Area shot
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/name "'Take shot of an area'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/command "'gnome-screenshot -a'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/binding "'<Shift>Print'"
+
+# Assemble value
+value=()
+for n in {0..3}; do
+    value+=("'/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom${n}/'")
+done
+values=$(implode "," ${value[*]})
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "[${values}]"
+
+# Super
+dconf write /org/gnome/shell/extensions/dash-to-dock/shortcut-text "''"
+dconf write /org/gnome/shell/extensions/dash-to-dock/shortcut "['']"
+
+# Config
+########
+
+# Set screenshots auto-save directory
+dconf write /org/gnome/gnome-screenshot/auto-save-directory "'~/pictures/screenshot'"
+
+print-finish
+
+exit 0
