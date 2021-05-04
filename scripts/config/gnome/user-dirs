@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Gnome     ##
+## User dirs ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Nautilus links
+################
+
+# Global
+echo -n "Copy global user dirs..."
+sudo cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.defaults" /etc/xdg/
+print-finish
+
+# User
+echo -n "Copy user dirs..."
+cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.dirs" ~/.config/
+print-finish
+
+# Bookmarks
+###########
+
+# Global bookmarks
+echo -n "Add global bookmarks..."
+# Loop through bookmarks
+while read -r line; do
+    # Check if it already contains
+    if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
+        echo "$line" >> ~/.config/gtk-3.0/bookmarks
+    fi
+done < "${ESUBUNTU_HOME}/custom/user-dirs/bookmarks"
+print-finish
+
+# Local bookmarks
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -f custom/user-dirs/bookmarks ]]; then # Local bookmarks exists
+        echo -n "Add local bookmarks..."
+        while read -r line; do
+            if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
+                echo "$line" >> ~/.config/gtk-3.0/bookmarks
+            fi
+        done < custom/user-dirs/bookmarks
+        print-finish
+    fi
+fi
+
+exit 0
