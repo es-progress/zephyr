@@ -15,7 +15,7 @@ shopt -s dotglob
 
 # Check if not run as root
 if [[ $(id -u) -eq 0 ]]; then
-    print-error "Don't run as root!"
+    echo "Don't run as root!"
     exit 1
 fi
 
