@@ -14,7 +14,7 @@ IFS=$'\n\t'
 source "${PATH_SOURCER}"
 
 # Check if not run as root
-check-not-root
+check-not-root || exit 1
 
 echo -n "Copy nano config files..."
 
