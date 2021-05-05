@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+###################
+## ES-Ubuntu     ##
+##               ##
+## Config        ##
+## pulse-effects ##
+###################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Config
+echo -n "Copy pulse-effect presets..."
+mkdir -p ~/.config/PulseEffects/output/
+cp ${ESUBUNTU_HOME}/custom/pulse-effects/* ~/.config/PulseEffects/output/
+print-finish
+
+exit 0
