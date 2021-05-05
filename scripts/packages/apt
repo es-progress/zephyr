@@ -28,13 +28,11 @@ apt_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packa
 while read -r line; do
 
     # Read package name
-    package=$(echo "${line}" | cut -d";" -f1)
+    package=$(echo "${line}" | cut -d"," -f1)
 
     # Read repo name (if supplied)
     repo=""
-    if [[ "${line}" =~ ";" ]]; then
-        repo=$(echo "${line}" | cut -d";" -f2)
-    fi
+    [[ "${line}" =~ "," ]] && repo=$(echo "${line}" | cut -d"," -f2)
 
     # Add repo
     if [[ -n "${repo}" ]]; then
