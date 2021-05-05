@@ -48,3 +48,5 @@ pinta,ppa:pinta-maintainers/pinta-stable
 shotwell,ppa:sicklylife/shotwell
 gnome-shell-pomodoro
 nautilus-admin
+pulseeffects,ppa:mikhailnov/pulseeffects
+pulseaudio
