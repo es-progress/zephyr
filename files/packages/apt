@@ -19,6 +19,8 @@ software-properties-common
 curl
 lftp
 whois
+ipset
+conntrack
 
 # Security
 pass

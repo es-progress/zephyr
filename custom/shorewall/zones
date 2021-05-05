@@ -1,0 +1,11 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## Shorewall ##
+## Zones     ##
+###############
+
+#ZONE   TYPE      OPTIONS         IN            OUT
+###################################################
+fw      firewall
+net     ipv4
