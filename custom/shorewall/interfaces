@@ -1,0 +1,14 @@
+################
+## ES-Ubuntu  ##
+##            ##
+## Shorewall  ##
+## Interfaces ##
+################
+
+#------------------------------------------------------------------------------
+# For information about entries in this file, type "man shorewall-interfaces"
+###############################################################################
+?FORMAT 2
+###############################################################################
+#ZONE	INTERFACE	OPTIONS
+net     {{ interface }}       dhcp,tcpflags,routefilter,logmartians,nosmurfs,sourceroute=0
