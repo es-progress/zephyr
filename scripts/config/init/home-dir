@@ -28,11 +28,14 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
 
     if [[ -f custom/user-dirs/home-dirs ]]; then # Local dirs file exists
         echo -n "Create home dirs..."
+
+        # Remove blank lines, comments from bookmarks
+        home_dirs=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' custom/user-dirs/home-dirs)
         while read -r line; do
             # eval line to let the shell expand tilde and env vars
             arg=$(eval echo "${line}")
             mkdir -p "${arg}"
-        done < custom/user-dirs/home-dirs
+        done <<< "${home_dirs}"
         echo -e "\e[32m\e[1mDone\e[0m"
     fi
 fi

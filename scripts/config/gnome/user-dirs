@@ -3,7 +3,7 @@
 ## ES-Ubuntu ##
 ##           ##
 ## Config    ##
-## Gnome     ##
+## GNOME     ##
 ## User dirs ##
 ###############
 
@@ -35,13 +35,14 @@ print-finish
 
 # Global bookmarks
 echo -n "Add global bookmarks..."
-# Loop through bookmarks
+# Remove blank lines, comments from bookmarks
+bookmarks=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/custom/user-dirs/bookmarks")
 while read -r line; do
     # Check if it already contains
     if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
         echo "$line" >> ~/.config/gtk-3.0/bookmarks
     fi
-done < "${ESUBUNTU_HOME}/custom/user-dirs/bookmarks"
+done <<< "${bookmarks}"
 print-finish
 
 # Local bookmarks
@@ -50,11 +51,14 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
 
     if [[ -f custom/user-dirs/bookmarks ]]; then # Local bookmarks exists
         echo -n "Add local bookmarks..."
+
+        # Remove blank lines, comments from bookmarks
+        bookmarks=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' custom/user-dirs/bookmarks)
         while read -r line; do
             if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
                 echo "$line" >> ~/.config/gtk-3.0/bookmarks
             fi
-        done < custom/user-dirs/bookmarks
+        done <<< "${bookmarks}"
         print-finish
     fi
 fi
