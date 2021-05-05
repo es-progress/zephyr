@@ -36,4 +36,9 @@ echo
 echo "Config GNOME"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/gnome"
 
+# Apps
+echo
+echo "Config apps"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/apps"
+
 exit 0
