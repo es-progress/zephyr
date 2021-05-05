@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## apt       ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# apt update
+echo "Update apt cache..."
+sudo apt update
+echo -e "\e[32m\e[1mDone\e[0m"
+
+# Remove blank lines, comments from package list
+apt_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/apt")
+
+# Parse package list
+while read -r line; do
+
+    # Read package name
+    package=$(echo "${line}" | cut -d";" -f1)
+
+    # Read repo name (if supplied)
+    repo=""
+    if [[ "${line}" =~ ";" ]]; then
+        repo=$(echo "${line}" | cut -d";" -f2)
+    fi
+
+    # Add repo
+    if [[ -n "${repo}" ]]; then
+        echo
+        echo "Adding apt repo: ${repo}"
+        sudo add-apt-repository --yes "${repo}"
+        echo -e "\e[32m\e[1mDone\e[0m"
+    fi
+
+    # Install package
+    echo
+    echo "Installing ${package}..."
+    sudo apt install --yes "${package}"
+    echo -e "\e[32m\e[1mDone\e[0m"
+done <<< "${apt_packages}"
+
+exit 0

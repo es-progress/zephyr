@@ -6,3 +6,4 @@
     "**/ssh/**": "source.git-config"
     "**/*nanorc": "source.git-config"
     "**/custom/mc/*": "source.ini"
+    "**/files/packages/*": "source.ini"
