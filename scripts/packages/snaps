@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## snap      ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# Remove blank lines, comments from package list
+snaps=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/snap")
+
+# Parse snap list
+while read -r line; do
+
+    # Read package name
+    package=$(echo "${line}" | cut -d"," -f1)
+
+    # Read mode (if supplied)
+    mode=""
+    [[ "${line}" =~ "," ]] && mode=$(echo "${line}" | cut -d"," -f2)
+
+    # Set options
+    options=""
+    [[ "${mode}" == "classic" ]] && options="--classic"
+
+    # Install snap
+    echo
+    echo "Installing ${package}..."
+    sudo snap install ${options} "${package}"
+    echo -e "\e[32m\e[1mDone\e[0m"
+
+done <<< "${snaps}"
+
+exit 0
