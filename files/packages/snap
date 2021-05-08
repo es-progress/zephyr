@@ -1,0 +1,22 @@
+########################
+## ES-Ubuntu          ##
+##                    ##
+## Packages           ##
+## snaps to install   ##
+##                    ##
+## Format:            ##
+## snap_name[,mode]   ##
+## mode: install mode ##
+########################
+
+# Apps
+######
+phpstorm,classic
+libreoffice
+spotify
+vlc
+skype,classic
+
+# Tools
+#######
+nmap
