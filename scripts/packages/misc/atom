@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## Atom      ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# Add Atom repo
+echo -n "Add Atom repo..."
+sudo wget -qO - https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
+sudo bash -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
+
+# Install
+echo "Install Atom"
+sudo apt-get update
+sudo apt install --yes atom
+
+# Base packages
+echo "Install base Atom packages"
+apm install sync-settings
+apm install sync-settings-git-location
+echo -e "\e[32m\e[1mDone\e[0m"
+
+exit 0

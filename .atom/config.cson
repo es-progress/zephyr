@@ -8,3 +8,4 @@
     "**/custom/mc/*": "source.ini"
     "**/custom/shorewall/*": "source.git-config"
     "**/files/packages/*": "source.git-config"
+    "**/scripts/**": "source.shell"
