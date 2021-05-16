@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## Shell bin ##
+###############
+
+##########
+# CONFIG #
+##########
+
+# Global shell programs destination
+dest_global_bin=/usr/local/bin
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# Vendor programs
+echo -n "Copy vendor shell programs..."
+sudo mkdir -p "${dest_global_bin}"
+cd "${ESUBUNTU_HOME}/files/shell/vendor"
+for file in *; do
+    sudo cp "${file}" "${dest_global_bin}"
+    sudo chown root:root "${dest_global_bin}/${file}"
+    sudo chmod =0755 "${dest_global_bin}/${file}"
+done
+echo -e "\e[32m\e[1mDone\e[0m"
+
+exit 0
