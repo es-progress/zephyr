@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## Local     ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -d custom/packages ]]; then # Local installer exists
+        cd custom/packages
+        run-parts --report  .
+    fi
+fi
+
+exit 0
