@@ -6,9 +6,8 @@
 ## snap      ##
 ###############
 
-# Strict mode
+# Strict mode minus IFS
 set -euo pipefail
-IFS=$'\n\t'
 
 # Check if not run as root
 if [[ $(id -u) -eq 0 ]]; then
@@ -20,14 +19,7 @@ fi
 snaps=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/snap")
 
 # Parse snap list
-while read -r line; do
-
-    # Read package name
-    package=$(echo "${line}" | cut -d"," -f1)
-
-    # Read mode (if supplied)
-    mode=""
-    [[ "${line}" =~ "," ]] && mode=$(echo "${line}" | cut -d"," -f2)
+while read -r package mode; do
 
     # Set options
     options=""
