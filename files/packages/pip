@@ -1,0 +1,16 @@
+################################
+## ES-Ubuntu                  ##
+##                            ##
+## Packages                   ##
+## Python packages to install ##
+##                            ##
+## Format:                    ##
+## package_name               ##
+################################
+
+# mkdocs
+mkdocs
+mkdocs-material
+
+# beautysh
+beautysh

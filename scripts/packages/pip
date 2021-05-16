@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## pip       ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Check if not run as root
+if [[ $(id -u) -eq 0 ]]; then
+    echo "Don't run as root!"
+    exit 1
+fi
+
+# apt update
+echo "Update apt cache..."
+sudo apt update
+echo -e "\e[32m\e[1mDone\e[0m"
+
+# Install pip (Python package installer)
+echo "Installing pip3..."
+sudo apt install --yes python3-pip
+echo -e "\e[32m\e[1mDone\e[0m"
+
+# Remove blank lines, comments from package list
+pip_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/pip")
+
+# Parse package list
+while read -r package; do
+    # Install package
+    echo
+    echo "Installing ${package}..."
+    sudo pip3 install "${package}"
+    echo -e "\e[32m\e[1mDone\e[0m"
+done <<< "${pip_packages}"
+
+exit 0
