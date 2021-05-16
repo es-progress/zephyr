@@ -1,0 +1,12 @@
+#####################################
+## ES-Ubuntu                       ##
+##                                 ##
+## git                             ##
+## Configs apt packages to install ##
+##                                 ##
+## Format:                         ##
+## cfg-location config.name value  ##
+#####################################
+
+# No advice for detached HEAD
+global advice.detachedHead false
