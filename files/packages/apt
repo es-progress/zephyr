@@ -5,7 +5,7 @@
 ## apt packages to install       ##
 ##                               ##
 ## Format:                       ##
-## package_name[,apt-repository] ##
+## package_name [apt-repository] ##
 ###################################
 
 # Tools
@@ -33,7 +33,7 @@ git
 shellcheck
 default-jre
 default-jdk
-ansible,ppa:ansible/ansible
+ansible ppa:ansible/ansible
 virtualbox
 figlet
 
@@ -45,9 +45,9 @@ xdotool
 
 # Apps
 ######
-pinta,ppa:pinta-maintainers/pinta-stable
-shotwell,ppa:sicklylife/shotwell
+pinta ppa:pinta-maintainers/pinta-stable
+shotwell ppa:sicklylife/shotwell
 gnome-shell-pomodoro
 nautilus-admin
-pulseeffects,ppa:mikhailnov/pulseeffects
+pulseeffects ppa:mikhailnov/pulseeffects
 pulseaudio
