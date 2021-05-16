@@ -7,5 +7,6 @@
     "**/*nanorc": "source.git-config"
     "**/custom/mc/*": "source.ini"
     "**/custom/shorewall/*": "source.git-config"
+    "**/custom/git/*": "source.git-config"
     "**/files/packages/*": "source.git-config"
     "**/scripts/**": "source.shell"
