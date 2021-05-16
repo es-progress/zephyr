@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## git       ##
+###############
+
+# Strict mode minus IFS
+set -euo pipefail
+
+# Import library
+source "${PATH_SOURCER}"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Global
+echo -n "Global git config..."
+configs=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/custom/git/configs")
+
+# Parse configs
+while read -r cfg_loc cfg_name cfg_value; do
+    # Apply configs
+    if [[ "${cfg_loc}" == "system" ]]; then
+        sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+    else
+        git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+    fi
+done <<< "${configs}"
+print-finish
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -f custom/git/configs ]]; then # Local git config exists
+        echo -n "Local git config..."
+        configs=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' custom/git/configs)
+
+        # Parse configs
+        while read -r cfg_loc cfg_name cfg_value; do
+            # Apply configs
+            if [[ "${cfg_loc}" == "system" ]]; then
+                sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+            else
+                git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+            fi
+        done <<< "${configs}"
+        print-finish
+    fi
+fi
+
+exit 0
