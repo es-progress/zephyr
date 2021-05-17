@@ -39,8 +39,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
 fi
 
 # Start service
-print-status "Starting shorewall..."
-echo
+print-header "Starting shorewall..."
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
 sudo shorewall save

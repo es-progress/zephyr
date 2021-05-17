@@ -16,8 +16,7 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-print-status "Adding user to groups..."
-echo
+print-header "Adding user to groups..."
 sudo adduser "${USER}" users
 sudo adduser "${USER}" www-data
 print-finish
