@@ -16,7 +16,7 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 check-not-root || exit 1
 
 # Remove blank lines, comments from package list
-snaps=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/snap")
+snaps=$(read-file-cfg "${ESUBUNTU_HOME}/files/packages/snap")
 
 # Parse snap list
 while read -r package mode; do
