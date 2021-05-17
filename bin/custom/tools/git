@@ -9,14 +9,14 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Import library
-source "${PATH_SOURCER}"
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Check if not run as root
 check-not-root || exit 1
 
 # Global
-echo -n "Global git config..."
+print-status "Global git config..."
 configs=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/custom/git/configs")
 
 # Parse configs
@@ -35,7 +35,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
     if [[ -f custom/git/configs ]]; then # Local git config exists
-        echo -n "Local git config..."
+        print-status "Local git config..."
         configs=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' custom/git/configs)
 
         # Parse configs

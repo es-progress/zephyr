@@ -10,13 +10,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Import library
-source "${PATH_SOURCER}"
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Check if not run as root
 check-not-root || exit 1
 
-echo -n "Copy nano config files..."
+print-status "Copy nano config files..."
 
 # Global
 sudo cp "${ESUBUNTU_HOME}/custom/nano/nanorc" /etc/nanorc
