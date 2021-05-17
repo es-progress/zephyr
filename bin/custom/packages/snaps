@@ -9,11 +9,11 @@
 # Strict mode minus IFS
 set -euo pipefail
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
 # Remove blank lines, comments from package list
 snaps=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/snap")
@@ -26,10 +26,9 @@ while read -r package mode; do
     [[ "${mode}" == "classic" ]] && options="--classic"
 
     # Install snap
-    echo
-    echo "Installing ${package}..."
+    print-header "Installing ${package}..."
     sudo snap install ${options} "${package}"
-    echo -e "\e[32m\e[1mDone\e[0m"
+    print-finish
 
 done <<< "${snaps}"
 
