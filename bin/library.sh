@@ -15,6 +15,7 @@ _TXT_BOLD="\e[1m"
 _TXT_RED="\e[31m"
 _TXT_YELLOW="\e[33m"
 _TXT_GREEN="\e[32m"
+_TXT_BLUE="\e[34m"
 
 #############
 # FUNCTIONS #
@@ -26,6 +27,15 @@ _TXT_GREEN="\e[32m"
 #######################
 print-error() {
     echo -e "${_TXT_RED}${_TXT_BOLD}${*}${_TXT_NORM}"
+}
+
+# Print section header
+#
+# @param    $*  Message
+#######################
+print-section() {
+    echo
+    echo -e "${_TXT_BLUE}${_TXT_BOLD}${*}${_TXT_NORM}"
 }
 
 # Print header
