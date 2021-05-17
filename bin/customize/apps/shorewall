@@ -21,7 +21,7 @@ iface=$(ip route | awk '/^default/{print $5}')
 
 # Global config
 print-status "Copy global shorewall config..."
-sudo cp ${ESUBUNTU_HOME}/custom/shorewall/* /etc/shorewall/
+sudo cp ${CUSTOMIZE_CFG_DIR}/shorewall/* /etc/shorewall/
 # Update interface
 sudo sed -i "s/{{ interface }}/${iface}/g" /etc/shorewall/interfaces
 print-finish
@@ -30,9 +30,9 @@ print-finish
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -d custom/shorewall ]]; then # Local config exists
+    if [[ -d config/customize/shorewall ]]; then # Local config exists
         print-status "Copy local shorewall config..."
-        cd custom/shorewall
+        cd config/customize/shorewall
         sudo cp ./* /etc/shorewall/
         print-finish
     fi
