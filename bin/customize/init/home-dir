@@ -26,11 +26,11 @@ print-finish
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -f custom/user-dirs/home-dirs ]]; then # Local dirs file exists
+    if [[ -f config/customize/user-dirs/home-dirs ]]; then # Local dirs file exists
         print-status "Create home dirs..."
 
         # Remove blank lines, comments from bookmarks
-        home_dirs=$(read-file-cfg custom/user-dirs/home-dirs)
+        home_dirs=$(read-file-cfg config/customize/user-dirs/home-dirs)
         while read -r line; do
             # eval line to let the shell expand tilde and env vars
             arg=$(eval echo "${line}")
