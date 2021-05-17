@@ -11,8 +11,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Import library
-source "${PATH_SOURCER}"
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Check if not run as root
 check-not-root || exit 1
@@ -21,12 +21,12 @@ check-not-root || exit 1
 ################
 
 # Global
-echo -n "Copy global user dirs..."
+print-status "Copy global user dirs..."
 sudo cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.defaults" /etc/xdg/
 print-finish
 
 # User
-echo -n "Copy user dirs..."
+print-status "Copy user dirs..."
 cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.dirs" ~/.config/
 print-finish
 
@@ -34,7 +34,7 @@ print-finish
 ###########
 
 # Global bookmarks
-echo -n "Add global bookmarks..."
+print-status "Add global bookmarks..."
 # Remove blank lines, comments from bookmarks
 bookmarks=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/custom/user-dirs/bookmarks")
 while read -r line; do
@@ -50,7 +50,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
     if [[ -f custom/user-dirs/bookmarks ]]; then # Local bookmarks exists
-        echo -n "Add local bookmarks..."
+        print-status "Add local bookmarks..."
 
         # Remove blank lines, comments from bookmarks
         bookmarks=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' custom/user-dirs/bookmarks)
