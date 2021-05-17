@@ -10,15 +10,16 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
-echo "Adding user to groups..."
+# Check if not run as root
+check-not-root || exit 1
+
+print-status "Adding user to groups..."
+echo
 sudo adduser "${USER}" users
 sudo adduser "${USER}" www-data
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 exit 0
