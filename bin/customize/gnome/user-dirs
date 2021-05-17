@@ -22,12 +22,12 @@ check-not-root || exit 1
 
 # Global
 print-status "Copy global user dirs..."
-sudo cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.defaults" /etc/xdg/
+sudo cp "${CUSTOMIZE_CFG_DIR}/user-dirs/user-dirs.defaults" /etc/xdg/
 print-finish
 
 # User
 print-status "Copy user dirs..."
-cp "${ESUBUNTU_HOME}/custom/user-dirs/user-dirs.dirs" ~/.config/
+cp "${CUSTOMIZE_CFG_DIR}/user-dirs/user-dirs.dirs" ~/.config/
 print-finish
 
 # Bookmarks
@@ -36,7 +36,7 @@ print-finish
 # Global bookmarks
 print-status "Add global bookmarks..."
 # Remove blank lines, comments from bookmarks
-bookmarks=$(read-file-cfg "${ESUBUNTU_HOME}/custom/user-dirs/bookmarks")
+bookmarks=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/user-dirs/bookmarks")
 while read -r line; do
     # Check if it already contains
     if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
@@ -49,11 +49,11 @@ print-finish
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -f custom/user-dirs/bookmarks ]]; then # Local bookmarks exists
+    if [[ -f config/customize/user-dirs/bookmarks ]]; then # Local bookmarks exists
         print-status "Add local bookmarks..."
 
         # Remove blank lines, comments from bookmarks
-        bookmarks=$(read-file-cfg custom/user-dirs/bookmarks)
+        bookmarks=$(read-file-cfg config/customize/user-dirs/bookmarks)
         while read -r line; do
             if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then
                 echo "$line" >> ~/.config/gtk-3.0/bookmarks
