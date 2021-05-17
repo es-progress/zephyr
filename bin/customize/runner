@@ -15,32 +15,29 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Parse options
 filter="${1:-}"
 
-# Get script dir
-base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-
 # Init
 print-section "Initialize"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/init"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/init"
 
 # Packages
 print-section "Install packages"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages/misc"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages/misc"
 
 # shell
 print-section "Setup shell"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/shell"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/shell"
 
 # Tools
 print-section "Config tools"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/tools"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/tools"
 
 # GNOME
 print-section "Config GNOME"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/gnome"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/gnome"
 
 # Apps
 print-section "Config apps"
-run-parts --exit-on-error --regex="${filter}" "${base_dir}/apps"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/apps"
 
 exit 0
