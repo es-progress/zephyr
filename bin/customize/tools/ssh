@@ -18,16 +18,16 @@ check-not-root || exit 1
 
 print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
-cp -a ${ESUBUNTU_HOME}/custom/ssh/* ~/.ssh/
+cp -a ${CUSTOMIZE_CFG_DIR}/ssh/* ~/.ssh/
 print-finish
 
 # Local
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -d custom/ssh ]]; then # Local SSH files exists
+    if [[ -d config/customize/ssh ]]; then # Local SSH files exists
         print-status "Copy local SSH config files..."
-        cd custom/ssh
+        cd config/customize/ssh
         for file in *; do
             cp -a "${file}" ~/.ssh/
         done

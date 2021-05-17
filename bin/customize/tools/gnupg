@@ -18,7 +18,7 @@ check-not-root || exit 1
 
 print-status "Copy gnupg config files..."
 mkdir -p ~/.gnupg
-cp "${ESUBUNTU_HOME}/custom/gpg/gpg-agent.conf" ~/.gnupg/
+cp "${CUSTOMIZE_CFG_DIR}/gpg/gpg-agent.conf" ~/.gnupg/
 print-finish
 
 exit 0
