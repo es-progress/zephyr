@@ -10,44 +10,44 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Allow dot globbing
 shopt -s dotglob
 
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
 # Global
-echo -n "Copy global Bash files..."
+print-status "Copy global Bash files..."
 cd "${ESUBUNTU_HOME}/custom/bash/global"
 for file in *; do
     sudo cp -r "${file}" /root/
     sudo cp -r "${file}" /etc/skel/
     cp -r "${file}" ~
 done
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 # Root
-echo -n "Copy root Bash files..."
+print-status "Copy root Bash files..."
 cd "${ESUBUNTU_HOME}/custom/bash/root"
 for file in *; do
     sudo cp -r "${file}" /root/
 done
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 # Local
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
     if [[ -d custom/bash ]]; then # Local Bash files exists
-        echo -n "Copy local Bash files..."
+        print-status "Copy local Bash files..."
         cd custom/bash
         for file in *; do
             cp -a "${file}" ~
         done
-        echo -e "\e[32m\e[1mDone\e[0m"
+        print-finish
     fi
 fi
 
