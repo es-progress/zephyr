@@ -21,6 +21,12 @@ echo
 echo "Initialize"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/init"
 
+# Packages
+echo
+echo "Install packages"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages"
+run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages/misc"
+
 # shell
 echo
 echo "Setup shell"
