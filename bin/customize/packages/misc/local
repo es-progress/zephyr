@@ -20,8 +20,8 @@ check-not-root || exit 1
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -d custom/packages ]]; then # Local installer exists
-        cd custom/packages
+    if [[ -d config/customize/packages ]]; then # Local installer exists
+        cd config/customize/packages
         run-parts --report  .
     fi
 fi
