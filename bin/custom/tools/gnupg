@@ -10,13 +10,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Import library
-source "${PATH_SOURCER}"
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Check if not run as root
 check-not-root || exit 1
 
-echo -n "Copy gnupg config files..."
+print-status "Copy gnupg config files..."
 mkdir -p ~/.gnupg
 cp "${ESUBUNTU_HOME}/custom/gpg/gpg-agent.conf" ~/.gnupg/
 print-finish

@@ -10,13 +10,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Import library
-source "${PATH_SOURCER}"
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Check if not run as root
 check-not-root || exit 1
 
-echo -n "Copy SSH config files..."
+print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
 cp -a ${ESUBUNTU_HOME}/custom/ssh/* ~/.ssh/
 print-finish
@@ -26,7 +26,7 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
     if [[ -d custom/ssh ]]; then # Local SSH files exists
-        echo -n "Copy local SSH config files..."
+        print-status "Copy local SSH config files..."
         cd custom/ssh
         for file in *; do
             cp -a "${file}" ~/.ssh/
