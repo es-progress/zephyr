@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Runner    ##
-## Configs   ##
-###############
+####################
+## ES-Ubuntu      ##
+##                ##
+## Customizations ##
+####################
 
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Parse options
 filter="${1:-}"
@@ -17,34 +19,28 @@ filter="${1:-}"
 base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 # Init
-echo
-echo "Initialize"
+print-section "Initialize"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/init"
 
 # Packages
-echo
-echo "Install packages"
+print-section "Install packages"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/packages/misc"
 
 # shell
-echo
-echo "Setup shell"
+print-section "Setup shell"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/shell"
 
 # Tools
-echo
-echo "Config tools"
+print-section "Config tools"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/tools"
 
 # GNOME
-echo
-echo "Config GNOME"
+print-section "Config GNOME"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/gnome"
 
 # Apps
-echo
-echo "Config apps"
+print-section "Config apps"
 run-parts --exit-on-error --regex="${filter}" "${base_dir}/apps"
 
 exit 0
