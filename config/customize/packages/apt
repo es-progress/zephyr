@@ -1,0 +1,53 @@
+###################################
+## ES-Ubuntu                     ##
+##                               ##
+## Packages                      ##
+## apt packages to install       ##
+##                               ##
+## Format:                       ##
+## package_name [apt-repository] ##
+###################################
+
+# Tools
+#######
+
+# Build
+build-essential
+software-properties-common
+
+# Net
+curl
+lftp
+whois
+ipset
+conntrack
+
+# Security
+pass
+pass-extension-tomb
+pwgen
+shorewall
+
+# dev
+git
+shellcheck
+default-jre
+default-jdk
+ansible ppa:ansible/ansible
+virtualbox
+figlet
+
+# Other
+mc
+pigz
+zsh
+xdotool
+
+# Apps
+######
+pinta ppa:pinta-maintainers/pinta-stable
+shotwell ppa:sicklylife/shotwell
+gnome-shell-pomodoro
+nautilus-admin
+pulseeffects ppa:mikhailnov/pulseeffects
+pulseaudio

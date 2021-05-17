@@ -27,7 +27,7 @@ sudo apt install --yes python3-pip
 print-finish
 
 # Remove blank lines, comments from package list
-pip_packages=$(read-file-cfg "${ESUBUNTU_HOME}/files/packages/pip")
+pip_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/pip")
 
 # Parse package list
 while read -r package; do
