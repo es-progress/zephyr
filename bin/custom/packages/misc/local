@@ -10,11 +10,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
 # Local
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists

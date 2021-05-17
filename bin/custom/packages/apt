@@ -9,16 +9,16 @@
 # Strict mode minus IFS
 set -euo pipefail
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
 # apt update
-echo "Update apt cache..."
+print-header "Update apt cache..."
 sudo apt update
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 # Remove blank lines, comments from package list
 apt_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/apt")
@@ -28,17 +28,15 @@ while read -r package repo; do
 
     # Add repo
     if [[ -n "${repo}" ]]; then
-        echo
-        echo "Adding apt repo: ${repo}"
+        print-header "Adding apt repo: ${repo}..."
         sudo add-apt-repository --yes "${repo}"
-        echo -e "\e[32m\e[1mDone\e[0m"
+        print-finish
     fi
 
     # Install package
-    echo
-    echo "Installing ${package}..."
+    print-header "Installing ${package}..."
     sudo apt install --yes "${package}"
-    echo -e "\e[32m\e[1mDone\e[0m"
+    print-finish
 done <<< "${apt_packages}"
 
 exit 0

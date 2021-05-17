@@ -10,21 +10,21 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
 # apt update
-echo "Update apt cache..."
+print-header "Update apt cache..."
 sudo apt update
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish "\e[32m\e[1mDone\e[0m"
 
 # Install pip (Python package installer)
-echo "Installing pip3..."
+print-header "Installing pip3..."
 sudo apt install --yes python3-pip
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish "\e[32m\e[1mDone\e[0m"
 
 # Remove blank lines, comments from package list
 pip_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/pip")
@@ -32,10 +32,9 @@ pip_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packa
 # Parse package list
 while read -r package; do
     # Install package
-    echo
-    echo "Installing ${package}..."
+    print-header "Installing ${package}..."
     sudo pip3 install "${package}"
-    echo -e "\e[32m\e[1mDone\e[0m"
+    print-finish "\e[32m\e[1mDone\e[0m"
 done <<< "${pip_packages}"
 
 exit 0

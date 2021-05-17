@@ -6,20 +6,20 @@
 ## Tomb      ##
 ###############
 
+# Tomb version
+tomb_version="2.9"
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
 
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
 # Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+check-not-root || exit 1
 
-# Tomb version
-tomb_version="2.9"
-
-echo "Installing Tomb..."
+print-header "Install Tomb..."
 
 # Unpack archive
 tmp_dir=$(mktemp -d)
@@ -29,6 +29,6 @@ tar -xf "${ESUBUNTU_HOME}/files/packages/Tomb-${tomb_version}.tar.gz"
 # Install
 cd "Tomb-${tomb_version}"
 sudo make install
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 exit 0
