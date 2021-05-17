@@ -19,22 +19,22 @@ check-not-root || exit 1
 # apt update
 print-header "Update apt cache..."
 sudo apt update
-print-finish "\e[32m\e[1mDone\e[0m"
+print-finish
 
 # Install pip (Python package installer)
 print-header "Installing pip3..."
 sudo apt install --yes python3-pip
-print-finish "\e[32m\e[1mDone\e[0m"
+print-finish
 
 # Remove blank lines, comments from package list
-pip_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/pip")
+pip_packages=$(read-file-cfg "${ESUBUNTU_HOME}/files/packages/pip")
 
 # Parse package list
 while read -r package; do
     # Install package
     print-header "Installing ${package}..."
     sudo pip3 install "${package}"
-    print-finish "\e[32m\e[1mDone\e[0m"
+    print-finish
 done <<< "${pip_packages}"
 
 exit 0

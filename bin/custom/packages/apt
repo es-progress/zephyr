@@ -21,7 +21,7 @@ sudo apt update
 print-finish
 
 # Remove blank lines, comments from package list
-apt_packages=$(sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ESUBUNTU_HOME}/files/packages/apt")
+apt_packages=$(read-file-cfg "${ESUBUNTU_HOME}/files/packages/apt")
 
 # Parse package list
 while read -r package repo; do
