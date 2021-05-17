@@ -21,8 +21,8 @@ print-status "Copy mc config files..."
 sudo mkdir -p /root/.config/mc
 mkdir -p ~/.config/mc
 
-sudo cp ${ESUBUNTU_HOME}/custom/mc/* /root/.config/mc/
-cp ${ESUBUNTU_HOME}/custom/mc/* ~/.config/mc
+sudo cp ${CUSTOMIZE_CFG_DIR}/mc/* /root/.config/mc/
+cp ${CUSTOMIZE_CFG_DIR}/mc/* ~/.config/mc
 
 print-finish
 
