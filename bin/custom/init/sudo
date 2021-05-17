@@ -10,13 +10,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Check if not run as root
-if [[ $(id -u) -eq 0 ]]; then
-    echo "Don't run as root!"
-    exit 1
-fi
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
 
-echo -n "Customizing sudoers..."
+# Check if not run as root
+check-not-root || exit 1
+
+print-status "Customizing sudoers..."
 
 # Add user name to template
 tmp_file=$(mktemp)
@@ -31,6 +31,6 @@ sudo cp "${tmp_file}" "/etc/sudoers.d/${USER}"
 # Verify full sudoers
 sudo visudo -c -s >/dev/null
 
-echo -e "\e[32m\e[1mDone\e[0m"
+print-finish
 
 exit 0
