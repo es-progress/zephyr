@@ -21,7 +21,7 @@ check-not-root || exit 1
 
 # Global
 print-status "Copy global Bash files..."
-cd "${ESUBUNTU_HOME}/custom/bash/global"
+cd "${CUSTOMIZE_CFG_DIR}/bash/global"
 for file in *; do
     sudo cp -r "${file}" /root/
     sudo cp -r "${file}" /etc/skel/
@@ -31,7 +31,7 @@ print-finish
 
 # Root
 print-status "Copy root Bash files..."
-cd "${ESUBUNTU_HOME}/custom/bash/root"
+cd "${CUSTOMIZE_CFG_DIR}/bash/root"
 for file in *; do
     sudo cp -r "${file}" /root/
 done
@@ -41,9 +41,9 @@ print-finish
 if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     cd "${ESUBUNTU_HOME}/local"
 
-    if [[ -d custom/bash ]]; then # Local Bash files exists
+    if [[ -d config/customize/bash ]]; then # Local Bash files exists
         print-status "Copy local Bash files..."
-        cd custom/bash
+        cd config/customize/bash
         for file in *; do
             cp -a "${file}" ~
         done
