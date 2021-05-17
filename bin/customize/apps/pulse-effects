@@ -19,7 +19,7 @@ check-not-root || exit 1
 # Config
 print-status "Copy pulse-effect presets..."
 mkdir -p ~/.config/PulseEffects/output/
-cp ${ESUBUNTU_HOME}/custom/pulse-effects/* ~/.config/PulseEffects/output/
+cp ${CUSTOMIZE_CFG_DIR}/pulse-effects/* ~/.config/PulseEffects/output/
 print-finish
 
 exit 0
