@@ -19,6 +19,7 @@ check-not-root || exit 1
 print-status "Copy gnupg config files..."
 mkdir -p ~/.gnupg
 cp "${CUSTOMIZE_CFG_DIR}/gpg/gpg-agent.conf" ~/.gnupg/
+chmod go-rwx -R ~/.gnupg/
 print-finish
 
 exit 0
