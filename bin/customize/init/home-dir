@@ -43,7 +43,7 @@ fi
 # Permissions
 print-status "Setting permission on /home..."
 sudo chown -R "${USER}:${USER}" ~
-chmod -R go-rwx ~
+chmod -R o-rwx ~
 print-finish
 
 exit 0
