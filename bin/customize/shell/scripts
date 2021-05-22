@@ -34,7 +34,7 @@ cd "${ESUBUNTU_HOME}/files/shell/es-progress/lib"
 for file in *; do
     sudo cp "${file}" "${GLOBAL_LIB}"
     sudo chown root:root "${GLOBAL_LIB}/${file}"
-    sudo chmod =0755 "${GLOBAL_LIB}/${file}"
+    sudo chmod =0644 "${GLOBAL_LIB}/${file}"
 done
 print-finish
 
