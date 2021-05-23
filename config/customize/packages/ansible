@@ -1,0 +1,11 @@
+#########################
+## ES-Ubuntu           ##
+##                     ##
+## Packages            ##
+## Ansible collections ##
+##                     ##
+## Format:             ##
+## collection_name     ##
+#########################
+
+community.general

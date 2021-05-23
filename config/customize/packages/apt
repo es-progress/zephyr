@@ -33,7 +33,6 @@ git
 shellcheck
 default-jre
 default-jdk
-ansible ppa:ansible/ansible
 virtualbox
 figlet
 
