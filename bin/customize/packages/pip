@@ -26,12 +26,9 @@ print-header "Installing pip3..."
 sudo apt install --yes python3-pip
 print-finish
 
-# Remove blank lines, comments from package list
+# Install packages
 pip_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/pip")
-
-# Parse package list
 while read -r package; do
-    # Install package
     print-header "Installing ${package}..."
     sudo pip3 install "${package}"
     print-finish

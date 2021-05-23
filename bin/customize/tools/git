@@ -18,8 +18,6 @@ check-not-root || exit 1
 # Global
 print-status "Global git config..."
 configs=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/git/configs")
-
-# Parse configs
 while read -r cfg_loc cfg_name cfg_value; do
     # Apply configs
     if [[ "${cfg_loc}" == "system" ]]; then
@@ -37,8 +35,6 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     if [[ -f config/customize/git/configs ]]; then # Local git config exists
         print-status "Local git config..."
         configs=$(read-file-cfg config/customize/git/configs)
-
-        # Parse configs
         while read -r cfg_loc cfg_name cfg_value; do
             # Apply configs
             if [[ "${cfg_loc}" == "system" ]]; then
