@@ -29,11 +29,7 @@ print-finish
 
 # Install collections
 print-header "Install Ansible collections..."
-
-# Get collections
 collections=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/ansible")
-
-# Parse package list
 while read -r collection; do
     ansible-galaxy collection install "${collection}"
 done <<< "${collections}"

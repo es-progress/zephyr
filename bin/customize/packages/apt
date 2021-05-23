@@ -20,10 +20,8 @@ print-header "Update apt cache..."
 sudo apt update
 print-finish
 
-# Remove blank lines, comments from package list
+# Install packages
 apt_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/apt")
-
-# Parse package list
 while read -r package repo; do
 
     # Add repo

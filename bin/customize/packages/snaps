@@ -15,10 +15,7 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-# Remove blank lines, comments from package list
 snaps=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/snap")
-
-# Parse snap list
 while read -r package mode; do
 
     # Set options
