@@ -1,12 +1,10 @@
 "*":
   "file-types":
-    "**/bash/**": "source.shell"
     "**/.bash/**": "source.shell"
     "**/.inputrc": "source.shell"
-    "**/ssh/**": "source.git-config"
     "**/*nanorc": "source.git-config"
-    "**/custom/mc/*": "source.ini"
-    "**/custom/shorewall/*": "source.git-config"
-    "**/custom/git/*": "source.git-config"
-    "**/files/packages/*": "source.git-config"
-    "**/scripts/**": "source.shell"
+    "**/config/customize/git/*": "source.git-config"
+    "**/config/customize/mc/*": "source.ini"
+    "**/config/customize/packages/*": "source.git-config"
+    "**/config/customize/shorewall/*": "source.git-config"
+    "**/config/customize/ssh/**": "source.git-config"
