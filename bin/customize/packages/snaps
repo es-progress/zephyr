@@ -26,7 +26,6 @@ while read -r package mode; do
     print-header "Installing ${package}..."
     sudo snap install ${options} "${package}"
     print-finish
-
 done <<< "${snaps}"
 
 exit 0
