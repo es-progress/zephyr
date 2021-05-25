@@ -22,16 +22,4 @@ mkdir -p ~/.config/PulseEffects/output/
 cp ${CUSTOMIZE_CFG_DIR}/pulse-effects/* ~/.config/PulseEffects/output/
 print-finish
 
-# Local configs
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d config/customize/pulse-effects ]]; then # Local config exists
-        print-status "Copy local pulse-effect presets..."
-        cd config/customize/pulse-effects
-        cp ./* ~/.config/PulseEffects/output/
-        print-finish
-    fi
-fi
-
 exit 0

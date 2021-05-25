@@ -16,26 +16,11 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-# Global
 print-status "Setting keyboard shortcuts..."
 dconf_configs=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/gnome/shortcuts")
 while read -r dconf_key dconf_value; do
     dconf write "${dconf_key}" "${dconf_value}"
 done <<< "${dconf_configs}"
 print-finish
-
-# Local configs
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -f config/customize/gnome/shortcuts ]]; then # Local config exists
-        print-status "Setting local keyboard shortcuts..."
-        dconf_configs=$(read-file-cfg config/customize/gnome/shortcuts)
-        while read -r dconf_key dconf_value; do
-            dconf write "${dconf_key}" "${dconf_value}"
-        done <<< "${dconf_configs}"
-        print-finish
-    fi
-fi
 
 exit 0
