@@ -17,8 +17,10 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Adding user to groups..."
-sudo adduser "${USER}" users
-sudo adduser "${USER}" www-data
+groups=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/init/groups")
+while read -r group_name; do
+    sudo adduser "${USER}" "${group_name}"
+done <<< "${groups}"
 print-finish
 
 exit 0
