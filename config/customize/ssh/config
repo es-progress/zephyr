@@ -24,6 +24,6 @@ HashKnownHosts no
 Include hosts/*
 
 # All
-Match all
+Host *
 IdentitiesOnly yes
 Protocol 2
