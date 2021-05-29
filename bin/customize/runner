@@ -24,6 +24,10 @@ print-section "Install packages"
 run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages"
 run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages/misc"
 
+# Services
+print-section "Install services"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/services"
+
 # shell
 print-section "Setup shell"
 run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/shell"

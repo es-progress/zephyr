@@ -31,7 +31,7 @@ print-finish
 # Config
 print-status "Configure PHPMyAdmin..."
 secret=$(openssl rand -hex 32)
-sudo cp "${CUSTOMIZE_CFG_DIR}/packages/phpmyadmin/config.inc.php" public/
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/phpmyadmin/config.inc.php" public/
 sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" public/config.inc.php
 sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" public/config.inc.php
 sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" public/config.inc.php
