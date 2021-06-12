@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Bash goto ##
+###############
+
+# Strict mode minus IFS
+set -euo pipefail
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Source goto
+source ~/.bash/goto
+
+# Register global alias
+gt_alias=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/random/goto")
+while read -r alias dir; do
+    # eval dir to let the shell expand tilde and env vars
+    path=$(eval echo "${dir}")
+
+    # Register only if not exists
+    if ! goto -x "${alias}" >/dev/null 2>&1; then
+        goto -r "${alias}" "${path}"
+    fi
+done <<< "${gt_alias}"
+
+# Local
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -f config/customize/random/goto ]]; then # Local goto exists
+        gt_alias=$(read-file-cfg config/customize/random/goto)
+        while read -r alias dir; do
+            # eval dir to let the shell expand tilde and env vars
+            path=$(eval echo "${dir}")
+
+            # Register only if not exists
+            if ! goto -x "${alias}" >/dev/null 2>&1; then
+                goto -r "${alias}" "${path}"
+            fi
+        done <<< "${gt_alias}"
+    fi
+fi
+
+exit 0
