@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Config       ##
+## Certificates ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Create Self-signed root CA certificate
+########################################
+
+# Create private key
+print-status "Create private key..."
+sudo openssl \
+    genpkey \
+    -aes-256-cbc \
+    -algorithm rsa \
+    -pkeyopt rsa_keygen_bits:4096 \
+    -out "/etc/ssl/private/ESubuntu_Root_Certification_Authority.key"
+print-finish
+
+# Create self-signed certificate
+print-header "Create self-signed certificate ..."
+sudo openssl \
+    req \
+    -new \
+    -x509 \
+    -sha512 \
+    -extensions v3_ca \
+    -addext "keyUsage=critical,keyCertSign,cRLSign" \
+    -key "/etc/ssl/private/ESubuntu_Root_Certification_Authority.key" \
+    -out "/usr/local/share/ca-certificates/ESubuntu_Root_Certification_Authority.crt" \
+    -days 3650 \
+    -subj "/C=HU/ST=Hungary/L=Budapest/O=ES-Progress/OU=HeadQuarters/CN=ESubuntu Root CA"
+print-finish
+
+# Update ca-cert
+print-header "Update certificates..."
+sudo update-ca-certificates
+print-finish
+
+exit 0
