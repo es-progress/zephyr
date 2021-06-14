@@ -45,8 +45,13 @@ sudo openssl \
 print-finish
 
 # Update ca-cert
-print-header "Update certificates..."
+print-header "Install root CA certificate to system..."
 sudo update-ca-certificates
+print-finish
+
+print-status "Install root CA certificate to Firefox..."
+sudo mkdir -p /usr/lib/firefox/distribution
+sudo cp "${CUSTOMIZE_CFG_DIR}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
 print-finish
 
 exit 0
