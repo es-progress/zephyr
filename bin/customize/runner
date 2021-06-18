@@ -36,12 +36,16 @@ run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/sh
 print-section "Config tools"
 run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/tools"
 
+# Apps
+print-section "Config apps"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/apps"
+
 # GNOME
 print-section "Config GNOME"
 run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/gnome"
 
-# Apps
-print-section "Config apps"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/apps"
+# Random
+print-section "Random configs"
+run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/random"
 
 exit 0
