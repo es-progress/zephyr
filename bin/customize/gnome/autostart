@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+## Autostart ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Autostart
+print-status "Copy autostart files..."
+mkdir -p ~/.config/autostart/
+cp -a ${CUSTOMIZE_CFG_DIR}/gnome/autostart/* ~/.config/autostart
+print-finish
+
+exit 0
