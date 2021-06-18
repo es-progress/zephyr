@@ -34,4 +34,15 @@ apm install sync-settings
 apm install sync-settings-git-location
 print-finish
 
+# Local configs
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    if [[ -f config/customize/packages/atom/config.cson ]]; then # Local config exists
+        print-status "Copy local config file..."
+        cp config/customize/packages/atom/config.cson ~/.atom
+        print-finish
+    fi
+fi
+
 exit 0
