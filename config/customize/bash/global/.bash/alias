@@ -27,6 +27,9 @@ alias rm="rm --interactive=once"
 # ls
 alias ll='ls -alph --time-style=long-iso'
 
+# Disable .wget-hsts
+alias wget="wget --hsts-file /dev/null"
+
 # Alert for long running commands
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
