@@ -37,6 +37,9 @@ HISTCONTROL=ignoreboth
 # Don't save bash history
 unset HISTFILE
 
+# Don't save less history
+export LESSHISTFILE=-
+
 ##########
 # PROMPT #
 ##########
