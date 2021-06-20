@@ -55,10 +55,13 @@ print-status() {
     echo -n -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
 }
 
-# Print 'Done'
-##############
+# Print OK message
+#
+# @param    $*  Message
+# @default      Done
+#######################
 print-finish() {
-    echo -e "${_TXT_GREEN}${_TXT_BOLD}Done.${_TXT_NORM}"
+    echo -e "${_TXT_GREEN}${_TXT_BOLD}${*:-"Done."}${_TXT_NORM}"
 }
 
 # Check if not run as root
