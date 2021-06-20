@@ -41,6 +41,7 @@ mc
 pigz
 zsh
 xdotool
+dconf-editor
 
 # Apps
 ######
