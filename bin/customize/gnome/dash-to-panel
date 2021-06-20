@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+###################
+## ES-Ubuntu     ##
+##               ##
+## Config        ##
+## GNOME         ##
+## Dash-to-panel ##
+###################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+print-header "Install dash-to-panel..."
+
+# Create temp dir
+install_dir=$(mktemp -d)
+cd "${install_dir}"
+
+# Get source
+git clone "https://github.com/home-sweet-gnome/dash-to-panel.git"
+cd "dash-to-panel/"
+git checkout v41
+
+# Install
+make install
+gnome-extensions enable "dash-to-panel@jderose9.github.com"
+
+# Restart GNOME
+busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval" "s" 'Meta.restart("Restarting…")'
+
+print-finish
+
+exit 0
