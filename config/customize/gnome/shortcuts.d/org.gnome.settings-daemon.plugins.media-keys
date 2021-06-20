@@ -6,49 +6,29 @@
 ## Shortcuts ##
 ###############
 
-# Screenshots auto-save directory
-[gnome-screenshot]
-auto-save-directory='~/pictures/screenshot'
-
-[settings-daemon/plugins/media-keys]
-
-# Remove defaults
+[/]
 area-screenshot=['']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/']
 screenshot=['']
+terminal=['<Super>t']
 window-screenshot=['']
 
-# Custom keybindings
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/']
-
-# Launch terminal
-terminal=['<Super>t']
-
-# Mouse single click
-[settings-daemon/plugins/media-keys/custom-keybindings/custom0]
+[custom-keybindings/custom0]
 binding='Menu'
 command='xdotool click 1'
 name='Single click'
 
-# Mouse double click
-[settings-daemon/plugins/media-keys/custom-keybindings/custom1]
+[custom-keybindings/custom1]
 binding='<Primary>Menu'
 command='xdotool click --repeat 2 1'
 name='Double click'
 
-# Window screenshot
-[settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+[custom-keybindings/custom2]
 binding='Print'
 command='gnome-screenshot -w'
 name='Take a window shot'
 
-# Area shot
-[settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+[custom-keybindings/custom3]
 binding='<Shift>Print'
 command='gnome-screenshot -a'
 name='Take shot of an area'
-
-[shell/keybindings]
-# Remove defaults
-toggle-application-view=['']
-toggle-message-tray=['']
-toggle-overview=['']
