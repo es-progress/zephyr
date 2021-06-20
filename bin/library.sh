@@ -74,17 +74,6 @@ check-not-root() {
     return 0
 }
 
-# Join arguments by char
-#
-# @param    $1  Joining character
-# @param    $*  Items to join
-#################################
-implode() {
-    local IFS="${1:?"Field separator missing"}"
-    shift
-    echo "${*}"
-}
-
 # Read config file
 #
 # @param    $1  Config File
