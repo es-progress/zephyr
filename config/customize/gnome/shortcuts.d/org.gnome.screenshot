@@ -1,0 +1,10 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+## Shortcuts ##
+###############
+
+[/]
+auto-save-directory='~/pictures/screenshot'

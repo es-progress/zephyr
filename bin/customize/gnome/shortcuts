@@ -18,7 +18,9 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Setting keyboard shortcuts..."
-sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/shortcuts" | dconf load /org/gnome/
+sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/shortcuts.d/org.gnome.screenshot" | dconf load /org/gnome/screenshot/
+sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/shortcuts.d/org.gnome.settings-daemon.plugins.media-keys" | dconf load /org/gnome/settings-daemon/plugins/media-keys/
+sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/shortcuts.d/org.gnome.shell.keybindings" | dconf load /org/gnome/shell/keybindings/
 print-finish
 
 exit 0
