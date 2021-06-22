@@ -10,3 +10,9 @@
 
 # No advice for detached HEAD
 global advice.detachedHead false
+
+# Alias
+global alias.co checkout
+global alias.ps push
+global alias.pl pull
+global alias.st status
