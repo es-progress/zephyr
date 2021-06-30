@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packages  ##
+## nmap      ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Install
+print-header "Install nmap..."
+sudo snap install nmap
+print-finish
+
+print-header "Install plugins..."
+sudo snap connect nmap:network-control
+print-finish
+
+exit 0
