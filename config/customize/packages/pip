@@ -11,6 +11,9 @@
 # mkdocs
 mkdocs
 mkdocs-material
+mkdocs-minify-plugin
+mkdocs-literate-nav
+mkdocs-git-revision-date-localized-plugin
 
 # beautysh
 beautysh
