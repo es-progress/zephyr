@@ -16,11 +16,12 @@ build-essential
 software-properties-common
 
 # Net
-curl
-lftp
-whois
-ipset
 conntrack
+curl
+ipset
+lftp
+sshfs
+whois
 
 # Security
 pass
@@ -29,26 +30,26 @@ pwgen
 shorewall
 
 # dev
+default-jdk
+default-jre
+figlet
 git
 shellcheck
-default-jre
-default-jdk
 virtualbox
-figlet
 
 # Other
-mc
-pigz
-zsh
-xdotool
 dconf-editor
 gnome-tweak-tool
+mc
+pigz
+xdotool
+zsh
 
 # Apps
 ######
-pinta ppa:pinta-maintainers/pinta-stable
-shotwell ppa:sicklylife/shotwell
 gnome-shell-pomodoro
 nautilus-admin
-pulseeffects ppa:mikhailnov/pulseeffects
+pinta ppa:pinta-maintainers/pinta-stable
 pulseaudio
+pulseeffects ppa:mikhailnov/pulseeffects
+shotwell ppa:sicklylife/shotwell
