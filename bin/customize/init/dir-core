@@ -6,9 +6,8 @@
 ## Core dirs ##
 ###############
 
-# Strict mode
+# Strict mode minus IFS
 set -euo pipefail
-IFS=$'\n\t'
 
 # Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
@@ -23,10 +22,13 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     if [[ -f config/customize/init/dir-core ]]; then # Local dirs file exists
         print-status "Create core dirs..."
         core_dirs=$(read-file-cfg config/customize/init/dir-core)
-        while read -r line; do
+        while read -r path owner; do
             # eval line to let the shell expand tilde and env vars
-            arg=$(eval echo "${line}")
-            sudo mkdir -p "${arg}"
+            path=$(eval echo "${path}")
+            owner=$(eval echo "${owner}")
+
+            sudo mkdir -p "${path}"
+            [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
         done <<< "${core_dirs}"
         print-finish
     fi
