@@ -13,14 +13,17 @@
 
 # Build
 build-essential
+patch
 software-properties-common
 
 # Net
 conntrack
 curl
+dnsutils
 ipset
 lftp
 sshfs
+vnstat
 whois
 
 # Security
@@ -34,6 +37,7 @@ default-jdk
 default-jre
 figlet
 git
+jq
 shellcheck
 virtualbox
 
@@ -41,6 +45,7 @@ virtualbox
 dconf-editor
 gnome-tweak-tool
 mc
+mokutil
 pigz
 xdotool
 zsh
