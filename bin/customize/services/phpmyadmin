@@ -21,6 +21,7 @@ check-not-root || exit 1
 
 # Unpack archive
 print-header "Install PHPMyAdmin..."
+old_dir=$(pwd)
 cd "${WEB_ROOT}"
 sudo mkdir -p phpmyadmin
 cd phpmyadmin
@@ -61,5 +62,7 @@ sudo mysql -e "CREATE USER IF NOT EXISTS '${PHPMYADMIN_CONTROL_NAME}'@'localhost
 sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${PHPMYADMIN_CONTROL_NAME}'@localhost;"
 sudo mysql -e "FLUSH PRIVILEGES;"
 print-finish
+
+cd "${old_dir}"
 
 exit 0
