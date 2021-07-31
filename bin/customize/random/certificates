@@ -19,39 +19,54 @@ check-not-root || exit 1
 # Create Self-signed root CA certificate
 ########################################
 
+key_created=""
+cert_created=""
+
 # Create private key
 print-status "Create private key..."
-sudo openssl \
-    genpkey \
-    -aes-256-cbc \
-    -algorithm rsa \
-    -pkeyopt rsa_keygen_bits:4096 \
-    -out "/etc/ssl/private/ESubuntu_Root_Certification_Authority.key"
-print-finish
+if sudo test ! -f "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
+    sudo openssl \
+        genpkey \
+        -aes-256-cbc \
+        -algorithm rsa \
+        -pkeyopt rsa_keygen_bits:4096 \
+        -out "/etc/ssl/private/${ROOT_CA_NAME}.key"
+    key_created="1"
+    print-finish
+else
+    print-finish "Key found, skipped"
+fi
 
 # Create self-signed certificate
 print-header "Create self-signed certificate ..."
-sudo openssl \
-    req \
-    -new \
-    -x509 \
-    -sha512 \
-    -extensions v3_ca \
-    -addext "keyUsage=critical,keyCertSign,cRLSign" \
-    -key "/etc/ssl/private/ESubuntu_Root_Certification_Authority.key" \
-    -out "/usr/local/share/ca-certificates/ESubuntu_Root_Certification_Authority.crt" \
-    -days 3650 \
-    -subj "/C=HU/ST=Hungary/L=Budapest/O=ES-Progress/OU=HeadQuarters/CN=ESubuntu Root CA"
-print-finish
+if [[ ! -f "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
+    sudo openssl \
+        req \
+        -new \
+        -x509 \
+        -sha512 \
+        -extensions v3_ca \
+        -addext "keyUsage=critical,keyCertSign,cRLSign" \
+        -key "/etc/ssl/private/${ROOT_CA_NAME}.key" \
+        -out "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
+        -days 3650 \
+        -subj "${ROOT_CA_SUBJECT}"
+    cert_created="1"
+    print-finish
+else
+    print-finish "Certificate found, skipped"
+fi
 
 # Update ca-cert
-print-header "Install root CA certificate to system..."
-sudo update-ca-certificates
-print-finish
+if [[ -n "${cert_created}" ]]; then
+    print-header "Install root CA certificate to system..."
+    sudo update-ca-certificates
+    print-finish
 
-print-status "Install root CA certificate to Firefox..."
-sudo mkdir -p /usr/lib/firefox/distribution
-sudo cp "${CUSTOMIZE_CFG_DIR}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
-print-finish
+    print-status "Install root CA certificate to Firefox..."
+    sudo mkdir -p /usr/lib/firefox/distribution
+    sudo cp "${CUSTOMIZE_CFG_DIR}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
+    print-finish
+fi
 
 exit 0
