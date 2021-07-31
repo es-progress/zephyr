@@ -19,6 +19,8 @@ check-not-root || exit 1
 
 print-header "Install Dash-to-panel..."
 
+old_dir=$(pwd)
+
 # Create temp dir
 install_dir=$(mktemp -d)
 cd "${install_dir}"
@@ -40,5 +42,7 @@ print-finish
 print-status "Config Dash-to-panel.."
 sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
 print-finish
+
+cd "${old_dir}"
 
 exit 0
