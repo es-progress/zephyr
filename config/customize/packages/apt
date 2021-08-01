@@ -42,11 +42,13 @@ shellcheck
 virtualbox
 
 # Other
+chromium-codecs-ffmpeg-extra
 dconf-editor
 gnome-tweak-tool
 mc
 mokutil
 pigz
+sysbench
 xdotool
 zsh
 
