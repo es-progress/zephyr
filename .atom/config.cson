@@ -12,6 +12,7 @@
     "**/config/customize/packages/virtualbox/*": "source.git-config"
     "**/config/customize/post-install/config/*": "source.git-config"
     "**/config/customize/random/*": "source.git-config"
+    "**/config/customize/services/mariadb/*": "source.git-config"
     "**/config/customize/services/php/extensions": "source.git-config"
     "**/config/customize/shorewall/*": "source.git-config"
     "**/config/customize/ssh/**": "source.git-config"
