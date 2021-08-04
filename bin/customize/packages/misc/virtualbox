@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+################
+## ES-Ubuntu  ##
+##            ##
+## Packages   ##
+## Virtualbox ##
+################
+
+# Strict mode minus IFS
+set -euo pipefail
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Install
+print-header "Install virtualbox..."
+sudo apt-get update
+sudo apt install --yes virtualbox virtualbox-guest-additions-iso
+print-finish
+
+# Global config
+print-status "Apply global configs..."
+configs=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/virtualbox")
+while read -r cfg_name cfg_value; do
+    if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
+        # eval value to let the shell expand tilde and env vars
+        cfg_value=$(eval echo "${cfg_value}")
+        vboxmanage setproperty "${cfg_name}" "${cfg_value}"
+    fi
+done <<< "${configs}"
+print-finish
+
+# Local config
+if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
+    cd "${ESUBUNTU_HOME}/local"
+
+    # Local settings
+    if [[ -f config/customize/packages/virtualbox/vboxconfig ]]; then # Local config file exists
+        print-status "Apply local configs..."
+
+        # vboxmanage configs
+        vbox_configs=$(read-file-cfg config/customize/packages/virtualbox/vboxconfig vboxmanage)
+        while read -r cfg_name cfg_value; do
+            if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
+                # eval value to let the shell expand tilde and env vars
+                cfg_value=$(eval echo "${cfg_value}")
+                vboxmanage setproperty "${cfg_name}" "${cfg_value}"
+            fi
+        done <<< "${vbox_configs}"
+
+        # Other configs
+        other_configs=$(read-file-cfg config/customize/packages/virtualbox/vboxconfig settings)
+        while read -r line; do
+            eval "${line}"
+        done <<<"${other_configs}"
+        print-finish
+    fi
+
+    # Register VMs
+    if [[ -d config/customize/packages/virtualbox ]]; then
+        cd config/customize/packages/virtualbox
+
+        print-status "Register VMs..."
+        vms=$(find . -maxdepth 1 -mindepth 1 -type d)
+        while read -r dir; do
+            target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
+            mkdir -p "${target_dir}"
+            cp -a "${dir}" "${target_dir}"
+            find "$target_dir" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+        done <<< "${vms}"
+        print-finish
+    fi
+
+fi
+
+exit 0
