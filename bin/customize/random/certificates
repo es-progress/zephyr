@@ -16,8 +16,43 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-# Create Self-signed root CA certificate
-########################################
+# Machine Owner Key (MOK)
+#########################
+
+key_created=""
+print-status "Create MOK private key..."
+if sudo test ! -f "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
+    sudo openssl \
+        genpkey \
+        -aes-256-cbc \
+        -algorithm rsa \
+        -pkeyopt rsa_keygen_bits:4096 \
+        -out "/etc/ssl/private/${MOK_KEY_NAME}.key"
+    key_created="1"
+    print-finish
+else
+    print-finish "Key found, skipped"
+fi
+
+print-header "Create MOK certificate..."
+if [[ ! -f "/etc/ssl/certs/${MOK_KEY_NAME}.der" || -n "${key_created}" ]]; then
+    sudo openssl \
+        req \
+        -new \
+        -x509 \
+        -sha256 \
+        -key "/etc/ssl/private/${MOK_KEY_NAME}.key" \
+        -outform DER \
+        -out "/etc/ssl/certs/${MOK_KEY_NAME}.der" \
+        -days 3650 \
+        -subj "${MOK_KEY_SUBJECT}"
+    print-finish
+else
+    print-finish "Certificate found, skipped"
+fi
+
+# Self-signed root CA certificate
+#################################
 
 key_created=""
 cert_created=""
@@ -38,7 +73,7 @@ else
 fi
 
 # Create self-signed certificate
-print-header "Create self-signed certificate ..."
+print-header "Create self-signed certificate..."
 if [[ ! -f "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
     sudo openssl \
         req \
