@@ -64,13 +64,28 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
         cd config/customize/packages/virtualbox
 
         print-status "Register VMs..."
-        vms=$(find . -maxdepth 1 -mindepth 1 -type d)
-        while read -r dir; do
-            target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
-            mkdir -p "${target_dir}"
-            cp -a "${dir}" "${target_dir}"
-            find "$target_dir" -name "*.vbox" -exec vboxmanage registervm '{}' \;
-        done <<< "${vms}"
+
+        # Get & create machine folder
+        target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
+        mkdir -p "${target_dir}"
+
+        # Read VM info
+        vm_info=$(read-file-cfg vboxconfig virtmachines)
+        while read -r line; do
+            eval "${line}"
+        done <<<"${vm_info}"
+
+        registered_vms=$(vboxmanage list vms)
+
+        for def in "${vm[@]:-}"; do
+            IFS="@" read -r dir uuid <<<"${def}"
+
+            # Check if already registered
+            if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
+                cp -a "${dir}" "${target_dir}"
+                find "$target_dir/${dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+            fi
+        done
         print-finish
     fi
 
