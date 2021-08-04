@@ -1,0 +1,14 @@
+#######################
+## ES-Ubuntu         ##
+##                   ##
+## Packages          ##
+## Virtualbox config ##
+##                   ##
+## Format:           ##
+## config_name value ##
+#######################
+
+hwvirtexclusive on
+vrdeauthlibrary VBoxAuth
+websrvauthlibrary VBoxAuth
+loghistorycount 3
