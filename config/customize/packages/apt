@@ -39,7 +39,6 @@ figlet
 git
 jq
 shellcheck
-virtualbox
 
 # Other
 chromium-codecs-ffmpeg-extra
