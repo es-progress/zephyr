@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Services  ##
+## PHP       ##
+###############
+
+# PHP version
+version="7.4"
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+# Add PHP repo
+print-header "Add PHP repo..."
+sudo add-apt-repository --yes ppa:ondrej/php
+print-finish
+
+# Install
+print-header "Install PHP & extensions..."
+sudo apt-get update
+sudo apt install --yes "php${version}"
+php_extensions=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/php/extensions")
+while read -r extension; do
+    package="php${version}-${extension}"
+    sudo apt install --yes "${package}"
+done <<< "${php_extensions}"
+print-finish
+
+# Config
+print-status "Config PHP..."
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/fpm.php.ini" "/etc/php/${version}/fpm/php.ini"
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/cli.php.ini" "/etc/php/${version}/cli/php.ini"
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/xdebug.ini" "/etc/php/${version}/mods-available/xdebug.ini"
+print-finish
+
+# Services
+print-header "Restarting services..."
+sudo systemctl enable "php${version}-fpm.service"
+sudo systemctl restart "php${version}-fpm.service"
+sudo a2enconf "php${version}-fpm"
+sudo systemctl restart apache2.service
+print-finish
+
+exit 0
