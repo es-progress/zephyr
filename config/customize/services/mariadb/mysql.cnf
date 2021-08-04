@@ -1,0 +1,17 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## MariaDB   ##
+## my.cnf    ##
+###############
+
+[mysql]
+auto-vertical-output
+
+[mysqld]
+innodb_large_prefix=true
+innodb_file_format=barracuda
+innodb_file_per_table=true
+
+# Emergency recovery
+#innodb_force_recovery=1
