@@ -1,0 +1,29 @@
+####################
+## ES-Ubuntu      ##
+##                ##
+## PHP extensions ##
+##                ##
+## Format:        ##
+## extension_name ##
+####################
+
+bcmath
+bz2
+cli
+common
+curl
+gd
+imagick
+imap
+intl
+json
+ldap
+mbstring
+mysql
+opcache
+soap
+zip
+xdebug
+xml
+
+fpm

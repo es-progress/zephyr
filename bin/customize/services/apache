@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Services  ##
+## Apache    ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+print-header "Add Apache repo..."
+sudo add-apt-repository --yes ppa:ondrej/apache2
+print-finish
+
+print-header "Install Apache & modules..."
+sudo apt-get update
+sudo apt install --yes apache2 libapache2-mod-fcgid libapache2-mod-security2
+apache_modules=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/apache/modules")
+while read -r module; do
+    sudo a2enmod "${module}"
+done <<< "${apache_modules}"
+print-finish
+
+print-status "Create default web dirs..."
+sudo mkdir -p "${WEB_ROOT}/default"
+sudo touch "${WEB_ROOT}/default/index.html"
+sudo chown -R "${USER}:www-data" "${WEB_ROOT}"
+print-finish
+
+print-status "Config Apache..."
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/apache2.conf" /etc/apache2/
+print-finish
+
+print-header "Create certificate for default vhost..."
+if sudo test ! -f "/etc/ssl/private/default.key"; then
+
+    # Create CSR
+    csr=$(sudo mktemp)
+    sudo openssl \
+        req \
+        -new \
+        -sha512 \
+        -newkey rsa:4096 \
+        -nodes \
+        -keyout "/etc/ssl/private/default.key" \
+        -out "${csr}" \
+        -subj "${DEF_VIRT_HOST_SUBJECT}"
+
+    # Sign CSR --> create certificate
+    tmp_config=$(sudo mktemp)
+    sudo openssl \
+        x509 \
+        -req \
+        -sha512 \
+        -extfile "${tmp_config}" \
+        -CAkey "/etc/ssl/private/${ROOT_CA_NAME}.key" \
+        -CA "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
+        -CAcreateserial \
+        -in "${csr}" \
+        -out "/etc/ssl/certs/default.pem" \
+        -days 365
+    print-finish
+else
+    print-finish "Key found, skipped"
+fi
+
+print-header "Setup default vhosts..."
+if [[ -f /etc/apache2/sites-available/default-ssl.conf ]]; then
+    sudo rm /etc/apache2/sites-available/default-ssl.conf
+    sudo a2dissite default-ssl.conf
+fi
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/default_virt_host.conf" /etc/apache2/sites-available/000-default.conf
+sudo sed -i \
+    -e "s@{{ doc_root }}@${WEB_ROOT}/default@g" \
+    -e "s@{{ ROOT_CA_NAME }}@${ROOT_CA_NAME}@g" \
+    /etc/apache2/sites-available/000-default.conf
+sudo a2ensite 000-default.conf
+print-finish
+
+print-header "Restarting services..."
+sudo systemctl enable apache2.service
+sudo systemctl restart apache2.service
+print-finish
+
+exit 0
