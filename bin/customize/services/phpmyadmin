@@ -43,7 +43,6 @@ print-finish
 print-status "Create tmp dirs, set permissions..."
 sudo mkdir -p upload save tmp
 sudo chgrp -R www-data .
-sudo chmod -R o-rwx .
 sudo chmod g+w upload save tmp
 print-finish
 
