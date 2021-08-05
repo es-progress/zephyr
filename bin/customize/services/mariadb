@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Services  ##
+## MariaDB   ##
+###############
+
+# Repo URL
+repo="deb [arch=amd64,arm64,ppc64el] http://ftp.bme.hu/pub/mirrors/mariadb/repo/10.6/ubuntu focal main"
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Bootstrap
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Check if not run as root
+check-not-root || exit 1
+
+print-header "Add MariaDB GPG key..."
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+print-finish
+
+print-header "Add MariaDB repo..."
+sudo add-apt-repository --yes "${repo}"
+print-finish
+
+print-header "Install MariaDB..."
+sudo apt-get updateapt
+sudo apt install --yes mariadb-server mariadb-backup python3-pymysql
+print-finish
+
+print-status "Config MariaDB..."
+sudo cp "${CUSTOMIZE_CFG_DIR}/services/mariadb/mysql.cnf" /etc/mysql/conf.d/
+print-finish
+
+print-header "Restarting services..."
+sudo systemctl enable mariadb.service
+sudo systemctl restart mariadb.service
+print-finish
+
+# DB admin
+print-status "Create DB admin..."
+sudo mysql -e "CREATE USER IF NOT EXISTS '${MARIADB_ADMIN_NAME}'@'localhost' IDENTIFIED BY '${MARIADB_ADMIN_PASS}';"
+sudo mysql -e "GRANT ALL ON *.* TO '${MARIADB_ADMIN_NAME}'@localhost WITH GRANT OPTION;"
+sudo mysql -e "FLUSH PRIVILEGES;"
+print-finish
+
+exit 0
