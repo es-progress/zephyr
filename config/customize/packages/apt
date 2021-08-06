@@ -45,7 +45,6 @@ shellcheck
 dconf-editor
 gnome-tweak-tool
 mc
-mokutil
 pigz
 sysbench
 xdotool
