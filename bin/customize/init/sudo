@@ -27,6 +27,7 @@ visudo -c -s "${tmp_file}" >/dev/null
 
 # Copy file
 sudo cp "${tmp_file}" "/etc/sudoers.d/${USER}"
+sudo chmod 0440 "/etc/sudoers.d/${USER}"
 
 # Verify full sudoers
 sudo visudo -c -s >/dev/null
