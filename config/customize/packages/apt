@@ -13,6 +13,7 @@
 
 # Build
 build-essential
+gettext
 patch
 software-properties-common
 
@@ -27,6 +28,7 @@ vnstat
 whois
 
 # Security
+cryptsetup
 pass
 pass-extension-tomb
 pwgen
