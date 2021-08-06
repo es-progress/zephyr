@@ -15,6 +15,9 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
+# Add snap to PATH
+PATH="/snap/bin:${PATH}"
+
 snaps=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/snap")
 while read -r package mode; do
 
@@ -24,7 +27,7 @@ while read -r package mode; do
 
     # Install snap
     print-header "Installing ${package}..."
-    sudo snap install ${options} "${package}"
+    sudo snap install "${package}" "${options}"
     print-finish
 done <<< "${snaps}"
 
