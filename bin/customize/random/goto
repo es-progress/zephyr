@@ -39,12 +39,16 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     if [[ -f config/customize/random/goto ]]; then # Local goto exists
         print-status "Registering local goto..."
         gt_alias=$(read-file-cfg config/customize/random/goto)
+
+        # Source env vars
+        [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
         while read -r alias dir; do
             # eval dir to let the shell expand tilde and env vars
             path=$(eval echo "${dir}")
 
             # Register only if not exists
             if ! goto -x "${alias}" >/dev/null 2>&1; then
+                mkdir -p "${path}"
                 goto -r "${alias}" "${path}"
             fi
         done <<< "${gt_alias}"
