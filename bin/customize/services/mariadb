@@ -28,7 +28,7 @@ sudo add-apt-repository --yes "${repo}"
 print-finish
 
 print-header "Install MariaDB..."
-sudo apt-get updateapt
+sudo apt-get update
 sudo apt install --yes mariadb-server mariadb-backup python3-pymysql
 print-finish
 
