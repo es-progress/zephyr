@@ -40,7 +40,6 @@ jq
 shellcheck
 
 # Other
-chromium-codecs-ffmpeg-extra
 dconf-editor
 gnome-tweak-tool
 mc
@@ -52,7 +51,6 @@ xdotool
 # Apps
 ######
 gnome-shell-pomodoro
-nautilus-admin
 pinta ppa:pinta-maintainers/pinta-stable
 pulseaudio
 pulseeffects ppa:mikhailnov/pulseeffects
