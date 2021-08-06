@@ -40,7 +40,7 @@ sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/apache2.conf" /etc/apache2/
 print-finish
 
 print-header "Create certificate for default vhost..."
-if sudo test ! -f "/etc/ssl/private/default.key"; then
+if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -e "/etc/ssl/certs/ESubuntu_Apache_default_vhost.pem" ]]; then
 
     # Create CSR
     csr=$(sudo mktemp)
@@ -50,7 +50,7 @@ if sudo test ! -f "/etc/ssl/private/default.key"; then
         -sha512 \
         -newkey rsa:4096 \
         -nodes \
-        -keyout "/etc/ssl/private/default.key" \
+        -keyout "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" \
         -out "${csr}" \
         -subj "${DEF_VIRT_HOST_SUBJECT}"
 
@@ -65,7 +65,7 @@ if sudo test ! -f "/etc/ssl/private/default.key"; then
         -CA "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
         -CAcreateserial \
         -in "${csr}" \
-        -out "/etc/ssl/certs/default.pem" \
+        -out "/etc/ssl/certs/ESubuntu_Apache_default_vhost.pem" \
         -days 365
     print-finish
 else
@@ -75,7 +75,6 @@ fi
 print-header "Setup default vhosts..."
 if [[ -f /etc/apache2/sites-available/default-ssl.conf ]]; then
     sudo rm /etc/apache2/sites-available/default-ssl.conf
-    sudo a2dissite default-ssl.conf
 fi
 sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/default_virt_host.conf" /etc/apache2/sites-available/000-default.conf
 sudo sed -i \
