@@ -33,10 +33,9 @@ pwgen
 shorewall
 
 # dev
-default-jdk
-default-jre
 figlet
 git
+jmeter
 jq
 shellcheck
 
