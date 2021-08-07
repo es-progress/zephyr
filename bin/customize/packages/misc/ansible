@@ -23,7 +23,6 @@ print-finish
 
 # Install
 print-header "Install Ansible..."
-sudo apt-get update
 sudo apt install --yes ansible
 print-finish
 

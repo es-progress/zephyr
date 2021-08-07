@@ -15,26 +15,27 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-# apt update
+# Read packages
+repos=()
+packages=()
+apt_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/apt")
+while read -r package repo; do
+    [[ -n "${repo}" ]] && repos+=("${repo}")
+    packages+=("${package}")
+done <<< "${apt_packages}"
+
+for repo in "${repos[@]}"; do
+    print-header "Adding apt repo: ${repo}..."
+    sudo add-apt-repository --yes --no-update "${repo}"
+    print-finish
+done
+
 print-header "Update apt cache..."
 sudo apt update
 print-finish
 
-# Install packages
-apt_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/apt")
-while read -r package repo; do
-
-    # Add repo
-    if [[ -n "${repo}" ]]; then
-        print-header "Adding apt repo: ${repo}..."
-        sudo add-apt-repository --yes "${repo}"
-        print-finish
-    fi
-
-    # Install package
-    print-header "Installing ${package}..."
-    sudo apt install --yes "${package}"
-    print-finish
-done <<< "${apt_packages}"
+print-header "Installing packages..."
+sudo apt install --yes "${packages[@]}"
+print-finish
 
 exit 0
