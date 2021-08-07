@@ -18,16 +18,12 @@ check-not-root || exit 1
 
 print-status "Customizing sudoers..."
 
-# Add user name to template
-tmp_file=$(mktemp)
-sed "s/{{ user }}/${USER}/g" <"${CUSTOMIZE_CFG_DIR}/init/sudoers" >"${tmp_file}"
-
 # Verify new file
-visudo -c -s "${tmp_file}" >/dev/null
+visudo -c -s "${CUSTOMIZE_CFG_DIR}/init/sudoers" >/dev/null
 
 # Copy file
-sudo cp "${tmp_file}" "/etc/sudoers.d/${USER}"
-sudo chmod 0440 "/etc/sudoers.d/${USER}"
+sudo cp "${CUSTOMIZE_CFG_DIR}/init/sudoers" "/etc/sudoers.d/ESubuntu"
+sudo chmod =0440 "/etc/sudoers.d/ESubuntu"
 
 # Verify full sudoers
 sudo visudo -c -s >/dev/null
