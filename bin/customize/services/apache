@@ -21,12 +21,13 @@ sudo add-apt-repository --yes ppa:ondrej/apache2
 print-finish
 
 print-header "Install Apache & modules..."
-sudo apt-get update
 sudo apt install --yes apache2 libapache2-mod-fcgid libapache2-mod-security2
 apache_modules=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/apache/modules")
+modules=()
 while read -r module; do
-    sudo a2enmod "${module}"
+    modules+=("${module}")
 done <<< "${apache_modules}"
+sudo a2enmod "${modules[@]}"
 print-finish
 
 print-status "Create default web dirs..."
