@@ -29,6 +29,13 @@ install         Install ES-Ubuntu
 
                 Command specific options:
                 LOCAL_DIR       Absolute path to local config dir
+
+update          Update a module
+
+                esubuntuctl update MODULE
+
+                Command specific options:
+                MODULE          Name of module to update (eg. packages, bash)
 EOF
     exit 1
 }
@@ -68,15 +75,20 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Parse options
 local_dir=""
+module=""
 cmd="${1:-}"
 [[ -z "${cmd}" ]] && usage "Command missing!"
 shift
 
-# Switch action
 case "${cmd}" in
     install)
         local_dir="${1:-}"
         install
+        ;;
+    update)
+        module="${1:-}"
+        [[ -z "${module}" ]] && usage "Module missing!"
+        "${ES_SCRIPTS_CUSTOMIZE}/runner" "${module}"
         ;;
     help|-h|--help)
         usage
