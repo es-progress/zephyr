@@ -10,15 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
 print-status "Copy gnupg config files..."
 mkdir -p ~/.gnupg
-cp "${CUSTOMIZE_CFG_DIR}/gpg/gpg-agent.conf" ~/.gnupg/
+cp "${ES_CFG_CUSTOMIZE}/gpg/gpg-agent.conf" ~/.gnupg/
 chmod go-rwx -R ~/.gnupg/
 print-finish
 

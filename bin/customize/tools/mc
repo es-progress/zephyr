@@ -10,20 +10,14 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
 print-status "Copy mc config files..."
-
 sudo mkdir -p /root/.config/mc
 mkdir -p ~/.config/mc
-
-sudo cp ${CUSTOMIZE_CFG_DIR}/mc/* /root/.config/mc/
-cp ${CUSTOMIZE_CFG_DIR}/mc/* ~/.config/mc
-
+sudo cp "${ES_CFG_CUSTOMIZE}"/mc/* /root/.config/mc/
+cp "${ES_CFG_CUSTOMIZE}"/mc/* ~/.config/mc
 print-finish
 
 exit 0

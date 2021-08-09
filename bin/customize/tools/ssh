@@ -10,22 +10,17 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
 print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
-cp -a ${CUSTOMIZE_CFG_DIR}/ssh/* ~/.ssh/
+cp -a "${ES_CFG_CUSTOMIZE}"/ssh/* ~/.ssh/
 print-finish
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d config/customize/ssh ]]; then # Local SSH files exists
+if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
+    cd "${ES_LOCAL_CONFIG}"
+    if [[ -d config/customize/ssh ]]; then
         print-status "Copy local SSH config files..."
         cd config/customize/ssh
         for file in *; do
