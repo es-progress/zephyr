@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+################
+## ES-Ubuntu  ##
+##            ##
+## Controller ##
+################
+
+#############
+# FUNCTIONS #
+#############
+
+# Usage
+#######
+usage(){
+    local msg="${1:-}"
+    [[ -n "${msg}" ]] && echo "${msg}"
+    cat <<EOF
+
+ES-Ubuntu controller
+
+Usage:
+esubuntuctl ACTION [OPTIONS...]
+
+Commands:
+
+install         Install ES-Ubuntu
+
+                esubuntuctl install [LOCAL_DIR]
+
+                Command specific options:
+                LOCAL_DIR       Absolute path to local config dir
+EOF
+    exit 1
+}
+
+# Install
+#########
+install(){
+    readonly link="${ESUBUNTU_HOME}/local"
+
+    # Symlink local dir
+    if [[ -n "${local_dir}" ]]; then
+        [[ -h "${link}" ]] && rm "${link}"
+        [[ ! -e "${link}" ]] && ln -s "${local_dir}" "${link}"
+    fi
+
+    "${ESUBUNTU_HOME}/bin/customize/runner"
+
+    echo
+    print-finish "Installation finished!"
+    read -r -p "Reboot is required, do you want it now? (y/n) "
+    [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && reboot
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Set default for ESUBUNTU_HOME
+if ! printenv ESUBUNTU_HOME >/dev/null 2>&1; then
+    ESUBUNTU_HOME="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    export ESUBUNTU_HOME
+fi
+
+source "${ESUBUNTU_HOME}/bootstrap.sh"
+
+# Parse options
+local_dir=""
+cmd="${1:-}"
+[[ -z "${cmd}" ]] && usage "Command missing!"
+shift
+
+# Switch action
+case "${cmd}" in
+    install)
+        local_dir="${1:-}"
+        install
+        ;;
+    help|-h|--help)
+        usage
+        ;;
+    *)
+        usage "${cmd}: Unknown command!"
+        ;;
+esac
+
+exit 0
