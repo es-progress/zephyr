@@ -35,8 +35,8 @@ while read -r line; do
 done <<< "${bookmarks}"
 print-finish
 
-if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
-    cd "${ES_LOCAL_CONFIG}"
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
     if [[ -f config/customize/gnome/bookmarks ]]; then
         print-status "Add local bookmarks..."
         bookmarks=$(read-file-cfg config/customize/gnome/bookmarks)

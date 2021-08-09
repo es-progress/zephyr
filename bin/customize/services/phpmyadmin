@@ -22,7 +22,7 @@ cd "${WEB_ROOT}"
 sudo rm -rf phpmyadmin
 sudo mkdir -p phpmyadmin
 cd phpmyadmin
-sudo unzip "${CUSTOMIZE_FILES_DIR}/tarballs/phpMyAdmin-${version}-all-languages.zip"
+sudo unzip "${ES_FILES_CUSTOMIZE}/tarballs/phpMyAdmin-${version}-all-languages.zip"
 sudo mv "phpMyAdmin-${version}-all-languages" public
 print-finish
 

@@ -20,7 +20,7 @@ print-header "Install Tomb..."
 # Unpack archive
 tmp_dir=$(mktemp -d)
 cd "${tmp_dir}"
-tar -xf "${CUSTOMIZE_FILES_DIR}/tarballs/Tomb-${tomb_version}.tar.gz"
+tar -xf "${ES_FILES_CUSTOMIZE}/tarballs/Tomb-${tomb_version}.tar.gz"
 # Install
 cd "Tomb-${tomb_version}"
 sudo make install

@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 print-status "Copy vendor shell programs..."
 sudo mkdir -p "${GLOBAL_BIN}"
-cd "${CUSTOMIZE_FILES_DIR}/shell/vendor"
+cd "${ES_FILES_CUSTOMIZE}/shell/vendor"
 for file in *; do
     sudo cp "${file}" "${GLOBAL_BIN}"
     sudo chown root:root "${GLOBAL_BIN}/${file}"

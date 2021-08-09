@@ -12,8 +12,8 @@ set -euo pipefail
 source "${ESUBUNTU_HOME}/bootstrap.sh"
 check-not-root || exit 1
 
-if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
-    cd "${ES_LOCAL_CONFIG}"
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
     if [[ -f config/customize/init/dir-core ]]; then
         print-status "Create core dirs..."
         core_dirs=$(read-file-cfg config/customize/init/dir-core)

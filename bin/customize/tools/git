@@ -23,8 +23,8 @@ while read -r cfg_loc cfg_name cfg_value; do
 done <<< "${configs}"
 print-finish
 
-if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
-    cd "${ES_LOCAL_CONFIG}"
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
     if [[ -f config/customize/git/configs ]]; then
         print-status "Local git config..."
         configs=$(read-file-cfg config/customize/git/configs)
