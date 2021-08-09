@@ -9,7 +9,7 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 if [[ -d "${ES_CFG_LOCAL}" ]]; then

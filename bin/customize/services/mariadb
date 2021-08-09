@@ -13,7 +13,7 @@ repo="deb [arch=amd64,arm64,ppc64el] http://ftp.bme.hu/pub/mirrors/mariadb/repo/
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Add MariaDB GPG key..."
@@ -29,7 +29,7 @@ sudo apt install --yes mariadb-server mariadb-backup python3-pymysql
 print-finish
 
 print-status "Config MariaDB..."
-sudo cp "${ES_CFG_CUSTOMIZE}/services/mariadb/mysql.cnf" /etc/mysql/conf.d/
+sudo cp "${ES_CUSTOMIZE_CFG}/services/mariadb/mysql.cnf" /etc/mysql/conf.d/
 print-finish
 
 print-header "Restarting services..."

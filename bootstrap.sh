@@ -6,10 +6,10 @@
 ##################
 
 # Import paths
-source "${ESUBUNTU_HOME}/ESubuntu.path.cfg"
+source "${DIR_ESUBUNTU}/ESubuntu.path.cfg"
 
 # Import configs
-source "${ESUBUNTU_HOME}/ESubuntu.cfg"
+source "${DIR_ESUBUNTU}/ESubuntu.cfg"
 
 # Import shell library
-source "${ESUBUNTU_HOME}/bin/library.sh"
+source "${DIR_ESUBUNTU}/bin/library.sh"

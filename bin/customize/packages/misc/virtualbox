@@ -9,7 +9,7 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install virtualbox..."
@@ -18,7 +18,7 @@ sudo apt install --yes virtualbox virtualbox-guest-additions-iso
 print-finish
 
 print-status "Apply global configs..."
-configs=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/packages/virtualbox")
+configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/virtualbox")
 while read -r cfg_name cfg_value; do
     if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
         # eval value to let the shell expand tilde and env vars

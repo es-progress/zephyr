@@ -9,13 +9,13 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Read packages
 repos=()
 packages=()
-apt_packages=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/packages/apt")
+apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt")
 while read -r package repo; do
     [[ -n "${repo}" ]] && repos+=("${repo}")
     packages+=("${package}")

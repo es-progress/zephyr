@@ -11,7 +11,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install Dash-to-panel..."
@@ -35,7 +35,7 @@ busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval"
 print-finish
 
 print-status "Config Dash-to-panel.."
-sed -e '/^#/d' -e '/^$/d' "${ES_CFG_CUSTOMIZE}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
+sed -e '/^#/d' -e '/^$/d' "${ES_CUSTOMIZE_CFG}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
 print-finish
 
 cd "${old_dir}"

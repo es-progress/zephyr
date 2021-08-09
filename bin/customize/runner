@@ -22,7 +22,7 @@ exec_dir=(
 # Strict mode minus IFS
 set -euo pipefail
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 
 # Parse options
 filter="${1:-}"
@@ -33,10 +33,10 @@ run_parts_exec="--exit-on-error --regex=${filter}"
 
 for item in "${exec_dir[@]}"; do
     IFS=";" read -r name dir <<<"${item}"
-    runnable=$(run-parts ${run_parts_test} "${ES_SCRIPTS_CUSTOMIZE}/${dir}")
+    runnable=$(run-parts ${run_parts_test} "${ES_CUSTOMIZE_SCRIPTS}/${dir}")
     if [[ -n "$runnable" ]]; then
         print-section "${name}"
-        run-parts ${run_parts_exec} "${ES_SCRIPTS_CUSTOMIZE}/${dir}"
+        run-parts ${run_parts_exec} "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
     fi
 done
 

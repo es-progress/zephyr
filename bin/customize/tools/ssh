@@ -10,12 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
-cp -a "${ES_CFG_CUSTOMIZE}"/ssh/* ~/.ssh/
+cp -a "${ES_CUSTOMIZE_CFG}"/ssh/* ~/.ssh/
 print-finish
 
 if [[ -d "${ES_CFG_LOCAL}" ]]; then
