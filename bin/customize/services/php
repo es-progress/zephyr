@@ -13,20 +13,15 @@ version="7.4"
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
-# Add PHP repo
 print-header "Add PHP repo..."
 sudo add-apt-repository --yes ppa:ondrej/php
 print-finish
 
-# Install
 print-header "Install PHP & extensions..."
-php_extensions=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/php/extensions")
+php_extensions=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/services/php/extensions")
 packages=()
 packages+=("php${version}")
 while read -r extension; do
@@ -35,14 +30,12 @@ done <<< "${php_extensions}"
 sudo apt install --yes "${packages[@]}"
 print-finish
 
-# Config
 print-status "Config PHP..."
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/fpm.php.ini" "/etc/php/${version}/fpm/php.ini"
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/cli.php.ini" "/etc/php/${version}/cli/php.ini"
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/php/xdebug.ini" "/etc/php/${version}/mods-available/xdebug.ini"
+sudo cp "${ES_CFG_CUSTOMIZE}/services/php/fpm.php.ini" "/etc/php/${version}/fpm/php.ini"
+sudo cp "${ES_CFG_CUSTOMIZE}/services/php/cli.php.ini" "/etc/php/${version}/cli/php.ini"
+sudo cp "${ES_CFG_CUSTOMIZE}/services/php/xdebug.ini" "/etc/php/${version}/mods-available/xdebug.ini"
 print-finish
 
-# Services
 print-header "Restarting services..."
 sudo systemctl enable "php${version}-fpm.service"
 sudo systemctl restart "php${version}-fpm.service"
