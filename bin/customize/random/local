@@ -9,17 +9,12 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d config/customize/post-install ]]; then # Local post-install scripts exists
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
+    if [[ -d config/customize/post-install ]]; then
         # Run local post-install scripts
         cd config/customize/post-install
         run-parts --exit-on-error .

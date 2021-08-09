@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+################
+## ES-Ubuntu  ##
+##            ##
+## Controller ##
+################
+
+#############
+# FUNCTIONS #
+#############
+
+# Usage
+#######
+usage(){
+    local msg="${1:-}"
+    [[ -n "${msg}" ]] && echo "${msg}"
+    cat <<EOF
+
+ES-Ubuntu controller
+
+Usage:
+esubuntuctl ACTION [OPTIONS...]
+
+Commands:
+
+install         Install ES-Ubuntu
+
+                esubuntuctl install [LOCAL_DIR]
+
+                Command specific options:
+                LOCAL_DIR       Absolute path to local config dir
+
+update          Update a module
+
+                esubuntuctl update MODULE
+
+                Command specific options:
+                MODULE          Name of module to update (eg. packages, bash)
+EOF
+    exit 1
+}
+
+# Install
+#########
+install(){
+    # Symlink local dir
+    if [[ -n "${local_dir}" ]]; then
+        [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
+        [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${local_dir}" "${ES_CFG_LOCAL}"
+    fi
+
+    "${ES_CUSTOMIZE_SCRIPTS}/runner"
+
+    echo
+    print-finish "Installation finished!"
+    read -r -p "Reboot is required, do you want it now? (y/n) "
+    [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && reboot
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+# Set default for DIR_ESUBUNTU
+if ! printenv DIR_ESUBUNTU >/dev/null 2>&1; then
+    DIR_ESUBUNTU="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    export DIR_ESUBUNTU
+fi
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+
+# Parse options
+local_dir=""
+module=""
+cmd="${1:-}"
+[[ -z "${cmd}" ]] && usage "Command missing!"
+shift
+
+case "${cmd}" in
+    install)
+        local_dir="${1:-}"
+        install
+        ;;
+    update)
+        module="${1:-}"
+        [[ -z "${module}" ]] && usage "Module missing!"
+        "${ES_CUSTOMIZE_SCRIPTS}/runner" "${module}"
+        ;;
+    help|-h|--help)
+        usage
+        ;;
+    *)
+        usage "${cmd}: Unknown command!"
+        ;;
+esac
+
+exit 0

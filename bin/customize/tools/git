@@ -9,17 +9,12 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Global
 print-status "Global git config..."
-configs=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/git/configs")
+configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/git/configs")
 while read -r cfg_loc cfg_name cfg_value; do
-    # Apply configs
     if [[ "${cfg_loc}" == "system" ]]; then
         sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
     else
@@ -28,15 +23,12 @@ while read -r cfg_loc cfg_name cfg_value; do
 done <<< "${configs}"
 print-finish
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -f config/customize/git/configs ]]; then # Local git config exists
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
+    if [[ -f config/customize/git/configs ]]; then
         print-status "Local git config..."
         configs=$(read-file-cfg config/customize/git/configs)
         while read -r cfg_loc cfg_name cfg_value; do
-            # Apply configs
             if [[ "${cfg_loc}" == "system" ]]; then
                 sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
             else

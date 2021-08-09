@@ -10,17 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d config/customize/packages/local ]]; then # Local installer exists
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
+    if [[ -d config/customize/packages/local ]]; then
         cd config/customize/packages/local
         run-parts --report  .
     fi

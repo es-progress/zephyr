@@ -11,15 +11,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Load configs
 print-status "Config GNOME terminal..."
-sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/terminal" | dconf load /org/gnome/terminal/
+sed -e '/^#/d' -e '/^$/d' "${ES_CUSTOMIZE_CFG}/gnome/terminal" | dconf load /org/gnome/terminal/
 print-finish
 
 exit 0

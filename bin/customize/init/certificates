@@ -10,16 +10,11 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Machine Owner Key (MOK)
 #########################
-
-# Install mokutil
 print-header "Install mokutil..."
 sudo apt install --yes mokutil
 print-finish
@@ -67,7 +62,6 @@ fi
 
 # Self-signed root CA certificate
 #################################
-
 key_created=""
 cert_created=""
 print-status "Create ROOT CA private key..."
@@ -110,7 +104,7 @@ if [[ -n "${cert_created}" ]]; then
 
     print-status "Install root CA certificate to Firefox..."
     sudo mkdir -p /usr/lib/firefox/distribution
-    sudo cp "${CUSTOMIZE_CFG_DIR}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
+    sudo cp "${ES_CUSTOMIZE_CFG}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
     print-finish
 fi
 

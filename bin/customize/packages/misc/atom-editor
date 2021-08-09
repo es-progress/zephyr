@@ -10,35 +10,27 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Add Atom repo
 print-header "Add Atom repo..."
 wget -qO - https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
 sudo bash -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
 print-finish
 
-# Install
 print-header "Install Atom..."
 sudo apt-get update
 sudo apt install --yes atom
 print-finish
 
-# Base packages
 print-header "Install base Atom packages..."
 apm install sync-settings
 apm install sync-settings-git-location
 print-finish
 
-# Local configs
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -f config/customize/packages/atom/config.cson ]]; then # Local config exists
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
+    if [[ -f config/customize/packages/atom/config.cson ]]; then
         print-status "Copy local config file..."
         cp config/customize/packages/atom/config.cson ~/.atom
         print-finish

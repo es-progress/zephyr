@@ -9,21 +9,16 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Install
 print-header "Install virtualbox..."
 sudo apt-get update
 sudo apt install --yes virtualbox virtualbox-guest-additions-iso
 print-finish
 
-# Global config
 print-status "Apply global configs..."
-configs=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/virtualbox")
+configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/virtualbox")
 while read -r cfg_name cfg_value; do
     if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
         # eval value to let the shell expand tilde and env vars
@@ -33,12 +28,11 @@ while read -r cfg_name cfg_value; do
 done <<< "${configs}"
 print-finish
 
-# Local config
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
 
     # Local settings
-    if [[ -f config/customize/packages/virtualbox/vboxconfig ]]; then # Local config file exists
+    if [[ -f config/customize/packages/virtualbox/vboxconfig ]]; then
         print-status "Apply local configs..."
 
         # vboxmanage configs
@@ -88,7 +82,6 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
         done
         print-finish
     fi
-
 fi
 
 exit 0
