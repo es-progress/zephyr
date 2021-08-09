@@ -10,16 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
-# Shell programs
 print-status "Copy global shell scripts..."
 sudo mkdir -p "${GLOBAL_BIN}"
-cd "${ESUBUNTU_HOME}/files/shell/es-progress/bin"
+cd "${CUSTOMIZE_FILES_DIR}/shell/es-progress/bin"
 for file in *; do
     sudo cp "${file}" "${GLOBAL_BIN}"
     sudo chown root:root "${GLOBAL_BIN}/${file}"
@@ -27,10 +23,9 @@ for file in *; do
 done
 print-finish
 
-# Shell library
 print-status "Copy global shell library..."
 sudo mkdir -p "${GLOBAL_LIB}"
-cd "${ESUBUNTU_HOME}/files/shell/es-progress/lib"
+cd "${CUSTOMIZE_FILES_DIR}/shell/es-progress/lib"
 for file in *; do
     sudo cp "${file}" "${GLOBAL_LIB}"
     sudo chown root:root "${GLOBAL_LIB}/${file}"
@@ -38,11 +33,9 @@ for file in *; do
 done
 print-finish
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d files/shell ]]; then # Local shell files exits
+if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
+    cd "${ES_LOCAL_CONFIG}"
+    if [[ -d files/shell ]]; then
         print-status "Copy local shell scripts..."
         mkdir -p "${LOCAL_BIN}"
         cd files/shell
