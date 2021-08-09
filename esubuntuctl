@@ -42,7 +42,7 @@ install(){
         [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${local_dir}" "${ES_CFG_LOCAL}"
     fi
 
-    "${ESUBUNTU_HOME}/bin/customize/runner"
+    "${ES_SCRIPTS_CUSTOMIZE}/runner"
 
     echo
     print-finish "Installation finished!"

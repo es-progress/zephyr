@@ -2,50 +2,42 @@
 ####################
 ## ES-Ubuntu      ##
 ##                ##
+## Runner         ##
 ## Customizations ##
 ####################
 
-# Strict mode
-set -euo pipefail
-IFS=$'\n\t'
+# Dirs to run (Name;Path)
+exec_dir=(
+    "Initialize;init"
+    "Install packages;packages"
+    "Install other packages;packages/misc"
+    "Install services;services"
+    "Setup shell;shell"
+    "Config tools;tools"
+    "Config apps;apps"
+    "Config GNOME;gnome"
+    "Random configs;random"
+)
 
-# Bootstrap
+# Strict mode minus IFS
+set -euo pipefail
+
 source "${ESUBUNTU_HOME}/bootstrap.sh"
 
 # Parse options
 filter="${1:-}"
 
-# Init
-print-section "Initialize"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/init"
+# run-parts options
+run_parts_test="--test --regex=${filter}"
+run_parts_exec="--exit-on-error --regex=${filter}"
 
-# Packages
-print-section "Install packages"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/packages/misc"
-
-# Services
-print-section "Install services"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/services"
-
-# shell
-print-section "Setup shell"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/shell"
-
-# Tools
-print-section "Config tools"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/tools"
-
-# Apps
-print-section "Config apps"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/apps"
-
-# GNOME
-print-section "Config GNOME"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/gnome"
-
-# Random
-print-section "Random configs"
-run-parts --exit-on-error --regex="${filter}" "${ESUBUNTU_HOME}/bin/customize/random"
+for item in "${exec_dir[@]}"; do
+    IFS=";" read -r name dir <<<"${item}"
+    runnable=$(run-parts ${run_parts_test} "${ES_SCRIPTS_CUSTOMIZE}/${dir}")
+    if [[ -n "$runnable" ]]; then
+        print-section "${name}"
+        run-parts ${run_parts_exec} "${ES_SCRIPTS_CUSTOMIZE}/${dir}"
+    fi
+done
 
 exit 0
