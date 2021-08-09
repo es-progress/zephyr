@@ -105,6 +105,7 @@ if [[ -n "${cert_created}" ]]; then
     print-status "Install root CA certificate to Firefox..."
     sudo mkdir -p /usr/lib/firefox/distribution
     sudo cp "${ES_CUSTOMIZE_CFG}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
+    sudo chmod =0644 /usr/lib/firefox/distribution/policies.json
     print-finish
 fi
 
