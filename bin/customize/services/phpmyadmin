@@ -13,13 +13,9 @@ version="5.1.0"
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
-# Unpack archive
 print-header "Install PHPMyAdmin..."
 old_dir=$(pwd)
 cd "${WEB_ROOT}"
@@ -30,24 +26,21 @@ sudo unzip "${CUSTOMIZE_FILES_DIR}/tarballs/phpMyAdmin-${version}-all-languages.
 sudo mv "phpMyAdmin-${version}-all-languages" public
 print-finish
 
-# Config
 print-status "Configure PHPMyAdmin..."
 secret=$(openssl rand -hex 32)
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/phpmyadmin/config.inc.php" public/
+sudo cp "${ES_CFG_CUSTOMIZE}/services/phpmyadmin/config.inc.php" public/
 sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" public/config.inc.php
 sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" public/config.inc.php
 sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" public/config.inc.php
 sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" public/config.inc.php
 print-finish
 
-# Permissions
 print-status "Create tmp dirs, set permissions..."
 sudo mkdir -p upload save tmp
 sudo chgrp -R www-data .
 sudo chmod g+w upload save tmp
 print-finish
 
-# PHPMyAdmin DB
 print-status "Create PHPMyAdmin control DB..."
 if [[ ! -f "public/sql/create_tables.sql" ]]; then
     echo "Import SQL file missing"
@@ -56,7 +49,6 @@ fi
 cat "public/sql/create_tables.sql" | sudo mysql
 print-finish
 
-# PHPMyAdmin user
 print-status "Create PHPMyAdmin control user..."
 sudo mysql -e "CREATE USER IF NOT EXISTS '${PHPMYADMIN_CONTROL_NAME}'@'localhost' IDENTIFIED BY '${PHPMYADMIN_CONTROL_PASS}';"
 sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${PHPMYADMIN_CONTROL_NAME}'@localhost;"
