@@ -9,22 +9,16 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
-# Source goto
 source ~/.bash/goto
 
-# Register global alias
-print-header "Registering global goto..."
-gt_alias=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/random/goto")
+print-header "Registering global goto alias..."
+gt_alias=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/random/goto")
 while read -r alias dir; do
     # eval dir to let the shell expand tilde and env vars
     path=$(eval echo "${dir}")
-
     # Register only if not exists
     if ! goto -x "${alias}" >/dev/null 2>&1; then
         goto -r "${alias}" "${path}"
@@ -32,16 +26,15 @@ while read -r alias dir; do
 done <<< "${gt_alias}"
 print-finish
 
-# Local
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -f config/customize/random/goto ]]; then # Local goto exists
-        print-header "Registering local goto..."
+if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
+    cd "${ES_LOCAL_CONFIG}"
+    if [[ -f config/customize/random/goto ]]; then
+        print-header "Registering local goto alias..."
         gt_alias=$(read-file-cfg config/customize/random/goto)
 
         # Source env vars
         [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
+
         while read -r alias dir; do
             # eval dir to let the shell expand tilde and env vars
             path=$(eval echo "${dir}")
