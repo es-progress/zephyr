@@ -10,10 +10,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Add Apache repo..."
@@ -22,7 +19,7 @@ print-finish
 
 print-header "Install Apache & modules..."
 sudo apt install --yes apache2 libapache2-mod-fcgid libapache2-mod-security2
-apache_modules=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/apache/modules")
+apache_modules=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/services/apache/modules")
 modules=()
 while read -r module; do
     modules+=("${module}")
@@ -37,7 +34,7 @@ sudo chown -R "${USER}:www-data" "${WEB_ROOT}"
 print-finish
 
 print-status "Config Apache..."
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/apache2.conf" /etc/apache2/
+sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/apache2.conf" /etc/apache2/
 print-finish
 
 print-header "Create certificate for default vhost..."
@@ -77,7 +74,7 @@ print-header "Setup default vhosts..."
 if [[ -f /etc/apache2/sites-available/default-ssl.conf ]]; then
     sudo rm /etc/apache2/sites-available/default-ssl.conf
 fi
-sudo cp "${CUSTOMIZE_CFG_DIR}/services/apache/default_virt_host.conf" /etc/apache2/sites-available/000-default.conf
+sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/default_virt_host.conf" /etc/apache2/sites-available/000-default.conf
 sudo sed -i \
     -e "s@{{ doc_root }}@${WEB_ROOT}/default@g" \
     -e "s@{{ ROOT_CA_NAME }}@${ROOT_CA_NAME}@g" \

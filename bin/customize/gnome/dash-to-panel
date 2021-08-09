@@ -11,14 +11,10 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install Dash-to-panel..."
-
 old_dir=$(pwd)
 
 # Create temp dir
@@ -36,11 +32,10 @@ gnome-extensions enable "dash-to-panel@jderose9.github.com"
 
 # Restart GNOME
 busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval" "s" 'Meta.restart("Restarting…")'
-
 print-finish
 
 print-status "Config Dash-to-panel.."
-sed -e '/^#/d' -e '/^$/d' "${CUSTOMIZE_CFG_DIR}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
+sed -e '/^#/d' -e '/^$/d' "${ES_CUSTOMIZE_CFG}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
 print-finish
 
 cd "${old_dir}"

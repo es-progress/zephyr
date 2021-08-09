@@ -10,29 +10,22 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Add Ansible repo
 print-header "Add Ansible repo..."
 sudo add-apt-repository --yes ppa:ansible/ansible
 print-finish
 
-# Install
 print-header "Install Ansible..."
 sudo apt install --yes ansible
 print-finish
 
-# Install collections
 print-header "Install Ansible collections..."
-collections=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/ansible")
+collections=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/ansible")
 while read -r collection; do
     ansible-galaxy collection install "${collection}"
 done <<< "${collections}"
-
 print-finish
 
 exit 0

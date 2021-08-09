@@ -10,20 +10,16 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Install pip (Python package installer)
-print-header "Installing pip3..."
+print-header "Installing pip3 (python package manager)..."
 sudo apt install --yes python3-pip
 print-finish
 
 # Read packages
 packages=()
-pip_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/pip")
+pip_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/pip")
 while read -r package; do
     packages+=("${package}")
 done <<< "${pip_packages}"

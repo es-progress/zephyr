@@ -9,24 +9,18 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
-source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Add new dirs
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -f config/customize/init/dir-core ]]; then # Local dirs file exists
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
+    if [[ -f config/customize/init/dir-core ]]; then
         print-status "Create core dirs..."
         core_dirs=$(read-file-cfg config/customize/init/dir-core)
         while read -r path owner; do
             # eval line to let the shell expand tilde and env vars
             path=$(eval echo "${path}")
             owner=$(eval echo "${owner}")
-
             sudo mkdir -p "${path}"
             [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
         done <<< "${core_dirs}"
