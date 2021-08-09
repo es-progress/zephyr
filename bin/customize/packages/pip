@@ -16,22 +16,20 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
-# apt update
-print-header "Update apt cache..."
-sudo apt update
-print-finish
-
 # Install pip (Python package installer)
 print-header "Installing pip3..."
 sudo apt install --yes python3-pip
 print-finish
 
-# Install packages
+# Read packages
+packages=()
 pip_packages=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/pip")
 while read -r package; do
-    print-header "Installing ${package}..."
-    sudo pip3 install "${package}"
-    print-finish
+    packages+=("${package}")
 done <<< "${pip_packages}"
+
+print-header "Installing pip packages..."
+sudo pip3 install "${packages[@]}"
+print-finish
 
 exit 0
