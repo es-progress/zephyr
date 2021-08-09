@@ -9,10 +9,7 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
 print-header "Install snapd..."
@@ -20,9 +17,8 @@ sudo apt update
 sudo apt install --yes snapd
 print-finish
 
-snaps=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/snap")
+snaps=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/packages/snap")
 while read -r package mode; do
-
     # Set options
     options=""
     [[ "${mode}" == "classic" ]] && options="--classic"
