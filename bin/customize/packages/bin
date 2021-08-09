@@ -10,16 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
-# Vendor programs
 print-status "Copy vendor shell programs..."
 sudo mkdir -p "${GLOBAL_BIN}"
-cd "${ESUBUNTU_HOME}/files/shell/vendor"
+cd "${CUSTOMIZE_FILES_DIR}/shell/vendor"
 for file in *; do
     sudo cp "${file}" "${GLOBAL_BIN}"
     sudo chown root:root "${GLOBAL_BIN}/${file}"
