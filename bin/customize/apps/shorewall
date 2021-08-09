@@ -10,14 +10,14 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Get default interface
 iface=$(ip route | awk '/^default/{print $5}')
 
 print-status "Copy global shorewall config..."
-sudo cp "${ES_CFG_CUSTOMIZE}"/shorewall/* /etc/shorewall/
+sudo cp "${ES_CUSTOMIZE_CFG}"/shorewall/* /etc/shorewall/
 sudo sed -i "s/{{ interface }}/${iface}/g" /etc/shorewall/interfaces
 print-finish
 

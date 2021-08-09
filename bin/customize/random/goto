@@ -9,13 +9,13 @@
 # Strict mode minus IFS
 set -euo pipefail
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 source ~/.bash/goto
 
 print-header "Registering global goto alias..."
-gt_alias=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/random/goto")
+gt_alias=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/random/goto")
 while read -r alias dir; do
     # eval dir to let the shell expand tilde and env vars
     path=$(eval echo "${dir}")

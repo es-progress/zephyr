@@ -13,7 +13,7 @@ version="5.1.0"
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install PHPMyAdmin..."
@@ -22,13 +22,13 @@ cd "${WEB_ROOT}"
 sudo rm -rf phpmyadmin
 sudo mkdir -p phpmyadmin
 cd phpmyadmin
-sudo unzip "${ES_FILES_CUSTOMIZE}/tarballs/phpMyAdmin-${version}-all-languages.zip"
+sudo unzip "${ES_CUSTOMIZE_FILES}/tarballs/phpMyAdmin-${version}-all-languages.zip"
 sudo mv "phpMyAdmin-${version}-all-languages" public
 print-finish
 
 print-status "Configure PHPMyAdmin..."
 secret=$(openssl rand -hex 32)
-sudo cp "${ES_CFG_CUSTOMIZE}/services/phpmyadmin/config.inc.php" public/
+sudo cp "${ES_CUSTOMIZE_CFG}/services/phpmyadmin/config.inc.php" public/
 sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" public/config.inc.php
 sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" public/config.inc.php
 sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" public/config.inc.php

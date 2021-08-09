@@ -10,12 +10,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy pulse-effect presets..."
 mkdir -p ~/.config/PulseEffects/output/
-cp "${ES_CFG_CUSTOMIZE}"/pulse-effects/* ~/.config/PulseEffects/output/
+cp "${ES_CUSTOMIZE_CFG}"/pulse-effects/* ~/.config/PulseEffects/output/
 print-finish
 
 exit 0

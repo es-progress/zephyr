@@ -11,22 +11,22 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Nautilus links
 ################
 print-status "Copy global user dirs..."
-sudo cp "${ES_CFG_CUSTOMIZE}/gnome/user-dirs.defaults" /etc/xdg/
+sudo cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.defaults" /etc/xdg/
 print-finish
 print-status "Copy user dirs..."
-cp "${ES_CFG_CUSTOMIZE}/gnome/user-dirs.dirs" ~/.config/
+cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.dirs" ~/.config/
 print-finish
 
 # Bookmarks
 ###########
 print-status "Add global bookmarks..."
-bookmarks=$(read-file-cfg "${ES_CFG_CUSTOMIZE}/gnome/bookmarks")
+bookmarks=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
 while read -r line; do
     # Check if it already contains
     if ! grep -qs -F -x "$line" ~/.config/gtk-3.0/bookmarks; then

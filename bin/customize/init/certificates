@@ -10,7 +10,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Machine Owner Key (MOK)
@@ -104,7 +104,7 @@ if [[ -n "${cert_created}" ]]; then
 
     print-status "Install root CA certificate to Firefox..."
     sudo mkdir -p /usr/lib/firefox/distribution
-    sudo cp "${ES_CFG_CUSTOMIZE}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
+    sudo cp "${ES_CUSTOMIZE_CFG}/random/firefox-policies.json" /usr/lib/firefox/distribution/policies.json
     print-finish
 fi
 

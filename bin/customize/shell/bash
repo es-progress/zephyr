@@ -10,13 +10,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${ESUBUNTU_HOME}/bootstrap.sh"
+source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 shopt -s dotglob
 
 print-status "Copy global Bash files..."
-cd "${ES_CFG_CUSTOMIZE}/bash/global"
+cd "${ES_CUSTOMIZE_CFG}/bash/global"
 for file in *; do
     sudo cp -r "${file}" /root/
     sudo cp -r "${file}" /etc/skel/
@@ -25,7 +25,7 @@ done
 print-finish
 
 print-status "Copy root Bash files..."
-cd "${ES_CFG_CUSTOMIZE}/bash/root"
+cd "${ES_CUSTOMIZE_CFG}/bash/root"
 for file in *; do
     sudo cp -r "${file}" /root/
 done
