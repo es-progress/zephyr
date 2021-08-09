@@ -19,9 +19,14 @@ check-not-root || exit 1
 # Machine Owner Key (MOK)
 #########################
 
+# Install mokutil
+print-header "Install mokutil..."
+sudo apt install --yes mokutil
+print-finish
+
 key_created=""
 print-status "Create MOK private key..."
-if sudo test ! -f "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
+if sudo test ! -e "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
     sudo openssl \
         genpkey \
         -aes-256-cbc \
@@ -35,7 +40,7 @@ else
 fi
 
 print-header "Create MOK certificate..."
-if [[ ! -f "/etc/ssl/certs/${MOK_KEY_NAME}.der" || -n "${key_created}" ]]; then
+if [[ ! -e "/etc/ssl/certs/${MOK_KEY_NAME}.der" || -n "${key_created}" ]]; then
     sudo openssl \
         req \
         -new \
@@ -51,18 +56,24 @@ else
     print-finish "Certificate found, skipped"
 fi
 
+print-header "Enrolling MOK certificate..."
+cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${MOK_KEY_NAME}.der" | cut -d= -f2)
+if ! mokutil --list-enrolled | grep -qs "SHA1 Fingerprint: ${cert_fingerprint}"; then
+    sudo mokutil --import "/etc/ssl/certs/${MOK_KEY_NAME}.der"
+    print-finish
+else
+    print-finish "Already enrolled, skipped"
+fi
+
 # Self-signed root CA certificate
 #################################
 
 key_created=""
 cert_created=""
-
-# Create private key
-print-status "Create private key..."
-if sudo test ! -f "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
+print-status "Create ROOT CA private key..."
+if sudo test ! -e "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
     sudo openssl \
         genpkey \
-        -aes-256-cbc \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${ROOT_CA_NAME}.key"
@@ -72,9 +83,8 @@ else
     print-finish "Key found, skipped"
 fi
 
-# Create self-signed certificate
-print-header "Create self-signed certificate..."
-if [[ ! -f "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
+print-status "Create self-signed ROOT CA certificate..."
+if [[ ! -e "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
     sudo openssl \
         req \
         -new \

@@ -35,7 +35,8 @@ print-error() {
 #######################
 print-section() {
     echo
-    echo -e "${_TXT_BLUE}${_TXT_BOLD}${*}${_TXT_NORM}"
+    echo -e "${_TXT_BLUE}${_TXT_BOLD}${*}"
+    echo -e "==================================================${_TXT_NORM}"
 }
 
 # Print header

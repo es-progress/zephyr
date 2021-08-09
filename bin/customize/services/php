@@ -26,13 +26,13 @@ print-finish
 
 # Install
 print-header "Install PHP & extensions..."
-sudo apt-get update
-sudo apt install --yes "php${version}"
 php_extensions=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/services/php/extensions")
+packages=()
+packages+=("php${version}")
 while read -r extension; do
-    package="php${version}-${extension}"
-    sudo apt install --yes "${package}"
+    packages+=("php${version}-${extension}")
 done <<< "${php_extensions}"
+sudo apt install --yes "${packages[@]}"
 print-finish
 
 # Config

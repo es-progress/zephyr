@@ -15,6 +15,11 @@ source "${ESUBUNTU_HOME}/bootstrap.sh"
 # Check if not run as root
 check-not-root || exit 1
 
+print-header "Install snapd..."
+sudo apt update
+sudo apt install --yes snapd
+print-finish
+
 snaps=$(read-file-cfg "${CUSTOMIZE_CFG_DIR}/packages/snap")
 while read -r package mode; do
 
@@ -24,7 +29,11 @@ while read -r package mode; do
 
     # Install snap
     print-header "Installing ${package}..."
-    sudo snap install ${options} "${package}"
+    if [[ -n "${options}" ]]; then
+        sudo snap install "${package}" "${options}"
+    else
+        sudo snap install "${package}"
+    fi
     print-finish
 done <<< "${snaps}"
 

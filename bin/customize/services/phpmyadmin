@@ -23,6 +23,7 @@ check-not-root || exit 1
 print-header "Install PHPMyAdmin..."
 old_dir=$(pwd)
 cd "${WEB_ROOT}"
+sudo rm -rf phpmyadmin
 sudo mkdir -p phpmyadmin
 cd phpmyadmin
 sudo unzip "${CUSTOMIZE_FILES_DIR}/tarballs/phpMyAdmin-${version}-all-languages.zip"

@@ -9,6 +9,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Set default for ESUBUNTU_HOME
+if ! printenv ESUBUNTU_HOME >/dev/null 2>&1; then
+    base_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    ESUBUNTU_HOME="$(cd "${base_dir}/../.." >/dev/null 2>&1 && pwd)"
+    export ESUBUNTU_HOME
+fi
+
 # Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
 

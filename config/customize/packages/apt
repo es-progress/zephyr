@@ -13,6 +13,7 @@
 
 # Build
 build-essential
+gettext
 patch
 software-properties-common
 
@@ -27,34 +28,30 @@ vnstat
 whois
 
 # Security
+cryptsetup
 pass
 pass-extension-tomb
 pwgen
 shorewall
 
 # dev
-default-jdk
-default-jre
 figlet
 git
+jmeter
 jq
 shellcheck
 
 # Other
-chromium-codecs-ffmpeg-extra
 dconf-editor
 gnome-tweak-tool
 mc
-mokutil
 pigz
 sysbench
 xdotool
-zsh
 
 # Apps
 ######
 gnome-shell-pomodoro
-nautilus-admin
 pinta ppa:pinta-maintainers/pinta-stable
 pulseaudio
 pulseeffects ppa:mikhailnov/pulseeffects
