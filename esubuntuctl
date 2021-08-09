@@ -36,12 +36,10 @@ EOF
 # Install
 #########
 install(){
-    readonly link="${ESUBUNTU_HOME}/local"
-
     # Symlink local dir
     if [[ -n "${local_dir}" ]]; then
-        [[ -h "${link}" ]] && rm "${link}"
-        [[ ! -e "${link}" ]] && ln -s "${local_dir}" "${link}"
+        [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
+        [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${local_dir}" "${ES_CFG_LOCAL}"
     fi
 
     "${ESUBUNTU_HOME}/bin/customize/runner"

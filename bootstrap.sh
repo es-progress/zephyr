@@ -5,6 +5,9 @@
 ## Bootstrapper ##
 ##################
 
+# Import paths
+source "${ESUBUNTU_HOME}/ESubuntu.path.cfg"
+
 # Import configs
 source "${ESUBUNTU_HOME}/ESubuntu.cfg"
 

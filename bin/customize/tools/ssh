@@ -18,8 +18,8 @@ mkdir -p ~/.ssh
 cp -a "${ES_CFG_CUSTOMIZE}"/ssh/* ~/.ssh/
 print-finish
 
-if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
-    cd "${ES_LOCAL_CONFIG}"
+if [[ -d "${ES_CFG_LOCAL}" ]]; then
+    cd "${ES_CFG_LOCAL}"
     if [[ -d config/customize/ssh ]]; then
         print-status "Copy local SSH config files..."
         cd config/customize/ssh
