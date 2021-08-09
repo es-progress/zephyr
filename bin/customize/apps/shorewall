@@ -10,27 +10,20 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-# Bootstrap
 source "${ESUBUNTU_HOME}/bootstrap.sh"
-
-# Check if not run as root
 check-not-root || exit 1
 
 # Get default interface
 iface=$(ip route | awk '/^default/{print $5}')
 
-# Global config
 print-status "Copy global shorewall config..."
-sudo cp ${CUSTOMIZE_CFG_DIR}/shorewall/* /etc/shorewall/
-# Update interface
+sudo cp "${ES_CFG_CUSTOMIZE}"/shorewall/* /etc/shorewall/
 sudo sed -i "s/{{ interface }}/${iface}/g" /etc/shorewall/interfaces
 print-finish
 
-# Local configs
-if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
-    cd "${ESUBUNTU_HOME}/local"
-
-    if [[ -d config/customize/shorewall ]]; then # Local config exists
+if [[ -d "${ES_LOCAL_CONFIG}" ]]; then
+    cd "${ES_LOCAL_CONFIG}"
+    if [[ -d config/customize/shorewall ]]; then
         print-status "Copy local shorewall config..."
         cd config/customize/shorewall
         sudo cp ./* /etc/shorewall/
@@ -38,7 +31,6 @@ if [[ -d "${ESUBUNTU_HOME}/local" ]]; then # Local dir exists
     fi
 fi
 
-# Start service
 print-header "Starting shorewall..."
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
