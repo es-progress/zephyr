@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Packaging ##
+## Pack ISO  ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+# Options
+orig_iso_image="${1?:"Original ISO file missing"}"
+new_iso_image="${ES_ISO}/${ES_ISO_FILE}"
+
+print-header "Building ISO image..."
+# Copy MBR file
+mbr_file=$(mktemp)
+dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
+# Create ISO
+xorriso -as mkisofs \
+    -r \
+    -V "${ES_ISO_LABEL}" \
+    -l \
+    -isohybrid-mbr "${mbr_file}" \
+    -c isolinux/boot.cat \
+    -b isolinux/isolinux.bin \
+    -no-emul-boot \
+    -boot-load-size 4 \
+    -boot-info-table \
+    -eltorito-alt-boot \
+    -e boot/grub/efi.img \
+    -no-emul-boot \
+    -isohybrid-gpt-basdat \
+    -o "${new_iso_image}" \
+    "${ES_EXTRACT}/iso"
+print-finish
+
+exit 0
