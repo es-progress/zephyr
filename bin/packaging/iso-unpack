@@ -28,14 +28,13 @@ sudo rsync \
     -aAXHEh \
     --info=stats1 --info=progress2 \
     --delete --inplace \
-    --exclude=/casper/filesystem.squashfs \
     "${ES_MOUNT}/" "${ES_EXTRACT}/iso"
 print-finish
 
 print-header "Extract SquashFS filesystem..."
 if [[ ! -e "${ES_EXTRACT}/squashfs-root" ]]; then
     cd "${ES_EXTRACT}"
-    sudo unsquashfs "${ES_MOUNT}/casper/filesystem.squashfs"
+    sudo unsquashfs "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
     print-finish
 else
     print-finish "SquashFS already extracted"
