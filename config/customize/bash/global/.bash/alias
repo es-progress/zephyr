@@ -25,7 +25,7 @@ alias egrep='egrep --color=auto'
 alias rm="rm --interactive=once"
 
 # ls
-alias ll='ls -alph --time-style=long-iso'
+alias ll='ls -alphv --time-style=long-iso --group-directories-first'
 
 # Disable .wget-hsts
 alias wget="wget --hsts-file /dev/null"
