@@ -76,6 +76,9 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# umask (g-w,o-rwx on newly created files)
+umask 027
+
 ############
 # INCLUDES #
 ############
