@@ -8,4 +8,5 @@
 # Settings
 Defaults  timestamp_timeout=360
 Defaults  insults
+Defaults  requiretty
 Defaults  env_keep="PATH_ENV_VARS PATH_SOURCER DIR_SHELL_LIB"
