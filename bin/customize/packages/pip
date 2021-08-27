@@ -17,15 +17,8 @@ print-header "Installing pip3 (python package manager)..."
 sudo apt install --yes python3-pip
 print-finish
 
-# Read packages
-packages=()
-pip_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/pip")
-while read -r package; do
-    packages+=("${package}")
-done <<< "${pip_packages}"
-
 print-header "Installing pip packages..."
-sudo pip3 install "${packages[@]}"
+pip install --upgrade --progress-bar ascii -r "${ES_CUSTOMIZE_CFG}/packages/pip"
 print-finish
 
 exit 0
