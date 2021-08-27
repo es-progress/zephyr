@@ -1,17 +1,13 @@
-################################
-## ES-Ubuntu                  ##
-##                            ##
-## Packages                   ##
-## Python packages to install ##
-##                            ##
-## Format:                    ##
-## package_name               ##
-################################
+##################################################################
+## ES-Ubuntu                                                    ##
+##                                                              ##
+## Packages                                                     ##
+## Python packages to install (pip requirements file)           ##
+## https://pip.pypa.io/en/stable/user_guide/#requirements-files ##
+##################################################################
 
-beautysh
 packaging
-
-# mkdocs
+beautysh
 mkdocs
 mkdocs-material
 mkdocs-minify-plugin
