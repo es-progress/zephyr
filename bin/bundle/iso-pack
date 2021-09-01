@@ -21,6 +21,7 @@ print-header "Building ISO image..."
 # Copy MBR file
 mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
+mkdir -p "${ES_ISO}"
 # Create ISO
 xorriso -as mkisofs \
     -r \
