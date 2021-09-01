@@ -31,6 +31,12 @@ sudo rsync \
     "${ES_MOUNT}/" "${ES_EXTRACT}/iso"
 print-finish
 
+if grep -qs "${ES_MOUNT}" /etc/mtab; then
+    print-status "Unmounting ISO..."
+    sudo umount "${ES_MOUNT}"
+    print-finish
+fi
+
 print-header "Extract SquashFS filesystem..."
 if [[ ! -e "${ES_EXTRACT}/squashfs-root" ]]; then
     cd "${ES_EXTRACT}"
@@ -38,12 +44,6 @@ if [[ ! -e "${ES_EXTRACT}/squashfs-root" ]]; then
     print-finish
 else
     print-finish "SquashFS already extracted"
-fi
-
-if grep -qs "${ES_MOUNT}" /etc/mtab; then
-    print-status "Unmounting ISO..."
-    sudo umount "${ES_MOUNT}"
-    print-finish
 fi
 
 exit 0
