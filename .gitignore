@@ -4,14 +4,9 @@
 ## git-ignore ##
 ################
 
-# ISO files
-/iso
-
-# Mounted images
-/mnt
-
-# Extracted contents
-/extract
+# Bundling
+# ISO files, mounted images, extracted contents
+/bundling
 
 # Static generated content
 /docs/site
