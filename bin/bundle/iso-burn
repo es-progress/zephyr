@@ -51,7 +51,7 @@ done <<< "${mount_points}"
 print-header "Burning ISO to USB..."
 read -r -p "Are you sure? (y/n) ";
 [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] || { echo "Aborted."; exit 1;}
-sudo dd if=iso/esubuntu.iso bs=1M of=/dev/sdc oflag=sync,noatime status=progress
+sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 
 udisksctl power-off --block-device "${disk}" && print-finish "Device can be safely removed."
