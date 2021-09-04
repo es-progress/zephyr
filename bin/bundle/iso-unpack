@@ -37,13 +37,15 @@ if grep -qs "${ES_MOUNT}" /etc/mtab; then
     print-finish
 fi
 
-print-header "Extract SquashFS filesystem..."
-if [[ ! -e "${ES_EXTRACT}/squashfs-root" ]]; then
-    cd "${ES_EXTRACT}"
-    sudo unsquashfs "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
+    print-status "Clearing extracting directory..."
+    sudo rm -rf "${ES_EXTRACT}/squashfs-root"
     print-finish
-else
-    print-finish "SquashFS already extracted"
 fi
+
+print-header "Extract SquashFS filesystem..."
+cd "${ES_EXTRACT}"
+sudo unsquashfs "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+print-finish
 
 exit 0
