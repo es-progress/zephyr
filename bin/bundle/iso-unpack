@@ -2,7 +2,7 @@
 ################
 ## ES-Ubuntu  ##
 ##            ##
-## Packaging  ##
+## Bundling   ##
 ## Unpack ISO ##
 ################
 
@@ -28,23 +28,24 @@ sudo rsync \
     -aAXHEh \
     --info=stats1 --info=progress2 \
     --delete --inplace \
-    --exclude=/casper/filesystem.squashfs \
     "${ES_MOUNT}/" "${ES_EXTRACT}/iso"
 print-finish
-
-print-header "Extract SquashFS filesystem..."
-if [[ ! -e "${ES_EXTRACT}/squashfs-root" ]]; then
-    cd "${ES_EXTRACT}"
-    sudo unsquashfs "${ES_MOUNT}/casper/filesystem.squashfs"
-    print-finish
-else
-    print-finish "SquashFS already extracted"
-fi
 
 if grep -qs "${ES_MOUNT}" /etc/mtab; then
     print-status "Unmounting ISO..."
     sudo umount "${ES_MOUNT}"
     print-finish
 fi
+
+if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
+    print-status "Clearing SquashFS extracting directory..."
+    sudo rm -rf "${ES_EXTRACT}/squashfs-root"
+    print-finish
+fi
+
+print-header "Extract SquashFS filesystem..."
+cd "${ES_EXTRACT}"
+sudo unsquashfs "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+print-finish
 
 exit 0

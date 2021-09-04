@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#####################
+## ES-Ubuntu       ##
+##                 ##
+## Bundling        ##
+## Burn ISO to USB ##
+#####################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+# Options
+iso_image="${1?:"ISO file missing"}"
+disk="${2:-}"
+
+# Select device
+if [[ -z "${disk}" ]]; then
+    print-header "Available disks"
+    sudo lshw -short -class disk
+    echo
+    read -rep "Select disk: " -i "/dev/" disk
+fi
+
+# Check if valid disk
+if ! udevadm info -q property "${disk}" | grep -qs "DEVTYPE=disk"; then
+    print-error "${disk} is not a disk!"
+    exit 1
+fi
+
+# Check if USB
+if ! udevadm info -q property "${disk}" | grep -qs "ID_BUS=usb"; then
+    echo
+    print-error "This device is not an USB stick!"
+    exit 1
+fi
+
+# Unmount
+mount_points=$(lsblk --noheadings -o mountpoint "${disk}")
+while read -r mount_point; do
+    if [[ -n "${mount_point}" ]]; then
+        print-status "Unmounting ${mount_point}..."
+        sudo umount "${mount_point}"
+        print-finish
+    fi
+done <<< "${mount_points}"
+
+print-header "Burning ISO to USB..."
+read -r -p "Are you sure? (y/n) ";
+[[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] || { echo "Aborted."; exit 1;}
+sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
+print-finish
+
+udisksctl power-off --block-device "${disk}" && print-finish "Device can be safely removed."
+
+exit 0
