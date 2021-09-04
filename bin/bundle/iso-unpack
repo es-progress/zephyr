@@ -38,7 +38,7 @@ if grep -qs "${ES_MOUNT}" /etc/mtab; then
 fi
 
 if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
-    print-status "Clearing extracting directory..."
+    print-status "Clearing SquashFS extracting directory..."
     sudo rm -rf "${ES_EXTRACT}/squashfs-root"
     print-finish
 fi
