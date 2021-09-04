@@ -24,7 +24,6 @@ print-status "Create MOK private key..."
 if sudo test ! -e "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
     sudo openssl \
         genpkey \
-        -aes-256-cbc \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${MOK_KEY_NAME}.key"
