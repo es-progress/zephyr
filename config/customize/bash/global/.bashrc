@@ -7,10 +7,7 @@
 ###############
 
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-    *) return ;;
-esac
+[ -z "${PS1}" ] && return
 
 ###########
 # OPTIONS #
@@ -18,25 +15,17 @@ esac
 
 # . matching
 shopt -s dotglob
-
-# Check window size after each command & update LINES and COLUMNS
-shopt -s checkwinsize
-
 # Autocd
 shopt -s autocd
-
 # Exit pipe on non-zero return value
 set -o pipefail
-
 # Allow pipe to read
 shopt -s lastpipe
 
 # Don't put duplicate lines or lines starting with space in the history
 HISTCONTROL=ignoreboth
-
 # Don't save bash history
 unset HISTFILE
-
 # Don't save less history
 export LESSHISTFILE=-
 
