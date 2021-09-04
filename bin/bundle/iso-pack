@@ -30,7 +30,7 @@ print-finish
 
 print-status "Calculate checksum..."
 cd "${ES_EXTRACT}/iso"
-sudo find . -type f -print0 | sudo xargs -0 md5sum | grep -v "\./md5sum.txt" | sudo tee md5sum.txt > /dev/null
+sudo find . -type f -print0 | sudo xargs -0 md5sum | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee md5sum.txt > /dev/null
 print-finish
 cd "${old_dir}"
 
@@ -40,6 +40,7 @@ mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
 mkdir -p "${ES_ISO}"
 # Create ISO
+[[ -e "${new_iso_image}" ]] && rm "${new_iso_image}"
 xorriso -as mkisofs \
     -r \
     -V "${ES_ISO_LABEL}" \
