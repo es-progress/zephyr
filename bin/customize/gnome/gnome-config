@@ -13,10 +13,18 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Config GNOME..."
+print-status "Global GNOME config..."
 for dconf_file in "${ES_CUSTOMIZE_CFG}"/gnome/config.d/*; do
     sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
 done
 print-finish
+
+if [[ -d "${ES_CFG_LOCAL}/config/customize/gnome/config.d" ]]; then
+    print-status "Local GNOME config..."
+    for dconf_file in "${ES_CFG_LOCAL}"/config/customize/gnome/config.d/*; do
+        sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
+    done
+    print-finish
+fi
 
 exit 0
