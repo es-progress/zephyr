@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+print-status "Config GNOME..."
+for dconf_file in "${ES_CUSTOMIZE_CFG}"/gnome/config.d/*; do
+    sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
+done
+print-finish
+
+exit 0

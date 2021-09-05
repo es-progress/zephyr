@@ -6,6 +6,7 @@
     "**/bin/customize/services/php": "source.shell"
     "**/config/customize/git/*": "source.git-config"
     "**/config/customize/gnome/*": "source.git-config"
+    "**/config/customize/gnome/config.d/*": "source.ini"
     "**/config/customize/init/*": "source.git-config"
     "**/config/customize/mc/*": "source.ini"
     "**/config/customize/packages/*": "source.git-config"
