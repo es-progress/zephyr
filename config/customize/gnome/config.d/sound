@@ -3,10 +3,9 @@
 ##           ##
 ## Config    ##
 ## GNOME     ##
-## Shortcuts ##
+## Sounds    ##
 ###############
 
-[/]
-toggle-application-view=['']
-toggle-message-tray=['']
-toggle-overview=['']
+[org/gnome/desktop/sound]
+event-sounds=false
+input-feedback-sounds=false

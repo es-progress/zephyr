@@ -26,6 +26,7 @@ print-finish
 # Bookmarks
 ###########
 print-status "Add global bookmarks..."
+echo -n >~/.config/gtk-3.0/bookmarks
 bookmarks=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
 while read -r line; do
     # Check if it already contains
