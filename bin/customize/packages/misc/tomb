@@ -6,7 +6,9 @@
 ## Tomb      ##
 ###############
 
-# Tomb version
+# Tomb
+url="https://files.dyne.org/tomb/releases/Tomb-2.9.tar.gz"
+checksum="b3a23c6680815f7557a3c4bd73d2b2dbde870a62357fcbf9b33089afae75d68c"
 tomb_version="2.9"
 
 # Strict mode
@@ -17,10 +19,18 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install Tomb..."
+# Download tar
+tmp_file=$(mktemp)
+curl --progress-bar -o "${tmp_file}" --url "${url}"
+hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
+if [[ "${hash}" != "${checksum}" ]]; then
+    print-error "Bad checksum, exiting"
+    exit 1
+fi
 # Unpack archive
 tmp_dir=$(mktemp -d)
 cd "${tmp_dir}"
-tar -xf "${ES_CUSTOMIZE_FILES}/tarballs/Tomb-${tomb_version}.tar.gz"
+tar -xf "${tmp_file}"
 # Install
 cd "Tomb-${tomb_version}"
 sudo make install
