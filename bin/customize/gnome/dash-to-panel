@@ -15,21 +15,16 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install Dash-to-panel..."
-old_dir=$(pwd)
-
 # Create temp dir
 install_dir=$(mktemp -d)
 cd "${install_dir}"
-
 # Get source
 git clone "https://github.com/home-sweet-gnome/dash-to-panel.git"
 cd "dash-to-panel/"
 git checkout v41
-
 # Install
 make install
 gnome-extensions enable "dash-to-panel@jderose9.github.com"
-
 # Restart GNOME
 busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval" "s" 'Meta.restart("Restarting…")'
 print-finish
@@ -37,7 +32,5 @@ print-finish
 print-status "Config Dash-to-panel.."
 sed -e '/^#/d' -e '/^$/d' "${ES_CUSTOMIZE_CFG}/gnome/dash-to-panel" | dconf load /org/gnome/shell/extensions/
 print-finish
-
-cd "${old_dir}"
 
 exit 0
