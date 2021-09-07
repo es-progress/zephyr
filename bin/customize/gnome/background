@@ -15,10 +15,10 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy background image..."
-if [[ -f "${ES_CFG_LOCAL}/files/misc/wallpaper.jpg" ]]; then
-    wallpaper="${ES_CFG_LOCAL}/files/misc/wallpaper.jpg"
+if [[ -f "${ES_CFG_LOCAL}/files/assets/wallpaper.jpg" ]]; then
+    wallpaper="${ES_CFG_LOCAL}/files/assets/wallpaper.jpg"
 else
-    wallpaper="${ES_CUSTOMIZE_FILES}/misc/wallpaper.jpg"
+    wallpaper="${ES_CUSTOMIZE_FILES}/assets/wallpaper.jpg"
 fi
 sudo mkdir -p "${GLOBAL_RES}"
 sudo cp "${wallpaper}" "${GLOBAL_RES}/wallpaper.jpg"
