@@ -1,0 +1,20 @@
+##########################
+## ES-Ubuntu            ##
+##                      ##
+## Packages             ##
+## Vendor binary        ##
+##                      ##
+## Format:              ##
+## Name URL [SHA256SUM] ##
+##########################
+
+# PHP
+composer https://getcomposer.org/download/1.10.22/composer.phar 6127ae192d3b56cd6758c7c72fe2ac6868ecc835dae1451a004aca10ab1e0700
+composer2 https://getcomposer.org/download/2.1.6/composer.phar 72524ccebcb071968eb83284507225fdba59f223719b2b3f333d76c8a9ac6b72
+phpunit8 https://phar.phpunit.de/phpunit-8.5.20.phar d9cbef97e81324ade2b06b0c8ed20f9006de3f5bb0257833ed8052cb19d169cd
+phpunit9 https://phar.phpunit.de/phpunit-9.5.9.phar 0fed2c26d31dc9baf39bb22356f59aa640949ab3805343102207880f17b56d9c
+php-cs-fixer https://cs.symfony.com/download/php-cs-fixer-v3.phar
+
+# CiviCRM
+cv https://download.civicrm.org/cv/cv.phar
+civix https://download.civicrm.org/civix/civix.phar

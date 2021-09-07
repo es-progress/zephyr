@@ -6,21 +6,33 @@
 ## Shell bin ##
 ###############
 
-# Strict mode
+# Strict mode minus IFS
 set -euo pipefail
-IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy vendor shell programs..."
+print-header "Install vendor shell programs..."
 sudo mkdir -p "${GLOBAL_BIN}"
-cd "${ES_CUSTOMIZE_FILES}/shell/vendor"
-for file in *; do
-    sudo cp "${file}" "${GLOBAL_BIN}"
-    sudo chown root:root "${GLOBAL_BIN}/${file}"
-    sudo chmod =0755 "${GLOBAL_BIN}/${file}"
-done
+binaries=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/bin")
+while read -r name url checksum; do
+    print-header "Installing ${name}..."
+    tmp_file=$(mktemp)
+    curl --progress-bar --location -o "${tmp_file}" --url "${url}"
+
+    if [[ -n "${checksum}" ]]; then
+        hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
+        if [[ "${hash}" != "${checksum}" ]]; then
+            print-error "Bad checksum for ${name}, skipping"
+            continue
+        fi
+    fi
+
+    sudo mv "${tmp_file}" "${GLOBAL_BIN}/${name}"
+    sudo chown root:root "${GLOBAL_BIN}/${name}"
+    sudo chmod =0755 "${GLOBAL_BIN}/${name}"
+    print-finish
+done <<< "${binaries}"
 print-finish
 
 exit 0
