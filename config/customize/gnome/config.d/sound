@@ -1,0 +1,11 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+## Sounds    ##
+###############
+
+[org/gnome/desktop/sound]
+event-sounds=false
+input-feedback-sounds=false
