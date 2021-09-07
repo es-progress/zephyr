@@ -7,7 +7,9 @@
 ################
 
 # PHPMyAdmin version
-version="5.1.0"
+version="5.1.1"
+url="https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.tar.gz"
+checksum="8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1"
 
 # Strict mode
 set -euo pipefail
@@ -17,12 +19,20 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install PHPMyAdmin..."
-old_dir=$(pwd)
+# Download tar
+tmp_file=$(mktemp)
+curl --progress-bar -o "${tmp_file}" --url "${url}"
+hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
+if [[ "${hash}" != "${checksum}" ]]; then
+    print-error "Bad checksum, exiting"
+    exit 1
+fi
+# Unpack archive
 cd "${WEB_ROOT}"
 sudo rm -rf phpmyadmin
 sudo mkdir -p phpmyadmin
 cd phpmyadmin
-sudo unzip "${ES_CUSTOMIZE_FILES}/tarballs/phpMyAdmin-${version}-all-languages.zip"
+sudo tar -xf "${tmp_file}"
 sudo mv "phpMyAdmin-${version}-all-languages" public
 print-finish
 
@@ -54,7 +64,5 @@ sudo mysql -e "CREATE USER IF NOT EXISTS '${PHPMYADMIN_CONTROL_NAME}'@'localhost
 sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${PHPMYADMIN_CONTROL_NAME}'@localhost;"
 sudo mysql -e "FLUSH PRIVILEGES;"
 print-finish
-
-cd "${old_dir}"
 
 exit 0
