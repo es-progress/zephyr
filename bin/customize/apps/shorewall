@@ -21,14 +21,10 @@ sudo cp "${ES_CUSTOMIZE_CFG}"/shorewall/* /etc/shorewall/
 sudo sed -i "s/{{ interface }}/${iface}/g" /etc/shorewall/interfaces
 print-finish
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -d config/customize/shorewall ]]; then
-        print-status "Copy local shorewall config..."
-        cd config/customize/shorewall
-        sudo cp ./* /etc/shorewall/
-        print-finish
-    fi
+if [[ -d "${ES_CFG_LOCAL}/config/customize/shorewall" ]]; then
+    print-status "Copy local shorewall config..."
+    sudo cp "${ES_CFG_LOCAL}"/config/customize/shorewall/* /etc/shorewall/
+    print-finish
 fi
 
 print-header "Starting shorewall..."

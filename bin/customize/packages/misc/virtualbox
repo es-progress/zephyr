@@ -28,60 +28,54 @@ while read -r cfg_name cfg_value; do
 done <<< "${configs}"
 print-finish
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
+# Local settings
+if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" ]]; then
+    print-status "Apply local configs..."
 
-    # Local settings
-    if [[ -f config/customize/packages/virtualbox/vboxconfig ]]; then
-        print-status "Apply local configs..."
+    # vboxmanage configs
+    vbox_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" vboxmanage)
+    while read -r cfg_name cfg_value; do
+        if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
+            # eval value to let the shell expand tilde and env vars
+            cfg_value=$(eval echo "${cfg_value}")
+            vboxmanage setproperty "${cfg_name}" "${cfg_value}"
+        fi
+    done <<< "${vbox_configs}"
 
-        # vboxmanage configs
-        vbox_configs=$(read-file-cfg config/customize/packages/virtualbox/vboxconfig vboxmanage)
-        while read -r cfg_name cfg_value; do
-            if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
-                # eval value to let the shell expand tilde and env vars
-                cfg_value=$(eval echo "${cfg_value}")
-                vboxmanage setproperty "${cfg_name}" "${cfg_value}"
-            fi
-        done <<< "${vbox_configs}"
+    # Other configs
+    other_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" settings)
+    while read -r line; do
+        eval "${line}"
+    done <<<"${other_configs}"
+    print-finish
+fi
 
-        # Other configs
-        other_configs=$(read-file-cfg config/customize/packages/virtualbox/vboxconfig settings)
-        while read -r line; do
-            eval "${line}"
-        done <<<"${other_configs}"
-        print-finish
-    fi
+# Register VMs
+if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/virtualbox" ]]; then
+    print-status "Register VMs..."
 
-    # Register VMs
-    if [[ -d config/customize/packages/virtualbox ]]; then
-        cd config/customize/packages/virtualbox
+    # Get & create machine folder
+    target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
+    mkdir -p "${target_dir}"
 
-        print-status "Register VMs..."
+    # Read VM info
+    vm_info=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" virtmachines)
+    while read -r line; do
+        eval "${line}"
+    done <<<"${vm_info}"
 
-        # Get & create machine folder
-        target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
-        mkdir -p "${target_dir}"
+    registered_vms=$(vboxmanage list vms)
 
-        # Read VM info
-        vm_info=$(read-file-cfg vboxconfig virtmachines)
-        while read -r line; do
-            eval "${line}"
-        done <<<"${vm_info}"
+    for def in "${vm[@]:-}"; do
+        IFS="@" read -r dir uuid <<<"${def}"
 
-        registered_vms=$(vboxmanage list vms)
-
-        for def in "${vm[@]:-}"; do
-            IFS="@" read -r dir uuid <<<"${def}"
-
-            # Check if already registered
-            if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
-                cp -a "${dir}" "${target_dir}"
-                find "$target_dir/${dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
-            fi
-        done
-        print-finish
-    fi
+        # Check if already registered
+        if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
+            cp -a "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/${dir}" "${target_dir}"
+            find "$target_dir/${dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+        fi
+    done
+    print-finish
 fi
 
 exit 0

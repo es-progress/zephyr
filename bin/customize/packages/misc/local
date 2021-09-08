@@ -13,12 +13,8 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -d config/customize/packages/local ]]; then
-        cd config/customize/packages/local
-        run-parts --report  .
-    fi
+if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/local" ]]; then
+    run-parts --report "${ES_CFG_LOCAL}/config/customize/packages/local"
 fi
 
 exit 0

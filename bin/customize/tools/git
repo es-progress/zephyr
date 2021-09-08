@@ -23,20 +23,17 @@ while read -r cfg_loc cfg_name cfg_value; do
 done <<< "${configs}"
 print-finish
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -f config/customize/git/configs ]]; then
-        print-status "Local git config..."
-        configs=$(read-file-cfg config/customize/git/configs)
-        while read -r cfg_loc cfg_name cfg_value; do
-            if [[ "${cfg_loc}" == "system" ]]; then
-                sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
-            else
-                git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
-            fi
-        done <<< "${configs}"
-        print-finish
-    fi
+if [[ -f "${ES_CFG_LOCAL}/config/customize/git/configs" ]]; then
+    print-status "Local git config..."
+    configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/git/configs")
+    while read -r cfg_loc cfg_name cfg_value; do
+        if [[ "${cfg_loc}" == "system" ]]; then
+            sudo git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+        else
+            git config "--${cfg_loc}" "$cfg_name" "$cfg_value"
+        fi
+    done <<< "${configs}"
+    print-finish
 fi
 
 exit 0

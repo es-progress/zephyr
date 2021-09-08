@@ -18,16 +18,12 @@ mkdir -p ~/.ssh
 cp -a "${ES_CUSTOMIZE_CFG}"/ssh/* ~/.ssh/
 print-finish
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -d config/customize/ssh ]]; then
-        print-status "Copy local SSH config files..."
-        cd config/customize/ssh
-        for file in *; do
-            cp -a "${file}" ~/.ssh/
-        done
-        print-finish
-    fi
+if [[ -d "${ES_CFG_LOCAL}/config/customize/ssh" ]]; then
+    print-status "Copy local SSH config files..."
+    for file in "${ES_CFG_LOCAL}"/config/customize/ssh/*; do
+        cp -a "${file}" ~/.ssh/
+    done
+    print-finish
 fi
 
 exit 0

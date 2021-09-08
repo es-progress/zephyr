@@ -26,27 +26,24 @@ while read -r alias dir; do
 done <<< "${gt_alias}"
 print-finish
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -f config/customize/random/goto ]]; then
-        print-header "Registering local goto alias..."
-        gt_alias=$(read-file-cfg config/customize/random/goto)
+if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
+    print-header "Registering local goto alias..."
+    gt_alias=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/random/goto")
 
-        # Source env vars
-        [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
+    # Source env vars
+    [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
 
-        while read -r alias dir; do
-            # eval dir to let the shell expand tilde and env vars
-            path=$(eval echo "${dir}")
+    while read -r alias dir; do
+        # eval dir to let the shell expand tilde and env vars
+        path=$(eval echo "${dir}")
 
-            # Register only if not exists
-            if ! goto -x "${alias}" >/dev/null 2>&1; then
-                mkdir -p "${path}"
-                goto -r "${alias}" "${path}"
-            fi
-        done <<< "${gt_alias}"
-        print-finish
-    fi
+        # Register only if not exists
+        if ! goto -x "${alias}" >/dev/null 2>&1; then
+            mkdir -p "${path}"
+            goto -r "${alias}" "${path}"
+        fi
+    done <<< "${gt_alias}"
+    print-finish
 fi
 
 exit 0

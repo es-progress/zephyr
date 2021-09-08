@@ -12,20 +12,17 @@ set -euo pipefail
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-if [[ -d "${ES_CFG_LOCAL}" ]]; then
-    cd "${ES_CFG_LOCAL}"
-    if [[ -f config/customize/init/dir-core ]]; then
-        print-status "Create core dirs..."
-        core_dirs=$(read-file-cfg config/customize/init/dir-core)
-        while read -r path owner; do
-            # eval line to let the shell expand tilde and env vars
-            path=$(eval echo "${path}")
-            owner=$(eval echo "${owner}")
-            sudo mkdir -p "${path}"
-            [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
-        done <<< "${core_dirs}"
-        print-finish
-    fi
+if [[ -f "${ES_CFG_LOCAL}/config/customize/init/dir-core" ]]; then
+    print-status "Create core dirs..."
+    core_dirs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/init/dir-core")
+    while read -r path owner; do
+        # eval line to let the shell expand tilde and env vars
+        path=$(eval echo "${path}")
+        owner=$(eval echo "${owner}")
+        sudo mkdir -p "${path}"
+        [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
+    done <<< "${core_dirs}"
+    print-finish
 fi
 
 exit 0
