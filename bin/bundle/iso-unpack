@@ -44,8 +44,7 @@ if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
 fi
 
 print-header "Extract SquashFS filesystem..."
-cd "${ES_EXTRACT}"
-sudo unsquashfs "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+sudo unsquashfs -dest "${ES_EXTRACT}/squashfs-root" "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 
 exit 0
