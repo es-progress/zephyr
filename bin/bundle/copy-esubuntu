@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+############################
+## ES-Ubuntu              ##
+##                        ##
+## Bundling               ##
+## Copy files to SquashFS ##
+############################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+print-status "Copy ES-Ubuntu to SquashFS..."
+cd "${ES_EXTRACT}/squashfs-root"
+sudo mkdir -p "opt/esubuntu/bin" "opt/esubuntu/config"
+sudo cp -r "${DIR_ESUBUNTU}/bootstrap.sh" "opt/esubuntu/"
+sudo cp -r "${DIR_ESUBUNTU}/ESubuntu.cfg" "opt/esubuntu/"
+sudo cp -r "${DIR_ESUBUNTU}/ESubuntu.path.cfg" "opt/esubuntu/"
+sudo cp -r "${DIR_ESUBUNTU}/esubuntuctl" "opt/esubuntu/"
+
+sudo cp -r "${DIR_ESUBUNTU}/bin/library.sh" "opt/esubuntu/bin/"
+sudo cp -r "${DIR_ESUBUNTU}/bin/customize" "opt/esubuntu/bin/"
+sudo cp -r "${DIR_ESUBUNTU}/config/customize" "opt/esubuntu/config/"
+
+sudo cp -r "${DIR_ESUBUNTU}/files/" "opt/esubuntu/"
+sudo cp -r "${DIR_ESUBUNTU}/local/" "opt/esubuntu/"
+
+sudo rm -f usr/local/bin/esubuntuctl
+sudo ln -s "/opt/esubuntu/esubuntuctl" usr/local/bin/esubuntuctl
+print-finish
+
+print-status "Set permissions..."
+sudo chmod -R u+rw,go+r "${ES_EXTRACT}/squashfs-root/opt/esubuntu"
+sudo find "${ES_EXTRACT}/squashfs-root/opt/esubuntu" -executable -exec chmod go+x '{}' \;
+print-finish
+
+exit 0
