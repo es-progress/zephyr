@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#############################
+## ES-Ubuntu               ##
+##                         ##
+## Bundling                ##
+## Clean-up unpacked files ##
+#############################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+print-status "Removing extracted files..."
+sudo rm -rf "${ES_EXTRACT}"
+print-finish
+
+exit 0
