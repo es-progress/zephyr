@@ -23,6 +23,13 @@ esubuntuctl ACTION [OPTIONS...]
 
 Commands:
 
+create          Create ES-Ubuntu ISO
+
+                esubuntuctl create ORIGINAL_ISO_FILE [NEW_ISO_FILE]
+
+                Command specific options:
+                ORIGINAL_ISO_FILE       Path to ISO to customize (ubuntu live-cd)
+
 install         Install ES-Ubuntu
 
                 esubuntuctl install [LOCAL_DIR]
@@ -57,6 +64,15 @@ install(){
     [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && reboot
 }
 
+# Create ISO
+############
+create(){
+    "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${iso_image}"
+    "${ES_BUNDLE_SCRIPTS}/copy-esubuntu"
+    "${ES_BUNDLE_SCRIPTS}/iso-pack" "${iso_image}"
+    "${ES_BUNDLE_SCRIPTS}/clean-up"
+}
+
 ################
 # SCRIPT START #
 ################
@@ -81,6 +97,11 @@ cmd="${1:-}"
 shift
 
 case "${cmd}" in
+    create)
+        iso_image="${1:-}"
+        [[ -z "${iso_image}" ]] && usage "ISO image missing!"
+        create
+        ;;
     install)
         local_dir="${1:-}"
         install
