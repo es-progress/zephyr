@@ -25,24 +25,32 @@ Commands:
 
 create          Create ES-Ubuntu ISO
 
-                esubuntuctl create ORIGINAL_ISO_FILE [NEW_ISO_FILE]
+                esubuntuctl create ISO_FILE
 
                 Command specific options:
-                ORIGINAL_ISO_FILE       Path to ISO to customize (ubuntu live-cd)
+                ISO_FILE                ISO to customize (ubuntu live-cd)
+
+burn            Burn to ISO to USB
+
+                esubuntuctl burn ISO_FILE [DISK]
+
+                Command specific options:
+                ISO_FILE                ISO to burn
+                DISK                    Device to copy to (eg. /dev/sdc)
 
 install         Install ES-Ubuntu
 
                 esubuntuctl install [LOCAL_DIR]
 
                 Command specific options:
-                LOCAL_DIR       Absolute path to local config dir
+                LOCAL_DIR               Absolute path to local config dir
 
 update          Update a module
 
                 esubuntuctl update MODULE
 
                 Command specific options:
-                MODULE          Name of module to update (eg. packages, bash)
+                MODULE                  Name of module to update (eg. packages, bash)
 EOF
     exit 1
 }
@@ -90,17 +98,20 @@ fi
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 
 # Parse options
-local_dir=""
-module=""
 cmd="${1:-}"
 [[ -z "${cmd}" ]] && usage "Command missing!"
 shift
-
 case "${cmd}" in
     create)
         iso_image="${1:-}"
         [[ -z "${iso_image}" ]] && usage "ISO image missing!"
         create
+        ;;
+    burn)
+        iso_image="${1:-}"
+        disk="${2:-}"
+        [[ -z "${iso_image}" ]] && usage "ISO image missing!"
+        "${ES_BUNDLE_SCRIPTS}/iso-burn" "${iso_image}" "${disk}"
         ;;
     install)
         local_dir="${1:-}"
