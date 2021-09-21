@@ -12,7 +12,7 @@ set -euo pipefail
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Read packages
+# Read packages to install
 repos=()
 packages=()
 apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt")
@@ -32,7 +32,22 @@ sudo apt update
 print-finish
 
 print-header "Installing packages..."
-sudo apt install --yes "${packages[@]}"
+sudo apt install --yes --no-install-recommends "${packages[@]}"
+print-finish
+
+# Read packages to delete
+packages=()
+apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt-delete")
+while read -r package; do
+    packages+=("${package}")
+done <<< "${apt_packages}"
+
+print-header "Removing packages..."
+sudo apt remove --yes --purge --autoremove "${packages[@]}"
+print-finish
+
+print-header "Running apt autoclean..."
+sudo apt autoclean
 print-finish
 
 exit 0
