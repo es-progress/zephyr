@@ -1,10 +1,27 @@
+############################
+## ES-Ubuntu              ##
+##                        ##
+## Packages               ##
+## apt packages to remove ##
+##                        ##
+## Format:                ##
+## package_name           ##
+############################
+
+# General
 bolt
 brltty
 cabextract
-command-not-found
-ed
 enchant-2
 espeak-ng-data
+gnome-accessibility-themes
+mobile-broadband-provider-info
+mousetweaks
+gamemode
+wamerican
+wbritish
+
+# Fonts
 fonts-beng-extra
 fonts-beng
 fonts-deva-extra
@@ -96,42 +113,3 @@ fonts-tlwg-umpush
 fonts-tlwg-waree-ttf
 fonts-tlwg-waree
 fonts-yrsa-rasa
-gnome-accessibility-themes
-gnome-characters
-gnome-font-viewer
-gnome-getting-started-docs
-gnome-logs
-gnome-user-docs
-mobile-broadband-provider-info
-mousetweaks
-mscompress
-orca
-popularity-contest
-vim-common
-vim-tiny
-yelp-xsl
-yelp
-cups
-cups-browsed
-cups-bsd
-cups-client
-cups-common
-cups-core-drivers
-cups-daemon
-cups-pk-helper
-cups-ppdc
-cups-server-common
-gamemode
-printer-driver-brlaser
-printer-driver-c2esp
-printer-driver-foo2zjs-common
-printer-driver-foo2zjs
-printer-driver-hpcups
-printer-driver-m2300w
-printer-driver-min12xxw
-printer-driver-pnm2ppa
-printer-driver-postscript-hp
-printer-driver-ptouch
-printer-driver-pxljr
-printer-driver-sag-gdi
-printer-driver-splix
