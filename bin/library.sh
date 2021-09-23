@@ -44,7 +44,6 @@ print-section() {
 # @param    $*  Message
 #######################
 print-header() {
-    echo
     echo -e "${_TXT_YELLOW}${*}${_TXT_NORM}"
 }
 
