@@ -59,4 +59,8 @@ xorriso -as mkisofs \
     "${ES_EXTRACT}/iso"
 print-finish
 
+echo
+print-finish "ES-Ubuntu ISO created!"
+echo "Newly created image: ${new_iso_image}"
+
 exit 0
