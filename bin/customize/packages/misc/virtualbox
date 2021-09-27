@@ -14,7 +14,7 @@ check-not-root || exit 1
 
 print-header "Install virtualbox..."
 sudo apt-get update
-sudo apt install --yes virtualbox virtualbox-guest-additions-iso
+sudo apt install --yes --no-install-recommends virtualbox virtualbox-guest-additions-iso
 print-finish
 
 print-status "Apply global configs..."

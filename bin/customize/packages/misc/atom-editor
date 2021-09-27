@@ -20,7 +20,7 @@ print-finish
 
 print-header "Install Atom..."
 sudo apt-get update
-sudo apt install --yes atom
+sudo apt install --yes --no-install-recommends atom
 print-finish
 
 print-header "Install base Atom packages..."

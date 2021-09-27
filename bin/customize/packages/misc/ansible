@@ -18,7 +18,7 @@ sudo add-apt-repository --yes ppa:ansible/ansible-2.10
 print-finish
 
 print-header "Install Ansible..."
-sudo apt install --yes ansible
+sudo apt install --yes --no-install-recommends ansible
 print-finish
 
 print-header "Install Ansible collections..."

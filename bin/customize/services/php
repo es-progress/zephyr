@@ -27,7 +27,7 @@ packages+=("php${version}")
 while read -r extension; do
     packages+=("php${version}-${extension}")
 done <<< "${php_extensions}"
-sudo apt install --yes "${packages[@]}"
+sudo apt install --yes --no-install-recommends "${packages[@]}"
 print-finish
 
 print-status "Config PHP..."

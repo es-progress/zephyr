@@ -14,7 +14,7 @@ check-not-root || exit 1
 
 print-header "Install snapd..."
 sudo apt update
-sudo apt install --yes snapd
+sudo apt install --yes --no-install-recommends snapd
 print-finish
 
 snaps=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/snap")
