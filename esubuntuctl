@@ -91,7 +91,8 @@ IFS=$'\n\t'
 
 # Set default for DIR_ESUBUNTU
 if ! printenv DIR_ESUBUNTU >/dev/null 2>&1; then
-    DIR_ESUBUNTU="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+    path_self=$(realpath "${0}")
+    DIR_ESUBUNTU="$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)"
     export DIR_ESUBUNTU
 fi
 
