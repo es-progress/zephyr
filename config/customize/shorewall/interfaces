@@ -11,4 +11,4 @@
 ?FORMAT 2
 ###############################################################################
 #ZONE	INTERFACE	OPTIONS
-net     {{ interface }}       dhcp,tcpflags,rpfilter,logmartians,nosmurfs,sourceroute=0
+net     {{ interface }}       dhcp,logmartians,nosmurfs,rpfilter,sourceroute=0,tcpflags

@@ -13,12 +13,19 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-# Get default interface
-iface=$(ip route | awk '/^default/{print $5}')
+# Get all interfaces
+interfaces=$(ls -1 /sys/class/net --hide lo)
 
 print-status "Copy global shorewall config..."
 sudo cp "${ES_CUSTOMIZE_CFG}"/shorewall/* /etc/shorewall/
-sudo sed -i "s/{{ interface }}/${iface}/g" /etc/shorewall/interfaces
+for iface in ${interfaces}; do
+    # Duplicate template line
+    sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
+    # Insert actual interface to first occurance
+    sudo sed -i "0,/{{ interface }}/ s/{{ interface }}/${iface}/" /etc/shorewall/interfaces
+done
+# Delete untemplated lines
+sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
 print-finish
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/shorewall" ]]; then
