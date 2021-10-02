@@ -17,3 +17,4 @@ global alias.ps push
 global alias.pl pull
 global alias.st status
 global alias.lg log --oneline
+global alias.lgall !git --no-pager log --format="oneline"
