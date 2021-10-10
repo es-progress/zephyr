@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#####################
+## ES-Ubuntu       ##
+##                 ##
+## Install         ##
+## Partition disks ##
+#####################
+
+# Config
+# Partition type codes
+TYPE_LINUX="8300"
+TYPE_SWAP="8200"
+TYPE_LUKS="8309"
+TYPE_EFI="ef00"
+TYPE_WIN="0700"
+
+# Strict mode minus IFS
+set -euo pipefail
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+print-section "Parsed config"
+sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ES_CFG_LOCAL}/config/install/partitions"
+echo
+# read -rp "Proceed? (y/n) "
+# [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]] && exit 0
+
+disks=$(read-file-cfg "${ES_CFG_LOCAL}/config/install/partitions" "DISKS")
+while read -r name device part_prefix; do
+
+    # echo $name
+    # echo $device
+    # echo $part_prefix
+
+    partitions=$(read-file-cfg "${ES_CFG_LOCAL}/config/install/partitions" "PARTITIONS_${name}")
+
+    while read -r number size type label format; do
+        echo sgdisk -n "${number}:0:+${size}" -t "${number}:${type}" -c "${number}:${label}" "${device}"
+        # echo $number
+        # echo $size
+        # echo $type
+        # echo $label
+    done <<< "${partitions}"
+
+
+
+
+
+
+done <<< "${disks}"
+
+exit 0
