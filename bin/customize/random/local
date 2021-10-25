@@ -14,7 +14,8 @@ check-not-root || exit 1
 
 # Run local post-install scripts
 if [[ -d "${ES_CFG_LOCAL}/config/customize/post-install" ]]; then
-    run-parts --exit-on-error "${ES_CFG_LOCAL}/config/customize/post-install"
+    cd "${ES_CFG_LOCAL}/config/customize/post-install"
+    run-parts --exit-on-error .
 fi
 
 exit 0
