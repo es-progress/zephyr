@@ -51,6 +51,8 @@ update          Update a module
 
                 Command specific options:
                 MODULE                  Name of module to update (eg. packages, bash)
+
+help            Display this help
 EOF
     exit 1
 }
