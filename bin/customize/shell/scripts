@@ -42,4 +42,8 @@ if [[ -d "${ES_CFG_LOCAL}/files/shell" ]]; then
     print-finish
 fi
 
+print-status "Link esubuntuctl..."
+[[ -e "${LOCAL_BIN}/esubuntuctl" ]] || ln -s "${DIR_ESUBUNTU}/esubuntuctl" "${LOCAL_BIN}/esubuntuctl"
+print-finish
+
 exit 0
