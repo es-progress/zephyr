@@ -14,6 +14,7 @@
 # Build
 build-essential
 gettext
+openjdk-16-jdk
 patch
 software-properties-common
 xorriso
@@ -39,7 +40,6 @@ shorewall
 # dev
 figlet
 git
-jmeter
 jq
 shellcheck
 
