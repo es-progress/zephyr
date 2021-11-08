@@ -28,35 +28,34 @@ if [[ "${hash}" != "${checksum}" ]]; then
     exit 1
 fi
 # Unpack archive
-cd "${WEB_ROOT}"
-sudo rm -rf phpmyadmin
-sudo mkdir -p phpmyadmin
-cd phpmyadmin
-sudo tar -xf "${tmp_file}"
-sudo mv "phpMyAdmin-${version}-all-languages" public
+target="${WEB_ROOT}/phpmyadmin"
+sudo rm -rf "${target}"
+sudo mkdir -p "${target}"
+sudo tar -C "${target}" -xf "${tmp_file}"
+sudo mv "${target}/phpMyAdmin-${version}-all-languages" "${target}/public"
 print-finish
 
 print-status "Configure PHPMyAdmin..."
 secret=$(openssl rand -hex 32)
-sudo cp "${ES_CUSTOMIZE_CFG}/services/phpmyadmin/config.inc.php" public/
-sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" public/config.inc.php
-sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" public/config.inc.php
-sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" public/config.inc.php
-sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" public/config.inc.php
+sudo cp "${ES_CUSTOMIZE_CFG}/services/phpmyadmin/config.inc.php" "${target}/public"
+sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" "${target}/public/config.inc.php"
+sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" "${target}/public/config.inc.php"
+sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" "${target}/public/config.inc.php"
+sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" "${target}/public/config.inc.php"
 print-finish
 
 print-status "Create tmp dirs, set permissions..."
-sudo mkdir -p upload save tmp
-sudo chgrp -R www-data .
-sudo chmod g+w upload save tmp
+sudo mkdir -p "${target}/upload" "${target}/save" "${target}/tmp"
+sudo chgrp -R www-data "${target}"
+sudo chmod g+w "${target}/upload" "${target}/save" "${target}/tmp"
 print-finish
 
 print-status "Create PHPMyAdmin control DB..."
-if [[ ! -f "public/sql/create_tables.sql" ]]; then
+if [[ ! -f "${target}/public/sql/create_tables.sql" ]]; then
     echo "Import SQL file missing"
     exit 1
 fi
-cat "public/sql/create_tables.sql" | sudo mysql
+cat "${target}/public/sql/create_tables.sql" | sudo mysql
 print-finish
 
 print-status "Create PHPMyAdmin control user..."

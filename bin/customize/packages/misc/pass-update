@@ -18,11 +18,9 @@ check-not-root || exit 1
 
 print-header "Install pass-update..."
 tmp_dir=$(mktemp -d)
-cd "${tmp_dir}"
-git clone https://github.com/roddhjav/pass-update.git
-cd pass-update
-git checkout "${pass_version}"
-sudo make install
+git clone https://github.com/roddhjav/pass-update.git "${tmp_dir}"
+git -C "${tmp_dir}" checkout "${pass_version}"
+sudo make -C "${tmp_dir}" install
 print-finish
 
 exit 0

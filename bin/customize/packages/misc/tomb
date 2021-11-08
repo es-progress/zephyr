@@ -29,11 +29,9 @@ if [[ "${hash}" != "${checksum}" ]]; then
 fi
 # Unpack archive
 tmp_dir=$(mktemp -d)
-cd "${tmp_dir}"
-tar -xf "${tmp_file}"
+tar -C "${tmp_dir}" -xf "${tmp_file}"
 # Install
-cd "Tomb-${tomb_version}"
-sudo make install
+sudo make -C "${tmp_dir}/Tomb-${tomb_version}" install
 print-finish
 
 exit 0
