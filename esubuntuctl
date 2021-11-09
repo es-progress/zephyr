@@ -12,58 +12,84 @@
 # Usage
 #######
 usage(){
-    local msg="${1:-}"
-    [[ -n "${msg}" ]] && echo "${msg}"
-    cat <<EOF
+    local selector="${1:-}"
 
-ES-Ubuntu controller
+    # Main
+    txt_main=$(cat <<EOF
+${_TXT_GREEN}ES-Ubuntu${_TXT_NORM} controller
 
-Usage:
-esubuntuctl ACTION [OPTIONS...]
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl COMMAND [OPTIONS]...
 
-Commands:
-
-create          Create ES-Ubuntu ISO
-
-                esubuntuctl create ISO_FILE
-
-                Command specific options:
-                ISO_FILE                ISO to customize (ubuntu live-cd)
-
-burn            Burn to ISO to USB
-
-                esubuntuctl burn ISO_FILE [DISK]
-
-                Command specific options:
-                ISO_FILE                ISO to burn
-                DISK                    Device to copy to (eg. /dev/sdc)
-
-install         Install ES-Ubuntu
-
-                esubuntuctl install [LOCAL_DIR]
-
-                Command specific options:
-                LOCAL_DIR               Absolute path to local config dir
-
-update          Update a module
-
-                esubuntuctl update MODULE
-
-                Command specific options:
-                MODULE                  Name of module to update (eg. packages, bash)
-
-help            Display this help
+${_TXT_YELLOW}Commands:${_TXT_NORM}
+  ${_TXT_GREEN}create${_TXT_NORM}            Create ES-Ubuntu ISO
+  ${_TXT_GREEN}burn${_TXT_NORM}              Burn to ISO to USB
+  ${_TXT_GREEN}install${_TXT_NORM}           Install ES-Ubuntu
+  ${_TXT_GREEN}update${_TXT_NORM}            Update a module
+  ${_TXT_GREEN}help${_TXT_NORM}              Display help
 EOF
-    exit 1
+    )
+    # Help
+    txt_help=$(cat <<EOF
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl help COMMAND
+EOF
+    )
+    # Create
+    txt_create=$(cat <<EOF
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl create ISO_FILE
+
+${_TXT_YELLOW}Options:${_TXT_NORM}
+  ISO_FILE          ISO to customize (e.g. ubuntu live-cd)
+EOF
+    )
+    # Burn
+    txt_burn=$(cat <<EOF
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl burn ISO_FILE [DISK]
+
+${_TXT_YELLOW}Options:${_TXT_NORM}
+  ISO_FILE          ISO to burn
+  DISK              Device to copy to (eg. /dev/sdc)
+EOF
+    )
+    # Install
+    txt_install=$(cat <<EOF
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl install [LOCAL_DIR]
+
+${_TXT_YELLOW}Options:${_TXT_NORM}
+  LOCAL_DIR         Absolute path to local config dir
+EOF
+    )
+    # Update
+    txt_update=$(cat <<EOF
+${_TXT_YELLOW}Usage:${_TXT_NORM}
+  esubuntuctl update MODULE
+
+${_TXT_YELLOW}Options:${_TXT_NORM}
+  MODULE            Name of module to update (eg. packages, bash)
+EOF
+    )
+
+    case "${selector}" in
+        "") echo -e "${txt_help}" ;;
+        create) echo -e "${txt_create}" ;;
+        burn) echo -e "${txt_burn}" ;;
+        install) echo -e "${txt_install}" ;;
+        update) echo -e "${txt_update}" ;;
+        *) echo -e "${txt_main}" ;;
+    esac
 }
 
 # Install
 #########
 install(){
     # Symlink local dir
-    if [[ -n "${local_dir}" ]]; then
+    if [[ -n "${1}" ]]; then
         [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
-        [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${local_dir}" "${ES_CFG_LOCAL}"
+        [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${1}" "${ES_CFG_LOCAL}"
     fi
 
     "${ES_CUSTOMIZE_SCRIPTS}/runner"
@@ -77,10 +103,37 @@ install(){
 # Create ISO
 ############
 create(){
-    "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${iso_image}"
+    if [[ -z "${1}" ]]; then
+        print-error "ISO image missing!"
+        usage create
+        exit 1
+    fi
+    "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${1}"
     "${ES_BUNDLE_SCRIPTS}/copy-esubuntu"
-    "${ES_BUNDLE_SCRIPTS}/iso-pack" "${iso_image}"
+    "${ES_BUNDLE_SCRIPTS}/iso-pack" "${1}"
     "${ES_BUNDLE_SCRIPTS}/clean-up"
+}
+
+# Update module
+###############
+update(){
+    if [[ -z "${1}" ]]; then
+        print-error "Module missing!"
+        usage update
+        exit 1
+    fi
+    "${ES_CUSTOMIZE_SCRIPTS}/runner" "${1}"
+}
+
+# Burn ISO
+##########
+burn(){
+    if [[ -z "${1}" ]]; then
+        print-error "ISO image missing!"
+        usage burn
+        exit 1
+    fi
+    "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
 }
 
 ################
@@ -102,35 +155,16 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 
 # Parse options
 cmd="${1:-}"
-[[ -z "${cmd}" ]] && usage "Command missing!"
-shift
+[[ -n "${cmd}" ]] && shift
+
+# Switch action
 case "${cmd}" in
-    create)
-        iso_image="${1:-}"
-        [[ -z "${iso_image}" ]] && usage "ISO image missing!"
-        create
-        ;;
-    burn)
-        iso_image="${1:-}"
-        disk="${2:-}"
-        [[ -z "${iso_image}" ]] && usage "ISO image missing!"
-        "${ES_BUNDLE_SCRIPTS}/iso-burn" "${iso_image}" "${disk}"
-        ;;
-    install)
-        local_dir="${1:-}"
-        install
-        ;;
-    update)
-        module="${1:-}"
-        [[ -z "${module}" ]] && usage "Module missing!"
-        "${ES_CUSTOMIZE_SCRIPTS}/runner" "${module}"
-        ;;
-    help|-h|--help)
-        usage
-        ;;
-    *)
-        usage "${cmd}: Unknown command!"
-        ;;
+    create) create "${1:-}" ;;
+    burn) burn "${1:-}" "${2:-}" ;;
+    install) install "${1:-}" ;;
+    update) update "${1:-}" ;;
+    help) usage "${1:-}" ;;
+    *) usage main ;;
 esac
 
 exit 0
