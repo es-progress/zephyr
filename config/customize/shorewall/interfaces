@@ -5,10 +5,7 @@
 ## Interfaces ##
 ################
 
-#------------------------------------------------------------------------------
-# For information about entries in this file, type "man shorewall-interfaces"
-###############################################################################
 ?FORMAT 2
-###############################################################################
-#ZONE	INTERFACE	OPTIONS
-net     {{ interface }}       dhcp,logmartians,nosmurfs,rpfilter,sourceroute=0,tcpflags
+#############################################################
+#ZONE	INTERFACE	       OPTIONS
+net     {{ interface }}    dhcp,logmartians,nosmurfs,rpfilter
