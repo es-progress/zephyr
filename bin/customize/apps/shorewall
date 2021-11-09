@@ -37,6 +37,7 @@ fi
 print-header "Starting shorewall..."
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
+sudo systemctl reload shorewall.service
 sudo shorewall save
 print-finish
 
