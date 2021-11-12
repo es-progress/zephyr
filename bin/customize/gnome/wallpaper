@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-################
-## ES-Ubuntu  ##
-##            ##
-## Config     ##
-## GNOME      ##
-## Background ##
-################
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+## Wallpaper ##
+###############
 
 # Strict mode
 set -euo pipefail
@@ -14,7 +14,7 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy background image..."
+print-status "Copy wallpaper image..."
 if [[ -f "${ES_CFG_LOCAL}/files/assets/wallpaper.jpg" ]]; then
     wallpaper="${ES_CFG_LOCAL}/files/assets/wallpaper.jpg"
 else
@@ -25,7 +25,7 @@ sudo cp "${wallpaper}" "${GLOBAL_RES}/wallpaper.jpg"
 sudo chmod 0644 "${GLOBAL_RES}/wallpaper.jpg"
 print-finish
 
-print-status "Set background image..."
+print-status "Set wallpaper image..."
 dconf write /org/gnome/desktop/background/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
 dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
 print-finish
