@@ -12,6 +12,7 @@ bz2
 cli
 common
 curl
+fpm
 gd
 imagick
 imap
@@ -22,8 +23,6 @@ mbstring
 mysql
 opcache
 soap
-zip
 xdebug
 xml
-
-fpm
+zip

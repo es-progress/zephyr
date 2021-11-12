@@ -13,8 +13,8 @@ global advice.detachedHead false
 
 # Alias
 global alias.co checkout
-global alias.ps push
-global alias.pl pull
-global alias.st status
 global alias.lg log --oneline
 global alias.lgall !git --no-pager log --format="oneline"
+global alias.pl pull
+global alias.ps push
+global alias.st status

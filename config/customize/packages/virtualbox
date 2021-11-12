@@ -9,6 +9,6 @@
 #######################
 
 hwvirtexclusive on
+loghistorycount 3
 vrdeauthlibrary VBoxAuth
 websrvauthlibrary VBoxAuth
-loghistorycount 3

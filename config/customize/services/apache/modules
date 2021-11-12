@@ -8,9 +8,9 @@
 ####################
 
 actions
-rewrite
-ssl
-proxy_fcgi
-setenvif
 expires
 headers
+proxy_fcgi
+rewrite
+setenvif
+ssl

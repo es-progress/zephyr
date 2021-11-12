@@ -6,11 +6,11 @@
 ## https://pip.pypa.io/en/stable/user_guide/#requirements-files ##
 ##################################################################
 
-packaging
 beautysh
+git-filter-repo
 mkdocs
+mkdocs-git-revision-date-localized-plugin
+mkdocs-literate-nav
 mkdocs-material
 mkdocs-minify-plugin
-mkdocs-literate-nav
-mkdocs-git-revision-date-localized-plugin
-git-filter-repo
+packaging
