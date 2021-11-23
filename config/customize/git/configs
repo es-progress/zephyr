@@ -10,6 +10,7 @@
 
 # No advice for detached HEAD
 global advice.detachedHead false
+global color.ui always
 
 # Alias
 global alias.co checkout
