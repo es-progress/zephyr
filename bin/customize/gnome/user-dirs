@@ -15,7 +15,6 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 # Nautilus links
-################
 print-status "Copy global user dirs..."
 sudo cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.defaults" /etc/xdg/
 print-finish
@@ -24,7 +23,6 @@ cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.dirs" ~/.config/
 print-finish
 
 # Bookmarks
-###########
 print-status "Add global bookmarks..."
 echo -n >~/.config/gtk-3.0/bookmarks
 bookmarks=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
