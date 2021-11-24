@@ -14,8 +14,10 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/local" ]]; then
-    cd "${ES_CFG_LOCAL}/config/customize/packages/local"
-    run-parts --report .
+    (
+        cd "${ES_CFG_LOCAL}/config/customize/packages/local"
+        run-parts --report .
+    )
 fi
 
 exit 0
