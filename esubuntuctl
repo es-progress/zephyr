@@ -16,59 +16,59 @@ usage(){
 
     # Main
     txt_main=$(cat <<EOF
-${_TXT_GREEN}ES-Ubuntu${_TXT_NORM} controller
+${TXT_GREEN}ES-Ubuntu${TXT_NORM} controller
 
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl COMMAND [OPTIONS]...
 
-${_TXT_YELLOW}Commands:${_TXT_NORM}
-  ${_TXT_GREEN}create${_TXT_NORM}            Create ES-Ubuntu ISO
-  ${_TXT_GREEN}burn${_TXT_NORM}              Burn to ISO to USB
-  ${_TXT_GREEN}install${_TXT_NORM}           Install ES-Ubuntu
-  ${_TXT_GREEN}update${_TXT_NORM}            Update a module
-  ${_TXT_GREEN}help${_TXT_NORM}              Display help
+${TXT_YELLOW}Commands:${TXT_NORM}
+  ${TXT_GREEN}create${TXT_NORM}            Create ES-Ubuntu ISO
+  ${TXT_GREEN}burn${TXT_NORM}              Burn to ISO to USB
+  ${TXT_GREEN}install${TXT_NORM}           Install ES-Ubuntu
+  ${TXT_GREEN}update${TXT_NORM}            Update a module
+  ${TXT_GREEN}help${TXT_NORM}              Display help
 EOF
     )
     # Help
     txt_help=$(cat <<EOF
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl help COMMAND
 EOF
     )
     # Create
     txt_create=$(cat <<EOF
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl create ISO_FILE
 
-${_TXT_YELLOW}Options:${_TXT_NORM}
+${TXT_YELLOW}Options:${TXT_NORM}
   ISO_FILE          ISO to customize (e.g. ubuntu live-cd)
 EOF
     )
     # Burn
     txt_burn=$(cat <<EOF
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl burn ISO_FILE [DISK]
 
-${_TXT_YELLOW}Options:${_TXT_NORM}
+${TXT_YELLOW}Options:${TXT_NORM}
   ISO_FILE          ISO to burn
   DISK              Device to copy to (eg. /dev/sdc)
 EOF
     )
     # Install
     txt_install=$(cat <<EOF
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl install [LOCAL_DIR]
 
-${_TXT_YELLOW}Options:${_TXT_NORM}
+${TXT_YELLOW}Options:${TXT_NORM}
   LOCAL_DIR         Absolute path to local config dir
 EOF
     )
     # Update
     txt_update=$(cat <<EOF
-${_TXT_YELLOW}Usage:${_TXT_NORM}
+${TXT_YELLOW}Usage:${TXT_NORM}
   esubuntuctl update MODULE
 
-${_TXT_YELLOW}Options:${_TXT_NORM}
+${TXT_YELLOW}Options:${TXT_NORM}
   MODULE            Name of module to update (eg. packages, bash)
 EOF
     )
