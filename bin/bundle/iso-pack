@@ -56,7 +56,7 @@ xorriso -as mkisofs \
 print-finish
 
 echo
-print-finish "ES-Ubuntu ISO created!"
 echo "Newly created image: ${new_iso_image}"
+print-finish "ES-Ubuntu ISO created!"
 
 exit 0
