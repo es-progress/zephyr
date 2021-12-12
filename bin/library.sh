@@ -26,7 +26,7 @@ TXT_BLUE="\e[34m"
 # @param    $*  Message
 #######################
 print-error() {
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}"
+    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
 # Print section header
@@ -75,6 +75,16 @@ print-finish() {
 error-exit(){
     print-error "${*}"
     exit 1
+}
+
+# Check if run as root
+######################
+check-root() {
+    if [[ $(id -u) -ne 0 ]]; then
+        print-error "Run as root!"
+        return 1
+    fi
+    return 0
 }
 
 # Check if not run as root

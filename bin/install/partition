@@ -6,48 +6,150 @@
 ## Partition disks ##
 #####################
 
-# Config
-# Partition type codes
-TYPE_LINUX="8300"
-TYPE_SWAP="8200"
-TYPE_LUKS="8309"
-TYPE_EFI="ef00"
-TYPE_WIN="0700"
+#############
+# FUNCTIONS #
+#############
+
+# Destroy partition table
+#
+# @param    $1  Device
+#########################
+partition-zap(){
+    local device="${1:?"Device missing"}"
+    sgdisk --zap-all "${device}"
+}
+
+# Create partition
+#
+# @param    $1  Device
+# @param    $2  Partition number
+# @param    $3  Size
+# @param    $4  Type (luks1, luks2, efi, win, linux)
+# @param    $5  Label
+####################################################
+partition-create(){
+    local device="${1:?"Device missing"}"
+    local number="${2:?"Partition number missing"}"
+    local size="${3:?"Partition size missing"}"
+    local type="${4:?"Partition type missing"}"
+    local label="${5:?"Partition label missing"}"
+    local type_code gap
+
+    case "${type}" in
+        luks1|luks2) type_code="8309" ;;
+        efi) type_code="ef00" ;;
+        win) type_code="0700" ;;
+        linux) type_code="8300" ;;
+        *)
+            print-error "Unsupported type: ${type}"
+            return 1 ;;
+    esac
+
+    [[ "${number}" -gt 1 ]] && gap="+128M" || gap=0
+
+    sgdisk -n "${number}:${gap}:+${size}" -t "0:${type_code}" -c "0:${label}" "${device}"
+}
+
+# Encrypt LUKS partition
+#
+# @param    $1  Partition
+# @param    $2  LUKS Type (luks1, luks2)
+# @param    $3  Label
+########################################
+partition-luks-create(){
+    local partition="${1:?"Partition missing"}"
+    local type="${2:?"LUKS type missing"}"
+    local label="${3:?"Partition label missing"}"
+
+    cryptsetup luksFormat \
+        --verify-passphrase \
+        "--type=${type}" \
+        --cipher=aes-xts-plain64 \
+        --key-size=512 \
+        --hash=sha512 \
+        --iter-time=3000 \
+        --use-urandom -- "${partition}"
+    cryptsetup open --type luks "${partition}" "LUKS_${label}"
+}
+
+# Format partition
+#
+# @param    $1  Partition
+# @param    $2  Type (luks1, luks2, efi, win, linux)
+# @param    $3  Label
+####################################################
+partition-format(){
+    local partition="${1:?"Partition missing"}"
+    local type="${2:?"Type missing"}"
+    local label="${3:?"Partition label missing"}"
+
+    case "${type}" in
+        luks1|luks2) mkfs.ext4 -L "${label}" "/dev/mapper/LUKS_${label}" ;;
+        efi) mkfs.vfat -F 32 -n "${label}" "${partition}" ;;
+        win) mkntfs -f -L "${label}" "${partition}" ;;
+        linux) mkfs.ext4 -L "${label}" "${partition}" ;;
+        *)
+            print-error "Unsupported type: ${type}"
+            return 1 ;;
+    esac
+}
+
+################
+# SCRIPT START #
+################
 
 # Strict mode minus IFS
 set -euo pipefail
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
-check-not-root || exit 1
+check-root || exit 1
+
+# Options
+map="${1:-}"
+
+if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
+    map_file="${ES_CFG_LOCAL}/config/install/partition-maps/${map}"
+elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
+    map_file="${ES_INSTALL_CFG}/partition-maps/${map}"
+else
+    echo "Available maps:"
+    ls -1 "${ES_INSTALL_CFG}/partition-maps"
+    [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
+    error-exit "Failed to find partition map"
+fi
 
 print-section "Parsed config"
-sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${ES_CFG_LOCAL}/config/install/partitions"
+sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
 echo
-# read -rp "Proceed? (y/n) "
-# [[ ${REPLY} != 'y' && ${REPLY} != 'Y' ]] && exit 0
+read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
+[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
 
-disks=$(read-file-cfg "${ES_CFG_LOCAL}/config/install/partitions" "DISKS")
+disks=$(read-file-cfg "${map_file}" "DISKS")
 while read -r name device part_prefix; do
+    print-status "Destroying partition table on ${device} (${name})..."
+    partition-zap "${device}"
+    print-finish
 
-    # echo $name
-    # echo $device
-    # echo $part_prefix
-
-    partitions=$(read-file-cfg "${ES_CFG_LOCAL}/config/install/partitions" "PARTITIONS_${name}")
-
+    print-header "Partitioning ${device}..."
+    partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
     while read -r number size type label format; do
-        echo sgdisk -n "${number}:0:+${size}" -t "${number}:${type}" -c "${number}:${label}" "${device}"
-        # echo $number
-        # echo $size
-        # echo $type
-        # echo $label
+        print-status "Create partition: ${label}..."
+        partition-create "${device}" "${number}" "${size}" "${type}" "${label}"
+        print-finish
+
+        if [[ "${type}" == luks* ]]; then
+            print-header "LUKS encrpyting ${label}..."
+            partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
+            print-finish
+        fi
+
+        if [[ "${format}" == "y" ]]; then
+            print-header "Formatting ${label}..."
+            partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
+            print-finish
+        fi
     done <<< "${partitions}"
-
-
-
-
-
-
+    print-finish "Partitioning finished."
 done <<< "${disks}"
 
 exit 0
