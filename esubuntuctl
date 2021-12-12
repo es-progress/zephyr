@@ -26,6 +26,7 @@ ${TXT_YELLOW}Commands:${TXT_NORM}
   ${TXT_GREEN}burn${TXT_NORM}              Burn to ISO to USB
   ${TXT_GREEN}install${TXT_NORM}           Install ES-Ubuntu
   ${TXT_GREEN}update${TXT_NORM}            Update a module
+  ${TXT_GREEN}partition${TXT_NORM}         Partition disk
   ${TXT_GREEN}help${TXT_NORM}              Display help
 EOF
     )
@@ -72,6 +73,15 @@ ${TXT_YELLOW}Options:${TXT_NORM}
   MODULE            Name of module to update (eg. packages, bash)
 EOF
     )
+    # Partition
+    txt_part=$(cat <<EOF
+${TXT_YELLOW}Usage:${TXT_NORM}
+  esubuntuctl partition MAP
+
+${TXT_YELLOW}Options:${TXT_NORM}
+  MAP               Partition map
+EOF
+    )
 
     case "${selector}" in
         "") echo -e "${txt_help}" ;;
@@ -79,6 +89,7 @@ EOF
         burn) echo -e "${txt_burn}" ;;
         install) echo -e "${txt_install}" ;;
         update) echo -e "${txt_update}" ;;
+        partition) echo -e "${txt_part}" ;;
         *) echo -e "${txt_main}" ;;
     esac
 }
@@ -136,6 +147,12 @@ burn(){
     "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
 }
 
+# Partition disks
+#################
+partition(){
+    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${1:-}"
+}
+
 ################
 # SCRIPT START #
 ################
@@ -163,6 +180,7 @@ case "${cmd}" in
     burn) burn "${1:-}" "${2:-}" ;;
     install) install "${1:-}" ;;
     update) update "${1:-}" ;;
+    partition) partition "${1:-}" ;;
     help) usage "${1:-}" ;;
     *) usage main ;;
 esac
