@@ -1,0 +1,17 @@
+###################
+## ES-Ubuntu     ##
+##               ##
+## Config        ##
+## Install       ##
+## Partition map ##
+###################
+
+[DISKS]
+# NAME DEVICE    [PARTITION_PREFIX]
+main   /dev/sda
+
+[PARTITIONS_main]
+# PARTNUM SIZE  TYPE   LABEL   FORMAT
+1         512M  efi    EFI     y
+2         1G    luks1  BOOT    y
+3         8G    luks2  SYSTEM  y
