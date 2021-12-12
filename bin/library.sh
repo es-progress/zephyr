@@ -68,6 +68,15 @@ print-finish() {
     echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
 }
 
+# Print error message and exit
+#
+# @param    $1  Error message
+##############################
+error-exit(){
+    print-error "${*}"
+    exit 1
+}
+
 # Check if not run as root
 ##########################
 check-not-root() {

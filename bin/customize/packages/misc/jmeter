@@ -23,10 +23,7 @@ print-header "Install jmeter..."
 tmp_file=$(mktemp)
 curl --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha512sum "${tmp_file}" | cut -d" " -f1)
-if [[ "${hash}" != "${checksum}" ]]; then
-    print-error "Bad checksum, exiting"
-    exit 1
-fi
+[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Unpack archive
 sudo tar -C /opt -xf "${tmp_file}"
 sudo rm -rf /opt/jmeter

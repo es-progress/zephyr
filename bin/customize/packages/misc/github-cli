@@ -22,10 +22,7 @@ print-header "Install github-cli..."
 tmp_file=$(mktemp)
 curl --progress-bar --location -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-if [[ "${hash}" != "${checksum}" ]]; then
-    print-error "Bad checksum, exiting"
-    exit 1
-fi
+[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Install
 sudo dpkg -i "${tmp_file}"
 print-finish
