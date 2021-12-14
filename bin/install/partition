@@ -84,9 +84,9 @@ partition-luks-create(){
 # Format partition
 #
 # @param    $1  Partition
-# @param    $2  Type (luks1, luks2, efi, win, linux)
+# @param    $2  Type (luks1, luks2, efi, msr, win, linux)
 # @param    $3  Label
-####################################################
+#########################################################
 partition-format(){
     local partition="${1:?"Partition missing"}"
     local type="${2:?"Type missing"}"
@@ -95,6 +95,7 @@ partition-format(){
     case "${type}" in
         luks1|luks2) mkfs.ext4 -L "${label}" "/dev/mapper/LUKS_${label}" ;;
         efi) mkfs.vfat -F 32 -n "${label}" "${partition}" ;;
+        msr) dd if=/dev/zero "of=${partition}" status=progress || return 0 ;;
         win) mkntfs -f -L "${label}" "${partition}" ;;
         linux) mkfs.ext4 -L "${label}" "${partition}" ;;
         *)
