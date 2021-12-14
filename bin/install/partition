@@ -98,8 +98,9 @@ partition-format(){
 # SCRIPT START #
 ################
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
@@ -125,15 +126,18 @@ read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
 [[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
 
 disks=$(read-file-cfg "${map_file}" "DISKS")
-while read -r name device part_prefix; do
-    print-status "Destroying partition table on ${device} (${name})..."
+for line in ${disks}; do
+    IFS=$' \t' read -r name device part_prefix <<< "${line}"
+    print-section "Partitioning ${device}..."
+
+    print-header "Destroying partition table on ${device} (${name})..."
     partition-zap "${device}"
     print-finish
 
-    print-header "Partitioning ${device}..."
     partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
-    while read -r number size type label format; do
-        print-status "Create partition: ${label}..."
+    for part_line in ${partitions}; do
+        IFS=$' \t' read -r number size type label format <<< "${part_line}"
+        print-header "Create partition: ${label}..."
         partition-create "${device}" "${number}" "${size}" "${type}" "${label}"
         print-finish
 
@@ -148,8 +152,8 @@ while read -r name device part_prefix; do
             partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
             print-finish
         fi
-    done <<< "${partitions}"
+    done
     print-finish "Partitioning finished."
-done <<< "${disks}"
+done
 
 exit 0
