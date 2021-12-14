@@ -17,6 +17,10 @@
 partition-zap(){
     local device="${1:?"Device missing"}"
     sgdisk --zap-all "${device}"
+
+    # Inform kernel about partitions
+    partprobe "${device}"
+    sleep 1
 }
 
 # Create partition
@@ -49,6 +53,10 @@ partition-create(){
     esac
 
     sgdisk -n "${number}:+${gap}:+${size}" -t "0:${type_code}" -c "0:${label}" "${device}"
+
+    # Inform kernel about partitions
+    partprobe "${device}"
+    sleep 1
 }
 
 # Encrypt LUKS partition
