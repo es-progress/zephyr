@@ -23,21 +23,24 @@ partition-zap(){
 #
 # @param    $1  Device
 # @param    $2  Partition number
-# @param    $3  Size
-# @param    $4  Type (luks1, luks2, efi, win, linux)
-# @param    $5  Label
+# @param    $3  Gap (free space before this partition)
+# @param    $4  Size
+# @param    $5  Type (luks1, luks2, efi, msr, win, linux)
+# @param    $6  Label
 ####################################################
 partition-create(){
     local device="${1:?"Device missing"}"
     local number="${2:?"Partition number missing"}"
-    local size="${3:?"Partition size missing"}"
-    local type="${4:?"Partition type missing"}"
-    local label="${5:?"Partition label missing"}"
-    local type_code gap
+    local gap="${3:?"Gap size missing"}"
+    local size="${4:?"Partition size missing"}"
+    local type="${5:?"Partition type missing"}"
+    local label="${6:?"Partition label missing"}"
+    local type_code
 
     case "${type}" in
         luks1|luks2) type_code="8309" ;;
         efi) type_code="ef00" ;;
+        msr) type_code="0c01" ;;
         win) type_code="0700" ;;
         linux) type_code="8300" ;;
         *)
@@ -45,9 +48,7 @@ partition-create(){
             return 1 ;;
     esac
 
-    [[ "${number}" -gt 1 ]] && gap="+128M" || gap=0
-
-    sgdisk -n "${number}:${gap}:+${size}" -t "0:${type_code}" -c "0:${label}" "${device}"
+    sgdisk -n "${number}:+${gap}:+${size}" -t "0:${type_code}" -c "0:${label}" "${device}"
 }
 
 # Encrypt LUKS partition
@@ -136,9 +137,9 @@ for line in ${disks}; do
 
     partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
     for part_line in ${partitions}; do
-        IFS=$' \t' read -r number size type label format <<< "${part_line}"
+        IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
         print-header "Create partition: ${label}..."
-        partition-create "${device}" "${number}" "${size}" "${type}" "${label}"
+        partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
         print-finish
 
         if [[ "${type}" == luks* ]]; then
