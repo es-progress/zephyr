@@ -31,7 +31,7 @@ partition-zap(){
 # @param    $4  Size
 # @param    $5  Type (luks1, luks2, efi, msr, win, linux)
 # @param    $6  Label
-####################################################
+#########################################################
 partition-create(){
     local device="${1:?"Device missing"}"
     local number="${2:?"Partition number missing"}"
