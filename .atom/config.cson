@@ -19,3 +19,4 @@
     "**/config/customize/services/php/extensions": "source.git-config"
     "**/config/customize/shorewall/*": "source.git-config"
     "**/config/customize/ssh/**": "source.git-config"
+    "**/config/install/**": "source.git-config"

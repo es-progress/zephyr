@@ -23,10 +23,7 @@ print-header "Install PHPMyAdmin..."
 tmp_file=$(mktemp)
 curl --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-if [[ "${hash}" != "${checksum}" ]]; then
-    print-error "Bad checksum, exiting"
-    exit 1
-fi
+[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Unpack archive
 target="${WEB_ROOT}/phpmyadmin"
 sudo rm -rf "${target}"
@@ -51,10 +48,7 @@ sudo chmod g+w "${target}/upload" "${target}/save" "${target}/tmp"
 print-finish
 
 print-status "Create PHPMyAdmin control DB..."
-if [[ ! -f "${target}/public/sql/create_tables.sql" ]]; then
-    echo "Import SQL file missing"
-    exit 1
-fi
+[[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
 cat "${target}/public/sql/create_tables.sql" | sudo mysql
 print-finish
 

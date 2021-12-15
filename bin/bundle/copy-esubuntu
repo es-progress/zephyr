@@ -15,21 +15,17 @@ check-not-root || exit 1
 
 print-status "Copy ES-Ubuntu to SquashFS..."
 target="${ES_EXTRACT}/squashfs-root/${GLOBAL_RES}"
-# Create dirs
+# Main files
 sudo mkdir -p "${target}"
-sudo mkdir -p "${target}/bin"
-sudo mkdir -p "${target}/config"
-# Main
 sudo cp -r "${DIR_ESUBUNTU}/bootstrap.sh" "${target}/"
 sudo cp -r "${DIR_ESUBUNTU}/ESubuntu.cfg" "${target}/"
 sudo cp -r "${DIR_ESUBUNTU}/ESubuntu.path.cfg" "${target}/"
 sudo cp -r "${DIR_ESUBUNTU}/esubuntuctl" "${target}/"
-# Bin
-sudo cp -r "${DIR_ESUBUNTU}/bin/library.sh" "${target}/bin/"
-sudo cp -r "${DIR_ESUBUNTU}/bin/customize" "${target}/bin/"
-sudo cp -r "${DIR_ESUBUNTU}/config/customize" "${target}/config/"
-# Files
-sudo cp -r "${DIR_ESUBUNTU}/files/" "${target}/"
+sudo cp -r "${DIR_ESUBUNTU}/LICENSE" "${target}/"
+sudo cp -r "${DIR_ESUBUNTU}/README.md" "${target}/"
+sudo cp -r "${DIR_ESUBUNTU}/bin" "${target}/"
+sudo cp -r "${DIR_ESUBUNTU}/config" "${target}/"
+sudo cp -r "${DIR_ESUBUNTU}/files" "${target}/"
 # Local config
 if [[ -e "${DIR_ESUBUNTU}/local/config" ]]; then
     sudo mkdir -p "${target}/local"

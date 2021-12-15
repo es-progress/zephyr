@@ -7,8 +7,8 @@
 ################
 
 # gh
-url="https://github.com/cli/cli/releases/download/v2.2.0/gh_2.2.0_linux_amd64.deb"
-checksum="effdb6df788f1e7af43857bda377c2c86d6905e0fa2b19c74c5552059df65830"
+url="https://github.com/cli/cli/releases/download/v2.3.0/gh_2.3.0_linux_amd64.deb"
+checksum="18c971061a4d56f42e36979d82c8dd1f25b355105d1613514eb59e54d0f03f3d"
 
 # Strict mode
 set -euo pipefail
@@ -22,10 +22,7 @@ print-header "Install github-cli..."
 tmp_file=$(mktemp)
 curl --progress-bar --location -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-if [[ "${hash}" != "${checksum}" ]]; then
-    print-error "Bad checksum, exiting"
-    exit 1
-fi
+[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Install
 sudo dpkg -i "${tmp_file}"
 print-finish
