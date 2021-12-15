@@ -27,6 +27,7 @@ ${TXT_YELLOW}Commands:${TXT_NORM}
   ${TXT_GREEN}install${TXT_NORM}           Install ES-Ubuntu
   ${TXT_GREEN}update${TXT_NORM}            Update a module
   ${TXT_GREEN}partition${TXT_NORM}         Partition disk
+  ${TXT_GREEN}post-install${TXT_NORM}      OS post-install steps
   ${TXT_GREEN}help${TXT_NORM}              Display help
 EOF
     )
@@ -82,6 +83,15 @@ ${TXT_YELLOW}Options:${TXT_NORM}
   MAP               Partition map
 EOF
     )
+    # Post-install
+    txt_post_install=$(cat <<EOF
+${TXT_YELLOW}Usage:${TXT_NORM}
+  esubuntuctl post-install MAP
+
+${TXT_YELLOW}Options:${TXT_NORM}
+  MAP               Partition map
+EOF
+    )
 
     case "${selector}" in
         "") echo -e "${txt_help}" ;;
@@ -90,6 +100,7 @@ EOF
         install) echo -e "${txt_install}" ;;
         update) echo -e "${txt_update}" ;;
         partition) echo -e "${txt_part}" ;;
+        post-install) echo -e "${txt_post_install}" ;;
         *) echo -e "${txt_main}" ;;
     esac
 }
@@ -153,6 +164,12 @@ partition(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${1:-}"
 }
 
+# Post-install
+##############
+post-install(){
+    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${1:-}"
+}
+
 ################
 # SCRIPT START #
 ################
@@ -181,6 +198,7 @@ case "${cmd}" in
     install) install "${1:-}" ;;
     update) update "${1:-}" ;;
     partition) partition "${1:-}" ;;
+    post-install) post-install "${1:-}" ;;
     help) usage "${1:-}" ;;
     *) usage main ;;
 esac
