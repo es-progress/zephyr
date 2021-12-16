@@ -167,7 +167,7 @@ partition(){
 # Post-install
 ##############
 post-install(){
-    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${1:-}"
+    "${ES_INSTALL_SCRIPTS}/post-install" "${1:-}"
 }
 
 ################
