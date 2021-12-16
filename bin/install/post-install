@@ -18,7 +18,7 @@ check-not-root || exit 1
 # target="/target"
 target="${ES_EXTRACT}/squashfs-root"
 for dir in proc sys dev; do
-    if ! grep -qs "${target}/${dir}" /proc/mounts; then
+    if ! findmnt "${target}/${dir}" >/dev/null; then
         sudo mount --rbind "/${dir}" "${target}/${dir}"
     fi
 done
