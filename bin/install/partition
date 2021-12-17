@@ -117,7 +117,6 @@ check-root || exit 1
 
 # Options
 map="${1:-}"
-
 if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
     map_file="${ES_CFG_LOCAL}/config/install/partition-maps/${map}"
 elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then

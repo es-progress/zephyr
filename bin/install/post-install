@@ -26,7 +26,7 @@ done
 # Run Post-install steps
 steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -printf "%P\n")
 for step in ${steps}; do
-    sudo chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}"
+    sudo chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${1:-}"
 done
 
 exit 0
