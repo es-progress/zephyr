@@ -83,18 +83,7 @@ print-status "Configure cryptsetup-initramfs..."
 # Keyfile
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
 # Umask
-if ! grep -qs "UMASK=0077" /etc/initramfs-tools/initramfs.conf; then
-    cat <<EOF >>/etc/initramfs-tools/initramfs.conf
-
-#
-# UMASK
-#
-# Restrict permissions on initramfs image
-#
-
-UMASK=0077
-EOF
-fi
+cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/initramfs.conf" /etc/initramfs-tools/conf.d/esubuntu.conf
 print-finish
 
 print-header "Create key file..."
