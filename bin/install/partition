@@ -137,9 +137,9 @@ read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
 disks=$(read-file-cfg "${map_file}" "DISKS")
 for line in ${disks}; do
     IFS=$' \t' read -r name device part_prefix <<< "${line}"
-    print-section "Partitioning ${device}..."
+    print-section "Partition ${device}..."
 
-    print-header "Destroying partition table on ${device} (${name})..."
+    print-header "Destroy partition table on ${device} (${name})..."
     partition-zap "${device}"
     print-finish
 
@@ -151,13 +151,13 @@ for line in ${disks}; do
         print-finish
 
         if [[ "${type}" == luks* ]]; then
-            print-header "LUKS encrpyting ${label}..."
+            print-header "LUKS encrypting ${label}..."
             partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
             print-finish
         fi
 
         if [[ "${format}" == "y" ]]; then
-            print-header "Formatting ${label}..."
+            print-header "Format ${label}..."
             partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
             print-finish
         fi
