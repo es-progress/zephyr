@@ -75,10 +75,6 @@ else
     error-exit "Failed to find partition map"
 fi
 
-print-status "Mount all file-systems..."
-mount -a
-print-finish
-
 print-header "Install cryptsetup-initramfs..."
 apt install -y --no-install-recommends cryptsetup-initramfs
 print-finish

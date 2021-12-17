@@ -23,6 +23,10 @@ for dir in proc sys dev; do
     fi
 done
 
+print-status "Mount all file-systems..."
+mount -a
+print-finish
+
 # Run Post-install steps
 steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -printf "%P\n")
 for step in ${steps}; do
