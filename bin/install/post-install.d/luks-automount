@@ -29,7 +29,7 @@ luks-add-key(){
     local key_slot="${3:?"Key slot missing"}"
 
     # Deleting previous key
-    cryptsetup luksKillSlot -q "${partition}" "${key_slot}"
+    cryptsetup luksKillSlot -q "${partition}" "${key_slot}" || true
     # Add new
     cryptsetup luksAddKey --iter-time 3000 --key-slot "${key_slot}" "${partition}" "${key_file}"
 }
