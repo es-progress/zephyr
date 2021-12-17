@@ -4,6 +4,7 @@
     "**/.inputrc": "source.shell"
     "**/*nanorc": "source.git-config"
     "**/bin/**": "source.shell"
+    "**/bin/**/*.conf": "source.git-config"
     "**/config/customize/git/*": "source.git-config"
     "**/config/customize/gnome/*": "source.git-config"
     "**/config/customize/gnome/config.d/*": "source.ini"
