@@ -15,8 +15,9 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
 print-status "Config GRUB..."
-# Timeout style
-sed -i '/GRUB_TIMEOUT_STYLE/ s/hidden/menu/' /etc/default/grub
+# Timeout
+sed -i '/GRUB_TIMEOUT_STYLE=/ c GRUB_TIMEOUT_STYLE=menu' /etc/default/grub
+sed -i '/GRUB_TIMEOUT=/ c GRUB_TIMEOUT=10' /etc/default/grub
 # GRUB menu resolution
 sed -i '/GRUB_GFXMODE/ c GRUB_GFXMODE=640x480' /etc/default/grub
 # Video settings
@@ -28,7 +29,7 @@ GRUB_GFXPAYLOAD_LINUX=keep
 EOF
 fi
 # GRUB menu theme (colors)
-cp "${ES_INSTALL_SCRIPTS}/spost-install.d/files/50_esubuntu" /etc/grub.d/
+cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/50_esubuntu" /etc/grub.d/
 chmod +x /etc/grub.d/50_esubuntu
 print-finish
 
