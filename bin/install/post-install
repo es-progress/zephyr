@@ -12,21 +12,21 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
-check-not-root || exit 1
+check-root || exit 1
 
 # Mount system
 # target="/target"
 target="${ES_EXTRACT}/squashfs-root"
 for dir in proc sys dev; do
     if ! findmnt "${target}/${dir}" >/dev/null; then
-        sudo mount --rbind "/${dir}" "${target}/${dir}"
+        mount --rbind "/${dir}" "${target}/${dir}"
     fi
 done
 
 # Run Post-install steps
 steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -printf "%P\n")
 for step in ${steps}; do
-    sudo chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${1:-}"
+    chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${1:-}"
 done
 
 exit 0
