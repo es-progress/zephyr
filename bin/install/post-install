@@ -14,9 +14,12 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
+read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
+[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+
 # Mount system
-# target="/target"
-target="${ES_EXTRACT}/squashfs-root"
+target="/target"
+# target="${ES_EXTRACT}/squashfs-root"
 for dir in proc sys dev; do
     if ! findmnt "${target}/${dir}" >/dev/null; then
         mount --rbind "/${dir}" "${target}/${dir}"
