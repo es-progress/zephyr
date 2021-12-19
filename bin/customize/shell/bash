@@ -16,7 +16,8 @@ check-not-root || exit 1
 shopt -s dotglob
 
 print-status "Copy global Bash files..."
-for file in "${ES_CUSTOMIZE_CFG}"/bash/global/*; do
+files=$(find "${ES_CUSTOMIZE_CFG}/bash/global" -type f)
+for file in ${files}; do
     sudo cp -r "${file}" /root/
     sudo cp -r "${file}" /etc/skel/
     cp -r "${file}" ~
@@ -24,14 +25,16 @@ done
 print-finish
 
 print-status "Copy root Bash files..."
-for file in "${ES_CUSTOMIZE_CFG}"/bash/root/*; do
+files=$(find "${ES_CUSTOMIZE_CFG}/bash/root/" -type f)
+for file in ${files}; do
     sudo cp -r "${file}" /root/
 done
 print-finish
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/bash" ]]; then
     print-status "Copy local Bash files..."
-    for file in "${ES_CFG_LOCAL}"/config/customize/bash/*; do
+    files=$(find "${ES_CFG_LOCAL}/config/customize/bash" -type f)
+    for file in ${files}; do
         cp -a "${file}" ~
     done
     print-finish

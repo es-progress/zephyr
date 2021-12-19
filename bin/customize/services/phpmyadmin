@@ -49,7 +49,7 @@ print-finish
 
 print-status "Create PHPMyAdmin control DB..."
 [[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
-cat "${target}/public/sql/create_tables.sql" | sudo mysql
+sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish
 
 print-status "Create PHPMyAdmin control user..."
