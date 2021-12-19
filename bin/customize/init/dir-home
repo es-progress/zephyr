@@ -20,9 +20,9 @@ print-finish
 if [[ -f "${ES_CFG_LOCAL}/config/customize/init/dir-home" ]]; then
     print-status "Create home dirs..."
     home_dirs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/init/dir-home")
-    for home_dir in ${home_dirs}; do
+    for line in ${home_dirs}; do
         # eval line to let the shell expand tilde and env vars
-        arg=$(eval echo "${home_dir}")
+        arg=$(eval echo "${line}")
         mkdir -p "${arg}"
     done
     print-finish
