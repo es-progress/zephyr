@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 iso_image="${1?:"ISO file missing"}"
 
-if ! grep -qs "${ES_MOUNT}" /etc/mtab; then
+if ! findmnt "${ES_MOUNT}" >/dev/null; then
     print-status "Mounting ISO..."
     mkdir -p "${ES_MOUNT}"
     sudo mount -o ro,loop "${iso_image}" "${ES_MOUNT}"

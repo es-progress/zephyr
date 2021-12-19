@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Install      ##
+## Post-install ##
+## Steps runner ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-root || exit 1
+
+read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
+[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+
+# Mount system
+target="/target"
+# target="${ES_EXTRACT}/squashfs-root"
+for dir in proc sys dev; do
+    if ! findmnt "${target}/${dir}" >/dev/null; then
+        mount --rbind "/${dir}" "${target}/${dir}"
+    fi
+done
+
+print-status "Mount all file-systems..."
+mount -a
+print-finish
+
+# Run Post-install steps
+steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -printf "%P\n")
+for step in ${steps}; do
+    chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${@}"
+done
+
+# Run local post-install steps
+steps=$(find "${ES_CFG_LOCAL}/config/install/post-install.d" -maxdepth 1 -type f -printf "%P\n")
+for step in ${steps}; do
+    chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/local/config/install/post-install.d/${step}" "${@}"
+done
+
+exit 0

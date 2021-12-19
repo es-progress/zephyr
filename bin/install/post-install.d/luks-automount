@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+####################
+## ES-Ubuntu      ##
+##                ##
+## Install        ##
+## Post-install   ##
+## LUKS automount ##
+####################
+
+##########
+# CONFIG #
+##########
+key_dir=/etc/luks
+key_slot=2
+
+#############
+# FUNCTIONS #
+#############
+
+# Add key to a LUKS partition
+#
+# @param    $1  LUKS partition
+# @param    $2  Key file
+# @param    $3  Key slot
+##############################
+luks-add-key(){
+    local partition="${1:?"Partition missing"}"
+    local key_file="${2:?"Key file missing"}"
+    local key_slot="${3:?"Key slot missing"}"
+
+    # Deleting previous key
+    cryptsetup luksKillSlot -q "${partition}" "${key_slot}" || true
+    # Add new
+    cryptsetup luksAddKey --iter-time 3000 --key-slot "${key_slot}" "${partition}" "${key_file}"
+}
+
+# Update /etc/crypttab
+#
+# @param    $1  LUKS partition
+# @param    $2  Label
+# @param    $3  Key file
+##############################
+luks-crypttab(){
+    local partition="${1:?"Partition missing"}"
+    local label="${2:?"Label missing"}"
+    local key_file="${3:?"Key file missing"}"
+
+    UUID=$(blkid -s UUID -o value "${partition}")
+    if ! grep -qs "${UUID}" /etc/crypttab; then
+        echo "LUKS_${label} UUID=${UUID} ${key_file} luks,discard" >>/etc/crypttab
+    fi
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-root || exit 1
+
+# Options
+map="${1:-}"
+if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
+    map_file="${ES_CFG_LOCAL}/config/install/partition-maps/${map}"
+elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
+    map_file="${ES_INSTALL_CFG}/partition-maps/${map}"
+else
+    echo "Available maps:"
+    ls -1 "${ES_INSTALL_CFG}/partition-maps"
+    [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
+    error-exit "Failed to find partition map"
+fi
+
+print-header "Install cryptsetup-initramfs..."
+apt install -y --no-install-recommends cryptsetup-initramfs
+print-finish
+
+print-status "Configure cryptsetup-initramfs..."
+# Keyfile
+sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
+# Umask
+cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/initramfs.conf" /etc/initramfs-tools/conf.d/esubuntu.conf
+print-finish
+
+print-header "Create key file..."
+mkdir -p "${key_dir}"
+dd if=/dev/urandom of="${key_dir}/${map}.key" bs=4096 count=1
+print-finish
+
+print-status "Secure key-file..."
+chmod o-rwx "${key_dir}"
+chmod go-rwx "${key_dir}/${map}.key"
+print-finish
+
+# Loop through partitions
+disks=$(read-file-cfg "${map_file}" "DISKS")
+for line in ${disks}; do
+    IFS=$' \t' read -r name device part_prefix <<< "${line}"
+    partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
+    for part_line in ${partitions}; do
+        IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
+
+        if [[ "${type}" == luks* ]]; then
+            print-header "Add machine key to LUKS ${label}..."
+            luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${map}.key" "${key_slot}"
+            print-finish
+
+            print-status "Update crypttab with ${label}..."
+            luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${map}.key"
+            print-finish
+        fi
+    done
+done
+
+print-header "Update initramfs..."
+update-initramfs -u -k all
+print-finish
+
+print-header "Updating GRUB..."
+update-grub
+print-finish
+
+exit 0

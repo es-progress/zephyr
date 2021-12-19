@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Install      ##
+## Post-install ##
+## GRUB config  ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-root || exit 1
+
+print-status "Config GRUB..."
+# Timeout
+sed -i '/GRUB_TIMEOUT_STYLE=/ c GRUB_TIMEOUT_STYLE=menu' /etc/default/grub
+sed -i '/GRUB_TIMEOUT=/ c GRUB_TIMEOUT=10' /etc/default/grub
+# GRUB menu resolution
+sed -i '/GRUB_GFXMODE/ c GRUB_GFXMODE=640x480' /etc/default/grub
+# Video settings
+if ! grep -qs "GRUB_GFXPAYLOAD_LINUX=keep" /etc/default/grub; then
+    cat <<EOF >>/etc/default/grub
+
+# Enable video settings
+GRUB_GFXPAYLOAD_LINUX=keep
+EOF
+fi
+# GRUB menu theme (colors)
+cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/grub_50_esubuntu" /etc/grub.d/50_esubuntu
+chmod +x /etc/grub.d/50_esubuntu
+print-finish
+
+print-status "Update GRUB..."
+update-grub
+print-finish
+
+exit 0
