@@ -34,7 +34,7 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/shorewall" ]]; then
     print-finish
 fi
 
-print-header "Starting shorewall..."
+print-header "Start shorewall..."
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
 sudo systemctl reload shorewall.service
