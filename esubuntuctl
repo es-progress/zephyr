@@ -172,7 +172,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|install|update|partition|post-install) "${cmd}" "${@}" ;;
+    create|burn|install|update|partition|post-install) "${cmd}" "${1:-}" "${2:-}" ;;
     help) usage "${1:-}" ;;
     *) usage_main ;;
 esac
