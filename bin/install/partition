@@ -20,7 +20,7 @@ partition-zap(){
 
     # Inform kernel about partitions
     partprobe "${device}"
-    sleep 1
+    sleep 3
 }
 
 # Create partition
@@ -56,7 +56,7 @@ partition-create(){
 
     # Inform kernel about partitions
     partprobe "${device}"
-    sleep 1
+    sleep 3
 }
 
 # Encrypt LUKS partition
