@@ -58,11 +58,11 @@ usage(){
     usage_update="update MODULE"
     options_update[0]="MODULE:Name of module to update (eg. packages, bash)"
     # Partition
-    usage_part="partition MAP"
-    options_part[0]="MAP:Partition map"
+    usage_part="partition MAP..."
+    options_part[0]="MAP:Partition maps"
     # Post-install
-    usage_postinstall="post-install MAP"
-    options_postinstall[0]="MAP:Partition map"
+    usage_postinstall="post-install MAP..."
+    options_postinstall[0]="MAP:Partition maps"
 
     case "${selector}" in
         "") usage="${usage_help}"; options=("${options_help[@]}") ;;

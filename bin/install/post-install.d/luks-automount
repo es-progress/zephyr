@@ -63,17 +63,20 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
 # Options
-map="${1:-}"
-if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
-    map_file="${ES_CFG_LOCAL}/config/install/partition-maps/${map}"
-elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
-    map_file="${ES_INSTALL_CFG}/partition-maps/${map}"
-else
-    echo "Available maps:"
-    ls -1 "${ES_INSTALL_CFG}/partition-maps"
-    [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
-    error-exit "Failed to find partition map"
-fi
+maps=("${@:-}")
+map_files=()
+for map in "${maps[@]}"; do
+    if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_CFG_LOCAL}/config/install/partition-maps/${map}")
+    elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_INSTALL_CFG}/partition-maps/${map}")
+    else
+        echo "Available maps:"
+        ls -1 "${ES_INSTALL_CFG}/partition-maps"
+        [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
+        error-exit "Failed to find partition map"
+    fi
+done
 
 print-header "Install cryptsetup-initramfs..."
 apt install -y --no-install-recommends cryptsetup-initramfs
@@ -97,22 +100,24 @@ chmod go-rwx "${key_dir}/${map}.key"
 print-finish
 
 # Loop through partitions
-disks=$(read-file-cfg "${map_file}" "DISKS")
-for line in ${disks}; do
-    IFS=$' \t' read -r name device part_prefix <<< "${line}"
-    partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
-    for part_line in ${partitions}; do
-        IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
+for map_file in "${map_files[@]}"; do
+    disks=$(read-file-cfg "${map_file}" "DISKS")
+    for line in ${disks}; do
+        IFS=$' \t' read -r name device part_prefix <<< "${line}"
+        partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
+        for part_line in ${partitions}; do
+            IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
 
-        if [[ "${type}" == luks* ]]; then
-            print-header "Add machine key to LUKS ${label}..."
-            luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${map}.key" "${key_slot}"
-            print-finish
+            if [[ "${type}" == luks* ]]; then
+                print-header "Add machine key to LUKS ${label}..."
+                luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${map}.key" "${key_slot}"
+                print-finish
 
-            print-status "Update crypttab with ${label}..."
-            luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${map}.key"
-            print-finish
-        fi
+                print-status "Update crypttab with ${label}..."
+                luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${map}.key"
+                print-finish
+            fi
+        done
     done
 done
 

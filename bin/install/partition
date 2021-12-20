@@ -116,53 +116,59 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
 # Options
-map="${1:-}"
-if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
-    map_file="${ES_CFG_LOCAL}/config/install/partition-maps/${map}"
-elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
-    map_file="${ES_INSTALL_CFG}/partition-maps/${map}"
-else
-    echo "Available maps:"
-    ls -1 "${ES_INSTALL_CFG}/partition-maps"
-    [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
-    error-exit "Failed to find partition map"
-fi
+maps=("${@:-}")
+map_files=()
+for map in "${maps[@]}"; do
+    if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_CFG_LOCAL}/config/install/partition-maps/${map}")
+    elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_INSTALL_CFG}/partition-maps/${map}")
+    else
+        echo "Available maps:"
+        ls -1 "${ES_INSTALL_CFG}/partition-maps"
+        [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
+        error-exit "Failed to find partition map"
+    fi
+done
 
-print-section "Parsed config"
-sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
-echo
-read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
-[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+for map_file in "${map_files[@]}"; do
+    print-section "Parsed config"
+    sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
+    echo
+    read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
+    [[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
 
-disks=$(read-file-cfg "${map_file}" "DISKS")
-for line in ${disks}; do
-    IFS=$' \t' read -r name device part_prefix <<< "${line}"
-    print-section "Partition ${device}..."
+    disks=$(read-file-cfg "${map_file}" "DISKS")
+    for line in ${disks}; do
+        IFS=$' \t' read -r name device part_prefix <<< "${line}"
+        print-section "Partition ${device}..."
 
-    print-header "Destroy partition table on ${device} (${name})..."
-    partition-zap "${device}"
-    print-finish
-
-    partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
-    for part_line in ${partitions}; do
-        IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
-        print-header "Create partition: ${label}..."
-        partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
+        print-header "Destroy partition table on ${device} (${name})..."
+        partition-zap "${device}"
         print-finish
 
-        if [[ "${type}" == luks* ]]; then
-            print-header "LUKS encrypting ${label}..."
-            partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
+        partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
+        for part_line in ${partitions}; do
+            IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
+            print-header "Create partition: ${label}..."
+            partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
-        fi
 
-        if [[ "${format}" == "y" ]]; then
-            print-header "Format ${label}..."
-            partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
-            print-finish
-        fi
+            if [[ "${type}" == luks* ]]; then
+                print-header "LUKS encrypting ${label}..."
+                partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
+                print-finish
+            fi
+
+            if [[ "${format}" == "y" ]]; then
+                print-header "Format ${label}..."
+                partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
+                print-finish
+            fi
+        done
+        print-finish "Finished partitioning ${device}."
     done
-    print-finish "Partitioning finished."
+    print-finish "All partitioning finished."
 done
 
 exit 0
