@@ -15,9 +15,9 @@ check-not-root || exit 1
 
 print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
-files=$(find "${ES_CUSTOMIZE_CFG}/ssh" -type f)
+files=$(find "${ES_CUSTOMIZE_CFG}/ssh" -mindepth 1 -maxdepth 1)
 for file in ${files}; do
-    cp -a "${file}" ~/.ssh/
+    cp -r "${file}" ~/.ssh/
 done
 
 print-finish
@@ -25,9 +25,9 @@ print-finish
 if [[ -d "${ES_CFG_LOCAL}/config/customize/ssh/hosts" ]]; then
     print-status "Copy SSH hosts config..."
     mkdir -p ~/.ssh/hosts
-    files=$(find "${ES_CFG_LOCAL}/config/customize/ssh/hosts" -type f)
+    files=$(find "${ES_CFG_LOCAL}/config/customize/ssh/hosts" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
-        cp -a "${file}" ~/.ssh/hosts/
+        cp -r "${file}" ~/.ssh/hosts/
     done
     print-finish
 fi

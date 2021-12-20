@@ -18,7 +18,7 @@ sudo apt install --yes --no-install-recommends python3-pip
 print-finish
 
 print-header "Install pip packages..."
-pip install --upgrade --progress-bar ascii -r "${ES_CUSTOMIZE_CFG}/packages/pip"
+pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${ES_CUSTOMIZE_CFG}/packages/pip"
 print-finish
 
 exit 0

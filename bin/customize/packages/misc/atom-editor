@@ -13,8 +13,11 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
+print-header "Add Atom GPG key..."
+curl -s --location --url https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
+print-finish
+
 print-header "Add Atom repo..."
-wget -qO - https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
 sudo add-apt-repository --yes "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"
 print-finish
 

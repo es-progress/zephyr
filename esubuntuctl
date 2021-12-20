@@ -58,11 +58,11 @@ usage(){
     usage_update="update MODULE"
     options_update[0]="MODULE:Name of module to update (eg. packages, bash)"
     # Partition
-    usage_part="partition MAP"
-    options_part[0]="MAP:Partition map"
+    usage_part="partition MAP..."
+    options_part[0]="MAP:Partition maps"
     # Post-install
-    usage_postinstall="post-install MAP"
-    options_postinstall[0]="MAP:Partition map"
+    usage_postinstall="post-install MAP..."
+    options_postinstall[0]="MAP:Partition maps"
 
     case "${selector}" in
         "") usage="${usage_help}"; options=("${options_help[@]}") ;;
@@ -88,7 +88,7 @@ usage(){
 #########
 install(){
     # Symlink local dir
-    if [[ -n "${1}" ]]; then
+    if [[ -n "${1:-}" ]]; then
         [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
         [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${1}" "${ES_CFG_LOCAL}"
     fi
@@ -104,7 +104,7 @@ install(){
 # Create ISO
 ############
 create(){
-    if [[ -z "${1}" ]]; then
+    if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
         usage create
         exit 1
@@ -118,7 +118,7 @@ create(){
 # Update module
 ###############
 update(){
-    if [[ -z "${1}" ]]; then
+    if [[ -z "${1:-}" ]]; then
         print-error "Module missing!"
         usage update
         exit 1
@@ -129,7 +129,7 @@ update(){
 # Burn ISO
 ##########
 burn(){
-    if [[ -z "${1}" ]]; then
+    if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
         usage burn
         exit 1
@@ -140,13 +140,13 @@ burn(){
 # Partition disks
 #################
 partition(){
-    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${1:-}"
+    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
 }
 
 # Post-install
 ##############
 post-install(){
-    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${1:-}"
+    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
 }
 
 ################
@@ -172,7 +172,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|install|update|partition|post-install) "${cmd}" "${1:-}" "${2:-}" ;;
+    create|burn|install|update|partition|post-install) "${cmd}" "${@}" ;;
     help) usage "${1:-}" ;;
     *) usage_main ;;
 esac
