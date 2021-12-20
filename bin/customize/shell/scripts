@@ -38,7 +38,7 @@ print-finish
 if [[ -d "${ES_CFG_LOCAL}/files/shell" ]]; then
     print-status "Copy local shell scripts..."
     mkdir -p "${LOCAL_BIN}"
-    files=$(find "${ES_CFG_LOCAL}/files/shell" -type f)
+    files=$(find "${ES_CFG_LOCAL}/files/shell" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
         cp -a "${file}" "${LOCAL_BIN}"
     done
