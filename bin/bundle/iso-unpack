@@ -16,7 +16,7 @@ check-not-root || exit 1
 iso_image="${1?:"ISO file missing"}"
 
 if ! findmnt "${ES_MOUNT}" >/dev/null; then
-    print-status "Mounting ISO..."
+    print-status "Mount ISO..."
     mkdir -p "${ES_MOUNT}"
     sudo mount -o ro,loop "${iso_image}" "${ES_MOUNT}"
     print-finish
@@ -31,14 +31,14 @@ sudo rsync \
     "${ES_MOUNT}/" "${ES_EXTRACT}/iso"
 print-finish
 
-if grep -qs "${ES_MOUNT}" /etc/mtab; then
-    print-status "Unmounting ISO..."
+if findmnt "${ES_MOUNT}" >/dev/null; then
+    print-status "Unmount ISO..."
     sudo umount "${ES_MOUNT}"
     print-finish
 fi
 
 if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
-    print-status "Clearing SquashFS extracting directory..."
+    print-status "Clear SquashFS extracting directory..."
     sudo rm -rf "${ES_EXTRACT}/squashfs-root"
     print-finish
 fi

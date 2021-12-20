@@ -6,8 +6,9 @@
 ## apt       ##
 ###############
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
@@ -16,13 +17,14 @@ check-not-root || exit 1
 repos=()
 packages=()
 apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt")
-while read -r package repo; do
+for line in ${apt_packages}; do
+    IFS=$' \t' read -r package repo <<< "${line}"
     [[ -n "${repo}" ]] && repos+=("${repo}")
     packages+=("${package}")
-done <<< "${apt_packages}"
+done
 
 for repo in "${repos[@]}"; do
-    print-header "Adding apt repo: ${repo}..."
+    print-header "Add apt repo: ${repo}..."
     sudo add-apt-repository --yes --no-update "${repo}"
     print-finish
 done
@@ -31,22 +33,22 @@ print-header "Update apt cache..."
 sudo apt update
 print-finish
 
-print-header "Installing packages..."
+print-header "Install packages..."
 sudo apt install --yes --no-install-recommends "${packages[@]}"
 print-finish
 
 # Read packages to delete
 packages=()
 apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt-delete")
-while read -r package; do
+for package in ${apt_packages}; do
     packages+=("${package}")
-done <<< "${apt_packages}"
+done
 
-print-header "Removing packages..."
+print-header "Remove packages..."
 sudo apt remove --yes --purge --autoremove "${packages[@]}"
 print-finish
 
-print-header "Running apt autoclean..."
+print-header "Run apt autoclean..."
 sudo apt autoclean
 print-finish
 

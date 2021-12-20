@@ -6,8 +6,9 @@
 ## Virtualbox ##
 ################
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
@@ -19,13 +20,14 @@ print-finish
 
 print-status "Apply global configs..."
 configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/virtualbox")
-while read -r cfg_name cfg_value; do
+for line in ${configs}; do
+    IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
     if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
         # eval value to let the shell expand tilde and env vars
         cfg_value=$(eval echo "${cfg_value}")
         vboxmanage setproperty "${cfg_name}" "${cfg_value}"
     fi
-done <<< "${configs}"
+done
 print-finish
 
 # Local settings
@@ -34,19 +36,20 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" ]]; t
 
     # vboxmanage configs
     vbox_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" vboxmanage)
-    while read -r cfg_name cfg_value; do
+    for line in ${vbox_configs}; do
+        IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
         if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
             # eval value to let the shell expand tilde and env vars
             cfg_value=$(eval echo "${cfg_value}")
             vboxmanage setproperty "${cfg_name}" "${cfg_value}"
         fi
-    done <<< "${vbox_configs}"
+    done
 
     # Other configs
     other_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" settings)
-    while read -r line; do
+    for line in ${other_configs}; do
         eval "${line}"
-    done <<<"${other_configs}"
+    done
     print-finish
 fi
 
@@ -60,9 +63,9 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/virtualbox" ]]; then
 
     # Read VM info
     vm_info=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" virtmachines)
-    while read -r line; do
+    for line in ${vm_info}; do
         eval "${line}"
-    done <<<"${vm_info}"
+    done
 
     registered_vms=$(vboxmanage list vms)
 

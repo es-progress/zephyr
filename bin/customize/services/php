@@ -24,9 +24,9 @@ print-header "Install PHP & extensions..."
 php_extensions=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/services/php/extensions")
 packages=()
 packages+=("php${version}")
-while read -r extension; do
+for extension in ${php_extensions}; do
     packages+=("php${version}-${extension}")
-done <<< "${php_extensions}"
+done
 sudo apt install --yes --no-install-recommends "${packages[@]}"
 print-finish
 
@@ -36,7 +36,7 @@ sudo cp "${ES_CUSTOMIZE_CFG}/services/php/cli.php.ini" "/etc/php/${version}/cli/
 sudo cp "${ES_CUSTOMIZE_CFG}/services/php/xdebug.ini" "/etc/php/${version}/mods-available/xdebug.ini"
 print-finish
 
-print-header "Restarting services..."
+print-header "Restart services..."
 sudo systemctl enable "php${version}-fpm.service"
 sudo systemctl restart "php${version}-fpm.service"
 sudo a2enconf "php${version}-fpm"

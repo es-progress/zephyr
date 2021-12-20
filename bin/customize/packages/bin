@@ -6,8 +6,9 @@
 ## Shell bin ##
 ###############
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
@@ -15,8 +16,9 @@ check-not-root || exit 1
 print-header "Install vendor shell programs..."
 sudo mkdir -p "${GLOBAL_BIN}"
 binaries=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/bin")
-while read -r name url checksum; do
-    print-header "Installing ${name}..."
+for line in ${binaries}; do
+    IFS=$' \t' read -r name url checksum <<< "${line}"
+    print-header "Install ${name}..."
     tmp_file=$(mktemp)
     curl --progress-bar --location -o "${tmp_file}" --url "${url}"
 
@@ -32,7 +34,7 @@ while read -r name url checksum; do
     sudo chown root:root "${GLOBAL_BIN}/${name}"
     sudo chmod =0755 "${GLOBAL_BIN}/${name}"
     print-finish
-done <<< "${binaries}"
+done
 print-finish
 
 exit 0

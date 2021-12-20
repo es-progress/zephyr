@@ -6,8 +6,9 @@
 ## snap      ##
 ###############
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
@@ -18,19 +19,16 @@ sudo apt install --yes --no-install-recommends snapd
 print-finish
 
 snaps=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/snap")
-while read -r package mode; do
+for line in ${snaps}; do
+    IFS=$' \t' read -r package mode <<< "${line}"
     # Set options
-    options=""
-    [[ "${mode}" == "classic" ]] && options="--classic"
+    options=()
+    [[ "${mode}" == "classic" ]] && options=(--classic)
 
     # Install snap
-    print-header "Installing ${package}..."
-    if [[ -n "${options}" ]]; then
-        sudo snap install "${package}" "${options}"
-    else
-        sudo snap install "${package}"
-    fi
+    print-header "Install ${package}..."
+    sudo snap install "${package}" "${options[@]}"
     print-finish
-done <<< "${snaps}"
+done
 
 exit 0

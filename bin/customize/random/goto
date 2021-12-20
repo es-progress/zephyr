@@ -6,34 +6,37 @@
 ## Bash goto ##
 ###############
 
-# Strict mode minus IFS
+# Strict mode
 set -euo pipefail
+IFS=$'\n\t'
 
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 source ~/.bash/goto
 
-print-header "Registering global goto alias..."
+print-header "Register global goto alias..."
 gt_alias=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/random/goto")
-while read -r alias dir; do
+for line in ${gt_alias}; do
+    IFS=$' \t' read -r alias dir <<< "${line}"
     # eval dir to let the shell expand tilde and env vars
     path=$(eval echo "${dir}")
     # Register only if not exists
     if ! goto -x "${alias}" >/dev/null 2>&1; then
         goto -r "${alias}" "${path}"
     fi
-done <<< "${gt_alias}"
+done
 print-finish
 
 if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
-    print-header "Registering local goto alias..."
+    print-header "Register local goto alias..."
     gt_alias=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/random/goto")
 
     # Source env vars
     [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
 
-    while read -r alias dir; do
+    for line in ${gt_alias}; do
+        IFS=$' \t' read -r alias dir <<< "${line}"
         # eval dir to let the shell expand tilde and env vars
         path=$(eval echo "${dir}")
 
@@ -42,7 +45,7 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
             mkdir -p "${path}"
             goto -r "${alias}" "${path}"
         fi
-    done <<< "${gt_alias}"
+    done
     print-finish
 fi
 

@@ -17,7 +17,7 @@ check-not-root || exit 1
 orig_iso_image="${1?:"Original ISO file missing"}"
 new_iso_image="${ES_ISO}/${ES_ISO_FILE}"
 
-print-header "Compressing SquashFS filesystem..."
+print-header "Compress SquashFS filesystem..."
 [[ -e "${ES_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
 sudo mksquashfs "${ES_EXTRACT}/squashfs-root/" "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
@@ -30,7 +30,7 @@ print-status "Calculate checksum..."
 sudo find "${ES_EXTRACT}/iso" -type f -print0  | sudo xargs -0 md5sum | sed -z "s,${ES_EXTRACT}/iso,\.,g" | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee "${ES_EXTRACT}/iso/md5sum.txt" >/dev/null
 print-finish
 
-print-header "Building ISO image..."
+print-header "Build ISO image..."
 # Copy MBR file
 mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"

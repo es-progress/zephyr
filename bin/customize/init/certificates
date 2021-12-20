@@ -22,8 +22,7 @@ print-finish
 key_created=""
 print-status "Create MOK private key..."
 if sudo test ! -e "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
-    sudo openssl \
-        genpkey \
+    sudo openssl genpkey \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${MOK_KEY_NAME}.key"
@@ -35,8 +34,7 @@ fi
 
 print-header "Create MOK certificate..."
 if [[ ! -e "/etc/ssl/certs/${MOK_KEY_NAME}.der" || -n "${key_created}" ]]; then
-    sudo openssl \
-        req \
+    sudo openssl req \
         -new \
         -x509 \
         -sha256 \
@@ -50,7 +48,7 @@ else
     print-finish "Certificate found, skipped"
 fi
 
-print-header "Enrolling MOK certificate..."
+print-header "Enroll MOK certificate..."
 cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${MOK_KEY_NAME}.der" | cut -d= -f2)
 if ! mokutil --list-enrolled | grep -qs "SHA1 Fingerprint: ${cert_fingerprint}"; then
     sudo mokutil --import "/etc/ssl/certs/${MOK_KEY_NAME}.der"
@@ -65,8 +63,7 @@ key_created=""
 cert_created=""
 print-status "Create ROOT CA private key..."
 if sudo test ! -e "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
-    sudo openssl \
-        genpkey \
+    sudo openssl genpkey \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${ROOT_CA_NAME}.key"
@@ -78,8 +75,7 @@ fi
 
 print-status "Create self-signed ROOT CA certificate..."
 if [[ ! -e "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
-    sudo openssl \
-        req \
+    sudo openssl req \
         -new \
         -x509 \
         -sha512 \

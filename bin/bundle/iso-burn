@@ -38,15 +38,15 @@ fi
 
 # Unmount
 mount_points=$(lsblk --noheadings -o mountpoint "${disk}")
-while read -r mount_point; do
+for mount_point in ${mount_points}; do
     if [[ -n "${mount_point}" ]]; then
         print-status "Unmounting ${mount_point}..."
         sudo umount "${mount_point}"
         print-finish
     fi
-done <<< "${mount_points}"
+done
 
-print-header "Burning ISO to USB..."
+print-header "Burn ISO to USB..."
 read -r -p "Are you sure? (y/n) ";
 [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] || error-exit "Aborted."
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress

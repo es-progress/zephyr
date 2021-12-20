@@ -13,7 +13,7 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Customizing sudoers..."
+print-status "Customize sudoers..."
 # Verify new file
 visudo -c -s "${ES_CUSTOMIZE_CFG}/init/sudoers" >/dev/null
 # Copy file
@@ -21,7 +21,6 @@ sudo cp "${ES_CUSTOMIZE_CFG}/init/sudoers" "/etc/sudoers.d/ESubuntu"
 sudo chmod =0440 "/etc/sudoers.d/ESubuntu"
 # Verify full sudoers
 sudo visudo -c -s >/dev/null
-
 print-finish
 
 exit 0

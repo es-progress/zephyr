@@ -32,7 +32,7 @@ print-status "Config MariaDB..."
 sudo cp "${ES_CUSTOMIZE_CFG}/services/mariadb/mysql.cnf" /etc/mysql/conf.d/
 print-finish
 
-print-header "Restarting services..."
+print-header "Restart services..."
 sudo systemctl enable mariadb.service
 sudo systemctl restart mariadb.service
 print-finish

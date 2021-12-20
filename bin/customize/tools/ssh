@@ -15,13 +15,18 @@ check-not-root || exit 1
 
 print-status "Copy SSH config files..."
 mkdir -p ~/.ssh
-cp -a "${ES_CUSTOMIZE_CFG}"/ssh/* ~/.ssh/
+files=$(find "${ES_CUSTOMIZE_CFG}/ssh" -type f)
+for file in ${files}; do
+    cp -a "${file}" ~/.ssh/
+done
+
 print-finish
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/ssh/hosts" ]]; then
     print-status "Copy SSH hosts config..."
     mkdir -p ~/.ssh/hosts
-    for file in "${ES_CFG_LOCAL}"/config/customize/ssh/hosts/*; do
+    files=$(find "${ES_CFG_LOCAL}/config/customize/ssh/hosts" -type f)
+    for file in ${files}; do
         cp -a "${file}" ~/.ssh/hosts/
     done
     print-finish
@@ -31,11 +36,11 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/ssh/host_ca" ]]; then
     print-status "Setup trusted cert-authorities..."
     touch ~/.ssh/known_hosts
     host_ca=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/ssh/host_ca")
-    while read -r line; do
+    for line in ${host_ca}; do
         if ! grep -F -qs "@cert-authority ${line}" ~/.ssh/known_hosts; then
             echo "@cert-authority ${line}" >> ~/.ssh/known_hosts
         fi
-    done <<< "${host_ca}"
+    done
     print-finish
 fi
 

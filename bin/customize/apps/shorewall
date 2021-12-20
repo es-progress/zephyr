@@ -17,7 +17,11 @@ check-not-root || exit 1
 interfaces=$(ls -1 /sys/class/net --hide lo)
 
 print-status "Copy global shorewall config..."
-sudo cp "${ES_CUSTOMIZE_CFG}"/shorewall/* /etc/shorewall/
+files=$(find "${ES_CUSTOMIZE_CFG}/shorewall" -type f)
+for file in ${files}; do
+    sudo cp "${file}" /etc/shorewall/
+done
+
 for iface in ${interfaces}; do
     # Duplicate template line
     sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
@@ -30,11 +34,14 @@ print-finish
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/shorewall" ]]; then
     print-status "Copy local shorewall config..."
-    sudo cp "${ES_CFG_LOCAL}"/config/customize/shorewall/* /etc/shorewall/
+    files=$(find "${ES_CFG_LOCAL}/config/customize/shorewall" -type f)
+    for file in ${files}; do
+        sudo cp "${file}" /etc/shorewall/
+    done
     print-finish
 fi
 
-print-header "Starting shorewall..."
+print-header "Start shorewall..."
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
 sudo systemctl reload shorewall.service

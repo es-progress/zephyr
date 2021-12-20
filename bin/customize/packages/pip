@@ -13,11 +13,11 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Installing pip3 (python package manager)..."
+print-header "Install pip3 (python package manager)..."
 sudo apt install --yes --no-install-recommends python3-pip
 print-finish
 
-print-header "Installing pip packages..."
+print-header "Install pip packages..."
 pip install --upgrade --progress-bar ascii -r "${ES_CUSTOMIZE_CFG}/packages/pip"
 print-finish
 

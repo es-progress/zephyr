@@ -16,8 +16,11 @@ check-not-root || exit 1
 print-status "Copy mc config files..."
 sudo mkdir -p /root/.config/mc
 mkdir -p ~/.config/mc
-sudo cp "${ES_CUSTOMIZE_CFG}"/mc/* /root/.config/mc/
-cp "${ES_CUSTOMIZE_CFG}"/mc/* ~/.config/mc
+files=$(find "${ES_CUSTOMIZE_CFG}/mc" -type f)
+for file in ${files}; do
+    sudo cp "${file}" /root/.config/mc/
+    cp "${file}" ~/.config/mc
+done
 print-finish
 
 exit 0
