@@ -19,7 +19,7 @@ mkdir -p /etc/systemd/system/fstrim.service.d
 cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/fstrim.conf" /etc/systemd/system/fstrim.service.d/override.conf
 print-finish
 
-print-status "Reload systemd..."
+print-header "Reload systemd..."
 systemctl daemon-reload
 print-finish
 

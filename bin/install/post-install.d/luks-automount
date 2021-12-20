@@ -120,7 +120,7 @@ print-header "Update initramfs..."
 update-initramfs -u -k all
 print-finish
 
-print-header "Updating GRUB..."
+print-header "Update GRUB..."
 update-grub
 print-finish
 
