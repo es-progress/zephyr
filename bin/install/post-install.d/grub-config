@@ -33,8 +33,4 @@ cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/grub_50_esubuntu" /etc/grub.d/50_
 chmod +x /etc/grub.d/50_esubuntu
 print-finish
 
-print-header "Update GRUB..."
-update-grub
-print-finish
-
 exit 0
