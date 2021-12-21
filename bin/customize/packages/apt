@@ -48,6 +48,10 @@ print-header "Remove packages..."
 sudo apt remove --yes --purge --autoremove "${packages[@]}"
 print-finish
 
+print-header "Upgrade packages..."
+sudo apt upgrade
+print-finish
+
 print-header "Run apt autoclean..."
 sudo apt autoclean
 print-finish
