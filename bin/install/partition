@@ -132,6 +132,9 @@ for map in "${maps[@]}"; do
 done
 
 for map_file in "${map_files[@]}"; do
+    print-section "Available drives"
+    lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
+    
     print-section "Parsed config"
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
