@@ -14,7 +14,7 @@
 # Build
 build-essential
 gettext
-openjdk-16-jdk
+openjdk-16-jre
 patch
 software-properties-common
 xorriso

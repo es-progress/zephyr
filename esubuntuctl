@@ -93,7 +93,9 @@ install(){
         [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${1}" "${ES_CFG_LOCAL}"
     fi
 
+    sudo systemctl stop unattended-upgrades.service
     "${ES_CUSTOMIZE_SCRIPTS}/runner"
+    sudo systemctl start unattended-upgrades.service
 
     echo
     print-finish "Installation finished!"

@@ -16,7 +16,7 @@ check-not-root || exit 1
 # Machine Owner Key (MOK)
 #########################
 print-header "Install mokutil..."
-sudo apt install --yes --no-install-recommends mokutil
+sudo apt-get install --yes --no-install-recommends mokutil
 print-finish
 
 key_created=""

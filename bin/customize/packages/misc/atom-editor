@@ -22,7 +22,7 @@ sudo add-apt-repository --yes "deb [arch=amd64] https://packagecloud.io/AtomEdit
 print-finish
 
 print-header "Install Atom..."
-sudo apt install --yes --no-install-recommends atom
+sudo apt-get install --yes --no-install-recommends atom
 print-finish
 
 print-header "Install base Atom packages..."

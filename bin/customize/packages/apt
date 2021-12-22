@@ -30,11 +30,11 @@ for repo in "${repos[@]}"; do
 done
 
 print-header "Update apt cache..."
-sudo apt update
+sudo apt-get update
 print-finish
 
 print-header "Install packages..."
-sudo apt install --yes --no-install-recommends "${packages[@]}"
+sudo apt-get install --yes --no-install-recommends "${packages[@]}"
 print-finish
 
 # Read packages to delete
@@ -45,11 +45,15 @@ for package in ${apt_packages}; do
 done
 
 print-header "Remove packages..."
-sudo apt remove --yes --purge --autoremove "${packages[@]}"
+sudo apt-get remove --yes --purge --autoremove "${packages[@]}"
 print-finish
 
-print-header "Run apt autoclean..."
-sudo apt autoclean
+print-header "Upgrade packages..."
+sudo apt-get upgrade --yes
+print-finish
+
+print-header "Run apt clean..."
+sudo apt-get clean
 print-finish
 
 exit 0

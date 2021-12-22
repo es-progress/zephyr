@@ -14,8 +14,8 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install snapd..."
-sudo apt update
-sudo apt install --yes --no-install-recommends snapd
+sudo apt-get update
+sudo apt-get install --yes --no-install-recommends snapd
 print-finish
 
 snaps=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/snap")

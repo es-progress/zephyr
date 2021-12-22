@@ -14,7 +14,7 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install pip3 (python package manager)..."
-sudo apt install --yes --no-install-recommends python3-pip
+sudo apt-get install --yes --no-install-recommends python3-pip
 print-finish
 
 print-header "Install pip packages..."

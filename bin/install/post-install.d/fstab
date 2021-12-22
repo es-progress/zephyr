@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Install      ##
+## Post-install ##
+## fstab        ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-root || exit 1
+
+print-status "Config fstab..."
+tmp_file=$(mktemp)
+awk '
+{
+    # Print comments and empty lines as is
+    if ($0 ~ "^#" || $0 ~ "^$") {
+        print
+    } else {
+        if ($3 != "swap") {
+            if ($4 !~ ".*noatime.*") {
+                $4=$4",noatime"
+            }
+        }
+        print $1,$2,$3,$4,$5,$6
+    }
+}
+' /etc/fstab > "${tmp_file}"
+print-finish
+
+print-header "Verify fstab..."
+findmnt --verify --tab-file "${tmp_file}" >/dev/null
+print-finish
+
+print-status "Update fstab..."
+cp "${tmp_file}" /etc/fstab
+print-finish
+
+exit 0
