@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Install      ##
+## Post-install ##
+## Backup GPT   ##
+##################
+
+##########
+# CONFIG #
+##########
+backup_dir=/root/backup/gpt
+
+#############
+# FUNCTIONS #
+#############
+
+# Backup GPT partition table
+#
+# @param    $1  Device
+# @param    $2  Backup file
+############################
+gpt-backup(){
+    local device="${1:?"Device missing"}"
+    local backup_file="${2:?"Backup filename missing"}"
+    sgdisk -b "${backup_file}" "${device}"
+}
+
+################
+# SCRIPT START #
+################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-root || exit 1
+
+# Maps
+maps=("${@:-}")
+map_files=()
+for map in "${maps[@]}"; do
+    if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_CFG_LOCAL}/config/install/partition-maps/${map}")
+    elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
+        map_files=("${map_files[@]}" "${ES_INSTALL_CFG}/partition-maps/${map}")
+    else
+        echo "Available maps:"
+        ls -1 "${ES_INSTALL_CFG}/partition-maps"
+        [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
+        error-exit "Failed to find partition map"
+    fi
+done
+
+mkdir -p "${backup_dir}"
+
+# Loop through maps
+for map_file in "${map_files[@]}"; do
+    # Loop through disks
+    disks=$(read-file-cfg "${map_file}" "DISKS")
+    for line in ${disks}; do
+        IFS=$' \t' read -r name device part_prefix <<< "${line}"
+        print-header "Backup partition table for ${name}..."
+        gpt-backup "${device}" "${backup_dir}/${name}"
+        print-finish
+    done
+done
+
+exit 0

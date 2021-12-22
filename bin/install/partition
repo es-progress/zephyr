@@ -115,7 +115,7 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
-# Options
+# Maps
 maps=("${@:-}")
 map_files=()
 for map in "${maps[@]}"; do
@@ -131,16 +131,18 @@ for map in "${maps[@]}"; do
     fi
 done
 
+# Loop through maps
 for map_file in "${map_files[@]}"; do
     print-section "Available drives"
     lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
-    
+
     print-section "Parsed config"
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
     read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
     [[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
 
+    # Loop through disks
     disks=$(read-file-cfg "${map_file}" "DISKS")
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
@@ -150,6 +152,7 @@ for map_file in "${map_files[@]}"; do
         partition-zap "${device}"
         print-finish
 
+        # Loop through partitions
         partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
         for part_line in ${partitions}; do
             IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
