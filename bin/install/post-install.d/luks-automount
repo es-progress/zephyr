@@ -91,7 +91,7 @@ print-finish
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
-    partition=$(basename "${mapfile}")
+    partition=$(basename "${map_file}")
 
     print-header "Create key file for ${partition}..."
     mkdir -p "${key_dir}"
