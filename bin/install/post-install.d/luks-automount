@@ -79,7 +79,7 @@ for map in "${maps[@]}"; do
 done
 
 print-header "Install cryptsetup-initramfs..."
-apt install -y --no-install-recommends cryptsetup-initramfs
+apt-get install --yes --no-install-recommends cryptsetup-initramfs
 print-finish
 
 print-status "Configure cryptsetup-initramfs..."
