@@ -174,7 +174,7 @@ for map_file in "${map_files[@]}"; do
         done
         print-finish "Finished partitioning ${device}."
     done
-    print-finish "All partitioning finished."
 done
+print-finish "All partitioning finished."
 
 exit 0

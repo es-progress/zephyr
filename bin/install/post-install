@@ -50,4 +50,6 @@ print-header "Update GRUB..."
 chroot "${target}" update-grub
 print-finish
 
+print-finish "Post-install finished."
+
 exit 0
