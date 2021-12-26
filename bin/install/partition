@@ -6,9 +6,9 @@
 ## Partition disks ##
 #####################
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Destroy partition table
 ##
@@ -104,9 +104,9 @@ partition-format(){
     esac
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail

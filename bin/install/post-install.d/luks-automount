@@ -7,15 +7,15 @@
 ## LUKS automount ##
 ####################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 key_dir=/etc/luks
 key_slot=2
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Add key to a LUKS partition
 ##
@@ -51,9 +51,9 @@ luks-crypttab(){
     fi
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail

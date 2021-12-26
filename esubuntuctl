@@ -5,9 +5,9 @@
 ## Controller ##
 ################
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
 ## Main usage text
 ##################
@@ -151,9 +151,9 @@ post-install(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail
