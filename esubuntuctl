@@ -9,8 +9,8 @@
 # FUNCTIONS #
 #############
 
-# Main usage text
-#################
+## Main usage text
+##################
 usage_main(){
     local command line name help
     command[0]="create:Create ES-Ubuntu ISO"
@@ -33,10 +33,10 @@ usage_main(){
     exit 1
 }
 
-# Print usage
-#
-# @param    $1  Usage selector
-##############################
+## Print usage
+##
+## @param    $1  Usage selector
+###############################
 usage(){
     local selector="${1:-}"
     local usage options line name help
@@ -84,8 +84,8 @@ usage(){
     done
 }
 
-# Install
-#########
+## Install
+##########
 install(){
     # Symlink local dir
     if [[ -n "${1:-}" ]]; then
@@ -103,8 +103,8 @@ install(){
     [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && reboot
 }
 
-# Create ISO
-############
+## Create ISO
+#############
 create(){
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
@@ -117,8 +117,8 @@ create(){
     "${ES_BUNDLE_SCRIPTS}/clean-up"
 }
 
-# Update module
-###############
+## Update module
+################
 update(){
     if [[ -z "${1:-}" ]]; then
         print-error "Module missing!"
@@ -128,8 +128,8 @@ update(){
     "${ES_CUSTOMIZE_SCRIPTS}/runner" "${1}"
 }
 
-# Burn ISO
-##########
+## Burn ISO
+###########
 burn(){
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
@@ -139,14 +139,14 @@ burn(){
     "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
 }
 
-# Partition disks
-#################
+## Partition disks
+##################
 partition(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
 }
 
-# Post-install
-##############
+## Post-install
+###############
 post-install(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
 }

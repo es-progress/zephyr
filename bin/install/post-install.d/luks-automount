@@ -17,12 +17,12 @@ key_slot=2
 # FUNCTIONS #
 #############
 
-# Add key to a LUKS partition
-#
-# @param    $1  LUKS partition
-# @param    $2  Key file
-# @param    $3  Key slot
-##############################
+## Add key to a LUKS partition
+##
+## @param    $1  LUKS partition
+## @param    $2  Key file
+## @param    $3  Key slot
+###############################
 luks-add-key(){
     local partition="${1:?"Partition missing"}"
     local key_file="${2:?"Key file missing"}"
@@ -34,12 +34,12 @@ luks-add-key(){
     cryptsetup luksAddKey --iter-time 3000 --key-slot "${key_slot}" "${partition}" "${key_file}"
 }
 
-# Update /etc/crypttab
-#
-# @param    $1  LUKS partition
-# @param    $2  Label
-# @param    $3  Key file
-##############################
+## Update /etc/crypttab
+##
+## @param    $1  LUKS partition
+## @param    $2  Label
+## @param    $3  Key file
+###############################
 luks-crypttab(){
     local partition="${1:?"Partition missing"}"
     local label="${2:?"Label missing"}"

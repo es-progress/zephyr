@@ -10,10 +10,10 @@
 # FUNCTIONS #
 #############
 
-# Destroy partition table
-#
-# @param    $1  Device
-#########################
+## Destroy partition table
+##
+## @param    $1  Device
+##########################
 partition-zap(){
     local device="${1:?"Device missing"}"
     sgdisk --zap-all "${device}"
@@ -23,15 +23,15 @@ partition-zap(){
     sleep 3
 }
 
-# Create partition
-#
-# @param    $1  Device
-# @param    $2  Partition number
-# @param    $3  Gap (free space before this partition)
-# @param    $4  Size
-# @param    $5  Type (luks1, luks2, efi, msr, win, linux)
-# @param    $6  Label
-#########################################################
+## Create partition
+##
+## @param    $1  Device
+## @param    $2  Partition number
+## @param    $3  Gap (free space before this partition)
+## @param    $4  Size
+## @param    $5  Type (luks1, luks2, efi, msr, win, linux)
+## @param    $6  Label
+##########################################################
 partition-create(){
     local device="${1:?"Device missing"}"
     local number="${2:?"Partition number missing"}"
@@ -59,12 +59,12 @@ partition-create(){
     sleep 3
 }
 
-# Encrypt LUKS partition
-#
-# @param    $1  Partition
-# @param    $2  LUKS Type (luks1, luks2)
-# @param    $3  Label
-########################################
+## Encrypt LUKS partition
+##
+## @param    $1  Partition
+## @param    $2  LUKS Type (luks1, luks2)
+## @param    $3  Label
+#########################################
 partition-luks-create(){
     local partition="${1:?"Partition missing"}"
     local type="${2:?"LUKS type missing"}"
@@ -81,12 +81,12 @@ partition-luks-create(){
     cryptsetup open --type luks "${partition}" "LUKS_${label}"
 }
 
-# Format partition
-#
-# @param    $1  Partition
-# @param    $2  Type (luks1, luks2, efi, msr, win, linux)
-# @param    $3  Label
-#########################################################
+## Format partition
+##
+## @param    $1  Partition
+## @param    $2  Type (luks1, luks2, efi, msr, win, linux)
+## @param    $3  Label
+##########################################################
 partition-format(){
     local partition="${1:?"Partition missing"}"
     local type="${2:?"Type missing"}"
