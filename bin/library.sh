@@ -6,9 +6,9 @@
 ## Helper functions ##
 ######################
 
-################
-# FORMAT CODES #
-################
+##################
+## FORMAT CODES ##
+##################
 
 TXT_NORM="\e[0m"
 TXT_BOLD="\e[1m"
@@ -17,23 +17,23 @@ TXT_YELLOW="\e[33m"
 TXT_GREEN="\e[32m"
 TXT_BLUE="\e[34m"
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Print error message
-#
-# @param    $*  Message
-#######################
-print-error() {
+## Print error message
+##
+## @param    $*  Message
+########################
+print-error(){
     echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
-# Print section header
-#
-# @param    $*  Message
-#######################
-print-section() {
+## Print section header
+##
+## @param    $*  Message
+########################
+print-section(){
     local msg="${*}"
     echo
     echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
@@ -43,43 +43,43 @@ print-section() {
     echo
 }
 
-# Print header
-#
-# @param    $*  Message
-#######################
-print-header() {
+## Print header
+##
+## @param    $*  Message
+########################
+print-header(){
     echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
-# Print status message
-#
-# @param    $*  Message
-#######################
-print-status() {
+## Print status message
+##
+## @param    $*  Message
+########################
+print-status(){
     echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
-# Print OK message
-#
-# @param    $*  Message
-# @default      Done
-#######################
-print-finish() {
+## Print OK message
+##
+## @param    $*  Message
+## @default      Done
+########################
+print-finish(){
     echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
 }
 
-# Print error message and exit
-#
-# @param    $1  Error message
-##############################
+## Print error message and exit
+##
+## @param    $1  Error message
+###############################
 error-exit(){
     print-error "${*}"
     exit 1
 }
 
-# Check if run as root
-######################
-check-root() {
+## Check if run as root
+#######################
+check-root(){
     if [[ $(id -u) -ne 0 ]]; then
         print-error "Run as root!"
         return 1
@@ -87,9 +87,9 @@ check-root() {
     return 0
 }
 
-# Check if not run as root
-##########################
-check-not-root() {
+## Check if not run as root
+###########################
+check-not-root(){
     if [[ $(id -u) -eq 0 ]]; then
         print-error "Don't run as root!"
         return 1
@@ -97,11 +97,11 @@ check-not-root() {
     return 0
 }
 
-# Read config file
-#
-# @param    $1  Config File
-# @param    $2  Section (read only this section)
-################################################
+## Read config file
+##
+## @param    $1  Config File
+## @param    $2  Section (read only this section)
+#################################################
 read-file-cfg(){
     local file="${1:?"File missing"}"
     local section="${2:-}"

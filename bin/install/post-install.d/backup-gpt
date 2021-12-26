@@ -7,29 +7,29 @@
 ## Backup GPT   ##
 ##################
 
-##########
-# CONFIG #
-##########
+############
+## CONFIG ##
+############
 backup_dir=/root/backup/gpt
 
-#############
-# FUNCTIONS #
-#############
+###############
+## FUNCTIONS ##
+###############
 
-# Backup GPT partition table
-#
-# @param    $1  Device
-# @param    $2  Backup file
-############################
+## Backup GPT partition table
+##
+## @param    $1  Device
+## @param    $2  Backup file
+#############################
 gpt-backup(){
     local device="${1:?"Device missing"}"
     local backup_file="${2:?"Backup filename missing"}"
     sgdisk -b "${backup_file}" "${device}"
 }
 
-################
-# SCRIPT START #
-################
+##################
+## SCRIPT START ##
+##################
 
 # Strict mode
 set -euo pipefail
