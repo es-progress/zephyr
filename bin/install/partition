@@ -95,7 +95,7 @@ partition-format(){
     case "${type}" in
         luks1|luks2) mkfs.ext4 -L "${label}" "/dev/mapper/LUKS_${label}" ;;
         efi) mkfs.vfat -F 32 -n "${label}" "${partition}" ;;
-        msr) dd if=/dev/zero "of=${partition}" status=progress || return 0 ;;
+        msr) dd if=/dev/zero "of=${partition}" status=progress || true ;;
         win) mkntfs -f -L "${label}" "${partition}" ;;
         linux) mkfs.ext4 -L "${label}" "${partition}" ;;
         *)
