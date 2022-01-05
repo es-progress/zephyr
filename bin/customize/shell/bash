@@ -40,4 +40,10 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/bash" ]]; then
     print-finish
 fi
 
+if [[ -e ~/.bash_history ]]; then
+    print-status "Remove Bash history..."
+    rm ~/.bash_history
+    print-finish
+fi
+
 exit 0
