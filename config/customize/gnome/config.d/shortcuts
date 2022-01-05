@@ -19,7 +19,7 @@ toggle-message-tray=['']
 toggle-overview=['']
 
 # Screenshot dir
-[org/gnome/screenshot]
+[org/gnome/gnome-screenshot]
 auto-save-directory='~/pictures/screenshot'
 
 [org/gnome/settings-daemon/plugins/media-keys]
