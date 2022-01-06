@@ -13,16 +13,8 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Add Ansible repo..."
-sudo add-apt-repository --yes ppa:ansible/ansible-2.10
-print-finish
-
-print-header "Install Ansible..."
-sudo apt-get install --yes --no-install-recommends ansible
-print-finish
-
 print-header "Install Ansible collections..."
-ansible-galaxy install -r "${ES_CUSTOMIZE_CFG}/packages/ansible-collections.yml"
+ansible-galaxy install -r "${ES_CUSTOMIZE_CFG}/ansible/ansible-collections.yml"
 print-finish
 
 exit 0
