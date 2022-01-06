@@ -13,10 +13,6 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Install nmap..."
-sudo snap install nmap
-print-finish
-
 print-header "Install plugins..."
 sudo snap connect nmap:network-control
 print-finish

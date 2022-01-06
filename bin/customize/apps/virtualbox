@@ -13,13 +13,8 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Install virtualbox..."
-sudo apt-get update
-sudo apt-get install --yes --no-install-recommends virtualbox virtualbox-guest-additions-iso
-print-finish
-
 print-status "Apply global configs..."
-configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/virtualbox")
+configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/apps/virtualbox")
 for line in ${configs}; do
     IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
     if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
@@ -31,11 +26,11 @@ done
 print-finish
 
 # Local settings
-if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" ]]; then
+if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" ]]; then
     print-status "Apply local configs..."
 
     # vboxmanage configs
-    vbox_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" vboxmanage)
+    vbox_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" vboxmanage)
     for line in ${vbox_configs}; do
         IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
         if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
@@ -46,7 +41,7 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" ]]; t
     done
 
     # Other configs
-    other_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" settings)
+    other_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" settings)
     for line in ${other_configs}; do
         eval "${line}"
     done
@@ -54,7 +49,7 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" ]]; t
 fi
 
 # Register VMs
-if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/virtualbox" ]]; then
+if [[ -d "${ES_CFG_LOCAL}/config/customize/apps/virtualbox" ]]; then
     print-status "Register VMs..."
 
     # Get & create machine folder
@@ -62,7 +57,7 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/virtualbox" ]]; then
     mkdir -p "${target_dir}"
 
     # Read VM info
-    vm_info=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/vboxconfig" virtmachines)
+    vm_info=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" virtmachines)
     for line in ${vm_info}; do
         eval "${line}"
     done
@@ -74,7 +69,7 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/virtualbox" ]]; then
 
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
-            cp -a "${ES_CFG_LOCAL}/config/customize/packages/virtualbox/${dir}" "${target_dir}"
+            cp -a "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/${dir}" "${target_dir}"
             find "$target_dir/${dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
         fi
     done

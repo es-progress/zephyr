@@ -16,20 +16,6 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Add PHP repo..."
-sudo add-apt-repository --yes ppa:ondrej/php
-print-finish
-
-print-header "Install PHP & extensions..."
-php_extensions=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/services/php/extensions")
-packages=()
-packages+=("php${version}")
-for extension in ${php_extensions}; do
-    packages+=("php${version}-${extension}")
-done
-sudo apt-get install --yes --no-install-recommends "${packages[@]}"
-print-finish
-
 print-status "Config PHP..."
 sudo cp "${ES_CUSTOMIZE_CFG}/services/php/fpm.php.ini" "/etc/php/${version}/fpm/php.ini"
 sudo cp "${ES_CUSTOMIZE_CFG}/services/php/cli.php.ini" "/etc/php/${version}/cli/php.ini"

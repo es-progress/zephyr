@@ -10,7 +10,6 @@
 exec_dir=(
     "Initialize;init"
     "Install packages;packages"
-    "Install other packages;packages/misc"
     "Install services;services"
     "Setup shell;shell"
     "Config tools;tools"
