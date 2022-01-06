@@ -14,7 +14,7 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install Ansible collections..."
-ansible-galaxy install -r "${ES_CUSTOMIZE_CFG}/ansible/ansible-collections.yml"
+ansible-galaxy install -r "${ES_CUSTOMIZE_CFG}/apps/ansible-collections.yml"
 print-finish
 
 exit 0
