@@ -60,6 +60,8 @@ pulseaudio
 pulseeffects ppa:mikhailnov/pulseeffects
 shotwell ppa:sicklylife/shotwell
 ansible ppa:ansible/ansible-2.10
+virtualbox
+virtualbox-guest-additions-iso
 
 # Services
 ##########
