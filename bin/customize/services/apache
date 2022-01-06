@@ -13,12 +13,7 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Add Apache repo..."
-sudo add-apt-repository --yes ppa:ondrej/apache2
-print-finish
-
-print-header "Install Apache & modules..."
-sudo apt-get install --yes --no-install-recommends apache2 libapache2-mod-fcgid libapache2-mod-security2
+print-header "Install Apache modules..."
 apache_modules=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/services/apache/modules")
 modules=()
 for module in ${apache_modules}; do
