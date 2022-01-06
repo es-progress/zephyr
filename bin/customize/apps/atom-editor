@@ -30,9 +30,9 @@ apm install sync-settings
 apm install sync-settings-git-location
 print-finish
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/packages/atom/config.cson" ]]; then
+if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/atom/config.cson" ]]; then
     print-status "Copy local config file..."
-    cp "${ES_CFG_LOCAL}/config/customize/packages/atom/config.cson" ~/.atom
+    cp "${ES_CFG_LOCAL}/config/customize/apps/atom/config.cson" ~/.atom
     print-finish
 fi
 
