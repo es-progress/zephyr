@@ -16,4 +16,7 @@ global alias.lg log --oneline
 global alias.lgall !git --no-pager log --format="oneline"
 global alias.pl pull
 global alias.ps push
-global alias.st status
+global alias.sa stash push
+global alias.sr stash pop
+global alias.sl stash list
+global alias.ss stash show
