@@ -7,8 +7,8 @@
 ################
 
 # gh
-url="https://github.com/cli/cli/releases/download/v2.3.0/gh_2.3.0_linux_amd64.deb"
-checksum="18c971061a4d56f42e36979d82c8dd1f25b355105d1613514eb59e54d0f03f3d"
+url="https://github.com/cli/cli/releases/download/v2.4.0/gh_2.4.0_linux_amd64.deb"
+checksum="430c7d678bee5a2210ec2d902e3d48babf3a7783b1ee8ec8bbb428c874a4fc83"
 
 # Strict mode
 set -euo pipefail
