@@ -20,3 +20,4 @@ global alias.sa stash push
 global alias.sr stash pop
 global alias.sl stash list
 global alias.ss stash show
+global alias.adog log --all --decorate --oneline --graph
