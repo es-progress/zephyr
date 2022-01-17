@@ -28,8 +28,8 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 filter="${1:-}"
 
 # run-parts options
-run_parts_test=(--test "--regex=${filter}")
-run_parts_exec=(--exit-on-error "--regex=${filter}")
+run_parts_test=(--test "--regex=^${filter}\$")
+run_parts_exec=(--exit-on-error "--regex=^${filter}\$")
 
 for item in "${exec_dir[@]}"; do
     IFS=";" read -r name dir <<<"${item}"
