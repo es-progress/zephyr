@@ -25,18 +25,15 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 
 # Parse options
-filter="${1:-}"
-
-# run-parts options
-run_parts_test=(--test "--regex=^${filter}\$")
-run_parts_exec=(--exit-on-error "--regex=^${filter}\$")
+filter=()
+[[ -n "${1:-}" ]] && filter=("--regex=^${1}\$")
 
 for item in "${exec_dir[@]}"; do
     IFS=";" read -r name dir <<<"${item}"
-    runnable=$(run-parts "${run_parts_test[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}")
+    runnable=$(run-parts --test "${filter[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}")
     if [[ -n "$runnable" ]]; then
         print-section "${name}"
-        run-parts "${run_parts_exec[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
+        run-parts --exit-on-error "${filter[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
     fi
 done
 
