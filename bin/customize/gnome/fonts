@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## GNOME     ##
+## Fonts     ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+print-status "Copy fonts..."
+fonts=$(find "${ES_CUSTOMIZE_FILES}/assets/fonts" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+for font in ${fonts}; do
+    sudo cp -a "${ES_CUSTOMIZE_FILES}/assets/fonts/${font}" /usr/local/share/fonts
+    sudo chmod 0644 -R "/usr/local/share/fonts/${font}"
+    sudo chmod 0755 "/usr/local/share/fonts/${font}"
+done
+fc-cache -f
+print-finish
+
+exit 0
