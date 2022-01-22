@@ -2,6 +2,7 @@
   "file-types":
     "**/.bash/**": "source.shell"
     "**/.inputrc": "source.shell"
+    "**/.nanorc": "source.shell"
     "**/*nanorc": "source.git-config"
     "**/bin/**": "source.shell"
     "**/bin/**/*.conf": "source.git-config"
