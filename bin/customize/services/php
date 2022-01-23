@@ -17,8 +17,9 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Config PHP..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/php/fpm.php.ini" "/etc/php/${version}/fpm/php.ini"
-sudo cp "${ES_CUSTOMIZE_CFG}/services/php/cli.php.ini" "/etc/php/${version}/cli/php.ini"
+sudo cp "${ES_CUSTOMIZE_CFG}/services/php/php.ini" "/etc/php/${version}/mods-available/php.ini"
+[[ -e "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/php.ini" "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini"
+[[ -e "/etc/php/${version}/cli/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/php.ini" "/etc/php/${version}/cli/conf.d/99-esubuntu.ini"
 sudo cp "${ES_CUSTOMIZE_CFG}/services/php/xdebug.ini" "/etc/php/${version}/mods-available/xdebug.ini"
 print-finish
 

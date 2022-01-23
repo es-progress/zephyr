@@ -29,7 +29,7 @@ sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup
 print-finish
 
 print-status "Config MariaDB..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/mariadb/mysql.cnf" /etc/mysql/conf.d/
+sudo cp "${ES_CUSTOMIZE_CFG}/services/mariadb/mariadb.cnf" /etc/mysql/conf.d/esubuntu.cnf
 print-finish
 
 print-header "Restart services..."

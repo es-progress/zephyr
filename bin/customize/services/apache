@@ -28,8 +28,9 @@ sudo touch "${WEB_ROOT}/default/index.html"
 sudo chown -R "${USER}:www-data" "${WEB_ROOT}"
 print-finish
 
-print-status "Config Apache..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/apache2.conf" /etc/apache2/
+print-header "Config Apache..."
+sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/apache.conf" /etc/apache2/conf-available/esubuntu.conf
+sudo a2enconf esubuntu
 print-finish
 
 print-header "Create certificate for default vhost..."
