@@ -15,9 +15,6 @@ set boldtext
 ## this overrides "quickblank".
 set constantshow
 
-## Do not use the line below the title bar, leaving it entirely blank.
-set emptyline
-
 ## Remember the used search/replace strings for the next session.
 unset historylog
 
