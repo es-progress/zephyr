@@ -54,6 +54,7 @@ xdotool
 
 # Apps
 ######
+ansible ppa:ansible/ansible
 gnome-shell-pomodoro
 pinta ppa:pinta-maintainers/pinta-stable
 pulseaudio
