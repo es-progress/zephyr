@@ -14,3 +14,4 @@ mkdocs-literate-nav
 mkdocs-material
 mkdocs-minify-plugin
 packaging
+ansible==4.10.0
