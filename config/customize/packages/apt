@@ -41,6 +41,8 @@ shorewall
 figlet
 git
 jq
+node-grunt-cli
+npm
 shellcheck
 
 # Other
