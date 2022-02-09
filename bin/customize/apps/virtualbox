@@ -13,6 +13,10 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
+print-status "Load vboxdrv to kernel..."
+sudo modprobe vboxdrv
+print-finish
+
 print-status "Apply global configs..."
 configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/apps/virtualbox")
 for line in ${configs}; do

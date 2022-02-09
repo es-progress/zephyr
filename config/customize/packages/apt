@@ -64,6 +64,7 @@ pulseeffects ppa:mikhailnov/pulseeffects
 shotwell ppa:sicklylife/shotwell
 virtualbox
 virtualbox-guest-additions-iso
+virtualbox-qt
 
 # Services
 ##########
