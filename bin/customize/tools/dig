@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## dig       ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+if [[ -f "${ES_CFG_LOCAL}/config/customize/tools/dig" ]]; then
+    print-status "Local dig config..."
+    cp "${ES_CFG_LOCAL}/config/customize/tools/dig" ~/.digrc
+    print-finish
+fi
+
+exit 0
