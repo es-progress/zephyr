@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Services  ##
+## Systemd   ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${DIR_ESUBUNTU}/bootstrap.sh"
+check-not-root || exit 1
+
+if [[ -f "${ES_CFG_LOCAL}/config/customize/services/systemd/resolved" ]]; then
+    print-status "Config systemd-resolved service..."
+    domains=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/services/systemd/resolved" domains)
+    sudo sed -i "/Domains=/ c Domains=${domains}" /etc/systemd/resolved.conf
+    sudo systemctl daemon-reload
+    sudo systemctl restart systemd-resolved.service
+    print-finish
+fi
+
+exit 0

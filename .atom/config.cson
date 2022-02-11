@@ -19,6 +19,7 @@
     "**/config/customize/services/apache/modules": "source.git-config"
     "**/config/customize/services/mariadb/*": "source.git-config"
     "**/config/customize/services/php/extensions": "source.git-config"
+    "**/config/customize/services/systemd/*": "source.git-config"
     "**/config/customize/shorewall/*": "source.git-config"
     "**/config/customize/ssh/**": "source.git-config"
     "**/config/install/partition-maps/**": "source.git-config"
