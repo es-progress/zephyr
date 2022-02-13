@@ -15,8 +15,9 @@ check-not-root || exit 1
 
 if [[ -f "${ES_CFG_LOCAL}/config/customize/services/systemd/resolved" ]]; then
     print-status "Config systemd-resolved service..."
-    domains=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/services/systemd/resolved" domains)
-    sudo sed -i "/Domains=/ c Domains=${domains}" /etc/systemd/resolved.conf
+    sudo mkdir -p /etc/systemd/resolved.conf.d/
+    sudo cp "${ES_CFG_LOCAL}/config/customize/services/systemd/resolved" /etc/systemd/resolved.conf.d/esubuntu.conf
+    sudo chmod 0644 /etc/systemd/resolved.conf.d/esubuntu.conf
     sudo systemctl daemon-reload
     sudo systemctl restart systemd-resolved.service
     print-finish
