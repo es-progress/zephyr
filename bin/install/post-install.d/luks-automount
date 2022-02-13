@@ -23,7 +23,7 @@ key_slot=2
 ## @param    $2  Key file
 ## @param    $3  Key slot
 ###############################
-luks-add-key(){
+_luks-add-key(){
     local partition="${1:?"Partition missing"}"
     local key_file="${2:?"Key file missing"}"
     local key_slot="${3:?"Key slot missing"}"
@@ -40,7 +40,7 @@ luks-add-key(){
 ## @param    $2  Label
 ## @param    $3  Key file
 ###############################
-luks-crypttab(){
+_luks-crypttab(){
     local partition="${1:?"Partition missing"}"
     local label="${2:?"Label missing"}"
     local key_file="${3:?"Key file missing"}"
@@ -115,11 +115,11 @@ for map_file in "${map_files[@]}"; do
 
             if [[ "${type}" == luks* ]]; then
                 print-header "Add machine key to LUKS ${label}..."
-                luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${partition}.key" "${key_slot}"
+                _luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${partition}.key" "${key_slot}"
                 print-finish
 
                 print-status "Update crypttab with ${label}..."
-                luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${partition}.key"
+                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${partition}.key"
                 print-finish
             fi
         done

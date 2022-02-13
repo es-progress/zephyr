@@ -14,7 +14,7 @@
 ##
 ## @param    $1  Device
 ##########################
-partition-zap(){
+_partition-zap(){
     local device="${1:?"Device missing"}"
     sgdisk --zap-all "${device}"
 
@@ -32,7 +32,7 @@ partition-zap(){
 ## @param    $5  Type (luks1, luks2, efi, msr, win, linux)
 ## @param    $6  Label
 ##########################################################
-partition-create(){
+_partition-create(){
     local device="${1:?"Device missing"}"
     local number="${2:?"Partition number missing"}"
     local gap="${3:?"Gap size missing"}"
@@ -65,7 +65,7 @@ partition-create(){
 ## @param    $2  LUKS Type (luks1, luks2)
 ## @param    $3  Label
 #########################################
-partition-luks-create(){
+_partition-luks-create(){
     local partition="${1:?"Partition missing"}"
     local type="${2:?"LUKS type missing"}"
     local label="${3:?"Partition label missing"}"
@@ -87,7 +87,7 @@ partition-luks-create(){
 ## @param    $2  Type (luks1, luks2, efi, msr, win, linux)
 ## @param    $3  Label
 ##########################################################
-partition-format(){
+_partition-format(){
     local partition="${1:?"Partition missing"}"
     local type="${2:?"Type missing"}"
     local label="${3:?"Partition label missing"}"
@@ -149,7 +149,7 @@ for map_file in "${map_files[@]}"; do
         print-section "Partition ${device}..."
 
         print-header "Destroy partition table on ${device} (${name})..."
-        partition-zap "${device}"
+        _partition-zap "${device}"
         print-finish
 
         # Loop through partitions
@@ -157,18 +157,18 @@ for map_file in "${map_files[@]}"; do
         for part_line in ${partitions}; do
             IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
             print-header "Create partition: ${label}..."
-            partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
+            _partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
 
             if [[ "${type}" == luks* ]]; then
                 print-header "LUKS encrypting ${label}..."
-                partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
+                _partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
                 print-finish
             fi
 
             if [[ "${format}" == "y" ]]; then
                 print-header "Format ${label}..."
-                partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
+                _partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
                 print-finish
             fi
         done

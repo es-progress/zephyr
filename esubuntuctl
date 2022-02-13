@@ -11,7 +11,7 @@
 
 ## Main usage text
 ##################
-usage_main(){
+_usage-main(){
     local command line name help
     command[0]="create:Create ES-Ubuntu ISO"
     command[1]="burn:Burn to ISO to USB"
@@ -37,7 +37,7 @@ usage_main(){
 ##
 ## @param    $1  Usage selector
 ###############################
-usage(){
+_usage(){
     local selector="${1:-}"
     local usage options line name help
 
@@ -66,13 +66,13 @@ usage(){
 
     case "${selector}" in
         "") usage="${usage_help}"; options=("${options_help[@]}") ;;
-        create)usage="${usage_create}";options=("${options_create[@]}") ;;
+        create) usage="${usage_create}";options=("${options_create[@]}") ;;
         burn) usage="${usage_burn}";options=("${options_burn[@]}") ;;
         install) usage="${usage_install}"; options=("${options_install[@]}") ;;
         update) usage="${usage_update}"; options=("${options_update[@]}") ;;
         partition) usage="${usage_part}"; options=("${options_part[@]}") ;;
         post-install) usage="${usage_postinstall}"; options=("${options_postinstall[@]}") ;;
-        *) usage_main ;;
+        *) _usage-main ;;
     esac
 
     printf "${TXT_YELLOW}Usage:${TXT_NORM}\n"
@@ -86,7 +86,7 @@ usage(){
 
 ## Install
 ##########
-install(){
+_install(){
     # Symlink local dir
     if [[ -n "${1:-}" ]]; then
         [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
@@ -105,10 +105,10 @@ install(){
 
 ## Create ISO
 #############
-create(){
+_create(){
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
-        usage create
+        _usage create
         exit 1
     fi
     "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${1}"
@@ -119,10 +119,10 @@ create(){
 
 ## Update module
 ################
-update(){
+_update(){
     if [[ -z "${1:-}" ]]; then
         print-error "Module missing!"
-        usage update
+        _usage update
         exit 1
     fi
     "${ES_CUSTOMIZE_SCRIPTS}/runner" "${1}"
@@ -130,10 +130,10 @@ update(){
 
 ## Burn ISO
 ###########
-burn(){
+_burn(){
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
-        usage burn
+        _usage burn
         exit 1
     fi
     "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
@@ -141,13 +141,13 @@ burn(){
 
 ## Partition disks
 ##################
-partition(){
+_partition(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
 }
 
 ## Post-install
 ###############
-post-install(){
+_post-install(){
     sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
 }
 
@@ -174,9 +174,9 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|install|update|partition|post-install) "${cmd}" "${@}" ;;
-    help) usage "${1:-}" ;;
-    *) usage_main ;;
+    create|burn|install|update|partition|post-install) "_${cmd}" "${@}" ;;
+    help) _usage "${1:-}" ;;
+    *) _usage-main ;;
 esac
 
 exit 0

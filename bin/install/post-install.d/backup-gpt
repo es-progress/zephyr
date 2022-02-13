@@ -21,7 +21,7 @@ backup_dir=/root/backup/gpt
 ## @param    $1  Device
 ## @param    $2  Backup file
 #############################
-gpt-backup(){
+_gpt-backup(){
     local device="${1:?"Device missing"}"
     local backup_file="${2:?"Backup filename missing"}"
     sgdisk -b "${backup_file}" "${device}"
@@ -63,7 +63,7 @@ for map_file in "${map_files[@]}"; do
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-header "Backup partition table for ${name}..."
-        gpt-backup "${device}" "${backup_dir}/${name}"
+        _gpt-backup "${device}" "${backup_dir}/${name}"
         print-finish
     done
 done
