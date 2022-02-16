@@ -21,7 +21,7 @@ alias ls='ls --color=always'
 ##########
 
 # rm safety
-alias rm="rm --interactive=once"
+alias rm="rm --interactive=once --one-file-system"
 
 # ls
 alias ll='ls -alphv --time-style=long-iso --group-directories-first'
