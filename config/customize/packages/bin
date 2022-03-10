@@ -9,8 +9,8 @@
 ##########################
 
 # PHP
-composer https://getcomposer.org/download/1.10.22/composer.phar 6127ae192d3b56cd6758c7c72fe2ac6868ecc835dae1451a004aca10ab1e0700
-composer2 https://getcomposer.org/download/2.1.6/composer.phar 72524ccebcb071968eb83284507225fdba59f223719b2b3f333d76c8a9ac6b72
+composer https://getcomposer.org/download/2.2.7/composer.phar 10040ded663541990eef8ce1f6fa44cb3b4a47e145efb8e9e59907a15068033d
+composer1 https://getcomposer.org/download/1.10.25/composer.phar 6b089bd8b78b00c3c15d7b13353fbcbdf16a3f5248203c9a3e76f13948f2de92
 php-cs-fixer https://cs.symfony.com/download/php-cs-fixer-v3.phar
 phpunit8 https://phar.phpunit.de/phpunit-8.5.20.phar d9cbef97e81324ade2b06b0c8ed20f9006de3f5bb0257833ed8052cb19d169cd
 phpunit9 https://phar.phpunit.de/phpunit-9.5.9.phar 0fed2c26d31dc9baf39bb22356f59aa640949ab3805343102207880f17b56d9c
