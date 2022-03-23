@@ -18,3 +18,6 @@ phpunit9 https://phar.phpunit.de/phpunit-9.5.9.phar 0fed2c26d31dc9baf39bb22356f5
 # CiviCRM
 civix https://download.civicrm.org/civix/civix.phar
 cv https://download.civicrm.org/cv/cv.phar
+
+# Other
+wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
