@@ -13,8 +13,10 @@ IFS=$'\n\t'
 source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Load vboxdrv to kernel..."
+print-status "Load vbox modules to kernel..."
 sudo modprobe vboxdrv
+sudo modprobe vboxnetadp
+sudo modprobe vboxnetflt
 print-finish
 
 print-status "Apply global configs..."
