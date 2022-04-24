@@ -43,7 +43,6 @@ git
 jq
 node-grunt-cli
 npm
-shellcheck
 
 # Other
 dconf-editor
