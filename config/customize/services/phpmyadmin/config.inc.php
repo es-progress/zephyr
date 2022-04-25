@@ -56,10 +56,11 @@ $cfg['SendErrorReports'] = 'never';
 $cfg['ConsoleEnterExecutes'] = true;
 $cfg['HideStructureActions'] = false;
 $cfg['ShowAll'] = true;
-$cfg['MaxRows'] = 100;
+$cfg['MaxRows'] = 250;
 $cfg['MaxNavigationItems'] = 70;
 $cfg['RetainQueryBox'] = true;
 $cfg['FirstDayOfCalendar'] = 1;
+$cfg['InsertRows'] = 1;
 
 /* Title */
 $cfg['TitleDefault'] = '@HTTP_HOST@ | PHPMyAdmin';
