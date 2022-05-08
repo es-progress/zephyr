@@ -47,6 +47,7 @@ npm
 # Other
 dconf-editor
 gnome-tweak-tool
+google-drive-ocamlfuse ppa:alessandro-strada/ppa
 mc
 pigz
 sysbench
