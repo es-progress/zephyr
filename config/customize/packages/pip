@@ -6,6 +6,7 @@
 ## https://pip.pypa.io/en/stable/user_guide/#requirements-files ##
 ##################################################################
 
+ansible-lint
 beautysh
 cryptography
 git-filter-repo
@@ -15,3 +16,4 @@ mkdocs-literate-nav
 mkdocs-material
 mkdocs-minify-plugin
 packaging
+yamllint
