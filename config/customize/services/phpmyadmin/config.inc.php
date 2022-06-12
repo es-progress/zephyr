@@ -47,9 +47,10 @@ $cfg['blowfish_secret'] = '{{ blowfish_secret }}';
 // Default server
 $cfg['ServerDefault'] = 1;
 
-/* Authentication Log */
+/* Authentication */
 $cfg['AuthLog'] = 'syslog';
 $cfg['AuthLogSuccess'] = true;
+$cfg['LoginCookieValidity'] = 2000000;
 
 /* UI */
 $cfg['SendErrorReports'] = 'never';
