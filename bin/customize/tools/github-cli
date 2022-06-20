@@ -7,8 +7,8 @@
 ################
 
 # gh
-url="https://github.com/cli/cli/releases/download/v2.7.0/gh_2.7.0_linux_amd64.deb"
-checksum="ce393ac41fd97fd27ebdaf81de882150b6d4fc4444afe8f490d74d1312260481"
+url="https://github.com/cli/cli/releases/download/v2.12.1/gh_2.12.1_linux_amd64.deb"
+checksum="366a56e3e4c9f6708a1750ad854439cf8ca073e1a5cd95c733c1d9568bd8c757"
 
 # Strict mode
 set -euo pipefail
@@ -25,6 +25,8 @@ hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Install
 sudo dpkg -i "${tmp_file}"
+# Bash completion
+gh completion -s bash | sudo tee /etc/bash_completion.d/github-cli >/dev/null
 print-finish
 
 exit 0
