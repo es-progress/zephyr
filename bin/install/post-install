@@ -15,7 +15,7 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
 read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
-[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+[[ ${REPLY} != "YES" ]] && error-exit "Aborted."
 
 # Mount system
 target="/target"

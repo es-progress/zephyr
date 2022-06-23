@@ -140,7 +140,7 @@ for map_file in "${map_files[@]}"; do
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
     read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
-    [[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+    [[ ${REPLY} != "YES" ]] && error-exit "Aborted."
 
     # Loop through disks
     disks=$(read-file-cfg "${map_file}" "DISKS")

@@ -27,7 +27,7 @@ git -C "${install_dir}" checkout "${version}"
 make -C "${install_dir}" install
 gnome-extensions enable "dash-to-panel@jderose9.github.com"
 # Restart GNOME
-busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval" "s" 'Meta.restart("Restarting…")'
+busctl --user call "org.gnome.Shell" "/org/gnome/Shell" "org.gnome.Shell" "Eval" "s" "Meta.restart('Restarting...')"
 print-finish
 
 print-status "Config Dash-to-panel.."

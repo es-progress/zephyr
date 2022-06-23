@@ -100,7 +100,7 @@ _install(){
     echo
     print-finish "Installation finished!"
     read -r -p "Reboot is required, do you want it now? (y/n) "
-    [[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] && reboot
+    [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
 }
 
 ## Create ISO
