@@ -65,7 +65,7 @@ print-status(){
 ## @default      Done
 ########################
 print-finish(){
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-"Done."}${TXT_NORM}"
+    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
 }
 
 ## Print error message and exit

@@ -15,10 +15,10 @@ source "${DIR_ESUBUNTU}/bootstrap.sh"
 check-root || exit 1
 
 read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
-[[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+[[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
 # Mount system
-target="/target"
+target=/target
 # target="${ES_EXTRACT}/squashfs-root"
 for dir in proc sys dev etc/resolv.conf; do
     if ! findmnt "${target}/${dir}" >/dev/null; then

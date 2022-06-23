@@ -26,7 +26,7 @@ if sudo test ! -e "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${MOK_KEY_NAME}.key"
-    key_created="1"
+    key_created=1
     print-finish
 else
     print-finish "Key found, skipped"
@@ -67,7 +67,7 @@ if sudo test ! -e "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
         -out "/etc/ssl/private/${ROOT_CA_NAME}.key"
-    key_created="1"
+    key_created=1
     print-finish
 else
     print-finish "Key found, skipped"
@@ -85,7 +85,7 @@ if [[ ! -e "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_c
         -out "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
         -days 3650 \
         -subj "${ROOT_CA_SUBJECT}"
-    cert_created="1"
+    cert_created=1
     print-finish
 else
     print-finish "Certificate found, skipped"

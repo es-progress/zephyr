@@ -42,11 +42,11 @@ _partition-create(){
     local type_code
 
     case "${type}" in
-        luks1|luks2) type_code="8309" ;;
-        efi) type_code="ef00" ;;
-        msr) type_code="0c01" ;;
-        win) type_code="0700" ;;
-        linux) type_code="8300" ;;
+        luks1|luks2) type_code=8309 ;;
+        efi) type_code=ef00 ;;
+        msr) type_code=0c01 ;;
+        win) type_code=0700 ;;
+        linux) type_code=8300 ;;
         *)
             print-error "Unsupported type: ${type}"
             return 1 ;;
@@ -140,10 +140,10 @@ for map_file in "${map_files[@]}"; do
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
     read -rp "WARNING! Listed drives will be erased! Proceed? Type 'YES': "
-    [[ ${REPLY} != 'YES' ]] && error-exit "Aborted."
+    [[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
     # Loop through disks
-    disks=$(read-file-cfg "${map_file}" "DISKS")
+    disks=$(read-file-cfg "${map_file}" DISKS)
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-section "Partition ${device}..."

@@ -7,7 +7,7 @@
 #################
 
 # pass-update version
-pass_version="v2.1"
+pass_version=v2.1
 
 # Strict mode
 set -euo pipefail

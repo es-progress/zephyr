@@ -22,7 +22,7 @@ if [[ -z "${disk}" ]]; then
     print-header "Available disks"
     sudo lshw -short -class disk
     echo
-    read -rep "Select disk: " -i "/dev/" disk
+    read -rep "Select disk: " -i /dev/ disk
 fi
 
 # Check if valid disk
@@ -48,7 +48,7 @@ done
 
 print-header "Burn ISO to USB..."
 read -r -p "Are you sure? (y/n) ";
-[[ ${REPLY} == 'y' || ${REPLY} == 'Y' ]] || error-exit "Aborted."
+[[ ${REPLY} == "y" || ${REPLY} == "Y" ]] || error-exit "Aborted."
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 
