@@ -43,7 +43,7 @@ if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -
         -sha512 \
         -newkey rsa:4096 \
         -nodes \
-        -keyout "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" \
+        -keyout /etc/ssl/private/ESubuntu_Apache_default_vhost.key \
         -out "${csr}" \
         -subj "${DEF_VIRT_HOST_SUBJECT}"
 
@@ -57,7 +57,7 @@ if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -
         -CA "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
         -CAcreateserial \
         -in "${csr}" \
-        -out "/etc/ssl/certs/ESubuntu_Apache_default_vhost.pem" \
+        -out /etc/ssl/certs/ESubuntu_Apache_default_vhost.pem \
         -days 365
     print-finish
 else

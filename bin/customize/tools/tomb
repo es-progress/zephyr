@@ -8,8 +8,8 @@
 
 # Tomb
 url="https://files.dyne.org/tomb/releases/Tomb-2.9.tar.gz"
-checksum="b3a23c6680815f7557a3c4bd73d2b2dbde870a62357fcbf9b33089afae75d68c"
-tomb_version="2.9"
+checksum=b3a23c6680815f7557a3c4bd73d2b2dbde870a62357fcbf9b33089afae75d68c
+tomb_version=2.9
 
 # Strict mode
 set -euo pipefail

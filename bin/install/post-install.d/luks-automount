@@ -104,7 +104,7 @@ for map_file in "${map_files[@]}"; do
     print-finish
 
     # Loop through disks
-    disks=$(read-file-cfg "${map_file}" "DISKS")
+    disks=$(read-file-cfg "${map_file}" DISKS)
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
 

@@ -22,7 +22,7 @@ if [[ -z "${disk}" ]]; then
     print-header "Available disks"
     sudo lshw -short -class disk
     echo
-    read -rep "Select disk: " -i "/dev/" disk
+    read -rep "Select disk: " -i /dev/ disk
 fi
 
 # Check if valid disk

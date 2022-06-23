@@ -7,9 +7,9 @@
 ################
 
 # PHPMyAdmin
-version="5.1.1"
+version=5.1.1
 url="https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.tar.gz"
-checksum="8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1"
+checksum=8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1
 
 # Strict mode
 set -euo pipefail
