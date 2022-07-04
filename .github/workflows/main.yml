@@ -10,5 +10,11 @@ jobs:
     name: Check code style (beautysh)
     runs-on: ubuntu-20.04
     steps:
+      - name: Install beautysh
+        run: sudo pip install beautysh
+
       - name: Self checkout
         uses: actions/checkout@v3
+
+      - name: Check code-style
+        run: find bin/ -type f -print0 | xargs -0 beautysh --force-function-style paronly --check

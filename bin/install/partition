@@ -14,7 +14,7 @@
 ##
 ## @param    $1  Device
 ##########################
-_partition-zap(){
+_partition-zap() {
     local device="${1:?"Device missing"}"
     sgdisk --zap-all "${device}"
 
@@ -32,7 +32,7 @@ _partition-zap(){
 ## @param    $5  Type (luks1, luks2, efi, msr, win, linux)
 ## @param    $6  Label
 ##########################################################
-_partition-create(){
+_partition-create() {
     local device="${1:?"Device missing"}"
     local number="${2:?"Partition number missing"}"
     local gap="${3:?"Gap size missing"}"
@@ -65,7 +65,7 @@ _partition-create(){
 ## @param    $2  LUKS Type (luks1, luks2)
 ## @param    $3  Label
 #########################################
-_partition-luks-create(){
+_partition-luks-create() {
     local partition="${1:?"Partition missing"}"
     local type="${2:?"LUKS type missing"}"
     local label="${3:?"Partition label missing"}"
@@ -87,7 +87,7 @@ _partition-luks-create(){
 ## @param    $2  Type (luks1, luks2, efi, msr, win, linux)
 ## @param    $3  Label
 ##########################################################
-_partition-format(){
+_partition-format() {
     local partition="${1:?"Partition missing"}"
     local type="${2:?"Type missing"}"
     local label="${3:?"Partition label missing"}"

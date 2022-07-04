@@ -23,7 +23,7 @@ key_slot=2
 ## @param    $2  Key file
 ## @param    $3  Key slot
 ###############################
-_luks-add-key(){
+_luks-add-key() {
     local partition="${1:?"Partition missing"}"
     local key_file="${2:?"Key file missing"}"
     local key_slot="${3:?"Key slot missing"}"
@@ -40,7 +40,7 @@ _luks-add-key(){
 ## @param    $2  Label
 ## @param    $3  Key file
 ###############################
-_luks-crypttab(){
+_luks-crypttab() {
     local partition="${1:?"Partition missing"}"
     local label="${2:?"Label missing"}"
     local key_file="${3:?"Key file missing"}"

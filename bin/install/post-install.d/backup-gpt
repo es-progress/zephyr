@@ -21,7 +21,7 @@ backup_dir=/root/backup/gpt
 ## @param    $1  Device
 ## @param    $2  Backup file
 #############################
-_gpt-backup(){
+_gpt-backup() {
     local device="${1:?"Device missing"}"
     local backup_file="${2:?"Backup filename missing"}"
     sgdisk -b "${backup_file}" "${device}"
