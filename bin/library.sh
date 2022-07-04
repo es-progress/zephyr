@@ -25,7 +25,7 @@ TXT_BLUE="\e[34m"
 ##
 ## @param    $*  Message
 ########################
-print-error(){
+print-error() {
     echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
 }
 
@@ -33,7 +33,7 @@ print-error(){
 ##
 ## @param    $*  Message
 ########################
-print-section(){
+print-section() {
     local msg="${*}"
     echo
     echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
@@ -47,7 +47,7 @@ print-section(){
 ##
 ## @param    $*  Message
 ########################
-print-header(){
+print-header() {
     echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
@@ -55,7 +55,7 @@ print-header(){
 ##
 ## @param    $*  Message
 ########################
-print-status(){
+print-status() {
     echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
@@ -64,7 +64,7 @@ print-status(){
 ## @param    $*  Message
 ## @default      Done
 ########################
-print-finish(){
+print-finish() {
     echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
 }
 
@@ -72,14 +72,14 @@ print-finish(){
 ##
 ## @param    $1  Error message
 ###############################
-error-exit(){
+error-exit() {
     print-error "${*}"
     exit 1
 }
 
 ## Check if run as root
 #######################
-check-root(){
+check-root() {
     if [[ $(id -u) -ne 0 ]]; then
         print-error "Run as root!"
         return 1
@@ -89,7 +89,7 @@ check-root(){
 
 ## Check if not run as root
 ###########################
-check-not-root(){
+check-not-root() {
     if [[ $(id -u) -eq 0 ]]; then
         print-error "Don't run as root!"
         return 1
@@ -102,7 +102,7 @@ check-not-root(){
 ## @param    $1  Config File
 ## @param    $2  Section (read only this section)
 #################################################
-read-file-cfg(){
+read-file-cfg() {
     local file="${1:?"File missing"}"
     local section="${2:-}"
     local contents
