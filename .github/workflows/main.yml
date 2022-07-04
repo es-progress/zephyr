@@ -1,0 +1,14 @@
+name: CI
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "bin/**"
+jobs:
+  code-style:
+    name: Check code style (beautysh)
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
