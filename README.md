@@ -1,5 +1,7 @@
 # ESubuntu
 
+[![CI](https://github.com/es-progress/ESubuntu/actions/workflows/main.yml/badge.svg)](https://github.com/es-progress/ESubuntu/actions/workflows/main.yml)
+
 This is a custom Ubuntu remix. It is packaged as a bootable ISO file,
 which can be burned to an USB stick and can act like a rescue (live) CD.
 Then you can install ESubuntu.
