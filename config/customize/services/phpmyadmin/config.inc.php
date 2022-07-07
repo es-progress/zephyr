@@ -62,6 +62,7 @@ $cfg['MaxNavigationItems'] = 70;
 $cfg['RetainQueryBox'] = true;
 $cfg['FirstDayOfCalendar'] = 1;
 $cfg['InsertRows'] = 1;
+$cfg['ShowPhpInfo'] = true;
 
 /* Title */
 $cfg['TitleDefault'] = '@HTTP_HOST@ | PHPMyAdmin';
