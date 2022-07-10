@@ -49,4 +49,8 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
     print-finish
 fi
 
+print-header "Cleanup aliases..."
+goto -c
+print-finish
+
 exit 0
