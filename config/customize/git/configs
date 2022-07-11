@@ -15,7 +15,7 @@ global alias.co checkout
 global alias.lg log --oneline
 global alias.lgall !git --no-pager log --format=oneline
 global alias.pl pull
-global alias.ps push
+global alias.ps push --set-upstream
 global alias.sa stash push
 global alias.sr stash pop
 global alias.sl stash list
