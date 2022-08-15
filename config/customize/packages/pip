@@ -16,4 +16,5 @@ mkdocs-literate-nav
 mkdocs-material
 mkdocs-minify-plugin
 packaging
+paramiko
 yamllint
