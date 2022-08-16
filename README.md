@@ -42,3 +42,8 @@ Scripts included so you can build your own ISO.
 - Unpack official Ubuntu ISO
 - Apply customizations
 - Pack files and create bootable ISO file
+
+## Note
+
+**DISCLAIMER**:
+Ubuntu is a registered trademark owned by Canonical. ESubuntu is NOT affiliated with, endorsed or sponsored by Canonical in any ways.
