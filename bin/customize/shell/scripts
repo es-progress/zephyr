@@ -10,7 +10,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy global shell scripts..."
@@ -46,7 +46,7 @@ if [[ -d "${ES_CFG_LOCAL}/files/shell" ]]; then
 fi
 
 print-status "Link esubuntuctl..."
-[[ -e "${LOCAL_BIN}/esubuntuctl" ]] || ln -s "${DIR_ESUBUNTU}/esubuntuctl" "${LOCAL_BIN}/esubuntuctl"
+[[ -e "${LOCAL_BIN}/esubuntuctl" ]] || ln -s "${PROJECT_ROOT}/esubuntuctl" "${LOCAL_BIN}/esubuntuctl"
 print-finish
 
 exit 0

@@ -142,13 +142,13 @@ _burn(){
 ## Partition disks
 ##################
 _partition(){
-    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
 }
 
 ## Post-install
 ###############
 _post-install(){
-    sudo DIR_ESUBUNTU="${DIR_ESUBUNTU}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
 }
 
 ##################
@@ -159,14 +159,14 @@ _post-install(){
 set -euo pipefail
 IFS=$'\n\t'
 
-# Set default for DIR_ESUBUNTU
-if ! printenv DIR_ESUBUNTU >/dev/null 2>&1; then
+# Set default for PROJECT_ROOT
+if ! printenv PROJECT_ROOT >/dev/null 2>&1; then
     path_self=$(realpath "${0}")
-    DIR_ESUBUNTU="$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)"
-    export DIR_ESUBUNTU
+    PROJECT_ROOT="$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)"
+    export PROJECT_ROOT
 fi
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 
 # Parse options
 cmd="${1:-}"

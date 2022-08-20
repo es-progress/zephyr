@@ -15,7 +15,7 @@ checksum=8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install PHPMyAdmin..."

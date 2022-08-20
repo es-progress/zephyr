@@ -10,7 +10,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 if [[ -d "${ES_CFG_LOCAL}/config/customize/packages/local" ]]; then

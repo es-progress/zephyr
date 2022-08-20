@@ -14,7 +14,7 @@ checksum=061a06174fca092590d1ae437c888451cb2763ffe26a69cc2ae25db3254c5ee6
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Install github-cli..."
