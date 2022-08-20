@@ -11,7 +11,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
 read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
@@ -33,13 +33,13 @@ print-finish
 # Run Post-install steps
 steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
 for step in ${steps}; do
-    chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${@}"
+    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${@}"
 done
 
 # Run local post-install steps
 steps=$(find "${ES_CFG_LOCAL}/config/install/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
 for step in ${steps}; do
-    chroot "${target}" env DIR_ESUBUNTU="${GLOBAL_RES}" "${GLOBAL_RES}/local/config/install/post-install.d/${step}" "${@}"
+    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/local/config/install/post-install.d/${step}" "${@}"
 done
 
 print-header "Update initramfs..."

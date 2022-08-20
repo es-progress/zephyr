@@ -10,31 +10,31 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy ES-Ubuntu to SquashFS..."
 target="${ES_EXTRACT}/squashfs-root/${GLOBAL_RES}"
 # Main files
 sudo mkdir -p "${target}"
-sudo cp "${DIR_ESUBUNTU}/bootstrap.sh" "${target}/"
-sudo cp "${DIR_ESUBUNTU}/ESubuntu.cfg" "${target}/"
-sudo cp "${DIR_ESUBUNTU}/ESubuntu.path.cfg" "${target}/"
-sudo cp "${DIR_ESUBUNTU}/esubuntuctl" "${target}/"
-sudo cp "${DIR_ESUBUNTU}/LICENSE" "${target}/"
-sudo cp "${DIR_ESUBUNTU}/README.md" "${target}/"
-sudo cp -r "${DIR_ESUBUNTU}/bin" "${target}/"
-sudo cp -r "${DIR_ESUBUNTU}/config" "${target}/"
-sudo cp -r "${DIR_ESUBUNTU}/files" "${target}/"
+sudo cp "${PROJECT_ROOT}/bootstrap.sh" "${target}/"
+sudo cp "${PROJECT_ROOT}/ESubuntu.cfg" "${target}/"
+sudo cp "${PROJECT_ROOT}/ESubuntu.path.cfg" "${target}/"
+sudo cp "${PROJECT_ROOT}/esubuntuctl" "${target}/"
+sudo cp "${PROJECT_ROOT}/LICENSE" "${target}/"
+sudo cp "${PROJECT_ROOT}/README.md" "${target}/"
+sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
+sudo cp -r "${PROJECT_ROOT}/config" "${target}/"
+sudo cp -r "${PROJECT_ROOT}/files" "${target}/"
 # Local config
-if [[ -e "${DIR_ESUBUNTU}/local/config" ]]; then
+if [[ -e "${PROJECT_ROOT}/local/config" ]]; then
     sudo mkdir -p "${target}/local"
-    sudo cp -r "${DIR_ESUBUNTU}/local/config" "${target}/local/"
+    sudo cp -r "${PROJECT_ROOT}/local/config" "${target}/local/"
 fi
 # Local files
-if [[ -e "${DIR_ESUBUNTU}/local/files" ]]; then
+if [[ -e "${PROJECT_ROOT}/local/files" ]]; then
     sudo mkdir -p "${target}/local"
-    sudo cp -r "${DIR_ESUBUNTU}/local/files" "${target}/local/"
+    sudo cp -r "${PROJECT_ROOT}/local/files" "${target}/local/"
 fi
 # Symlink controller
 sudo rm -f "${ES_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"

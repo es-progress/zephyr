@@ -112,7 +112,7 @@ _partition-format() {
 set -euo pipefail
 IFS=$'\n\t'
 
-source "${DIR_ESUBUNTU}/bootstrap.sh"
+source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
 # Maps
