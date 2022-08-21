@@ -116,3 +116,14 @@ read-file-cfg() {
     # Delete section headers
     sed -r -e '/^\s*\[/ d' <<<"${contents}"
 }
+
+## Join arguments by char
+##
+## @param    $1  Joining character
+## @param    $*  Items to join
+##################################
+implode() {
+    local IFS="${1:?"Field separator missing"}"
+    shift
+    echo "${*}"
+}
