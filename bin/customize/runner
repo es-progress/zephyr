@@ -25,15 +25,18 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 
 # Parse options
+profile="${1?:"Profile missing"}"
+shift
+modules=$(implode "|" "${@}")
 filter=()
-[[ -n "${1:-}" ]] && filter=("--regex=^${1}\$")
+[[ -n "${modules}" ]] && filter=("--regex=^(${modules})\$")
 
 for item in "${exec_dir[@]}"; do
     IFS=";" read -r name dir <<<"${item}"
     runnable=$(run-parts --test "${filter[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}")
-    if [[ -n "$runnable" ]]; then
+    if [[ -n "${runnable}" ]]; then
         print-section "${name}"
-        run-parts --exit-on-error "${filter[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
+        run-parts --exit-on-error "${filter[@]}" --arg="${profile}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
     fi
 done
 
