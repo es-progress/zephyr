@@ -137,6 +137,11 @@ _customize() {
     fi
     profile="${1}"
     shift
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error "Profile: ${profile} missing!"
+        exit 1
+    fi
+
     [[ $# -gt 0 ]] && module_selected=1
 
     [[ -z "${module_selected}" ]] && sudo systemctl stop unattended-upgrades.service
