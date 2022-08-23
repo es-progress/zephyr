@@ -1,8 +1,9 @@
 #######################
 ## ES-Ubuntu         ##
 ##                   ##
-## Packages          ##
-## Virtualbox config ##
+## Apps              ##
+## Virtualbox        ##
+## Global config     ##
 ##                   ##
 ## Format:           ##
 ## config_name value ##

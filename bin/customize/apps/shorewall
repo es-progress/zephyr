@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get default apps/shorewall); then
+if dir=$(cfg-get default apps/shorewall/global); then
     print-status "Copy global shorewall config..."
     files=$(find "${dir}" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
@@ -24,7 +24,7 @@ if dir=$(cfg-get default apps/shorewall); then
     print-finish
 fi
 
-if dir=$(cfg-get "${profile}" apps/shorewall); then
+if dir=$(cfg-get "${profile}" apps/shorewall/local); then
     print-status "Copy local shorewall config..."
     files=$(find "${dir}" -mindepth 1 -maxdepth 1)
     for file in ${files}; do

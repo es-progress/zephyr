@@ -2,7 +2,7 @@
 ################
 ## ES-Ubuntu  ##
 ##            ##
-## Packages   ##
+## Config     ##
 ## Virtualbox ##
 ################
 
@@ -13,70 +13,74 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
+profile="${1:?"Profile missing"}"
+
 print-status "Load vbox modules to kernel..."
 sudo modprobe vboxdrv
 sudo modprobe vboxnetadp
 sudo modprobe vboxnetflt
 print-finish
 
-print-status "Apply global configs..."
-configs=$(cfg-read "${ES_CUSTOMIZE_CFG}/apps/virtualbox")
-for line in ${configs}; do
-    IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
-    if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
+if file=$(cfg-get "${profile}" apps/virtualbox/vboxconfig.global); then
+    print-status "Apply global configs..."
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
+        [[ -z "${cfg_name}" || -z "${cfg_value}" ]] && continue
+
         # eval value to let the shell expand tilde and env vars
         cfg_value=$(eval echo "${cfg_value}")
         vboxmanage setproperty "${cfg_name}" "${cfg_value}"
-    fi
-done
-print-finish
+    done
+    print-finish
+fi
 
-# Local settings
-if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" ]]; then
+if file=$(cfg-get "${profile}" apps/virtualbox/vboxconfig.local); then
     print-status "Apply local configs..."
 
     # vboxmanage configs
-    vbox_configs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" vboxmanage)
+    vbox_configs=$(cfg-read "${file}" vboxmanage)
     for line in ${vbox_configs}; do
         IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
-        if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
-            # eval value to let the shell expand tilde and env vars
-            cfg_value=$(eval echo "${cfg_value}")
-            vboxmanage setproperty "${cfg_name}" "${cfg_value}"
-        fi
+        [[ -z "${cfg_name}" || -z "${cfg_value}" ]] && continue
+
+        # eval value to let the shell expand tilde and env vars
+        cfg_value=$(eval echo "${cfg_value}")
+        vboxmanage setproperty "${cfg_name}" "${cfg_value}"
     done
 
     # Other configs
-    other_configs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" settings)
+    other_configs=$(cfg-read "${file}" settings)
     for line in ${other_configs}; do
+        eval "${line}"
+    done
+
+    # Read VM info
+    vm_info=$(cfg-read "${file}" virtmachines)
+    for line in ${vm_info}; do
         eval "${line}"
     done
     print-finish
 fi
 
-# Register VMs
-if [[ -d "${ES_CFG_LOCAL}/config/customize/apps/virtualbox" ]]; then
+if dir=$(cfg-get "${profile}" apps/virtualbox/vm); then
     print-status "Register VMs..."
 
     # Get & create machine folder
     target_dir=$(echo "${VM_LOCAL_DIR:-~/.config/VirtualBox}")
     mkdir -p "${target_dir}"
 
-    # Read VM info
-    vm_info=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" virtmachines)
-    for line in ${vm_info}; do
-        eval "${line}"
-    done
-
     registered_vms=$(vboxmanage list vms)
 
     for def in "${vm[@]:-}"; do
-        IFS="@" read -r dir uuid <<<"${def}"
+        IFS="@" read -r dir_vm uuid <<<"${def}"
 
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
-            cp -a "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/${dir}" "${target_dir}"
-            find "$target_dir/${dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+            [[ -e "${dir}/${dir_vm}" ]] || continue
+            
+            cp -a "${dir}/${dir_vm}" "${target_dir}"
+            find "$target_dir/${dir_vm}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
         fi
     done
     print-finish
