@@ -13,6 +13,8 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
+profile="${1:?"Profile missing"}"
+
 print-header "Add Atom GPG key..."
 curl -s --location --url https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
 print-finish
@@ -30,9 +32,9 @@ apm install sync-settings
 apm install sync-settings-git-location
 print-finish
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/atom/config.cson" ]]; then
-    print-status "Copy local config file..."
-    cp "${ES_CFG_LOCAL}/config/customize/apps/atom/config.cson" ~/.atom
+if file=$(cfg-get "${profile}" apps/atom/config.cson); then
+    print-status "Copy config file..."
+    cp "${file}" ~/.atom
     print-finish
 fi
 
