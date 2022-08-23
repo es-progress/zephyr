@@ -3,7 +3,7 @@
 ## ES-Ubuntu     ##
 ##               ##
 ## Config        ##
-## pulse-effects ##
+## Pulse-effects ##
 ###################
 
 # Strict mode
@@ -13,12 +13,15 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy pulse-effect presets..."
-mkdir -p ~/.config/PulseEffects/output/
-files=$(find "${ES_CUSTOMIZE_CFG}/pulse-effects" -type f)
-for file in ${files}; do
-    cp "${file}" ~/.config/PulseEffects/output/
-done
-print-finish
+profile="${1:?"Profile missing"}"
+if dir=$(cfg-get "${profile}" apps/pulse-effects); then
+    print-status "Copy pulse-effect presets..."
+    mkdir -p ~/.config/PulseEffects/output/
+    files=$(find "${dir}" -type f)
+    for file in ${files}; do
+        cp "${file}" ~/.config/PulseEffects/output/
+    done
+    print-finish
+fi
 
 exit 0
