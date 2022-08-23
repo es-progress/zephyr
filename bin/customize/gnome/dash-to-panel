@@ -7,9 +7,6 @@
 ## Dash-to-panel ##
 ###################
 
-# Dash-to-panel version
-version=v42
-
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
