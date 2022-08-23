@@ -14,12 +14,15 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy autostart files..."
-mkdir -p ~/.config/autostart/
-files=$(find "${ES_CUSTOMIZE_CFG}/gnome/autostart.d" -type f)
-for file in ${files}; do
-    cp -a "${file}" ~/.config/autostart
-done
-print-finish
+profile="${1:?"Profile missing"}"
+if dir=$(cfg-get "${profile}" gnome/autostart.d); then
+    print-status "Copy autostart files..."
+    mkdir -p ~/.config/autostart/
+    files=$(find "${dir}" -type f)
+    for file in ${files}; do
+        cp -a "${file}" ~/.config/autostart
+    done
+    print-finish
+fi
 
 exit 0
