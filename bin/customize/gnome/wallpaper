@@ -14,20 +14,18 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy wallpaper image..."
-if [[ -f "${ES_CFG_LOCAL}/files/assets/wallpaper.jpg" ]]; then
-    wallpaper="${ES_CFG_LOCAL}/files/assets/wallpaper.jpg"
-else
-    wallpaper="${ES_CUSTOMIZE_FILES}/assets/wallpaper.jpg"
-fi
-sudo mkdir -p "${GLOBAL_RES}"
-sudo cp "${wallpaper}" "${GLOBAL_RES}/wallpaper.jpg"
-sudo chmod 0644 "${GLOBAL_RES}/wallpaper.jpg"
-print-finish
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" gnome/wallpaper.jpg); then
+    print-status "Copy wallpaper image..."
+    sudo mkdir -p "${GLOBAL_RES}"
+    sudo cp "${file}" "${GLOBAL_RES}/wallpaper.jpg"
+    sudo chmod 0644 "${GLOBAL_RES}/wallpaper.jpg"
+    print-finish
 
-print-status "Set wallpaper image..."
-dconf write /org/gnome/desktop/background/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
-dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
-print-finish
+    print-status "Set wallpaper image..."
+    dconf write /org/gnome/desktop/background/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
+    print-finish
+fi
 
 exit 0
