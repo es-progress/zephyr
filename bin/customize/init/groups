@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-header "Add user to groups..."
-groups=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/init/groups")
+groups=$(cfg-read "${ES_CUSTOMIZE_CFG}/init/groups")
 for group in ${groups}; do
     sudo adduser "${USER}" "${group}"
 done

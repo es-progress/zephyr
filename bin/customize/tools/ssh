@@ -35,7 +35,7 @@ fi
 if [[ -f "${ES_CFG_LOCAL}/config/customize/ssh/host_ca" ]]; then
     print-status "Setup trusted cert-authorities..."
     touch ~/.ssh/known_hosts
-    host_ca=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/ssh/host_ca")
+    host_ca=$(cfg-read "${ES_CFG_LOCAL}/config/customize/ssh/host_ca")
     for line in ${host_ca}; do
         if ! grep -F -qs "@cert-authority ${line}" ~/.ssh/known_hosts; then
             echo "@cert-authority ${line}" >> ~/.ssh/known_hosts

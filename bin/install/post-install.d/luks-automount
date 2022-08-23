@@ -104,12 +104,12 @@ for map_file in "${map_files[@]}"; do
     print-finish
 
     # Loop through disks
-    disks=$(read-file-cfg "${map_file}" DISKS)
+    disks=$(cfg-read "${map_file}" DISKS)
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
 
         # Loop through partitions
-        partitions=$(read-file-cfg "${map_file}" "PARTITIONS_${name}")
+        partitions=$(cfg-read "${map_file}" "PARTITIONS_${name}")
         for part_line in ${partitions}; do
             IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
 

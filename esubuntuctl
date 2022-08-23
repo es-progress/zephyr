@@ -11,21 +11,26 @@
 
 ## Main usage text
 ##################
-_usage-main(){
-    local command line name help
-    command[0]="create:Create ES-Ubuntu ISO"
-    command[1]="burn:Burn to ISO to USB"
-    command[2]="install:Install ES-Ubuntu"
-    command[3]="update:Update a module"
-    command[4]="partition:Partition disk"
-    command[5]="post-install:OS post-install steps"
-    command[6]="help:Display help"
+_usage-main() {
+    local command=()
+    local sorted_commands_array=()
+    local line name help sorted_commands_string
 
-    printf "${TXT_GREEN}ES-Ubuntu${TXT_NORM} controller\n\n"
-    printf "${TXT_YELLOW}Usage:${TXT_NORM}\n"
-    printf "  esubuntuctl COMMAND [OPTIONS]...\n\n"
-    printf "${TXT_YELLOW}Commands:${TXT_NORM}\n"
-    for line in "${command[@]}"; do
+    command+=("create:Create ES-Ubuntu ISO")
+    command+=("burn:Burn to ISO to USB")
+    command+=("partition:Partition disk")
+    command+=("post-install:OS post-install steps")
+    command+=("customize:Customize Ubuntu")
+    command+=("help:Display help")
+    command+=("update:Update a module")
+    sorted_commands_string=$(sort <<<"${command[*]}")
+    mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
+
+    echo -e "${TXT_GREEN}ES-Ubuntu${TXT_NORM} controller\n"
+    echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
+    echo -e  "  esubuntuctl COMMAND [OPTIONS]...\n"
+    echo -e  "${TXT_YELLOW}Commands:${TXT_NORM}"
+    for line in "${sorted_commands_array[@]}"; do
         IFS=":" read -r name help <<<"${line}"
         printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
     done
@@ -37,75 +42,57 @@ _usage-main(){
 ##
 ## @param    $1  Usage selector
 ###############################
-_usage(){
+_usage() {
     local selector="${1:-}"
-    local usage options line name help
-
-    # Help
-    usage_help="help COMMAND"
-    options_help[0]="COMMAND:command to run (for available commands run 'esubuntuctl' without arguments)"
-    # Create
-    usage_create="create ISO_FILE"
-    options_create[0]="ISO_FILE:ISO to customize (e.g. ubuntu live-cd)"
-    # Burn
-    usage_burn="burn ISO_FILE [DISK]"
-    options_burn[0]="ISO_FILE:ISO to burn"
-    options_burn[1]="DISK:Device to copy to (eg. /dev/sdc)"
-    # Install
-    usage_install="install [LOCAL_DIR]."
-    options_install[0]="LOCAL_DIR:Absolute path to local config dir"
-    # Update
-    usage_update="update MODULE"
-    options_update[0]="MODULE:Name of module to update (eg. packages, bash)"
-    # Partition
-    usage_part="partition MAP..."
-    options_part[0]="MAP:Partition maps"
-    # Post-install
-    usage_postinstall="post-install MAP..."
-    options_postinstall[0]="MAP:Partition maps"
+    local usage line name help
+    local options=()
 
     case "${selector}" in
-        "") usage="${usage_help}"; options=("${options_help[@]}") ;;
-        create) usage="${usage_create}";options=("${options_create[@]}") ;;
-        burn) usage="${usage_burn}";options=("${options_burn[@]}") ;;
-        install) usage="${usage_install}"; options=("${options_install[@]}") ;;
-        update) usage="${usage_update}"; options=("${options_update[@]}") ;;
-        partition) usage="${usage_part}"; options=("${options_part[@]}") ;;
-        post-install) usage="${usage_postinstall}"; options=("${options_postinstall[@]}") ;;
+        "")
+            usage="help COMMAND"
+            options+=("COMMAND:command to run (for available commands run 'esubuntuctl' without arguments")
+            ;;
+        create)
+            usage="create ISO_FILE"
+            options+=("ISO_FILE:ISO to customize (e.g. ubuntu live-cd)")
+            ;;
+        burn)
+            usage="burn ISO_FILE [DISK]"
+            options+=("ISO_FILE:ISO to burn")
+            options+=("DISK:Device to copy to (eg. /dev/sdc)")
+            ;;
+        partition)
+            usage="partition MAP..."
+            options+=("MAP:Partition maps")
+            ;;
+        post-install)
+            usage="post-install MAP..."
+            options+=("MAP:Partition maps")
+            ;;
+        customize)
+            usage="customize PROFILE [MODULE]..."
+            options+=("PROFILE:Customization profile to use")
+            options+=("MODULE:Module to update (eg. packages, bash)")
+            ;;
+        update)
+            usage="update MODULE"
+            options+=("MODULE:Name of module to update (eg. packages, bash)")
+            ;;
         *) _usage-main ;;
     esac
 
-    printf "${TXT_YELLOW}Usage:${TXT_NORM}\n"
-    printf "  esubuntuctl %s\n\n" "${usage}"
-    printf "${TXT_YELLOW}Options:${TXT_NORM}\n"
+    echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
+    echo -e "  esubuntuctl ${usage}\n"
+    echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
     for line in "${options[@]}"; do
         IFS=":" read -r name help <<<"${line}"
         printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
     done
 }
 
-## Install
-##########
-_install(){
-    # Symlink local dir
-    if [[ -n "${1:-}" ]]; then
-        [[ -h "${ES_CFG_LOCAL}" ]] && rm "${ES_CFG_LOCAL}"
-        [[ ! -e "${ES_CFG_LOCAL}" ]] && ln -s "${1}" "${ES_CFG_LOCAL}"
-    fi
-
-    sudo systemctl stop unattended-upgrades.service
-    "${ES_CUSTOMIZE_SCRIPTS}/runner"
-    sudo systemctl start unattended-upgrades.service
-
-    echo
-    print-finish "Installation finished!"
-    read -r -p "Reboot is required, do you want it now? (y/n) "
-    [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
-}
-
 ## Create ISO
 #############
-_create(){
+_create() {
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
         _usage create
@@ -117,20 +104,9 @@ _create(){
     "${ES_BUNDLE_SCRIPTS}/clean-up"
 }
 
-## Update module
-################
-_update(){
-    if [[ -z "${1:-}" ]]; then
-        print-error "Module missing!"
-        _usage update
-        exit 1
-    fi
-    "${ES_CUSTOMIZE_SCRIPTS}/runner" "${1}"
-}
-
 ## Burn ISO
 ###########
-_burn(){
+_burn() {
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
         _usage burn
@@ -141,14 +117,58 @@ _burn(){
 
 ## Partition disks
 ##################
-_partition(){
+_partition() {
     sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
 }
 
 ## Post-install
 ###############
-_post-install(){
+_post-install() {
     sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
+}
+
+## Customize
+##
+## @param   $1  Profile
+#######################
+_customize() {
+    local profile
+    local module_selected=
+
+    if [[ -z "${1:-}" ]]; then
+        print-error "Profile missing!"
+        _usage customize
+        exit 1
+    fi
+    profile="${1}"
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error "Profile: ${profile} missing!"
+        exit 1
+    fi
+    shift
+
+    [[ $# -gt 0 ]] && module_selected=1
+
+    [[ -z "${module_selected}" ]] && sudo systemctl stop unattended-upgrades.service
+    "${ES_CUSTOMIZE_SCRIPTS}/runner" "${profile}" "${@}"
+    [[ -z "${module_selected}" ]] && sudo systemctl start unattended-upgrades.service
+
+    print-finish "Customization finished!"
+    if [[ -z "${module_selected}" ]]; then
+        read -r -p "Reboot is required, do you want it now? (y/n) "
+        [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
+    fi
+}
+
+## Update module
+################
+_update(){
+    if [[ -z "${1:-}" ]]; then
+        print-error "Module missing!"
+        _usage update
+        exit 1
+    fi
+    "${ES_CUSTOMIZE_SCRIPTS}/runner" default "${1}"
 }
 
 ##################
@@ -174,7 +194,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|install|update|partition|post-install) "_${cmd}" "${@}" ;;
+    create|burn|partition|post-install|customize|update) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac

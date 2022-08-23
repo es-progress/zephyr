@@ -97,12 +97,37 @@ check-not-root() {
     return 0
 }
 
+## Get config file path
+##
+## @param   $1  Profile name
+## @param   $1  Config file
+############################
+cfg-get() {
+    local profile="${1:?"Profile missing"}"
+    local file="${2:?"Config file missing"}"
+
+    # First check in selected profile
+    if [[ -r "${PATH_PROFILES}/${profile}/${file}" ]]; then
+        echo "${PATH_PROFILES}/${profile}/${file}"
+        return 0
+    fi
+
+    # Fall back to default
+    if [[ -r "${PATH_PROFILES}/default/${file}" ]]; then
+        echo "${PATH_PROFILES}/default/${file}"
+        return 0
+    fi
+
+    # Not exists
+    return 1
+}
+
 ## Read config file
 ##
 ## @param    $1  Config File
 ## @param    $2  Section (read only this section)
 #################################################
-read-file-cfg() {
+cfg-read() {
     local file="${1:?"File missing"}"
     local section="${2:-}"
     local contents
@@ -115,4 +140,15 @@ read-file-cfg() {
 
     # Delete section headers
     sed -r -e '/^\s*\[/ d' <<<"${contents}"
+}
+
+## Join arguments by char
+##
+## @param    $1  Joining character
+## @param    $*  Items to join
+##################################
+implode() {
+    local IFS="${1:?"Field separator missing"}"
+    shift
+    echo "${*}"
 }
