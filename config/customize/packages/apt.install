@@ -5,7 +5,7 @@
 ## apt packages to install       ##
 ##                               ##
 ## Format:                       ##
-## package_name [apt-repository] ##
+## package_name [apt_repository] ##
 ###################################
 
 # Tools

@@ -13,14 +13,17 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Customize sudoers..."
-# Verify new file
-visudo -c -s "${ES_CUSTOMIZE_CFG}/init/sudoers" >/dev/null
-# Copy file
-sudo cp "${ES_CUSTOMIZE_CFG}/init/sudoers" /etc/sudoers.d/ESubuntu
-sudo chmod =0440 /etc/sudoers.d/ESubuntu
-# Verify full sudoers
-sudo visudo -c -s >/dev/null
-print-finish
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" init/sudoers); then
+    print-status "Customize sudoers..."
+    # Verify new file
+    visudo -c -s "${file}" >/dev/null
+    # Copy file
+    sudo cp "${file}" /etc/sudoers.d/ESubuntu
+    sudo chmod =0440 /etc/sudoers.d/ESubuntu
+    # Verify full sudoers
+    sudo visudo -c -s >/dev/null
+    print-finish
+fi
 
 exit 0

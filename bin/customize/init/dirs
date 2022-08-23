@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#########################
+## ES-Ubuntu           ##
+##                     ##
+## Config              ##
+## Directory structure ##
+#########################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+if file=$(cfg-get "${profile}" init/dir.core); then
+    print-status "Create core dirs..."
+    dirs=$(cfg-read "${file}")
+    for line in ${dirs}; do
+        IFS=$' \t' read -r path owner <<< "${line}"
+        # eval line to let the shell expand tilde and env vars
+        path=$(eval echo "${path}")
+        owner=$(eval echo "${owner}")
+        sudo mkdir -p "${path}"
+        [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" init/dir.remove); then
+    print-status "Remove default dirs..."
+    dirs=$(cfg-read "${file}")
+    for line in ${dirs}; do
+        # eval line to let the shell expand tilde and env vars
+        arg=$(eval echo "${line}")
+        rm -rf "${arg}"
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" init/dir.home); then
+    print-status "Create home dirs..."
+    dirs=$(cfg-read "${file}")
+    for line in ${dirs}; do
+        # eval line to let the shell expand tilde and env vars
+        arg=$(eval echo "${line}")
+        mkdir -p "${arg}"
+    done
+    print-finish
+fi
+
+print-status "Set permission on /home..."
+sudo chown -R "${USER}:${USER}" ~
+chmod -R o-rwx ~
+print-finish
+
+exit 0

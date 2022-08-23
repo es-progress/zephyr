@@ -3,7 +3,7 @@
 ## ES-Ubuntu ##
 ##           ##
 ## Config    ##
-## shorewall ##
+## Shorewall ##
 ###############
 
 # Strict mode
@@ -13,15 +13,28 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-# Get all interfaces
+profile="${1:?"Profile missing"}"
+
+if dir=$(cfg-get default apps/shorewall/global); then
+    print-status "Copy global shorewall config..."
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
+    for file in ${files}; do
+        sudo cp -r "${file}" /etc/shorewall/
+    done
+    print-finish
+fi
+
+if dir=$(cfg-get "${profile}" apps/shorewall/local); then
+    print-status "Copy local shorewall config..."
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
+    for file in ${files}; do
+        sudo cp -r "${file}" /etc/shorewall/
+    done
+    print-finish
+fi
+
+print-status "Template interfaces..."
 interfaces=$(ls -1 /sys/class/net --hide lo)
-
-print-status "Copy global shorewall config..."
-files=$(find "${ES_CUSTOMIZE_CFG}/shorewall" -mindepth 1 -maxdepth 1)
-for file in ${files}; do
-    sudo cp -r "${file}" /etc/shorewall/
-done
-
 for iface in ${interfaces}; do
     # Duplicate template line
     sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
@@ -31,15 +44,6 @@ done
 # Delete untemplated lines
 sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
 print-finish
-
-if [[ -d "${ES_CFG_LOCAL}/config/customize/shorewall" ]]; then
-    print-status "Copy local shorewall config..."
-    files=$(find "${ES_CFG_LOCAL}/config/customize/shorewall" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        sudo cp -r "${file}" /etc/shorewall/
-    done
-    print-finish
-fi
 
 print-header "Start shorewall..."
 sudo systemctl enable shorewall.service

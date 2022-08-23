@@ -13,40 +13,46 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-# Read packages to install
-repos=()
-packages=()
-apt_packages=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/apt")
-for line in ${apt_packages}; do
-    IFS=$' \t' read -r package repo <<< "${line}"
-    [[ -n "${repo}" ]] && repos+=("${repo}")
-    packages+=("${package}")
-done
+profile="${1:?"Profile missing"}"
 
-for repo in "${repos[@]}"; do
-    print-header "Add apt repo: ${repo}..."
-    sudo add-apt-repository --yes --no-update "${repo}"
+if file=$(cfg-get "${profile}" packages/apt.install); then
+    # Parse packages to install
+    repos=()
+    packages=()
+    apt_packages=$(cfg-read "${file}")
+    for line in ${apt_packages}; do
+        IFS=$' \t' read -r package repo <<< "${line}"
+        [[ -n "${repo}" ]] && repos+=("${repo}")
+        packages+=("${package}")
+    done
+
+    for repo in "${repos[@]}"; do
+        print-header "Add apt repo: ${repo}..."
+        sudo add-apt-repository --yes --no-update "${repo}"
+        print-finish
+    done
+
+    print-header "Update apt cache..."
+    sudo apt-get update
     print-finish
-done
 
-print-header "Update apt cache..."
-sudo apt-get update
-print-finish
+    print-header "Install packages..."
+    sudo apt-get install --yes --no-install-recommends "${packages[@]}"
+    print-finish
+fi
 
-print-header "Install packages..."
-sudo apt-get install --yes --no-install-recommends "${packages[@]}"
-print-finish
+if file=$(cfg-get "${profile}" packages/apt.delete); then
+    # Parse packages to delete
+    packages=()
+    apt_packages=$(cfg-read "${file}")
+    for package in ${apt_packages}; do
+        packages+=("${package}")
+    done
 
-# Read packages to delete
-packages=()
-apt_packages=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/apt-delete")
-for package in ${apt_packages}; do
-    packages+=("${package}")
-done
-
-print-header "Remove packages..."
-sudo apt-get remove --yes --purge --autoremove "${packages[@]}"
-print-finish
+    print-header "Remove packages..."
+    sudo apt-get remove --yes --purge --autoremove "${packages[@]}"
+    print-finish
+fi
 
 print-header "Upgrade packages..."
 sudo apt-get upgrade --yes

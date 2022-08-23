@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## cron jobs ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+if file=$(cfg-get "${profile}" random/cronjobs); then
+    print-status "Set up weekly cron jobs..."
+    cronjobs=$(cfg-read "${file}" weekly)
+    for line in ${cronjobs}; do
+        IFS=$' \t' read -r target name <<< "${line}"
+        # eval target to let the shell expand tilde and env vars
+        path=$(eval echo "${target}")
+
+        [[ -f "/etc/cron.weekly/${name}" ]] || sudo ln -s "${path}" "/etc/cron.weekly/${name}"
+    done
+    print-finish
+
+    print-status "Set up daily cron jobs..."
+    cronjobs=$(cfg-read "${file}" daily)
+    for line in ${cronjobs}; do
+        IFS=$' \t' read -r target name <<< "${line}"
+        # eval target to let the shell expand tilde and env vars
+        path=$(eval echo "${target}")
+
+        [[ -f "/etc/cron.daily/${name}" ]] || sudo ln -s "${path}" "/etc/cron.daily/${name}"
+    done
+    print-finish
+fi
+
+exit 0

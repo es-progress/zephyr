@@ -13,30 +13,41 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-source ~/.bash/goto
+profile="${1:?"Profile missing"}"
 
-print-header "Register global goto alias..."
-gt_alias=$(cfg-read "${ES_CUSTOMIZE_CFG}/random/goto")
-for line in ${gt_alias}; do
-    IFS=$' \t' read -r alias dir <<< "${line}"
-    # eval dir to let the shell expand tilde and env vars
-    path=$(eval echo "${dir}")
-    # Register only if not exists
-    if ! goto -x "${alias}" >/dev/null 2>&1; then
-        goto -r "${alias}" "${path}"
-    fi
-done
-print-finish
+if [[ -e ~/.bash/goto ]]; then
+    source ~/.bash/goto
+else
+    exit 0
+fi
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
+if file=$(cfg-get "${profile}" random/goto.global); then
+    print-header "Register global goto alias..."
+    gt_alias=$(cfg-read "${file}")
+    for line in ${gt_alias}; do
+        IFS=$' \t' read -r alias dir <<< "${line}"
+
+        # eval dir to let the shell expand tilde and env vars
+        path=$(eval echo "${dir}")
+
+        # Register only if not exists
+        if ! goto -x "${alias}" >/dev/null 2>&1; then
+            goto -r "${alias}" "${path}"
+        fi
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" random/goto.local); then
     print-header "Register local goto alias..."
-    gt_alias=$(cfg-read "${ES_CFG_LOCAL}/config/customize/random/goto")
+    gt_alias=$(cfg-read "${file}")
 
     # Source env vars
     [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
 
     for line in ${gt_alias}; do
         IFS=$' \t' read -r alias dir <<< "${line}"
+
         # eval dir to let the shell expand tilde and env vars
         path=$(eval echo "${dir}")
 

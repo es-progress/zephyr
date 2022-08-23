@@ -13,39 +13,42 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Install vendor shell programs..."
-sudo mkdir -p "${GLOBAL_BIN}"
-binaries=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/bin")
-for line in ${binaries}; do
-    IFS=$' \t' read -r name url checksum <<< "${line}"
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" packages/bin); then
+    print-header "Install vendor shell programs..."
+    sudo mkdir -p "${GLOBAL_BIN}"
+    binaries=$(cfg-read "${file}")
+    for line in ${binaries}; do
+        IFS=$' \t' read -r name url checksum <<< "${line}"
 
-    print-header "Install ${name}..."
+        print-header "Install ${name}..."
 
-    # Check if already installed
-    if [[ -e "${GLOBAL_BIN}/${name}" ]]; then
-        hash=$(sha256sum "${GLOBAL_BIN}/${name}" | cut -d" " -f1)
-        if [[ "${hash}" == "${checksum}" ]]; then
-            print-finish "Already installed, skipped."
-            continue
+        # Check if already installed
+        if [[ -e "${GLOBAL_BIN}/${name}" ]]; then
+            hash=$(sha256sum "${GLOBAL_BIN}/${name}" | cut -d" " -f1)
+            if [[ "${hash}" == "${checksum}" ]]; then
+                print-finish "Already installed, skipped."
+                continue
+            fi
         fi
-    fi
 
-    tmp_file=$(mktemp)
-    curl --progress-bar --location -o "${tmp_file}" --url "${url}"
+        tmp_file=$(mktemp)
+        curl --progress-bar --location -o "${tmp_file}" --url "${url}"
 
-    if [[ -n "${checksum}" ]]; then
-        hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-        if [[ "${hash}" != "${checksum}" ]]; then
-            print-error "Bad checksum for ${name}, skipping."
-            continue
+        if [[ -n "${checksum}" ]]; then
+            hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
+            if [[ "${hash}" != "${checksum}" ]]; then
+                print-error "Bad checksum for ${name}, skipping."
+                continue
+            fi
         fi
-    fi
 
-    sudo mv "${tmp_file}" "${GLOBAL_BIN}/${name}"
-    sudo chown root:root "${GLOBAL_BIN}/${name}"
-    sudo chmod =0755 "${GLOBAL_BIN}/${name}"
+        sudo mv "${tmp_file}" "${GLOBAL_BIN}/${name}"
+        sudo chown root:root "${GLOBAL_BIN}/${name}"
+        sudo chmod =0755 "${GLOBAL_BIN}/${name}"
+        print-finish
+    done
     print-finish
-done
-print-finish
+fi
 
 exit 0

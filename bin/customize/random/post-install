@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+##################
+## ES-Ubuntu    ##
+##              ##
+## Config       ##
+## Post-install ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+if dir=$(cfg-get "${profile}" post-install); then
+    (
+        cd "${dir}"
+        run-parts --exit-on-error --arg="${profile}" .
+    )
+fi
+
+exit 0

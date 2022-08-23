@@ -2,14 +2,9 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Packages  ##
+## Config    ##
 ## JMeter    ##
 ###############
-
-# jmeter
-url="https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.4.1.tgz"
-checksum=bfc0faa84769b58c1fd498417b3a5c65749f52226bd6e3533f08ca7ea4a3798bb8d2cbd7091b443dd6837f3cbea5565c3c18e6497b40bec95616bf44dfdf590d
-version=5.4.1
 
 # Strict mode
 set -euo pipefail
@@ -17,6 +12,23 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
+
+# Options
+profile="${1:?"Profile missing"}"
+url=
+checksum=
+version=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" apps/jmeter); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${url}" ]] && exit 1
+[[ -z "${checksum}" ]] && exit 1
+[[ -z "${version}" ]] && exit 1
 
 print-header "Install jmeter..."
 # Download tar

@@ -13,16 +13,20 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Global GNOME config..."
-files=$(find "${ES_CUSTOMIZE_CFG}/gnome/config.d" -type f)
-for dconf_file in ${files}; do
-    sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
-done
-print-finish
+profile="${1:?"Profile missing"}"
 
-if [[ -d "${ES_CFG_LOCAL}/config/customize/gnome/config.d" ]]; then
+if dir=$(cfg-get "${profile}" gnome/config.global.d); then
+    print-status "Global GNOME config..."
+    files=$(find "${dir}" -type f)
+    for dconf_file in ${files}; do
+        sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
+    done
+    print-finish
+fi
+
+if dir=$(cfg-get "${profile}" gnome/config.local.d); then
     print-status "Local GNOME config..."
-    files=$(find "${ES_CFG_LOCAL}/config/customize/gnome/config.d" -type f)
+    files=$(find "${dir}" -type f)
     for dconf_file in ${files}; do
         sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
     done
