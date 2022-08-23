@@ -2,7 +2,7 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Packages  ##
+## Config    ##
 ## Atom      ##
 ###############
 
@@ -27,10 +27,14 @@ print-header "Install Atom..."
 sudo apt-get install --yes --no-install-recommends atom
 print-finish
 
-print-header "Install base Atom packages..."
-apm install sync-settings
-apm install sync-settings-git-location
-print-finish
+if file=$(cfg-get "${profile}" apps/atom/packages); then
+    print-header "Install base Atom packages..."
+    configs=$(cfg-read "${file}")
+    for package in ${configs}; do
+        apm install "${package}"
+    done
+    print-finish
+fi
 
 if file=$(cfg-get "${profile}" apps/atom/config.cson); then
     print-status "Copy config file..."

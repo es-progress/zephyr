@@ -1,0 +1,12 @@
+###################
+## ES-Ubuntu     ##
+##               ##
+## Apps          ##
+## Atom packages ##
+##               ##
+## Format:       ##
+## package_name  ##
+###################
+
+sync-settings
+sync-settings-git-location

@@ -5,7 +5,7 @@
     "**/.nanorc": "source.shell"
     "**/*nanorc": "source.git-config"
     "**/bin/**": "source.shell"
-    "**/config/customize/apps/*": "source.ini"
+    "**/config/customize/apps/virtualbox/*": "source.ini"
     "**/config/customize/apps/atom/*": "source.ini"
     "**/config/customize/git/*": "source.ini"
     "**/config/customize/gnome/*": "source.ini"
