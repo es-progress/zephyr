@@ -117,6 +117,31 @@ read-file-cfg() {
     sed -r -e '/^\s*\[/ d' <<<"${contents}"
 }
 
+## Get config file path
+##
+## @param   $1  Profile name
+## @param   $1  Config file
+############################
+cfg-get() {
+    local profile="${1:?"Profile missing"}"
+    local file="${2:?"Config file missing"}"
+
+    # First check in selected profile
+    if [[ -r "${PATH_PROFILES}/${profile}/${file}" ]]; then
+        echo "${PATH_PROFILES}/${profile}/${file}"
+        return 0
+    fi
+
+    # Fall back to default
+    if [[ -r "${PATH_PROFILES}/default/${file}" ]]; then
+        echo "${PATH_PROFILES}/default/${file}"
+        return 0
+    fi
+
+    # Not exists
+    return 1
+}
+
 ## Join arguments by char
 ##
 ## @param    $1  Joining character
