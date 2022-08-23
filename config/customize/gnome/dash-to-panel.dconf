@@ -1,0 +1,36 @@
+###################
+## ES-Ubuntu     ##
+##               ##
+## Config        ##
+## GNOME         ##
+## Dash-to-panel ##
+## dconf configs ##
+###################
+
+[dash-to-panel]
+animate-app-switch=false
+animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
+animate-show-apps=false
+animate-window-launch=false
+appicon-margin=4
+appicon-padding=4
+available-monitors=[1, 0]
+group-apps=false
+group-apps-label-font-color='#dddddd'
+group-apps-use-launchers=true
+hot-keys=false
+hotkeys-overlay-combo='TEMPORARILY'
+leftbox-padding=4
+leftbox-size=16
+location-clock='STATUSRIGHT'
+panel-anchors='{"0":"MIDDLE","1":"MIDDLE"}'
+panel-lengths='{"0":100,"1":100}'
+panel-size=40
+primary-monitor=1
+show-apps-icon-file=''
+show-apps-icon-side-padding=0
+show-showdesktop-button=true
+showdesktop-button-width=16
+status-icon-padding=4
+tray-padding=4
+tray-size=16
