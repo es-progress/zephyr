@@ -78,7 +78,7 @@ if dir=$(cfg-get "${profile}" apps/virtualbox/vm); then
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
             [[ -e "${dir}/${dir_vm}" ]] || continue
-            
+
             cp -a "${dir}/${dir_vm}" "${target_dir}"
             find "$target_dir/${dir_vm}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
         fi
