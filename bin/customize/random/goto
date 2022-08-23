@@ -16,7 +16,7 @@ check-not-root || exit 1
 source ~/.bash/goto
 
 print-header "Register global goto alias..."
-gt_alias=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/random/goto")
+gt_alias=$(cfg-read "${ES_CUSTOMIZE_CFG}/random/goto")
 for line in ${gt_alias}; do
     IFS=$' \t' read -r alias dir <<< "${line}"
     # eval dir to let the shell expand tilde and env vars
@@ -30,7 +30,7 @@ print-finish
 
 if [[ -f "${ES_CFG_LOCAL}/config/customize/random/goto" ]]; then
     print-header "Register local goto alias..."
-    gt_alias=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/random/goto")
+    gt_alias=$(cfg-read "${ES_CFG_LOCAL}/config/customize/random/goto")
 
     # Source env vars
     [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local

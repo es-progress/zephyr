@@ -16,7 +16,7 @@ check-not-root || exit 1
 # Read packages to install
 repos=()
 packages=()
-apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt")
+apt_packages=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/apt")
 for line in ${apt_packages}; do
     IFS=$' \t' read -r package repo <<< "${line}"
     [[ -n "${repo}" ]] && repos+=("${repo}")
@@ -39,7 +39,7 @@ print-finish
 
 # Read packages to delete
 packages=()
-apt_packages=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/apt-delete")
+apt_packages=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/apt-delete")
 for package in ${apt_packages}; do
     packages+=("${package}")
 done

@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 if [[ -f "${ES_CFG_LOCAL}/config/customize/init/dir-core" ]]; then
     print-status "Create core dirs..."
-    core_dirs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/init/dir-core")
+    core_dirs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/init/dir-core")
     for line in ${core_dirs}; do
         IFS=$' \t' read -r path owner <<< "${line}"
         # eval line to let the shell expand tilde and env vars

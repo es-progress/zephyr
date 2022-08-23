@@ -20,7 +20,7 @@ sudo modprobe vboxnetflt
 print-finish
 
 print-status "Apply global configs..."
-configs=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/apps/virtualbox")
+configs=$(cfg-read "${ES_CUSTOMIZE_CFG}/apps/virtualbox")
 for line in ${configs}; do
     IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
     if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
@@ -36,7 +36,7 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" ]]; then
     print-status "Apply local configs..."
 
     # vboxmanage configs
-    vbox_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" vboxmanage)
+    vbox_configs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" vboxmanage)
     for line in ${vbox_configs}; do
         IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
         if [[ -n "${cfg_name}" && -n "${cfg_value}" ]]; then
@@ -47,7 +47,7 @@ if [[ -f "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" ]]; then
     done
 
     # Other configs
-    other_configs=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" settings)
+    other_configs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" settings)
     for line in ${other_configs}; do
         eval "${line}"
     done
@@ -63,7 +63,7 @@ if [[ -d "${ES_CFG_LOCAL}/config/customize/apps/virtualbox" ]]; then
     mkdir -p "${target_dir}"
 
     # Read VM info
-    vm_info=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" virtmachines)
+    vm_info=$(cfg-read "${ES_CFG_LOCAL}/config/customize/apps/virtualbox/vboxconfig" virtmachines)
     for line in ${vm_info}; do
         eval "${line}"
     done

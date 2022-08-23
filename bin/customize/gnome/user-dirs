@@ -25,7 +25,7 @@ print-finish
 # Bookmarks
 print-status "Add global bookmarks..."
 echo -n >~/.config/gtk-3.0/bookmarks
-bookmarks=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
+bookmarks=$(cfg-read "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
 for line in ${bookmarks}; do
     echo "${line}" >> ~/.config/gtk-3.0/bookmarks
 done
@@ -33,7 +33,7 @@ print-finish
 
 if [[ -f "${ES_CFG_LOCAL}/config/customize/gnome/bookmarks" ]]; then
     print-status "Add local bookmarks..."
-    bookmarks=$(read-file-cfg "${ES_CFG_LOCAL}/config/customize/gnome/bookmarks")
+    bookmarks=$(cfg-read "${ES_CFG_LOCAL}/config/customize/gnome/bookmarks")
     for line in ${bookmarks}; do
         echo "${line}" >> ~/.config/gtk-3.0/bookmarks
     done

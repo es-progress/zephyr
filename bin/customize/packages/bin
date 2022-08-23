@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 print-header "Install vendor shell programs..."
 sudo mkdir -p "${GLOBAL_BIN}"
-binaries=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/bin")
+binaries=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/bin")
 for line in ${binaries}; do
     IFS=$' \t' read -r name url checksum <<< "${line}"
 

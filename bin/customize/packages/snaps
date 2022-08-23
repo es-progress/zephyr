@@ -18,7 +18,7 @@ sudo apt-get update
 sudo apt-get install --yes --no-install-recommends snapd
 print-finish
 
-snaps=$(read-file-cfg "${ES_CUSTOMIZE_CFG}/packages/snap")
+snaps=$(cfg-read "${ES_CUSTOMIZE_CFG}/packages/snap")
 for line in ${snaps}; do
     IFS=$' \t' read -r package mode <<< "${line}"
     # Set options
