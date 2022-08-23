@@ -22,6 +22,7 @@ _usage-main() {
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("help:Display help")
+    command+=("update:Update a module")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
 
@@ -73,12 +74,16 @@ _usage() {
             options+=("PROFILE:Customization profile to use")
             options+=("MODULE:Module to update (eg. packages, bash)")
             ;;
+        update)
+            usage="update MODULE"
+            options+=("MODULE:Name of module to update (eg. packages, bash)")
+            ;;
         *) _usage-main ;;
     esac
 
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e "  esubuntuctl ${usage}\n"
-    echo -e "${TXT_YELLOW}Options:${TXT_NORM}\n"
+    echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
     for line in "${options[@]}"; do
         IFS=":" read -r name help <<<"${line}"
         printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
@@ -136,11 +141,11 @@ _customize() {
         exit 1
     fi
     profile="${1}"
-    shift
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
         print-error "Profile: ${profile} missing!"
         exit 1
     fi
+    shift
 
     [[ $# -gt 0 ]] && module_selected=1
 
@@ -148,12 +153,22 @@ _customize() {
     "${ES_CUSTOMIZE_SCRIPTS}/runner" "${profile}" "${@}"
     [[ -z "${module_selected}" ]] && sudo systemctl start unattended-upgrades.service
 
-    print-finish "\nCustomization finished!"
+    print-finish "Customization finished!"
     if [[ -z "${module_selected}" ]]; then
-        echo
         read -r -p "Reboot is required, do you want it now? (y/n) "
         [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
     fi
+}
+
+## Update module
+################
+_update(){
+    if [[ -z "${1:-}" ]]; then
+        print-error "Module missing!"
+        _usage update
+        exit 1
+    fi
+    "${ES_CUSTOMIZE_SCRIPTS}/runner" default "${1}"
 }
 
 ##################
@@ -179,7 +194,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|partition|post-install|customize) "_${cmd}" "${@}" ;;
+    create|burn|partition|post-install|customize|update) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
