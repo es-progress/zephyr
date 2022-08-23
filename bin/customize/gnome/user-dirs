@@ -14,28 +14,38 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
+profile="${1:?"Profile missing"}"
+
 # Nautilus links
-print-status "Copy global user dirs..."
-sudo cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.defaults" /etc/xdg/
-print-finish
-print-status "Copy user dirs..."
-cp "${ES_CUSTOMIZE_CFG}/gnome/user-dirs.dirs" ~/.config/
-print-finish
+if file=$(cfg-get "${profile}" gnome/user-dirs.defaults); then
+    print-status "Copy default dirs..."
+    sudo cp "${file}" /etc/xdg/
+    print-finish
+fi
+if file=$(cfg-get "${profile}" gnome/user-dirs.user); then
+    print-status "Copy user dirs..."
+    cp "${file}" ~/.config/
+    print-finish
+fi
 
 # Bookmarks
-print-status "Add global bookmarks..."
-echo -n >~/.config/gtk-3.0/bookmarks
-bookmarks=$(cfg-read "${ES_CUSTOMIZE_CFG}/gnome/bookmarks")
-for line in ${bookmarks}; do
-    echo "${line}" >> ~/.config/gtk-3.0/bookmarks
-done
-print-finish
+bookmarks_file=~/.config/gtk-3.0/bookmarks
+echo -n >"${bookmarks_file}"
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/gnome/bookmarks" ]]; then
-    print-status "Add local bookmarks..."
-    bookmarks=$(cfg-read "${ES_CFG_LOCAL}/config/customize/gnome/bookmarks")
+if file=$(cfg-get "${profile}" gnome/bookmarks.global); then
+    print-status "Add global bookmarks..."
+    bookmarks=$(cfg-read "${file}")
     for line in ${bookmarks}; do
-        echo "${line}" >> ~/.config/gtk-3.0/bookmarks
+        echo "${line}" >>"${bookmarks_file}"
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" gnome/bookmarks.local); then
+    print-status "Add local bookmarks..."
+    bookmarks=$(cfg-read "${file}")
+    for line in ${bookmarks}; do
+        echo "${line}" >>"${bookmarks_file}"
     done
     print-finish
 fi
