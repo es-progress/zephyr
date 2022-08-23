@@ -14,14 +14,20 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy fonts..."
-fonts=$(find "${ES_CUSTOMIZE_FILES}/assets/fonts" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-for font in ${fonts}; do
-    sudo cp -a "${ES_CUSTOMIZE_FILES}/assets/fonts/${font}" /usr/local/share/fonts
-    sudo chmod 0644 -R "/usr/local/share/fonts/${font}"
-    sudo chmod 0755 "/usr/local/share/fonts/${font}"
-done
-fc-cache -f
-print-finish
+profile="${1:?"Profile missing"}"
+if dir=$(cfg-get "${profile}" gnome/fonts); then
+    print-status "Copy fonts..."
+    fonts=$(find "${dir}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
+    for font in ${fonts}; do
+        sudo cp -a "${dir}/${font}" /usr/local/share/fonts
+        sudo chmod 0644 -R "/usr/local/share/fonts/${font}"
+        sudo chmod 0755 "/usr/local/share/fonts/${font}"
+    done
+    print-finish
+
+    print-status "Flush font cache..."
+    fc-cache -f
+    print-finish
+fi
 
 exit 0
