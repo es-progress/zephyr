@@ -1,9 +1,9 @@
-#######################
-## ES-Ubuntu         ##
-##                   ##
-## Services          ##
-## PHPMyAdmin config ##
-#######################
+################
+## ES-Ubuntu  ##
+##            ##
+## Config     ##
+## PHPMyAdmin ##
+################
 
 # PHPMyAdmin version
 version=5.1.1
