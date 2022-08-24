@@ -6,9 +6,6 @@
 ## PHP       ##
 ###############
 
-# PHP version
-version=7.4
-
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -16,12 +13,27 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Config PHP..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/php/php.ini" "/etc/php/${version}/mods-available/esubuntu.ini"
-sudo chmod 0644 "/etc/php/${version}/mods-available/esubuntu.ini"
-[[ -e "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini"
-[[ -e "/etc/php/${version}/cli/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/cli/conf.d/99-esubuntu.ini"
-print-finish
+# Options
+profile="${1:?"Profile missing"}"
+version=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" services/php/config); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${version}" ]] && exit 1
+
+if file=$(cfg-get "${profile}" services/php/php.ini); then
+    print-status "Config PHP..."
+    sudo cp "${file}" "/etc/php/${version}/mods-available/esubuntu.ini"
+    sudo chmod 0644 "/etc/php/${version}/mods-available/esubuntu.ini"
+    [[ -e "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini"
+    [[ -e "/etc/php/${version}/cli/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/cli/conf.d/99-esubuntu.ini"
+    print-finish
+fi
 
 print-header "Restart services..."
 sudo systemctl enable "php${version}-fpm.service"
