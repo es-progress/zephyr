@@ -13,27 +13,33 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
+profile="${1:?"Profile missing"}"
+
 shopt -s dotglob
 
-print-status "Copy global Bash files..."
-files=$(find "${ES_CUSTOMIZE_CFG}/bash/global" -mindepth 1 -maxdepth 1)
-for file in ${files}; do
-    sudo cp -r "${file}" /root/
-    sudo cp -r "${file}" /etc/skel/
-    cp -r "${file}" ~
-done
-print-finish
+if dir=$(cfg-get "${profile}" shell/bash/global); then
+    print-status "Copy global Bash files..."
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
+    for file in ${files}; do
+        sudo cp -r "${file}" /root/
+        sudo cp -r "${file}" /etc/skel/
+        cp -r "${file}" ~
+    done
+    print-finish
+fi
 
-print-status "Copy root Bash files..."
-files=$(find "${ES_CUSTOMIZE_CFG}/bash/root/" -mindepth 1 -maxdepth 1)
-for file in ${files}; do
-    sudo cp -r "${file}" /root/
-done
-print-finish
+if dir=$(cfg-get "${profile}" shell/bash/root); then
+    print-status "Copy root Bash files..."
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
+    for file in ${files}; do
+        sudo cp -r "${file}" /root/
+    done
+    print-finish
+fi
 
-if [[ -d "${ES_CFG_LOCAL}/config/customize/bash" ]]; then
+if dir=$(cfg-get "${profile}" shell/bash/local); then
     print-status "Copy local Bash files..."
-    files=$(find "${ES_CFG_LOCAL}/config/customize/bash" -mindepth 1 -maxdepth 1)
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
         cp -r "${file}" ~
     done
