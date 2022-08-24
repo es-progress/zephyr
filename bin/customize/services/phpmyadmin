@@ -6,17 +6,29 @@
 ## PHPMyAdmin ##
 ################
 
-# PHPMyAdmin
-version=5.1.1
-url="https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.tar.gz"
-checksum=8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1
-
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
+
+# Options
+profile="${1:?"Profile missing"}"
+version=
+url=
+checksum=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" services/phpmyadmin/config); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${version}" ]] && exit 1
+[[ -z "${url}" ]] && exit 1
+[[ -z "${checksum}" ]] && exit 1
 
 print-header "Install PHPMyAdmin..."
 # Download tar
@@ -32,14 +44,16 @@ sudo tar -C "${target}" -xf "${tmp_file}"
 sudo mv "${target}/phpMyAdmin-${version}-all-languages" "${target}/public"
 print-finish
 
-print-status "Configure PHPMyAdmin..."
-secret=$(openssl rand -hex 32)
-sudo cp "${ES_CUSTOMIZE_CFG}/services/phpmyadmin/config.inc.php" "${target}/public"
-sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" "${target}/public/config.inc.php"
-sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" "${target}/public/config.inc.php"
-sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" "${target}/public/config.inc.php"
-sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" "${target}/public/config.inc.php"
-print-finish
+if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
+    print-status "Configure PHPMyAdmin..."
+    secret=$(openssl rand -hex 32)
+    sudo cp "${file}" "${target}/public"
+    sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" "${target}/public/config.inc.php"
+    sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" "${target}/public/config.inc.php"
+    sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" "${target}/public/config.inc.php"
+    sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" "${target}/public/config.inc.php"
+    print-finish
+fi
 
 print-status "Create tmp dirs, set permissions..."
 sudo mkdir -p "${target}/upload" "${target}/save" "${target}/tmp"

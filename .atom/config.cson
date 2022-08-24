@@ -21,6 +21,7 @@
     "**/config/customize/services/apache/modules": "source.ini"
     "**/config/customize/services/mariadb/*": "source.ini"
     "**/config/customize/services/php/*": "source.ini"
+    "**/config/customize/services/phpmyadmin/config": "source.ini"
     "**/config/customize/services/systemd/*": "source.ini"
     "**/config/customize/shorewall/*": "source.ini"
     "**/config/customize/ssh/**": "source.git-config"

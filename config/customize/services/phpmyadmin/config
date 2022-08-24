@@ -1,0 +1,13 @@
+#######################
+## ES-Ubuntu         ##
+##                   ##
+## Services          ##
+## PHPMyAdmin config ##
+#######################
+
+# PHPMyAdmin version
+version=5.1.1
+# Download URL
+url="https://files.phpmyadmin.net/phpMyAdmin/5.1.1/phpMyAdmin-5.1.1-all-languages.tar.gz"
+# SHA256 checksum
+checksum=8264b57aeaa1f91c6d859331777c71e80d26088bef7cdcd5f9431119747ed1c1
