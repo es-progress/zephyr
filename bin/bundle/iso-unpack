@@ -15,10 +15,10 @@ check-not-root || exit 1
 
 iso_image="${1?:"ISO file missing"}"
 
-if ! findmnt "${ES_MOUNT}" >/dev/null; then
+if ! findmnt "${PATH_MOUNT}" >/dev/null; then
     print-status "Mount ISO..."
-    mkdir -p "${ES_MOUNT}"
-    sudo mount -o ro,loop "${iso_image}" "${ES_MOUNT}"
+    mkdir -p "${PATH_MOUNT}"
+    sudo mount -o ro,loop "${iso_image}" "${PATH_MOUNT}"
     print-finish
 fi
 
@@ -28,12 +28,12 @@ sudo rsync \
     -aAXHEh \
     --info=stats1 --info=progress2 \
     --delete --inplace \
-    "${ES_MOUNT}/" "${PATH_EXTRACT}/iso"
+    "${PATH_MOUNT}/" "${PATH_EXTRACT}/iso"
 print-finish
 
-if findmnt "${ES_MOUNT}" >/dev/null; then
+if findmnt "${PATH_MOUNT}" >/dev/null; then
     print-status "Unmount ISO..."
-    sudo umount "${ES_MOUNT}"
+    sudo umount "${PATH_MOUNT}"
     print-finish
 fi
 

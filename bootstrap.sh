@@ -21,6 +21,8 @@ export ES_CUSTOMIZE_FILES="${PROJECT_ROOT}/files"
 
 # Customization profiles
 export PATH_PROFILES="${PROJECT_ROOT}/profiles"
+# Mount point for iso images
+export PATH_MOUNT="${PROJECT_ROOT}/bundling/mnt"
 # Extracted files from iso image
 export PATH_EXTRACT="${PROJECT_ROOT}/bundling/extract"
 
