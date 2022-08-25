@@ -22,5 +22,6 @@
     "**/config/customize/services/mariadb/*": "source.ini"
     "**/config/customize/services/php/*": "source.ini"
     "**/config/customize/services/phpmyadmin/config": "source.ini"
+    "**/config/customize/tools/*": "source.ini"
     "**/config/customize/ssh/**": "source.git-config"
     "**/config/install/partition-maps/**": "source.git-config"
