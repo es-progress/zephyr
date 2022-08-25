@@ -13,21 +13,25 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Global git config..."
-configs=$(cfg-read "${ES_CUSTOMIZE_CFG}/git/configs")
-for line in ${configs}; do
-    IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
-    if [[ "${cfg_loc}" == "system" ]]; then
-        sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-    else
-        git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-    fi
-done
-print-finish
+profile="${1:?"Profile missing"}"
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/git/configs" ]]; then
+if file=$(cfg-get "${profile}" tools/git/config.global); then
+    print-status "Global git config..."
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
+        if [[ "${cfg_loc}" == "system" ]]; then
+            sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
+        else
+            git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
+        fi
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" tools/git/config.local); then
     print-status "Local git config..."
-    configs=$(cfg-read "${ES_CFG_LOCAL}/config/customize/git/configs")
+    configs=$(cfg-read "${file}")
     for line in ${configs}; do
         IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
         if [[ "${cfg_loc}" == "system" ]]; then
