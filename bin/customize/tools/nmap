@@ -2,7 +2,7 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Packages  ##
+## Config    ##
 ## nmap      ##
 ###############
 
@@ -12,6 +12,8 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
 
 print-header "Install plugins..."
 sudo snap connect nmap:network-control

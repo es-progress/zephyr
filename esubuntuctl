@@ -22,7 +22,6 @@ _usage-main() {
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("help:Display help")
-    command+=("update:Update a module")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
 
@@ -74,10 +73,6 @@ _usage() {
             options+=("PROFILE:Customization profile to use")
             options+=("MODULE:Module to update (eg. packages, bash)")
             ;;
-        update)
-            usage="update MODULE"
-            options+=("MODULE:Name of module to update (eg. packages, bash)")
-            ;;
         *) _usage-main ;;
     esac
 
@@ -98,10 +93,10 @@ _create() {
         _usage create
         exit 1
     fi
-    "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${1}"
-    "${ES_BUNDLE_SCRIPTS}/copy-esubuntu"
-    "${ES_BUNDLE_SCRIPTS}/iso-pack" "${1}"
-    "${ES_BUNDLE_SCRIPTS}/clean-up"
+    "${PATH_SCRIPTS_REMIX}/unpack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/copy-files"
+    "${PATH_SCRIPTS_REMIX}/pack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/clean-up"
 }
 
 ## Burn ISO
@@ -112,19 +107,19 @@ _burn() {
         _usage burn
         exit 1
     fi
-    "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
+    "${PATH_SCRIPTS_REMIX}/burn" "${1}" "${2:-}"
 }
 
 ## Partition disks
 ##################
 _partition() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${@}"
 }
 
 ## Post-install
 ###############
 _post-install() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${@}"
 }
 
 ## Customize
@@ -150,7 +145,7 @@ _customize() {
     [[ $# -gt 0 ]] && module_selected=1
 
     [[ -z "${module_selected}" ]] && sudo systemctl stop unattended-upgrades.service
-    "${ES_CUSTOMIZE_SCRIPTS}/runner" "${profile}" "${@}"
+    "${PATH_SCRIPTS_CUSTOMIZE}/runner" "${profile}" "${@}"
     [[ -z "${module_selected}" ]] && sudo systemctl start unattended-upgrades.service
 
     print-finish "Customization finished!"
@@ -158,17 +153,6 @@ _customize() {
         read -r -p "Reboot is required, do you want it now? (y/n) "
         [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
     fi
-}
-
-## Update module
-################
-_update(){
-    if [[ -z "${1:-}" ]]; then
-        print-error "Module missing!"
-        _usage update
-        exit 1
-    fi
-    "${ES_CUSTOMIZE_SCRIPTS}/runner" default "${1}"
 }
 
 ##################
@@ -194,7 +178,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|partition|post-install|customize|update) "_${cmd}" "${@}" ;;
+    create|burn|partition|post-install|customize) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac

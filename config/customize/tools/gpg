@@ -1,9 +1,8 @@
-###############
-## ES-Ubuntu ##
-##           ##
-## gnupg     ##
-## Config    ##
-###############
+####################
+## ES-Ubuntu      ##
+##                ##
+## gpg-agent.conf ##
+####################
 
 ## Caching
 # Set the time a cache entry is valid to n seconds.

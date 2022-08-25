@@ -3,7 +3,7 @@
 ## ES-Ubuntu ##
 ##           ##
 ## Config    ##
-## gnupg     ##
+## Local     ##
 ###############
 
 # Strict mode
@@ -13,10 +13,12 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy gnupg config files..."
-mkdir -p ~/.gnupg
-cp "${ES_CUSTOMIZE_CFG}/gpg/gpg-agent.conf" ~/.gnupg/
-chmod go-rwx -R ~/.gnupg/
-print-finish
+profile="${1:?"Profile missing"}"
+if dir=$(cfg-get "${profile}" local); then
+    (
+        cd "${dir}"
+        run-parts --exit-on-error --arg="${profile}" .
+    )
+fi
 
 exit 0

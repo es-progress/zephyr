@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+############################
+## ES-Ubuntu              ##
+##                        ##
+## Remix                  ##
+## Copy files to SquashFS ##
+############################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+print-status "Copy files to SquashFS..."
+target="${PATH_EXTRACT}/squashfs-root/${GLOBAL_RES}"
+# Main files
+sudo mkdir -p "${target}"
+sudo cp "${PROJECT_ROOT}/bootstrap.sh" "${target}/"
+sudo cp "${PROJECT_ROOT}/ESubuntu.cfg" "${target}/"
+sudo cp "${PROJECT_ROOT}/esubuntuctl" "${target}/"
+sudo cp "${PROJECT_ROOT}/LICENSE" "${target}/"
+sudo cp "${PROJECT_ROOT}/README.md" "${target}/"
+sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
+# Profiles
+if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
+    sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
+fi
+# Symlink controller
+sudo rm -f "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+print-finish
+
+print-status "Set permissions..."
+sudo chmod -R u+rw,go+r "${target}"
+sudo find "${target}" -executable -exec chmod go+x '{}' \;
+print-finish
+
+print-status "Patch GRUB..."
+# Boot from encrypted partition
+if ! grep -qs "GRUB_ENABLE_CRYPTODISK=y" "${PATH_EXTRACT}/squashfs-root/etc/default/grub"; then
+    cat <<EOF | sudo tee -a "${PATH_EXTRACT}/squashfs-root/etc/default/grub" >/dev/null
+
+# Enabling boot from LUKS
+GRUB_ENABLE_CRYPTODISK=y
+EOF
+fi
+print-finish
+
+exit 0

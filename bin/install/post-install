@@ -19,7 +19,7 @@ read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
 
 # Mount system
 target=/target
-# target="${ES_EXTRACT}/squashfs-root"
+# target="${PATH_EXTRACT}/squashfs-root"
 for dir in proc sys dev etc/resolv.conf; do
     if ! findmnt "${target}/${dir}" >/dev/null; then
         mount --rbind "/${dir}" "${target}/${dir}"
@@ -31,7 +31,7 @@ chroot "${target}" mount -a
 print-finish
 
 # Run Post-install steps
-steps=$(find "${ES_INSTALL_SCRIPTS}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
+steps=$(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
 for step in ${steps}; do
     chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${@}"
 done

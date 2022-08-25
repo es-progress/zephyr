@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## SSH       ##
-###############
+################
+## ES-Ubuntu  ##
+##            ##
+## Config     ##
+## SSH client ##
+################
 
 # Strict mode
 set -euo pipefail
@@ -13,32 +13,36 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy SSH config files..."
-mkdir -p ~/.ssh
-files=$(find "${ES_CUSTOMIZE_CFG}/ssh" -mindepth 1 -maxdepth 1)
-for file in ${files}; do
-    cp -r "${file}" ~/.ssh/
-done
+profile="${1:?"Profile missing"}"
 
-print-finish
-
-if [[ -d "${ES_CFG_LOCAL}/config/customize/ssh/hosts" ]]; then
-    print-status "Copy SSH hosts config..."
-    mkdir -p ~/.ssh/hosts
-    files=$(find "${ES_CFG_LOCAL}/config/customize/ssh/hosts" -mindepth 1 -maxdepth 1)
+if dir=$(cfg-get "${profile}" tools/ssh/global); then
+    print-status "Copy SSH client global config files..."
+    mkdir -p ~/.ssh
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
-        cp -r "${file}" ~/.ssh/hosts/
+        cp -r "${file}" ~/.ssh/
     done
     print-finish
 fi
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/ssh/host_ca" ]]; then
-    print-status "Setup trusted cert-authorities..."
+if dir=$(cfg-get "${profile}" tools/ssh/local); then
+    print-status "Copy SSH client local config files..."
+    mkdir -p ~/.ssh
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
+    for file in ${files}; do
+        cp -r "${file}" ~/.ssh/
+    done
+    print-finish
+fi
+
+if file=$(cfg-get "${profile}" tools/ssh/known_hosts); then
+    print-status "Setup known hosts..."
+    mkdir -p ~/.ssh
     touch ~/.ssh/known_hosts
-    host_ca=$(cfg-read "${ES_CFG_LOCAL}/config/customize/ssh/host_ca")
+    host_ca=$(cfg-read "${file}")
     for line in ${host_ca}; do
-        if ! grep -F -qs "@cert-authority ${line}" ~/.ssh/known_hosts; then
-            echo "@cert-authority ${line}" >> ~/.ssh/known_hosts
+        if ! grep -F -qs "${line}" ~/.ssh/known_hosts; then
+            echo "${line}" >> ~/.ssh/known_hosts
         fi
     done
     print-finish

@@ -3,7 +3,7 @@
 ## ES-Ubuntu ##
 ##           ##
 ## Config    ##
-## mc        ##
+## gnupg     ##
 ###############
 
 # Strict mode
@@ -14,10 +14,11 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if dir=$(cfg-get "${profile}" tools/mc); then
-    print-status "Copy mc config files..."
-    sudo cp -r "${dir}" /root/.config/
-    cp -r "${dir}" ~/.config/
+if file=$(cfg-get "${profile}" tools/gpg); then
+    print-status "Copy gnupg config files..."
+    mkdir -p ~/.gnupg
+    cp "${file}" ~/.gnupg/gpg-agent.conf
+    chmod go-rwx -R ~/.gnupg/gpg-agent.conf
     print-finish
 fi
 

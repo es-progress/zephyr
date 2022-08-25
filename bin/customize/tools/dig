@@ -13,9 +13,10 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-if [[ -f "${ES_CFG_LOCAL}/config/customize/tools/dig" ]]; then
-    print-status "Local dig config..."
-    cp "${ES_CFG_LOCAL}/config/customize/tools/dig" ~/.digrc
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" tools/dig); then
+    print-status "Config dig..."
+    cp "${file}" ~/.digrc
     print-finish
 fi
 

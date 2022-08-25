@@ -1,0 +1,11 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## gh        ##
+###############
+
+# Download URL
+url="https://github.com/cli/cli/releases/download/v2.14.7/gh_2.14.7_linux_amd64.deb"
+# SHA256 checksum
+checksum=b7ee6f6eb9fb75621bad26b8de7cf457700c33d2f93065a73a77bb3a7a135036

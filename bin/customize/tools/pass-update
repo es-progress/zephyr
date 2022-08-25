@@ -2,12 +2,9 @@
 #################
 ## ES-Ubuntu   ##
 ##             ##
-## Packages    ##
+## Config      ##
 ## pass-update ##
 #################
-
-# pass-update version
-pass_version=v2.1
 
 # Strict mode
 set -euo pipefail
@@ -16,10 +13,23 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
+# Options
+profile="${1:?"Profile missing"}"
+version=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" tools/pass-update); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${version}" ]] && exit 1
+
 print-header "Install pass-update..."
 tmp_dir=$(mktemp -d)
 git clone https://github.com/roddhjav/pass-update.git "${tmp_dir}"
-git -C "${tmp_dir}" checkout "${pass_version}"
+git -C "${tmp_dir}" checkout "${version}"
 sudo make -C "${tmp_dir}" install
 print-finish
 

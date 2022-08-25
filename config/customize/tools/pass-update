@@ -2,11 +2,8 @@
 ## ES-Ubuntu   ##
 ##             ##
 ## Config      ##
-## User groups ##
-##             ##
-## Format:     ##
-## group_name  ##
+## pass-update ##
 #################
 
-users
-www-data
+# pass-update version (git tag to checkout)
+version=v2.1

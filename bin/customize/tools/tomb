@@ -2,14 +2,9 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Packages  ##
+## Config    ##
 ## Tomb      ##
 ###############
-
-# Tomb
-url="https://files.dyne.org/tomb/releases/Tomb-2.9.tar.gz"
-checksum=b3a23c6680815f7557a3c4bd73d2b2dbde870a62357fcbf9b33089afae75d68c
-tomb_version=2.9
 
 # Strict mode
 set -euo pipefail
@@ -17,6 +12,23 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
+
+# Options
+profile="${1:?"Profile missing"}"
+version=
+url=
+checksum=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" tools/tomb); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${version}" ]] && exit 1
+[[ -z "${url}" ]] && exit 1
+[[ -z "${checksum}" ]] && exit 1
 
 print-header "Install Tomb..."
 # Download tar
@@ -28,7 +40,7 @@ hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 tmp_dir=$(mktemp -d)
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 # Install
-sudo make -C "${tmp_dir}/Tomb-${tomb_version}" install
+sudo make -C "${tmp_dir}/Tomb-${version}" install
 print-finish
 
 exit 0

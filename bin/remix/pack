@@ -2,7 +2,7 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Bundling  ##
+## Remix     ##
 ## Pack ISO  ##
 ###############
 
@@ -15,31 +15,31 @@ check-not-root || exit 1
 
 # Options
 orig_iso_image="${1?:"Original ISO file missing"}"
-new_iso_image="${ES_ISO}/${ES_ISO_FILE}"
+new_iso_image="${PATH_ISO}/${ISO_FILE_NAME}"
 
 print-header "Compress SquashFS filesystem..."
-[[ -e "${ES_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
-sudo mksquashfs "${ES_EXTRACT}/squashfs-root/" "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+[[ -e "${PATH_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
+sudo mksquashfs "${PATH_EXTRACT}/squashfs-root/" "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 
 print-status "Calculate filesystem size..."
-sudo du -sx --block-size=1 "${ES_EXTRACT}/squashfs-root/" | cut -f1 | sudo tee "${ES_EXTRACT}/iso/casper/filesystem.size" >/dev/null
+sudo du -sx --block-size=1 "${PATH_EXTRACT}/squashfs-root/" | cut -f1 | sudo tee "${PATH_EXTRACT}/iso/casper/filesystem.size" >/dev/null
 print-finish
 
 print-status "Calculate checksum..."
-sudo find "${ES_EXTRACT}/iso" -type f -print0  | sudo xargs -0 md5sum | sed -z "s,${ES_EXTRACT}/iso,\.,g" | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee "${ES_EXTRACT}/iso/md5sum.txt" >/dev/null
+sudo find "${PATH_EXTRACT}/iso" -type f -print0  | sudo xargs -0 md5sum | sed -z "s,${PATH_EXTRACT}/iso,\.,g" | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee "${PATH_EXTRACT}/iso/md5sum.txt" >/dev/null
 print-finish
 
 print-header "Build ISO image..."
 # Copy MBR file
 mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
-mkdir -p "${ES_ISO}"
+mkdir -p "${PATH_ISO}"
 # Create ISO
 [[ -e "${new_iso_image}" ]] && rm "${new_iso_image}"
 xorriso -as mkisofs \
     -r \
-    -V "${ES_ISO_LABEL}" \
+    -V "${ISO_LABEL}" \
     -l \
     -isohybrid-mbr "${mbr_file}" \
     -c isolinux/boot.cat \
@@ -52,7 +52,7 @@ xorriso -as mkisofs \
     -no-emul-boot \
     -isohybrid-gpt-basdat \
     -o "${new_iso_image}" \
-    "${ES_EXTRACT}/iso"
+    "${PATH_EXTRACT}/iso"
 print-finish
 
 echo
