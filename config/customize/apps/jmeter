@@ -1,9 +1,9 @@
-###################
-## ES-Ubuntu     ##
-##               ##
-## Config        ##
-## JMeter config ##
-###################
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## JMeter    ##
+###############
 
 # JMeter version
 version=5.5
