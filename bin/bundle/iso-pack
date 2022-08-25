@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 # Options
 orig_iso_image="${1?:"Original ISO file missing"}"
-new_iso_image="${ES_ISO}/${ES_ISO_FILE}"
+new_iso_image="${PATH_ISO}/${ES_ISO_FILE}"
 
 print-header "Compress SquashFS filesystem..."
 [[ -e "${PATH_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
@@ -34,7 +34,7 @@ print-header "Build ISO image..."
 # Copy MBR file
 mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
-mkdir -p "${ES_ISO}"
+mkdir -p "${PATH_ISO}"
 # Create ISO
 [[ -e "${new_iso_image}" ]] && rm "${new_iso_image}"
 xorriso -as mkisofs \
