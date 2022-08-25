@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## gnupg     ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" tools/gpg); then
+    print-status "Copy gnupg config files..."
+    mkdir -p ~/.gnupg
+    cp "${file}" ~/.gnupg/gpg-agent.conf
+    chmod go-rwx -R ~/.gnupg/gpg-agent.conf
+    print-finish
+fi
+
+exit 0
