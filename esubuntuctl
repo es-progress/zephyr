@@ -22,7 +22,6 @@ _usage-main() {
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("help:Display help")
-    command+=("update:Update a module")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
 
@@ -73,10 +72,6 @@ _usage() {
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
             options+=("MODULE:Module to update (eg. packages, bash)")
-            ;;
-        update)
-            usage="update MODULE"
-            options+=("MODULE:Name of module to update (eg. packages, bash)")
             ;;
         *) _usage-main ;;
     esac
@@ -160,17 +155,6 @@ _customize() {
     fi
 }
 
-## Update module
-################
-_update(){
-    if [[ -z "${1:-}" ]]; then
-        print-error "Module missing!"
-        _usage update
-        exit 1
-    fi
-    "${PATH_SCRIPTS_CUSTOMIZE}/runner" default "${1}"
-}
-
 ##################
 ## SCRIPT START ##
 ##################
@@ -194,7 +178,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|partition|post-install|customize|update) "_${cmd}" "${@}" ;;
+    create|burn|partition|post-install|customize) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
