@@ -4,9 +4,8 @@
 ## git-ignore ##
 ################
 
-# Bundling
-# ISO files, mounted images, extracted contents
-/bundling
+# Mixing: iso files, mounted images, extracted contents
+/mixing
 
 # Static generated content
 /docs/site
