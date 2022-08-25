@@ -11,13 +11,10 @@
 export ES_CFG_LOCAL="${PROJECT_ROOT}/local"
 # Scripts
 export PATH_SCRIPTS_REMIX="${PROJECT_ROOT}/bin/remix"
-export ES_CUSTOMIZE_SCRIPTS="${PROJECT_ROOT}/bin/customize"
-export ES_INSTALL_SCRIPTS="${PROJECT_ROOT}/bin/install"
+export PATH_SCRIPTS_CUSTOMIZE="${PROJECT_ROOT}/bin/customize"
+export PATH_SCRIPTS_INSTALL="${PROJECT_ROOT}/bin/install"
 # Config
-export ES_CUSTOMIZE_CFG="${PROJECT_ROOT}/config/customize"
 export ES_INSTALL_CFG="${PROJECT_ROOT}/config/install"
-# Files
-export ES_CUSTOMIZE_FILES="${PROJECT_ROOT}/files"
 
 # Customization profiles
 export PATH_PROFILES="${PROJECT_ROOT}/profiles"

@@ -29,7 +29,7 @@ GRUB_GFXPAYLOAD_LINUX=keep
 EOF
 fi
 # GRUB menu theme (colors)
-cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/grub_50_esubuntu" /etc/grub.d/50_esubuntu
+cp "${PATH_SCRIPTS_INSTALL}/post-install.d/files/grub_50_esubuntu" /etc/grub.d/50_esubuntu
 chmod +x /etc/grub.d/50_esubuntu
 print-finish
 

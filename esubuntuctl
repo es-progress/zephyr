@@ -118,13 +118,13 @@ _burn() {
 ## Partition disks
 ##################
 _partition() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/partition" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${@}"
 }
 
 ## Post-install
 ###############
 _post-install() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${ES_INSTALL_SCRIPTS}/post-install" "${@}"
+    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${@}"
 }
 
 ## Customize
@@ -150,7 +150,7 @@ _customize() {
     [[ $# -gt 0 ]] && module_selected=1
 
     [[ -z "${module_selected}" ]] && sudo systemctl stop unattended-upgrades.service
-    "${ES_CUSTOMIZE_SCRIPTS}/runner" "${profile}" "${@}"
+    "${PATH_SCRIPTS_CUSTOMIZE}/runner" "${profile}" "${@}"
     [[ -z "${module_selected}" ]] && sudo systemctl start unattended-upgrades.service
 
     print-finish "Customization finished!"
@@ -168,7 +168,7 @@ _update(){
         _usage update
         exit 1
     fi
-    "${ES_CUSTOMIZE_SCRIPTS}/runner" default "${1}"
+    "${PATH_SCRIPTS_CUSTOMIZE}/runner" default "${1}"
 }
 
 ##################

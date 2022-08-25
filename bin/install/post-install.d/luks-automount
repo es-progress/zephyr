@@ -86,7 +86,7 @@ print-status "Configure cryptsetup-initramfs..."
 # Keyfile
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
 # Umask
-cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/initramfs.conf" /etc/initramfs-tools/conf.d/esubuntu.conf
+cp "${PATH_SCRIPTS_INSTALL}/post-install.d/files/initramfs.conf" /etc/initramfs-tools/conf.d/esubuntu.conf
 print-finish
 
 # Loop through maps

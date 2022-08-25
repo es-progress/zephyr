@@ -33,10 +33,10 @@ filter=()
 
 for item in "${exec_dir[@]}"; do
     IFS=";" read -r name dir <<<"${item}"
-    runnable=$(run-parts --test "${filter[@]}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}")
+    runnable=$(run-parts --test "${filter[@]}" "${PATH_SCRIPTS_CUSTOMIZE}/${dir}")
     if [[ -n "${runnable}" ]]; then
         print-section "${name}"
-        run-parts --exit-on-error "${filter[@]}" --arg="${profile}" "${ES_CUSTOMIZE_SCRIPTS}/${dir}"
+        run-parts --exit-on-error "${filter[@]}" --arg="${profile}" "${PATH_SCRIPTS_CUSTOMIZE}/${dir}"
     fi
 done
 

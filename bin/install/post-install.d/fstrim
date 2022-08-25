@@ -16,7 +16,7 @@ check-root || exit 1
 
 print-status "Config fstrim service..."
 mkdir -p /etc/systemd/system/fstrim.service.d
-cp "${ES_INSTALL_SCRIPTS}/post-install.d/files/fstrim.conf" /etc/systemd/system/fstrim.service.d/override.conf
+cp "${PATH_SCRIPTS_INSTALL}/post-install.d/files/fstrim.conf" /etc/systemd/system/fstrim.service.d/override.conf
 print-finish
 
 print-header "Reload systemd..."
