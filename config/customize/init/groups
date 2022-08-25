@@ -1,12 +1,12 @@
-#############################
-## ES-Ubuntu               ##
-##                         ##
-## init                    ##
-## Add user to this groups ##
-##                         ##
-## Format:                 ##
-## group_name              ##
-#############################
+#################
+## ES-Ubuntu   ##
+##             ##
+## Config      ##
+## User groups ##
+##             ##
+## Format:     ##
+## group_name  ##
+#################
 
 users
 www-data
