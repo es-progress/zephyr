@@ -1,3 +1,0 @@
-[submodule "files/shell"]
-	path = files/shell
-	url = git@github.com:es-progress/shell.git

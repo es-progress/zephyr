@@ -13,34 +13,40 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-status "Copy global shell scripts..."
-sudo mkdir -p "${GLOBAL_BIN}"
-files=$(find "${ES_CUSTOMIZE_FILES}/shell/bin" -type f)
-for file in ${files}; do
-    file_name=$(basename "${file}")
-    sudo cp "${file}" "${GLOBAL_BIN}"
-    sudo chown root:root "${GLOBAL_BIN}/${file_name}"
-    sudo chmod =0755 "${GLOBAL_BIN}/${file_name}"
-done
-print-finish
+profile="${1:?"Profile missing"}"
 
-print-status "Copy global shell library..."
-sudo mkdir -p "${GLOBAL_LIB}"
-files=$(find "${ES_CUSTOMIZE_FILES}/shell/lib" -type f)
-for file in ${files}; do
-    file_name=$(basename "${file}")
-    sudo cp "${file}" "${GLOBAL_LIB}"
-    sudo chown root:root "${GLOBAL_LIB}/${file_name}"
-    sudo chmod =0644 "${GLOBAL_LIB}/${file_name}"
-done
-print-finish
+if dir=$(cfg-get "${profile}" shell/bin/global); then
+    print-status "Copy global shell scripts..."
+    sudo mkdir -p "${GLOBAL_BIN}"
+    files=$(find "${dir}" -type f)
+    for file in ${files}; do
+        file_name=$(basename "${file}")
+        sudo cp "${file}" "${GLOBAL_BIN}"
+        sudo chown root:root "${GLOBAL_BIN}/${file_name}"
+        sudo chmod =0755 "${GLOBAL_BIN}/${file_name}"
+    done
+    print-finish
+fi
 
-if [[ -d "${ES_CFG_LOCAL}/files/shell" ]]; then
+if dir=$(cfg-get "${profile}" shell/bin/local); then
     print-status "Copy local shell scripts..."
     mkdir -p "${LOCAL_BIN}"
-    files=$(find "${ES_CFG_LOCAL}/files/shell" -mindepth 1 -maxdepth 1)
+    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
     for file in ${files}; do
         cp -a "${file}" "${LOCAL_BIN}"
+    done
+    print-finish
+fi
+
+if dir=$(cfg-get "${profile}" shell/lib); then
+    print-status "Copy shell library..."
+    sudo mkdir -p "${GLOBAL_LIB}"
+    files=$(find "${dir}" -type f)
+    for file in ${files}; do
+        file_name=$(basename "${file}")
+        sudo cp "${file}" "${GLOBAL_LIB}"
+        sudo chown root:root "${GLOBAL_LIB}/${file_name}"
+        sudo chmod =0644 "${GLOBAL_LIB}/${file_name}"
     done
     print-finish
 fi
