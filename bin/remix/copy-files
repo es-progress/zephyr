@@ -25,7 +25,7 @@ sudo cp "${PROJECT_ROOT}/README.md" "${target}/"
 sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
 # Profiles
 if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
-    sudo cp -r "${PROJECT_ROOT}/profiles" "${target}/"
+    sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
 fi
 # Symlink controller
 sudo rm -f "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
