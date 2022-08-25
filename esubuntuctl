@@ -98,9 +98,9 @@ _create() {
         _usage create
         exit 1
     fi
-    "${PATH_SCRIPTS_REMIX}/iso-unpack" "${1}"
-    "${PATH_SCRIPTS_REMIX}/copy-esubuntu"
-    "${PATH_SCRIPTS_REMIX}/iso-pack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/unpack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/copy-files"
+    "${PATH_SCRIPTS_REMIX}/pack" "${1}"
     "${PATH_SCRIPTS_REMIX}/clean-up"
 }
 
@@ -112,7 +112,7 @@ _burn() {
         _usage burn
         exit 1
     fi
-    "${PATH_SCRIPTS_REMIX}/iso-burn" "${1}" "${2:-}"
+    "${PATH_SCRIPTS_REMIX}/burn" "${1}" "${2:-}"
 }
 
 ## Partition disks
