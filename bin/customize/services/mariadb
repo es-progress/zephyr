@@ -2,12 +2,9 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Services  ##
+## Config    ##
 ## MariaDB   ##
 ###############
-
-# Repo URL
-repo="deb [arch=amd64,arm64,ppc64el] http://ftp.bme.hu/pub/mirrors/mariadb/repo/10.6/ubuntu focal main"
 
 # Strict mode
 set -euo pipefail
@@ -15,6 +12,19 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
+
+# Options
+profile="${1:?"Profile missing"}"
+repo=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" services/mariadb/config); then
+    configs=$(cfg-read "${file}")
+    for line in ${configs}; do
+        eval "${line}"
+    done
+fi
+[[ -z "${repo}" ]] && exit 1
 
 print-header "Add MariaDB GPG key..."
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
@@ -28,9 +38,11 @@ print-header "Install MariaDB..."
 sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup python3-pymysql
 print-finish
 
-print-status "Config MariaDB..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/mariadb/mariadb.cnf" /etc/mysql/conf.d/esubuntu.cnf
-print-finish
+if file=$(cfg-get "${profile}" services/mariadb/mariadb.cnf); then
+    print-status "Config MariaDB..."
+    sudo cp "${file}" /etc/mysql/conf.d/esubuntu.cnf
+    print-finish
+fi
 
 print-header "Restart services..."
 sudo systemctl enable mariadb.service

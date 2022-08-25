@@ -1,0 +1,9 @@
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## MariaDB   ##
+###############
+
+# Repo URL
+repo="deb [arch=amd64,arm64,ppc64el] http://ftp.bme.hu/pub/mirrors/mariadb/repo/10.6/ubuntu focal main"

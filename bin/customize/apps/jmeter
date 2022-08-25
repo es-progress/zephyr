@@ -15,9 +15,9 @@ check-not-root || exit 1
 
 # Options
 profile="${1:?"Profile missing"}"
+version=
 url=
 checksum=
-version=
 
 # Read config file, get options
 if file=$(cfg-get "${profile}" apps/jmeter); then
@@ -26,9 +26,9 @@ if file=$(cfg-get "${profile}" apps/jmeter); then
         eval "${line}"
     done
 fi
+[[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
-[[ -z "${version}" ]] && exit 1
 
 print-header "Install jmeter..."
 # Download tar

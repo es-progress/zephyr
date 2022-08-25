@@ -2,7 +2,7 @@
 ###############
 ## ES-Ubuntu ##
 ##           ##
-## Services  ##
+## Config    ##
 ## Apache    ##
 ###############
 
@@ -13,14 +13,18 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
-print-header "Install Apache modules..."
-apache_modules=$(cfg-read "${ES_CUSTOMIZE_CFG}/services/apache/modules")
-modules=()
-for module in ${apache_modules}; do
-    modules+=("${module}")
-done
-sudo a2enmod "${modules[@]}"
-print-finish
+profile="${1:?"Profile missing"}"
+
+if file=$(cfg-get "${profile}" services/apache/modules); then
+    print-header "Install Apache modules..."
+    apache_modules=$(cfg-read "${file}")
+    modules=()
+    for module in ${apache_modules}; do
+        modules+=("${module}")
+    done
+    sudo a2enmod "${modules[@]}"
+    print-finish
+fi
 
 print-status "Create default web dirs..."
 sudo mkdir -p "${WEB_ROOT}/default"
@@ -28,14 +32,15 @@ sudo touch "${WEB_ROOT}/default/index.html"
 sudo chown -R "${USER}:www-data" "${WEB_ROOT}"
 print-finish
 
-print-header "Config Apache..."
-sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/apache.conf" /etc/apache2/conf-available/esubuntu.conf
-sudo a2enconf esubuntu
-print-finish
+if file=$(cfg-get "${profile}" services/apache/apache.conf); then
+    print-header "Config Apache..."
+    sudo cp "${file}" /etc/apache2/conf-available/esubuntu.conf
+    sudo a2enconf esubuntu
+    print-finish
+fi
 
 print-header "Create certificate for default vhost..."
 if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -e "/etc/ssl/certs/ESubuntu_Apache_default_vhost.pem" ]]; then
-
     # Create CSR
     csr=$(sudo mktemp)
     sudo openssl req \
@@ -64,15 +69,17 @@ else
     print-finish "Key found, skipped"
 fi
 
-print-header "Setup default vhosts..."
-[[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
-sudo cp "${ES_CUSTOMIZE_CFG}/services/apache/default_virt_host.conf" /etc/apache2/sites-available/000-default.conf
-sudo sed -i \
-    -e "s@{{ doc_root }}@${WEB_ROOT}/default@g" \
-    -e "s@{{ ROOT_CA_NAME }}@${ROOT_CA_NAME}@g" \
-    /etc/apache2/sites-available/000-default.conf
-sudo a2ensite 000-default.conf
-print-finish
+if file=$(cfg-get "${profile}" services/apache/default_virt_host.conf); then
+    print-header "Setup default vhosts..."
+    [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
+    sudo cp "${file}" /etc/apache2/sites-available/000-default.conf
+    sudo sed -i \
+        -e "s@{{ doc_root }}@${WEB_ROOT}/default@g" \
+        -e "s@{{ ROOT_CA_NAME }}@${ROOT_CA_NAME}@g" \
+        /etc/apache2/sites-available/000-default.conf
+    sudo a2ensite 000-default.conf
+    print-finish
+fi
 
 print-header "Restart services..."
 sudo systemctl enable apache2.service
