@@ -10,7 +10,7 @@
 # Local configs
 export ES_CFG_LOCAL="${PROJECT_ROOT}/local"
 # Scripts
-export ES_BUNDLE_SCRIPTS="${PROJECT_ROOT}/bin/bundle"
+export PATH_SCRIPTS_REMIX="${PROJECT_ROOT}/bin/bundle"
 export ES_CUSTOMIZE_SCRIPTS="${PROJECT_ROOT}/bin/customize"
 export ES_INSTALL_SCRIPTS="${PROJECT_ROOT}/bin/install"
 # Config

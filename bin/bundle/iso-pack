@@ -15,7 +15,7 @@ check-not-root || exit 1
 
 # Options
 orig_iso_image="${1?:"Original ISO file missing"}"
-new_iso_image="${PATH_ISO}/${ES_ISO_FILE}"
+new_iso_image="${PATH_ISO}/${ISO_FILE_NAME}"
 
 print-header "Compress SquashFS filesystem..."
 [[ -e "${PATH_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
@@ -39,7 +39,7 @@ mkdir -p "${PATH_ISO}"
 [[ -e "${new_iso_image}" ]] && rm "${new_iso_image}"
 xorriso -as mkisofs \
     -r \
-    -V "${ES_ISO_LABEL}" \
+    -V "${ISO_LABEL}" \
     -l \
     -isohybrid-mbr "${mbr_file}" \
     -c isolinux/boot.cat \

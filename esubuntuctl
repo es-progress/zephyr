@@ -98,10 +98,10 @@ _create() {
         _usage create
         exit 1
     fi
-    "${ES_BUNDLE_SCRIPTS}/iso-unpack" "${1}"
-    "${ES_BUNDLE_SCRIPTS}/copy-esubuntu"
-    "${ES_BUNDLE_SCRIPTS}/iso-pack" "${1}"
-    "${ES_BUNDLE_SCRIPTS}/clean-up"
+    "${PATH_SCRIPTS_REMIX}/iso-unpack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/copy-esubuntu"
+    "${PATH_SCRIPTS_REMIX}/iso-pack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/clean-up"
 }
 
 ## Burn ISO
@@ -112,7 +112,7 @@ _burn() {
         _usage burn
         exit 1
     fi
-    "${ES_BUNDLE_SCRIPTS}/iso-burn" "${1}" "${2:-}"
+    "${PATH_SCRIPTS_REMIX}/iso-burn" "${1}" "${2:-}"
 }
 
 ## Partition disks
