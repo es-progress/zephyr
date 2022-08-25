@@ -23,12 +23,12 @@ if ! findmnt "${ES_MOUNT}" >/dev/null; then
 fi
 
 print-header "Extract ISO contents..."
-mkdir -p "${ES_EXTRACT}/iso"
+mkdir -p "${PATH_EXTRACT}/iso"
 sudo rsync \
     -aAXHEh \
     --info=stats1 --info=progress2 \
     --delete --inplace \
-    "${ES_MOUNT}/" "${ES_EXTRACT}/iso"
+    "${ES_MOUNT}/" "${PATH_EXTRACT}/iso"
 print-finish
 
 if findmnt "${ES_MOUNT}" >/dev/null; then
@@ -37,14 +37,14 @@ if findmnt "${ES_MOUNT}" >/dev/null; then
     print-finish
 fi
 
-if [[ -e "${ES_EXTRACT}/squashfs-root" ]]; then
+if [[ -e "${PATH_EXTRACT}/squashfs-root" ]]; then
     print-status "Clear SquashFS extracting directory..."
-    sudo rm -rf "${ES_EXTRACT}/squashfs-root"
+    sudo rm -rf "${PATH_EXTRACT}/squashfs-root"
     print-finish
 fi
 
 print-header "Extract SquashFS filesystem..."
-sudo unsquashfs -dest "${ES_EXTRACT}/squashfs-root" "${ES_EXTRACT}/iso/casper/filesystem.squashfs"
+sudo unsquashfs -dest "${PATH_EXTRACT}/squashfs-root" "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 
 exit 0

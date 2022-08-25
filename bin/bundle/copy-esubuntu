@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy ES-Ubuntu to SquashFS..."
-target="${ES_EXTRACT}/squashfs-root/${GLOBAL_RES}"
+target="${PATH_EXTRACT}/squashfs-root/${GLOBAL_RES}"
 # Main files
 sudo mkdir -p "${target}"
 sudo cp "${PROJECT_ROOT}/bootstrap.sh" "${target}/"
@@ -37,8 +37,8 @@ if [[ -e "${PROJECT_ROOT}/local/files" ]]; then
     sudo cp -r "${PROJECT_ROOT}/local/files" "${target}/local/"
 fi
 # Symlink controller
-sudo rm -f "${ES_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
-sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${ES_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+sudo rm -f "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
 print-finish
 
 print-status "Set permissions..."
@@ -48,8 +48,8 @@ print-finish
 
 print-status "Patch GRUB..."
 # Boot from encrypted partition
-if ! grep -qs "GRUB_ENABLE_CRYPTODISK=y" "${ES_EXTRACT}/squashfs-root/etc/default/grub"; then
-    cat <<EOF | sudo tee -a "${ES_EXTRACT}/squashfs-root/etc/default/grub" >/dev/null
+if ! grep -qs "GRUB_ENABLE_CRYPTODISK=y" "${PATH_EXTRACT}/squashfs-root/etc/default/grub"; then
+    cat <<EOF | sudo tee -a "${PATH_EXTRACT}/squashfs-root/etc/default/grub" >/dev/null
 
 # Enabling boot from LUKS
 GRUB_ENABLE_CRYPTODISK=y

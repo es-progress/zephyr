@@ -19,7 +19,10 @@ export ES_INSTALL_CFG="${PROJECT_ROOT}/config/install"
 # Files
 export ES_CUSTOMIZE_FILES="${PROJECT_ROOT}/files"
 
+# Customization profiles
 export PATH_PROFILES="${PROJECT_ROOT}/profiles"
+# Extracted files from iso image
+export PATH_EXTRACT="${PROJECT_ROOT}/bundling/extract"
 
 # Import configs
 source "${PROJECT_ROOT}/ESubuntu.cfg"

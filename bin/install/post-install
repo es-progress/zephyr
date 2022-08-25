@@ -19,7 +19,7 @@ read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
 
 # Mount system
 target=/target
-# target="${ES_EXTRACT}/squashfs-root"
+# target="${PATH_EXTRACT}/squashfs-root"
 for dir in proc sys dev etc/resolv.conf; do
     if ! findmnt "${target}/${dir}" >/dev/null; then
         mount --rbind "/${dir}" "${target}/${dir}"
