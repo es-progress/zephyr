@@ -61,7 +61,8 @@ _usage() {
             options+=("DISK:Device to copy to (eg. /dev/sdc)")
             ;;
         partition)
-            usage="partition MAP..."
+            usage="partition PROFILE MAP..."
+            options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         post-install)
@@ -113,7 +114,21 @@ _burn() {
 ## Partition disks
 ##################
 _partition() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${@}"
+    local profile
+
+    if [[ -z "${1:-}" ]]; then
+        print-error "Profile missing!"
+        _usage partition
+        exit 1
+    fi
+    profile="${1}"
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error "Profile: ${profile} missing!"
+        exit 1
+    fi
+    shift
+
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${profile}" "${@}"
 }
 
 ## Post-install
