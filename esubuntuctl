@@ -66,7 +66,8 @@ _usage() {
             options+=("MAP:Partition maps")
             ;;
         post-install)
-            usage="post-install MAP..."
+            usage="post-install PROFILE MAP..."
+            options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         customize)
@@ -134,7 +135,21 @@ _partition() {
 ## Post-install
 ###############
 _post-install() {
-    sudo PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${@}"
+    local profile
+
+    if [[ -z "${1:-}" ]]; then
+        print-error "Profile missing!"
+        _usage post-install
+        exit 1
+    fi
+    profile="${1}"
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error "Profile: ${profile} missing!"
+        exit 1
+    fi
+    shift
+
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${profile}" "${@}"
 }
 
 ## Customize

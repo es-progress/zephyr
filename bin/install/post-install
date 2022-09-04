@@ -4,7 +4,6 @@
 ##              ##
 ## Install      ##
 ## Post-install ##
-## Steps runner ##
 ##################
 
 # Strict mode
@@ -13,6 +12,9 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
+
+profile="${1:?"Profile missing"}"
+shift
 
 read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
 [[ ${REPLY} != "YES" ]] && error-exit Aborted.
@@ -33,13 +35,7 @@ print-finish
 # Run Post-install steps
 steps=$(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
 for step in ${steps}; do
-    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${@}"
-done
-
-# Run local post-install steps
-steps=$(find "${ES_CFG_LOCAL}/config/install/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n")
-for step in ${steps}; do
-    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/local/config/install/post-install.d/${step}" "${@}"
+    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${profile}" "${@}"
 done
 
 print-header "Update initramfs..."
