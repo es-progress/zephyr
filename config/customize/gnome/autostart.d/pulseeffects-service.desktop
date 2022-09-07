@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=PulseEffects
-Comment=PulseEffects Service
-Icon=pulseeffects
-Exec=pulseeffects --gapplication-service

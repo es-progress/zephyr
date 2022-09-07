@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Pomodoro
-Comment=Timer
-Icon=stopwatch-symbolic
-Exec=gnome-pomodoro --no-default-window

@@ -1,9 +1,0 @@
-#################
-## ES-Ubuntu   ##
-##             ##
-## Config      ##
-## pass-update ##
-#################
-
-# pass-update version (git tag to checkout)
-version=v2.1
