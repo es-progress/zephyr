@@ -11,7 +11,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
-check-root || exit 1
+check-not-root || exit 1
 
 print-status "Config fstab..."
 tmp_file=$(mktemp)
@@ -37,7 +37,7 @@ findmnt --verify --tab-file "${tmp_file}" >/dev/null
 print-finish
 
 print-status "Update fstab..."
-cp "${tmp_file}" /etc/fstab
+sudo cp "${tmp_file}" /etc/fstab
 print-finish
 
 exit 0
