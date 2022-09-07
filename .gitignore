@@ -7,11 +7,5 @@
 # Mixing: iso files, mounted images, extracted contents
 /mixing
 
-# Static generated content
-/docs/site
-
-# Local content
-/local
-
 # Profiles
 /profiles
