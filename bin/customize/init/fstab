@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-##################
-## ES-Ubuntu    ##
-##              ##
-## Install      ##
-## Post-install ##
-## fstab        ##
-##################
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## fstab     ##
+###############
 
 # Strict mode
 set -euo pipefail
