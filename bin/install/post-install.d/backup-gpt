@@ -2,15 +2,9 @@
 ##################
 ## ES-Ubuntu    ##
 ##              ##
-## Install      ##
 ## Post-install ##
 ## Backup GPT   ##
 ##################
-
-############
-## CONFIG ##
-############
-backup_dir=/root/backup/gpt
 
 ###############
 ## FUNCTIONS ##
@@ -38,23 +32,19 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
+profile="${1:?"Profile missing"}"
+shift
+
 # Maps
-maps=("${@:-}")
 map_files=()
-for map in "${maps[@]}"; do
-    if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
-        map_files=("${map_files[@]}" "${ES_CFG_LOCAL}/config/install/partition-maps/${map}")
-    elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
-        map_files=("${map_files[@]}" "${ES_INSTALL_CFG}/partition-maps/${map}")
-    else
-        echo "Available maps:"
-        ls -1 "${ES_INSTALL_CFG}/partition-maps"
-        [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
-        error-exit "Failed to find partition map"
+for map in "${@}"; do
+    if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
+        map_files+=("${file}")
     fi
 done
+[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
 
-mkdir -p "${backup_dir}"
+mkdir -p "${GPT_BACKUP_DIR}"
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
@@ -63,7 +53,7 @@ for map_file in "${map_files[@]}"; do
     for line in ${disks}; do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-header "Backup partition table for ${name}..."
-        _gpt-backup "${device}" "${backup_dir}/${name}"
+        _gpt-backup "${device}" "${GPT_BACKUP_DIR}/${name}"
         print-finish
     done
 done
