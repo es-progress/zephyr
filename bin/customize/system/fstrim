@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## fstrim    ##
+###############
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+if file=$(cfg-get "${profile}" system/fstrim.conf); then
+    print-status "Config fstrim service..."
+    sudo mkdir -p /etc/systemd/system/fstrim.service.d
+    sudo cp "${file}" /etc/systemd/system/fstrim.service.d/esubuntu.conf
+    sudo chmod 0644 /etc/systemd/system/fstrim.service.d/esubuntu.conf
+    sudo systemctl daemon-reload
+    print-finish
+fi
+
+exit 0

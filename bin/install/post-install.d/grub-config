@@ -2,7 +2,6 @@
 ##################
 ## ES-Ubuntu    ##
 ##              ##
-## Install      ##
 ## Post-install ##
 ## GRUB config  ##
 ##################
@@ -13,6 +12,9 @@ IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
+
+profile="${1:?"Profile missing"}"
+shift
 
 print-status "Config GRUB..."
 # Timeout
@@ -29,8 +31,10 @@ GRUB_GFXPAYLOAD_LINUX=keep
 EOF
 fi
 # GRUB menu theme (colors)
-cp "${PATH_SCRIPTS_INSTALL}/post-install.d/files/grub_50_esubuntu" /etc/grub.d/50_esubuntu
-chmod +x /etc/grub.d/50_esubuntu
+if file=$(cfg-get "${profile}" install/grub.cfg.sh); then
+    cp "${file}" /etc/grub.d/50_esubuntu
+    chmod +x /etc/grub.d/50_esubuntu
+fi
 print-finish
 
 exit 0

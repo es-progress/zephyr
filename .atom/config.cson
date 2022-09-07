@@ -13,6 +13,7 @@
     "**/config/customize/gnome/config.global.d/*": "source.ini"
     "**/config/customize/gnome/config.local.d/*": "source.ini"
     "**/config/customize/init/*": "source.ini"
+    "**/config/customize/install/**": "source.ini"
     "**/config/customize/packages/*": "source.ini"
     "**/config/customize/random/*": "source.ini"
     "**/config/customize/services/apache/modules": "source.ini"

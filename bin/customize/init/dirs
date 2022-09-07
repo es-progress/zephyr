@@ -29,6 +29,20 @@ if file=$(cfg-get "${profile}" init/dir.core); then
     print-finish
 fi
 
+if file=$(cfg-get "${profile}" init/dir.mountpoint); then
+    print-status "Create mount points..."
+    dirs=$(cfg-read "${file}")
+    for line in ${dirs}; do
+        IFS=$' \t' read -r path owner <<< "${line}"
+        # eval line to let the shell expand tilde and env vars
+        path=$(eval echo "${path}")
+        owner=$(eval echo "${owner}")
+        sudo mkdir -p "${path}"
+        [[ -n "${owner}" ]] && sudo chown "${owner}:${owner}" "${path}"
+    done
+    print-finish
+fi
+
 if file=$(cfg-get "${profile}" init/dir.remove); then
     print-status "Remove default dirs..."
     dirs=$(cfg-read "${file}")
