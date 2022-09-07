@@ -2,16 +2,9 @@
 ####################
 ## ES-Ubuntu      ##
 ##                ##
-## Install        ##
 ## Post-install   ##
 ## LUKS automount ##
 ####################
-
-############
-## CONFIG ##
-############
-key_dir=/etc/luks
-key_slot=2
 
 ###############
 ## FUNCTIONS ##
@@ -62,21 +55,17 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
+profile="${1:?"Profile missing"}"
+shift
+
 # Maps
-maps=("${@:-}")
 map_files=()
-for map in "${maps[@]}"; do
-    if [[ -f "${ES_CFG_LOCAL}/config/install/partition-maps/${map}" ]]; then
-        map_files=("${map_files[@]}" "${ES_CFG_LOCAL}/config/install/partition-maps/${map}")
-    elif [[ -f "${ES_INSTALL_CFG}/partition-maps/${map}" ]]; then
-        map_files=("${map_files[@]}" "${ES_INSTALL_CFG}/partition-maps/${map}")
-    else
-        echo "Available maps:"
-        ls -1 "${ES_INSTALL_CFG}/partition-maps"
-        [[ -d "${ES_CFG_LOCAL}/config/install/partition-maps" ]] && ls -1 "${ES_CFG_LOCAL}/config/install/partition-maps"
-        error-exit "Failed to find partition map"
+for map in "${@}"; do
+    if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
+        map_files+=("${file}")
     fi
 done
+[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
 
 print-header "Install cryptsetup-initramfs..."
 apt-get install --yes --no-install-recommends cryptsetup-initramfs
@@ -84,9 +73,11 @@ print-finish
 
 print-status "Configure cryptsetup-initramfs..."
 # Keyfile
-sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
+sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${LUKS_KEY_DIR}/*.key" /etc/cryptsetup-initramfs/conf-hook
 # Umask
-cp "${PATH_SCRIPTS_INSTALL}/post-install.d/files/initramfs.conf" /etc/initramfs-tools/conf.d/esubuntu.conf
+if file=$(cfg-get "${profile}" install/initramfs.conf); then
+    cp "${file}" /etc/initramfs-tools/conf.d/esubuntu.conf
+fi
 print-finish
 
 # Loop through maps
@@ -94,13 +85,13 @@ for map_file in "${map_files[@]}"; do
     partition=$(basename "${map_file}")
 
     print-header "Create key file for ${partition}..."
-    mkdir -p "${key_dir}"
-    dd if=/dev/urandom of="${key_dir}/${partition}.key" bs=4096 count=1
+    mkdir -p "${LUKS_KEY_DIR}"
+    dd if=/dev/urandom of="${LUKS_KEY_DIR}/${partition}.key" bs=4096 count=1
     print-finish
 
     print-status "Secure key-file for ${partition}..."
-    chmod o-rwx "${key_dir}"
-    chmod go-rwx "${key_dir}/${partition}.key"
+    chmod o-rwx "${LUKS_KEY_DIR}"
+    chmod go-rwx "${LUKS_KEY_DIR}/${partition}.key"
     print-finish
 
     # Loop through disks
@@ -115,11 +106,11 @@ for map_file in "${map_files[@]}"; do
 
             if [[ "${type}" == luks* ]]; then
                 print-header "Add machine key to LUKS ${label}..."
-                _luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${partition}.key" "${key_slot}"
+                _luks-add-key "${device}${part_prefix}${number}" "${LUKS_KEY_DIR}/${partition}.key" "${LUKS_KEY_SLOT}"
                 print-finish
 
                 print-status "Update crypttab with ${label}..."
-                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${partition}.key"
+                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${LUKS_KEY_DIR}/${partition}.key"
                 print-finish
             fi
         done
