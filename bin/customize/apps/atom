@@ -6,6 +6,30 @@
 ## Atom      ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Install Atom packages
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_install-packages(){
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Install Atom packages [${selector}]..."
+    for package in $(cfg-read "${cfg_file}"); do
+        apm install "${package}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -27,17 +51,15 @@ print-header "Install Atom..."
 sudo apt-get install --yes --no-install-recommends atom
 print-finish
 
-if file=$(cfg-get "${profile}" apps/atom/packages); then
-    print-header "Install base Atom packages..."
-    configs=$(cfg-read "${file}")
-    for package in ${configs}; do
-        apm install "${package}"
-    done
-    print-finish
+if file=$(cfg-get "${profile}" apps/atom/packages.global); then
+    _install-packages global "${file}"
+fi
+if file=$(cfg-get "${profile}" apps/atom/packages.local); then
+    _install-packages local "${file}"
 fi
 
 if file=$(cfg-get "${profile}" apps/atom/config.cson); then
-    print-status "Copy config file..."
+    print-status "Copy Atom config file..."
     cp "${file}" ~/.atom
     print-finish
 fi
