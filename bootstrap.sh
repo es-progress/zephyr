@@ -20,8 +20,13 @@ export PATH_MOUNT="${PROJECT_ROOT}/mixing/mnt"
 # Extracted files from iso image
 export PATH_EXTRACT="${PROJECT_ROOT}/mixing/extract"
 
-# Import configs
-source "${PROJECT_ROOT}/ESubuntu.cfg"
-
-# Import shell library
+# Imports
+#########
+# Shell library
 source "${PROJECT_ROOT}/bin/library.sh"
+# Defaults
+source "${PROJECT_ROOT}/ESubuntu.default.cfg"
+# Local configs
+if [[ -r "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+    source "${PROJECT_ROOT}/ESubuntu.local.cfg"
+fi
