@@ -7,6 +7,29 @@
 ## Autostart ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy autostart files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_copy-autostart(){
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Copy autostart files [${selector}]..."
+    mkdir -p ~/.config/autostart
+    find "${cfg_dir}" -type f -exec cp {} ~/.config/autostart/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,14 +38,12 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if dir=$(cfg-get "${profile}" gnome/autostart.d); then
-    print-status "Copy autostart files..."
-    mkdir -p ~/.config/autostart/
-    files=$(find "${dir}" -type f)
-    for file in ${files}; do
-        cp -a "${file}" ~/.config/autostart
-    done
-    print-finish
+
+if dir=$(cfg-get "${profile}" gnome/autostart.global.d); then
+    _copy-autostart global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" gnome/autostart.local.d); then
+    _copy-autostart local "${dir}"
 fi
 
 exit 0
