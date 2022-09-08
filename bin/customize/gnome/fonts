@@ -7,6 +7,28 @@
 ## Fonts     ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy fonts
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_copy-fonts(){
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Copy fonts [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type d -exec sudo cp -r --no-preserve=mode,ownership {} /usr/local/share/fonts \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,19 +37,16 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if dir=$(cfg-get "${profile}" gnome/fonts); then
-    print-status "Copy fonts..."
-    fonts=$(find "${dir}" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-    for font in ${fonts}; do
-        sudo cp -a "${dir}/${font}" /usr/local/share/fonts
-        sudo chmod 0644 -R "/usr/local/share/fonts/${font}"
-        sudo chmod 0755 "/usr/local/share/fonts/${font}"
-    done
-    print-finish
 
-    print-status "Flush font cache..."
-    fc-cache -f
-    print-finish
+if dir=$(cfg-get "${profile}" gnome/fonts.global.d); then
+    _copy-fonts global "${dir}"
 fi
+if dir=$(cfg-get "${profile}" gnome/fonts.local.d); then
+    _copy-fonts local "${dir}"
+fi
+
+print-status "Flush font cache..."
+fc-cache -f
+print-finish
 
 exit 0
