@@ -7,6 +7,28 @@
 ## Dash-to-panel ##
 ###################
 
+###############
+## FUNCTIONS ##
+###############
+
+## Config Dash-to-panel
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_config(){
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Config Dash-to-panel [${selector}]..."
+    sed -e '/^#/d' -e '/^$/d' "${cfg_file}" | dconf load /org/gnome/shell/extensions/
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -18,11 +40,11 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 version=
 # Read config file, get options
-if file=$(cfg-get "${profile}" gnome/dash-to-panel); then
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        eval "${line}"
-    done
+if file=$(cfg-get "${profile}" gnome/dash-to-panel/global.cfg); then
+    cfg-eval "${file}"
+fi
+if file=$(cfg-get "${profile}" gnome/dash-to-panel/local.cfg); then
+    cfg-eval "${file}"
 fi
 [[ -z "${version}" ]] && exit 1
 
@@ -39,10 +61,11 @@ gnome-extensions enable dash-to-panel@jderose9.github.com
 busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s "Meta.restart('Restarting...')"
 print-finish
 
-if file=$(cfg-get "${profile}" gnome/dash-to-panel.dconf); then
-    print-status "Config Dash-to-panel.."
-    sed -e '/^#/d' -e '/^$/d' "${file}" | dconf load /org/gnome/shell/extensions/
-    print-finish
+if file=$(cfg-get "${profile}" gnome/dash-to-panel/global.dconf); then
+    _config global "${file}"
+fi
+if file=$(cfg-get "${profile}" gnome/dash-to-panel/local.dconf); then
+    _config local "${file}"
 fi
 
 exit 0
