@@ -56,7 +56,7 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
-    echo -n -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
 }
 
 ## Print OK message
@@ -140,6 +140,20 @@ cfg-read() {
 
     # Delete section headers
     sed -r -e '/^\s*\[/ d' <<<"${contents}"
+}
+
+## Eval config file
+##
+## @param    $1  Config File
+## @param    $2  Section (eval only this section)
+#################################################
+cfg-eval(){
+    local cfg_file="${1:?"Config file missing"}"
+    local section="${2:-}"
+
+    for line in $(cfg-read "${cfg_file}" "${section}"); do
+        eval "${line}"
+    done
 }
 
 ## Join arguments by char
