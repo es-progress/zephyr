@@ -38,10 +38,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" gnome/fonts.global.d); then
+if dir=$(cfg-get "${profile}" gnome/fonts/global.d); then
     _copy-fonts global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" gnome/fonts.local.d); then
+if dir=$(cfg-get "${profile}" gnome/fonts/local.d); then
     _copy-fonts local "${dir}"
 fi
 
