@@ -6,6 +6,29 @@
 ## Shorewall ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Config shorewall
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Copy shorewall config [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/shorewall/ \;
+    sudo chmod -R o-rwx /etc/shorewall
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -16,21 +39,10 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 
 if dir=$(cfg-get default apps/shorewall/global); then
-    print-status "Copy global shorewall config..."
-    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        sudo cp -r "${file}" /etc/shorewall/
-    done
-    print-finish
+    _config global "${dir}"
 fi
-
 if dir=$(cfg-get "${profile}" apps/shorewall/local); then
-    print-status "Copy local shorewall config..."
-    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        sudo cp -r "${file}" /etc/shorewall/
-    done
-    print-finish
+    _config local "${dir}"
 fi
 
 print-status "Template interfaces..."

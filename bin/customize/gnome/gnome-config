@@ -6,6 +6,28 @@
 ## GNOME     ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Config GNOME
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Config GNOME [${selector}]..."
+    find "${cfg_dir}" -type f -print0 | xargs -0 sed -e '/^#/d' -e '/^$/d' | dconf load /
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -16,21 +38,11 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 
 if dir=$(cfg-get "${profile}" gnome/config.global.d); then
-    print-status "Global GNOME config..."
-    files=$(find "${dir}" -type f)
-    for dconf_file in ${files}; do
-        sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
-    done
-    print-finish
+    _config global "${dir}"
 fi
 
 if dir=$(cfg-get "${profile}" gnome/config.local.d); then
-    print-status "Local GNOME config..."
-    files=$(find "${dir}" -type f)
-    for dconf_file in ${files}; do
-        sed -e '/^#/d' -e '/^$/d' "${dconf_file}" | dconf load /
-    done
-    print-finish
+    _config local "${dir}"
 fi
 
 if ! grep -qs "\[connectivity\]" /etc/NetworkManager/NetworkManager.conf; then
