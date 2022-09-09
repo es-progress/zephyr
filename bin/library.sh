@@ -147,7 +147,7 @@ cfg-read() {
 ## @param    $1  Config File
 ## @param    $2  Section (eval only this section)
 #################################################
-cfg-eval(){
+cfg-eval() {
     local cfg_file="${1:?"Config file missing"}"
     local section="${2:-}"
 

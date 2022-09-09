@@ -15,7 +15,7 @@
 ## @param   $1  Global/Local
 ## @param   $2  Config dir
 ############################
-_config(){
+_config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
