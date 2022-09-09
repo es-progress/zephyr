@@ -20,9 +20,23 @@ _install-packages() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install Atom packages [${selector}]..."
-    for package in $(cfg-read "${cfg_file}"); do
+    for package in $(cfg-read "${cfg_file}" atom-packages); do
         apm install "${package}"
     done
+    print-finish
+}
+
+## Copy config files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Copy Atom config [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.atom/ \;
     print-finish
 }
 
@@ -51,17 +65,17 @@ print-header "Install Atom..."
 sudo apt-get install --yes --no-install-recommends atom
 print-finish
 
-if file=$(cfg-get "${profile}" apps/atom/packages.global); then
+if file=$(cfg-get "${profile}" apps.global.cfg); then
     _install-packages global "${file}"
 fi
-if file=$(cfg-get "${profile}" apps/atom/packages.local); then
+if file=$(cfg-get "${profile}" apps.local.cfg); then
     _install-packages local "${file}"
 fi
-
-if file=$(cfg-get "${profile}" apps/atom/config.cson); then
-    print-status "Copy Atom config file..."
-    cp "${file}" ~/.atom
-    print-finish
+if file=$(cfg-get "${profile}" atom/global.d); then
+    _config global "${file}"
+fi
+if file=$(cfg-get "${profile}" atom/local.d); then
+    _config local "${file}"
 fi
 
 exit 0

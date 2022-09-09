@@ -38,10 +38,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get default apps/shorewall/global); then
+if dir=$(cfg-get default shorewall/global.d); then
     _config global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" apps/shorewall/local); then
+if dir=$(cfg-get "${profile}" shorewall/local.d); then
     _config local "${dir}"
 fi
 

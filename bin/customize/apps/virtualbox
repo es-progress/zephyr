@@ -21,7 +21,7 @@ _config() {
 
     print-status "Config VirtualBox [${selector}]..."
     # vboxmanage configs
-    for line in $(cfg-read "${cfg_file}" vboxmanage); do
+    for line in $(cfg-read "${cfg_file}" virtualbox-vboxmanage); do
         IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
         [[ -z "${cfg_name}" || -z "${cfg_value}" ]] && continue
 
@@ -30,9 +30,9 @@ _config() {
         vboxmanage setproperty "${cfg_name}" "${cfg_value}"
     done
     # Other configs
-    cfg-eval "${cfg_file}" settings
+    cfg-eval "${cfg_file}" virtualbox-settings
     # Read VM info
-    cfg-eval "${cfg_file}" virtmachines
+    cfg-eval "${cfg_file}" virtualbox-virtmachines
     print-finish
 }
 
@@ -45,23 +45,22 @@ _register() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Register VMs [${selector}]..."
     # Get & create machine folder
     mkdir -p "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
     # Register VMs
     registered_vms=$(vboxmanage list vms)
     for def in "${vm[@]:-}"; do
-        IFS="@" read -r vm_dir uuid <<<"${def}"
-
+        IFS="@" read -r vm uuid <<<"${def}"
+        print-status "Register VM: ${vm} [${selector}]..."
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
-            [[ -e "${cfg_dir}/${vm_dir}" ]] || continue
+            [[ -e "${cfg_dir}/${vm}" ]] || continue
 
-            cp -r --no-preserve=mode,ownership "${cfg_dir}/${vm_dir}" "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
-            find "${VM_LOCAL_DIR:-~/.config/VirtualBox}/${vm_dir}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+            cp -r --no-preserve=mode,ownership "${cfg_dir}/${vm}" "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
+            find "${VM_LOCAL_DIR:-~/.config/VirtualBox}/${vm}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
         fi
+        print-finish
     done
-    print-finish
 }
 
 ##################
@@ -83,16 +82,19 @@ sudo modprobe vboxnetadp
 sudo modprobe vboxnetflt
 print-finish
 
-if file=$(cfg-get "${profile}" apps/virtualbox/vboxconfig.global); then
+vm=()
+if file=$(cfg-get "${profile}" apps.global.cfg); then
     _config global "${file}"
 fi
-if file=$(cfg-get "${profile}" apps/virtualbox/vboxconfig.local); then
-    _config local "${file}"
-fi
-if dir=$(cfg-get "${profile}" apps/virtualbox/vm.global); then
+if dir=$(cfg-get "${profile}" vbox/vm.global.d); then
     _register global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" apps/virtualbox/vm.local); then
+
+vm=()
+if file=$(cfg-get "${profile}" apps.local.cfg); then
+    _config local "${file}"
+fi
+if dir=$(cfg-get "${profile}" vbox/vm.local.d); then
     _register local "${dir}"
 fi
 
