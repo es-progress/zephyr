@@ -40,11 +40,11 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 version=
 # Read config file, get options
-if file=$(cfg-get "${profile}" gnome/dash-to-panel/global.cfg); then
-    cfg-eval "${file}"
+if file=$(cfg-get "${profile}" gnome/global.cfg); then
+    cfg-eval "${file}" dash-to-panel
 fi
-if file=$(cfg-get "${profile}" gnome/dash-to-panel/local.cfg); then
-    cfg-eval "${file}"
+if file=$(cfg-get "${profile}" gnome/local.cfg); then
+    cfg-eval "${file}" dash-to-panel
 fi
 [[ -z "${version}" ]] && exit 1
 
