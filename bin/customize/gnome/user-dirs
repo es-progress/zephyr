@@ -7,6 +7,30 @@
 ## User dirs ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Create bookmarks
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_copy-bookmarks(){
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Add bookmarks [${selector}]..."
+    for line in $(cfg-read "${cfg_file}"); do
+        echo "${line}" >>"${bookmarks_file}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -33,21 +57,11 @@ bookmarks_file=~/.config/gtk-3.0/bookmarks
 echo -n >"${bookmarks_file}"
 
 if file=$(cfg-get "${profile}" gnome/bookmarks.global); then
-    print-status "Add global bookmarks..."
-    bookmarks=$(cfg-read "${file}")
-    for line in ${bookmarks}; do
-        echo "${line}" >>"${bookmarks_file}"
-    done
-    print-finish
+    _copy-bookmarks global "${file}"
 fi
 
 if file=$(cfg-get "${profile}" gnome/bookmarks.local); then
-    print-status "Add local bookmarks..."
-    bookmarks=$(cfg-read "${file}")
-    for line in ${bookmarks}; do
-        echo "${line}" >>"${bookmarks_file}"
-    done
-    print-finish
+    _copy-bookmarks local "${file}"
 fi
 
 exit 0
