@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+####################
+## ES-Ubuntu      ##
+##                ##
+## Config         ##
+## Custom scripts ##
+####################
+
+###############
+## FUNCTIONS ##
+###############
+
+## Run custom scripts
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_run() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Run custom scripts [${selector}]..."
+    (
+        cd "${cfg_dir}"
+        run-parts --exit-on-error --arg="${profile}" .
+    )
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+if dir=$(cfg-get "${profile}" random/custom/global.d); then
+    _run global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" random/custom/local.d); then
+    _run local "${dir}"
+fi
+
+exit 0
