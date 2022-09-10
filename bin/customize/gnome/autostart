@@ -39,10 +39,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" gnome/autostart.global.d); then
+if dir=$(cfg-get "${profile}" gnome/autostart/global.d); then
     _copy-autostart global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" gnome/autostart.local.d); then
+if dir=$(cfg-get "${profile}" gnome/autostart/local.d); then
     _copy-autostart local "${dir}"
 fi
 

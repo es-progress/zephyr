@@ -103,8 +103,7 @@ if [[ -n "${cert_created}" ]]; then
     if file=$(cfg-get "${profile}" random/firefox-policies.json); then
         print-status "Install root CA certificate to Firefox..."
         sudo mkdir -p /usr/lib/firefox/distribution
-        sudo cp "${file}" /usr/lib/firefox/distribution/policies.json
-        sudo chmod =0644 /usr/lib/firefox/distribution/policies.json
+        sudo cp --no-preserve=mode,ownership "${file}" /usr/lib/firefox/distribution/policies.json
         print-finish
     fi
 fi

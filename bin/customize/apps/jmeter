@@ -20,10 +20,10 @@ url=
 checksum=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" apps.global.cfg); then
+if file=$(cfg-get "${profile}" apps/global.cfg); then
     cfg-eval "${file}" jmeter
 fi
-if file=$(cfg-get "${profile}" apps.local.cfg); then
+if file=$(cfg-get "${profile}" apps/local.cfg); then
     cfg-eval "${file}" jmeter
 fi
 
