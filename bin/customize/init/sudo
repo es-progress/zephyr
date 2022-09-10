@@ -6,6 +6,38 @@
 ## sudoers   ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy sudoers
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_copy-sudoers() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Customize sudoers [${selector}]..."
+    files=$(find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f)
+    for file in ${files}; do
+        file_name=$(basename "${file}")
+        # Verify new file
+        visudo -c -s "${file}" >/dev/null
+        # Copy file
+        sudo cp "${file}" "/etc/sudoers.d/${file_name}"
+        sudo chmod =0440 "/etc/sudoers.d/${file_name}"
+        # Verify full sudoers
+        sudo visudo -c -s >/dev/null
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -14,16 +46,12 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if file=$(cfg-get "${profile}" init/sudoers); then
-    print-status "Customize sudoers..."
-    # Verify new file
-    visudo -c -s "${file}" >/dev/null
-    # Copy file
-    sudo cp "${file}" /etc/sudoers.d/ESubuntu
-    sudo chmod =0440 /etc/sudoers.d/ESubuntu
-    # Verify full sudoers
-    sudo visudo -c -s >/dev/null
-    print-finish
+
+if dir=$(cfg-get "${profile}" init/sudo/global.d); then
+    _copy-sudoers global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" init/sudo/local.d); then
+    _copy-sudoers local "${dir}"
 fi
 
 exit 0
