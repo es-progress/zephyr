@@ -21,7 +21,7 @@ _copy-bookmarks() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Add bookmarks [${selector}]..."
-    for line in $(cfg-read "${cfg_file}"); do
+    for line in $(cfg-read "${cfg_file}" bookmarks); do
         echo "${line}" >>"${bookmarks_file}"
     done
     print-finish
@@ -46,7 +46,7 @@ if file=$(cfg-get "${profile}" gnome/user-dirs.defaults); then
     sudo cp "${file}" /etc/xdg/
     print-finish
 fi
-if file=$(cfg-get "${profile}" gnome/user-dirs.user); then
+if file=$(cfg-get "${profile}" gnome/user-dirs.dirs); then
     print-status "Copy user dirs..."
     cp "${file}" ~/.config/
     print-finish
@@ -56,11 +56,11 @@ fi
 bookmarks_file=~/.config/gtk-3.0/bookmarks
 echo -n >"${bookmarks_file}"
 
-if file=$(cfg-get "${profile}" gnome/bookmarks.global); then
+if file=$(cfg-get "${profile}" gnome/global.cfg); then
     _copy-bookmarks global "${file}"
 fi
 
-if file=$(cfg-get "${profile}" gnome/bookmarks.local); then
+if file=$(cfg-get "${profile}" gnome/local.cfg); then
     _copy-bookmarks local "${file}"
 fi
 
