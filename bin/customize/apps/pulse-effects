@@ -38,10 +38,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" pulse-effects/global.d); then
+if dir=$(cfg-get "${profile}" apps/pulse-effects/global.d); then
     _copy-presets global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" pulse-effects/local.d); then
+if dir=$(cfg-get "${profile}" apps/pulse-effects/local.d); then
     _copy-presets local "${dir}"
 fi
 

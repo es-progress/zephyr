@@ -83,18 +83,18 @@ sudo modprobe vboxnetflt
 print-finish
 
 vm=()
-if file=$(cfg-get "${profile}" apps.global.cfg); then
+if file=$(cfg-get "${profile}" apps/global.cfg); then
     _config global "${file}"
 fi
-if dir=$(cfg-get "${profile}" vbox/vm.global.d); then
+if dir=$(cfg-get "${profile}" apps/vbox/vm.global.d); then
     _register global "${dir}"
 fi
 
 vm=()
-if file=$(cfg-get "${profile}" apps.local.cfg); then
+if file=$(cfg-get "${profile}" apps/local.cfg); then
     _config local "${file}"
 fi
-if dir=$(cfg-get "${profile}" vbox/vm.local.d); then
+if dir=$(cfg-get "${profile}" apps/vbox/vm.local.d); then
     _register local "${dir}"
 fi
 
