@@ -6,6 +6,30 @@
 ## User groups ##
 #################
 
+###############
+## FUNCTIONS ##
+###############
+
+## Add user to groups
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_add-to-group() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Add user to groups [${selector}]..."
+    for group in $(cfg-read "${file}" groups); do
+        sudo adduser "${USER}" "${group}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -14,13 +38,12 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if file=$(cfg-get "${profile}" init/groups); then
-    print-header "Add user to groups..."
-    groups=$(cfg-read "${file}")
-    for group in ${groups}; do
-        sudo adduser "${USER}" "${group}"
-    done
-    print-finish
+
+if file=$(cfg-get "${profile}" init/global.cfg); then
+    _add-to-group global "${file}"
+fi
+if file=$(cfg-get "${profile}" init/local.cfg); then
+    _add-to-group local "${file}"
 fi
 
 exit 0
