@@ -37,6 +37,7 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+
 if dir=$(cfg-get "${profile}" system/resolved/global.d); then
     _config global "${dir}"
 fi

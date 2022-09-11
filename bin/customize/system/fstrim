@@ -6,6 +6,29 @@
 ## fstrim    ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy fstrim config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Config fstrim [${selector}]..."
+    sudo mkdir -p /etc/systemd/system/fstrim.service.d
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/system/fstrim.service.d/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -14,13 +37,17 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if file=$(cfg-get "${profile}" system/fstrim.conf); then
-    print-status "Config fstrim service..."
-    sudo mkdir -p /etc/systemd/system/fstrim.service.d
-    sudo cp "${file}" /etc/systemd/system/fstrim.service.d/esubuntu.conf
-    sudo chmod 0644 /etc/systemd/system/fstrim.service.d/esubuntu.conf
-    sudo systemctl daemon-reload
-    print-finish
+
+if dir=$(cfg-get "${profile}" system/fstrim/global.d); then
+    _config global "${dir}"
 fi
+if dir=$(cfg-get "${profile}" system/fstrim/local.d); then
+    _config local "${dir}"
+fi
+
+print-status "Restart fstrim service..."
+sudo systemctl daemon-reload
+sudo systemctl restart fstrim.service
+print-finish
 
 exit 0
