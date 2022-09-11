@@ -6,6 +6,34 @@
 ## PHP       ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy PHP config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Config PHP [${selector}]..."
+    files=$(find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f)
+    for file in ${files}; do
+        file_name=$(basename "${file}")
+        sudo cp --no-preserve=mode,ownership "${file}" "/etc/php/${version}/mods-available/${file_name}"
+        [[ -e "/etc/php/${version}/fpm/conf.d/${file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${file_name}" "/etc/php/${version}/fpm/conf.d/${file_name}"
+        [[ -e "/etc/php/${version}/cli/conf.d/${file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${file_name}" "/etc/php/${version}/cli/conf.d/${file_name}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -18,21 +46,19 @@ profile="${1:?"Profile missing"}"
 version=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" services/php/config); then
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        eval "${line}"
-    done
+if file=$(cfg-get "${profile}" services/global.cfg); then
+    cfg-eval "${file}" php
+fi
+if file=$(cfg-get "${profile}" services/local.cfg); then
+    cfg-eval "${file}" php
 fi
 [[ -z "${version}" ]] && exit 1
 
-if file=$(cfg-get "${profile}" services/php/php.ini); then
-    print-status "Config PHP..."
-    sudo cp "${file}" "/etc/php/${version}/mods-available/esubuntu.ini"
-    sudo chmod 0644 "/etc/php/${version}/mods-available/esubuntu.ini"
-    [[ -e "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/fpm/conf.d/99-esubuntu.ini"
-    [[ -e "/etc/php/${version}/cli/conf.d/99-esubuntu.ini" ]] || sudo ln -s "/etc/php/${version}/mods-available/esubuntu.ini" "/etc/php/${version}/cli/conf.d/99-esubuntu.ini"
-    print-finish
+if dir=$(cfg-get "${profile}" services/php/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" services/php/local.d); then
+    _config local "${dir}"
 fi
 
 print-header "Restart services..."
