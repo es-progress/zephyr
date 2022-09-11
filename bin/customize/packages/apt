@@ -6,6 +6,48 @@
 ## apt       ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Parse install packages
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_parse-install-packages() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Parse packages to install [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" apt-install); do
+        IFS=$' \t' read -r package repo <<< "${line}"
+        [[ -n "${repo}" ]] && repos+=("${repo}")
+        packages_install+=("${package}")
+    done
+    print-finish
+}
+
+## Parse remove packages
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_parse-remove-packages() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Parse packages to remove [${selector}]..."
+    for package in $(cfg-read "${cfg_file}" apt-remove); do
+        packages_remove+=("${package}")
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,44 +57,36 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if file=$(cfg-get "${profile}" packages/apt.install); then
-    # Parse packages to install
-    repos=()
-    packages=()
-    apt_packages=$(cfg-read "${file}")
-    for line in ${apt_packages}; do
-        IFS=$' \t' read -r package repo <<< "${line}"
-        [[ -n "${repo}" ]] && repos+=("${repo}")
-        packages+=("${package}")
-    done
-
-    for repo in "${repos[@]}"; do
-        print-header "Add apt repo: ${repo}..."
-        sudo add-apt-repository --yes --no-update "${repo}"
-        print-finish
-    done
-
-    print-header "Update apt cache..."
-    sudo apt-get update
-    print-finish
-
-    print-header "Install packages..."
-    sudo apt-get install --yes --no-install-recommends "${packages[@]}"
-    print-finish
+# Parse packages
+repos=()
+packages_install=()
+packages_remove=()
+if file=$(cfg-get "${profile}" packages/global.cfg); then
+    _parse-install-packages global "${file}"
+    _parse-remove-packages global "${file}"
+fi
+if file=$(cfg-get "${profile}" packages/local.cfg); then
+    _parse-install-packages local "${file}"
+    _parse-remove-packages local "${file}"
 fi
 
-if file=$(cfg-get "${profile}" packages/apt.delete); then
-    # Parse packages to delete
-    packages=()
-    apt_packages=$(cfg-read "${file}")
-    for package in ${apt_packages}; do
-        packages+=("${package}")
-    done
-
-    print-header "Remove packages..."
-    sudo apt-get remove --yes --purge --autoremove "${packages[@]}"
+for repo in "${repos[@]}"; do
+    print-header "Add apt repo: ${repo}..."
+    sudo add-apt-repository --yes --no-update "${repo}"
     print-finish
-fi
+done
+
+print-header "Update apt cache..."
+sudo apt-get update
+print-finish
+
+print-header "Install packages..."
+sudo apt-get install --yes --no-install-recommends "${packages_install[@]}"
+print-finish
+
+print-header "Remove packages..."
+sudo apt-get remove --yes --purge --autoremove "${packages_remove[@]}"
+print-finish
 
 print-header "Upgrade packages..."
 sudo apt-get upgrade --yes

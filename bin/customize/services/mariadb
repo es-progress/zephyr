@@ -6,6 +6,28 @@
 ## MariaDB   ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy MariaDB config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Config MariaDB [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/mysql/conf.d/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -18,11 +40,11 @@ profile="${1:?"Profile missing"}"
 repo=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" services/mariadb/config); then
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        eval "${line}"
-    done
+if file=$(cfg-get "${profile}" services/global.cfg); then
+    cfg-eval "${file}" mariadb
+fi
+if file=$(cfg-get "${profile}" services/local.cfg); then
+    cfg-eval "${file}" mariadb
 fi
 [[ -z "${repo}" ]] && exit 1
 
@@ -38,10 +60,11 @@ print-header "Install MariaDB..."
 sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup python3-pymysql
 print-finish
 
-if file=$(cfg-get "${profile}" services/mariadb/mariadb.cnf); then
-    print-status "Config MariaDB..."
-    sudo cp "${file}" /etc/mysql/conf.d/esubuntu.cnf
-    print-finish
+if dir=$(cfg-get "${profile}" services/mariadb/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" services/mariadb/local.d); then
+    _config local "${dir}"
 fi
 
 print-header "Restart services..."

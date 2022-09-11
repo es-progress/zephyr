@@ -6,19 +6,22 @@
 ## Shell bin ##
 ###############
 
-# Strict mode
-set -euo pipefail
-IFS=$'\n\t'
+###############
+## FUNCTIONS ##
+###############
 
-source "${PROJECT_ROOT}/bootstrap.sh"
-check-not-root || exit 1
+## Install shell binaries
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_install() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
 
-profile="${1:?"Profile missing"}"
-if file=$(cfg-get "${profile}" packages/bin); then
-    print-header "Install vendor shell programs..."
+    print-header "Install vendor shell programs [${selector}]..."
     sudo mkdir -p "${GLOBAL_BIN}"
-    binaries=$(cfg-read "${file}")
-    for line in ${binaries}; do
+    for line in $(cfg-read "${cfg_file}" bin); do
         IFS=$' \t' read -r name url checksum <<< "${line}"
 
         print-header "Install ${name}..."
@@ -49,6 +52,26 @@ if file=$(cfg-get "${profile}" packages/bin); then
         print-finish
     done
     print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+if file=$(cfg-get "${profile}" packages/global.cfg); then
+    _install global "${file}"
+fi
+if file=$(cfg-get "${profile}" packages/local.cfg); then
+    _install local "${file}"
 fi
 
 exit 0

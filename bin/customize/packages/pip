@@ -6,6 +6,28 @@
 ## pip       ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Install pip packages
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_install() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Install pip packages [${selector}]..."
+    pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${cfg_file}"
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -19,10 +41,11 @@ print-header "Install pip3 (python package manager)..."
 sudo apt-get install --yes --no-install-recommends python3-pip
 print-finish
 
-if file=$(cfg-get "${profile}" packages/pip); then
-    print-header "Install pip packages..."
-    pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${file}"
-    print-finish
+if file=$(cfg-get "${profile}" packages/pip.global); then
+    _install global "${file}"
+fi
+if file=$(cfg-get "${profile}" packages/pip.local); then
+    _install local "${file}"
 fi
 
 exit 0

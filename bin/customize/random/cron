@@ -6,6 +6,54 @@
 ## cron jobs ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Setup weekly cronjobs
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_setup-weekly() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Setup weekly cron jobs [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" cron-weekly); do
+        IFS=$' \t' read -r target name <<< "${line}"
+        # eval target to let the shell expand tilde and env vars
+        path=$(eval echo "${target}")
+
+        [[ -f "/etc/cron.weekly/${name}" ]] || sudo ln -s "${path}" "/etc/cron.weekly/${name}"
+    done
+    print-finish
+}
+
+## Setup daily cronjobs
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_setup-daily() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Setup daily cron jobs [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" cron-daily); do
+        IFS=$' \t' read -r target name <<< "${line}"
+        # eval target to let the shell expand tilde and env vars
+        path=$(eval echo "${target}")
+
+        [[ -f "/etc/cron.daily/${name}" ]] || sudo ln -s "${path}" "/etc/cron.daily/${name}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,28 +63,17 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if file=$(cfg-get "${profile}" random/cronjobs); then
-    print-status "Set up weekly cron jobs..."
-    cronjobs=$(cfg-read "${file}" weekly)
-    for line in ${cronjobs}; do
-        IFS=$' \t' read -r target name <<< "${line}"
-        # eval target to let the shell expand tilde and env vars
-        path=$(eval echo "${target}")
-
-        [[ -f "/etc/cron.weekly/${name}" ]] || sudo ln -s "${path}" "/etc/cron.weekly/${name}"
-    done
-    print-finish
-
-    print-status "Set up daily cron jobs..."
-    cronjobs=$(cfg-read "${file}" daily)
-    for line in ${cronjobs}; do
-        IFS=$' \t' read -r target name <<< "${line}"
-        # eval target to let the shell expand tilde and env vars
-        path=$(eval echo "${target}")
-
-        [[ -f "/etc/cron.daily/${name}" ]] || sudo ln -s "${path}" "/etc/cron.daily/${name}"
-    done
-    print-finish
+if file=$(cfg-get "${profile}" random/global.cfg); then
+    _setup-weekly global "${file}"
+    _setup-daily global "${file}"
 fi
+if file=$(cfg-get "${profile}" random/local.cfg); then
+    _setup-weekly local "${file}"
+    _setup-daily local "${file}"
+fi
+
+print-status "Restart cron..."
+sudo systemctl restart cron.service
+print-finish
 
 exit 0

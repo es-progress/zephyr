@@ -6,6 +6,39 @@
 ## Bash goto ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Register goto aliases
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_register() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Register goto alias [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" goto); do
+        IFS=$' \t' read -r alias dir <<< "${line}"
+
+        # eval dir to let the shell expand tilde and env vars
+        path=$(eval echo "${dir}")
+
+        # Register only if not exists
+        if ! goto -x "${alias}" >/dev/null 2>&1; then
+            mkdir -p "${path}"
+            goto -r "${alias}" "${path}"
+        fi
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -20,44 +53,14 @@ if [[ -e ~/.bash/goto ]]; then
 else
     exit 0
 fi
+# Source env vars
+[[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
 
-if file=$(cfg-get "${profile}" random/goto.global); then
-    print-header "Register global goto alias..."
-    gt_alias=$(cfg-read "${file}")
-    for line in ${gt_alias}; do
-        IFS=$' \t' read -r alias dir <<< "${line}"
-
-        # eval dir to let the shell expand tilde and env vars
-        path=$(eval echo "${dir}")
-
-        # Register only if not exists
-        if ! goto -x "${alias}" >/dev/null 2>&1; then
-            goto -r "${alias}" "${path}"
-        fi
-    done
-    print-finish
+if file=$(cfg-get "${profile}" random/global.cfg); then
+    _register global "${file}"
 fi
-
-if file=$(cfg-get "${profile}" random/goto.local); then
-    print-header "Register local goto alias..."
-    gt_alias=$(cfg-read "${file}")
-
-    # Source env vars
-    [[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
-
-    for line in ${gt_alias}; do
-        IFS=$' \t' read -r alias dir <<< "${line}"
-
-        # eval dir to let the shell expand tilde and env vars
-        path=$(eval echo "${dir}")
-
-        # Register only if not exists
-        if ! goto -x "${alias}" >/dev/null 2>&1; then
-            mkdir -p "${path}"
-            goto -r "${alias}" "${path}"
-        fi
-    done
-    print-finish
+if file=$(cfg-get "${profile}" random/local.cfg); then
+    _register local "${file}"
 fi
 
 print-header "Cleanup aliases..."

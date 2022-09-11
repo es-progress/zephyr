@@ -20,11 +20,11 @@ url=
 checksum=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" services/phpmyadmin/config); then
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        eval "${line}"
-    done
+if file=$(cfg-get "${profile}" services/global.cfg); then
+    cfg-eval "${file}" phpmyadmin
+fi
+if file=$(cfg-get "${profile}" services/local.cfg); then
+    cfg-eval "${file}" phpmyadmin
 fi
 [[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1

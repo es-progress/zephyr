@@ -3,25 +3,25 @@
 ## ES-Ubuntu ##
 ##           ##
 ## Config    ##
-## fstrim    ##
+## resolved  ##
 ###############
 
 ###############
 ## FUNCTIONS ##
 ###############
 
-## Copy fstrim config file
+## Copy systemd-resolved config file
 ##
 ## @param   $1  Global/Local
 ## @param   $2  Config dir
-############################
+####################################
 _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Config fstrim [${selector}]..."
-    sudo mkdir -p /etc/systemd/system/fstrim.service.d
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/system/fstrim.service.d/ \;
+    print-header "Config systemd-resolved [${selector}]..."
+    sudo mkdir -p /etc/systemd/resolved.conf.d/
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/resolved.conf.d/ \;
     print-finish
 }
 
@@ -38,16 +38,16 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" system/fstrim/global.d); then
+if dir=$(cfg-get "${profile}" system/resolved/global.d); then
     _config global "${dir}"
 fi
-if dir=$(cfg-get "${profile}" system/fstrim/local.d); then
+if dir=$(cfg-get "${profile}" system/resolved/local.d); then
     _config local "${dir}"
 fi
 
-print-status "Restart fstrim service..."
+print-status "Restart systemd-resolved service..."
 sudo systemctl daemon-reload
-sudo systemctl restart fstrim.service
+sudo systemctl restart systemd-resolved.service
 print-finish
 
 exit 0

@@ -20,7 +20,7 @@ _dirs-create() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Create dirs [${selector}]..."
-    for line in $(cfg-read "${file}" dirs-create); do
+    for line in $(cfg-read "${cfg_file}" dirs-create); do
         IFS=$' \t' read -r path owner <<< "${line}"
         # eval line to let the shell expand tilde and env vars
         path=$(eval echo "${path}")
@@ -41,7 +41,7 @@ _dirs-remove() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Remove dirs [${selector}]..."
-    for line in $(cfg-read "${file}" dirs-remove); do
+    for line in $(cfg-read "${cfg_file}" dirs-remove); do
         # eval line to let the shell expand tilde and env vars
         arg=$(eval echo "${line}")
         sudo rm -rf "${arg}"
