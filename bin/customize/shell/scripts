@@ -15,39 +15,31 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" shell/bin/global); then
-    print-status "Copy global shell scripts..."
+if dir=$(cfg-get "${profile}" shell/bin/global.d); then
+    print-status "Copy shell scripts [global]..."
     sudo mkdir -p "${GLOBAL_BIN}"
-    files=$(find "${dir}" -type f)
-    for file in ${files}; do
-        file_name=$(basename "${file}")
-        sudo cp "${file}" "${GLOBAL_BIN}"
-        sudo chown root:root "${GLOBAL_BIN}/${file_name}"
-        sudo chmod =0755 "${GLOBAL_BIN}/${file_name}"
-    done
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${GLOBAL_BIN}/" \;
+    find "${GLOBAL_BIN}" -type f -not -perm /+x -exec sudo chmod +x {} \;
     print-finish
 fi
-
-if dir=$(cfg-get "${profile}" shell/bin/local); then
-    print-status "Copy local shell scripts..."
+if dir=$(cfg-get "${profile}" shell/bin/local.d); then
+    print-status "Copy shell scripts [local]..."
     mkdir -p "${LOCAL_BIN}"
-    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        cp -a "${file}" "${LOCAL_BIN}"
-    done
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_BIN}/" \;
+    find "${LOCAL_BIN}" -type f -not -perm /+x -exec chmod +x {} \;
     print-finish
 fi
 
-if dir=$(cfg-get "${profile}" shell/lib); then
-    print-status "Copy shell library..."
+if dir=$(cfg-get "${profile}" shell/lib/global.d); then
+    print-status "Copy shell library [global]..."
     sudo mkdir -p "${GLOBAL_LIB}"
-    files=$(find "${dir}" -type f)
-    for file in ${files}; do
-        file_name=$(basename "${file}")
-        sudo cp "${file}" "${GLOBAL_LIB}"
-        sudo chown root:root "${GLOBAL_LIB}/${file_name}"
-        sudo chmod =0644 "${GLOBAL_LIB}/${file_name}"
-    done
+    find -L "${dir}" -type f -exec sudo cp --no-preserve=mode,ownership {} "${GLOBAL_LIB}/" \;
+    print-finish
+fi
+if dir=$(cfg-get "${profile}" shell/lib/local.d); then
+    print-status "Copy shell library [local]..."
+    sudo mkdir -p "${LOCAL_LIB}"
+    find -L "${dir}" -type f -exec cp --no-preserve=mode,ownership {} "${LOCAL_LIB}/" \;
     print-finish
 fi
 
