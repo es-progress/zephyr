@@ -21,7 +21,7 @@ _install() {
 
     print-header "Install vendor shell programs [${selector}]..."
     sudo mkdir -p "${GLOBAL_BIN}"
-    for line in $(cfg-read "${file}" bin); do
+    for line in $(cfg-read "${cfg_file}" bin); do
         IFS=$' \t' read -r name url checksum <<< "${line}"
 
         print-header "Install ${name}..."

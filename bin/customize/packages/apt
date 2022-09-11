@@ -20,7 +20,7 @@ _parse-install-packages() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Parse packages to install [${selector}]..."
-    for line in $(cfg-read "${file}" apt-install); do
+    for line in $(cfg-read "${cfg_file}" apt-install); do
         IFS=$' \t' read -r package repo <<< "${line}"
         [[ -n "${repo}" ]] && repos+=("${repo}")
         packages_install+=("${package}")
@@ -38,7 +38,7 @@ _parse-remove-packages() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Parse packages to remove [${selector}]..."
-    for package in $(cfg-read "${file}" apt-remove); do
+    for package in $(cfg-read "${cfg_file}" apt-remove); do
         packages_remove+=("${package}")
     done
     print-finish

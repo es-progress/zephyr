@@ -20,7 +20,7 @@ _register() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Register goto alias [${selector}]..."
-    for line in $(cfg-read "${file}" goto); do
+    for line in $(cfg-read "${cfg_file}" goto); do
         IFS=$' \t' read -r alias dir <<< "${line}"
 
         # eval dir to let the shell expand tilde and env vars

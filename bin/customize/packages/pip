@@ -20,7 +20,7 @@ _install() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install pip packages [${selector}]..."
-    pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${file}"
+    pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${cfg_file}"
     print-finish
 }
 

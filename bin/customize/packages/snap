@@ -20,7 +20,7 @@ _install() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install snaps [${selector}]..."
-    for line in $(cfg-read "${file}" snap); do
+    for line in $(cfg-read "${cfg_file}" snap); do
         IFS=$' \t' read -r package mode <<< "${line}"
         # Set options
         options=()
