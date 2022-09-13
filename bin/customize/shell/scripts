@@ -18,18 +18,17 @@ profile="${1:?"Profile missing"}"
 if dir=$(cfg-get "${profile}" shell/bin/global.d); then
     print-status "Copy shell scripts [global]..."
     sudo mkdir -p "${GLOBAL_BIN}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${GLOBAL_BIN}/" \;
-    find "${GLOBAL_BIN}" -type f -not -perm /+x -exec sudo chmod +x {} \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${GLOBAL_BIN}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} sudo chmod +x "${GLOBAL_BIN}/{}"
     print-finish
 fi
 if dir=$(cfg-get "${profile}" shell/bin/local.d); then
     print-status "Copy shell scripts [local]..."
     mkdir -p "${LOCAL_BIN}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_BIN}/" \;
-    find "${LOCAL_BIN}" -type f -not -perm /+x -exec chmod +x {} \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_BIN}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x "${LOCAL_BIN}/{}"
     print-finish
 fi
-
 if dir=$(cfg-get "${profile}" shell/lib/global.d); then
     print-status "Copy shell library [global]..."
     sudo mkdir -p "${GLOBAL_LIB}"
