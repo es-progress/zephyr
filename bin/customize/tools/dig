@@ -16,7 +16,7 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 if file=$(cfg-get "${profile}" tools/digrc); then
     print-status "Config dig..."
-    cp "${file}" ~/.digrc
+    cp --no-preserve=mode,ownership "${file}" ~/.digrc
     print-finish
 fi
 
