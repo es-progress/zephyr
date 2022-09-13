@@ -6,8 +6,8 @@ on:
     paths:
       - "bin/**"
 jobs:
-  code-style:
-    name: Check code style (beautysh)
+  format:
+    name: Check format
     runs-on: ubuntu-20.04
     steps:
       - name: Install beautysh

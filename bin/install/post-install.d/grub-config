@@ -6,6 +6,29 @@
 ## GRUB config  ##
 ##################
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy GRUB config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Config GRUB [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/grub.d/ \;
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x /etc/grub.d/{}
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -16,7 +39,7 @@ check-root || exit 1
 profile="${1:?"Profile missing"}"
 shift
 
-print-status "Config GRUB..."
+print-status "Config GRUB [default]..."
 # Timeout
 sed -i '/GRUB_TIMEOUT_STYLE=/ c GRUB_TIMEOUT_STYLE=menu' /etc/default/grub
 sed -i '/GRUB_TIMEOUT=/ c GRUB_TIMEOUT=10' /etc/default/grub
@@ -30,11 +53,13 @@ if ! grep -qs "GRUB_GFXPAYLOAD_LINUX=keep" /etc/default/grub; then
 GRUB_GFXPAYLOAD_LINUX=keep
 EOF
 fi
-# GRUB menu theme (colors)
-if file=$(cfg-get "${profile}" install/grub.cfg.sh); then
-    cp "${file}" /etc/grub.d/50_esubuntu
-    chmod +x /etc/grub.d/50_esubuntu
-fi
 print-finish
+
+if dir=$(cfg-get "${profile}" install/grub/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" install/grub/local.d); then
+    _config local "${dir}"
+fi
 
 exit 0

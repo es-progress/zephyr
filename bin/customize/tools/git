@@ -6,6 +6,35 @@
 ## git       ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Config git
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Config git [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" git); do
+        IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
+        if [[ "${cfg_loc}" == "system" ]]; then
+            sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
+        else
+            git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
+        fi
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,32 +44,11 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if file=$(cfg-get "${profile}" tools/git/config.global); then
-    print-status "Global git config..."
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
-        if [[ "${cfg_loc}" == "system" ]]; then
-            sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-        else
-            git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-        fi
-    done
-    print-finish
+if file=$(cfg-get "${profile}" tools/global.cfg); then
+    _config global "${file}"
 fi
-
-if file=$(cfg-get "${profile}" tools/git/config.local); then
-    print-status "Local git config..."
-    configs=$(cfg-read "${file}")
-    for line in ${configs}; do
-        IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
-        if [[ "${cfg_loc}" == "system" ]]; then
-            sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-        else
-            git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
-        fi
-    done
-    print-finish
+if file=$(cfg-get "${profile}" tools/local.cfg); then
+    _config local "${file}"
 fi
 
 exit 0

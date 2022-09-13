@@ -6,6 +6,50 @@
 ## SSH client ##
 ################
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy SSH config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Config SSH [${selector}]..."
+    mkdir -p ~/.ssh
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.ssh/ \;
+    chmod -R o-rwx ~/.ssh
+    print-finish
+}
+
+## Add known hosts
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_known-hosts() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Setup known hosts [${selector}]..."
+    mkdir -p ~/.ssh
+    touch ~/.ssh/known_hosts
+    for line in $(cfg-read "${cfg_file}" ssh-known); do
+        if ! grep -F -qs "${line}" ~/.ssh/known_hosts; then
+            echo "${line}" >> ~/.ssh/known_hosts
+        fi
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -15,37 +59,17 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if dir=$(cfg-get "${profile}" tools/ssh/global); then
-    print-status "Copy SSH client global config files..."
-    mkdir -p ~/.ssh
-    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        cp -r "${file}" ~/.ssh/
-    done
-    print-finish
+if dir=$(cfg-get "${profile}" tools/ssh/global.d); then
+    _config global "${dir}"
 fi
-
-if dir=$(cfg-get "${profile}" tools/ssh/local); then
-    print-status "Copy SSH client local config files..."
-    mkdir -p ~/.ssh
-    files=$(find "${dir}" -mindepth 1 -maxdepth 1)
-    for file in ${files}; do
-        cp -r "${file}" ~/.ssh/
-    done
-    print-finish
+if dir=$(cfg-get "${profile}" tools/ssh/local.d); then
+    _config local "${dir}"
 fi
-
-if file=$(cfg-get "${profile}" tools/ssh/known_hosts); then
-    print-status "Setup known hosts..."
-    mkdir -p ~/.ssh
-    touch ~/.ssh/known_hosts
-    host_ca=$(cfg-read "${file}")
-    for line in ${host_ca}; do
-        if ! grep -F -qs "${line}" ~/.ssh/known_hosts; then
-            echo "${line}" >> ~/.ssh/known_hosts
-        fi
-    done
-    print-finish
+if file=$(cfg-get "${profile}" tools/global.cfg); then
+    _known-hosts global "${file}"
+fi
+if file=$(cfg-get "${profile}" tools/local.cfg); then
+    _known-hosts local "${file}"
 fi
 
 exit 0

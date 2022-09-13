@@ -6,6 +6,28 @@
 ## nano      ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy nano syntax file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Copy nano syntax files [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /usr/share/nano/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -14,15 +36,11 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if dir=$(cfg-get "${profile}" tools/nano); then
-    print-status "Copy nano syntax files..."
-    files=$(find "${dir}" -type f)
-    for file in ${files}; do
-        filename=$(basename "${file}")
-        sudo cp "${file}" /usr/share/nano/
-        sudo chmod =0644 "/usr/share/nano/${filename}"
-    done
-    print-finish
+if dir=$(cfg-get "${profile}" tools/nano/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" tools/nano/local.d); then
+    _config local "${dir}"
 fi
 
 exit 0
