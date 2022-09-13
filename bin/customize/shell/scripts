@@ -37,7 +37,7 @@ if dir=$(cfg-get "${profile}" shell/lib/global.d); then
 fi
 if dir=$(cfg-get "${profile}" shell/lib/local.d); then
     print-status "Copy shell library [local]..."
-    sudo mkdir -p "${LOCAL_LIB}"
+    mkdir -p "${LOCAL_LIB}"
     find -L "${dir}" -type f -exec cp --no-preserve=mode,ownership {} "${LOCAL_LIB}/" \;
     print-finish
 fi
