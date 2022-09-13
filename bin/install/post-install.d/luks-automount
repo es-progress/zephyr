@@ -44,6 +44,20 @@ _luks-crypttab() {
     fi
 }
 
+## Copy initramfs config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Config initramfs [${selector}]..."
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/initramfs-tools/conf.d/ \;
+    print-finish
+}
+
 ##################
 ## SCRIPT START ##
 ##################
@@ -71,14 +85,16 @@ print-header "Install cryptsetup-initramfs..."
 apt-get install --yes --no-install-recommends cryptsetup-initramfs
 print-finish
 
-print-status "Configure cryptsetup-initramfs..."
-# Keyfile
+print-status "Config cryptsetup-initramfs..."
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${LUKS_KEY_DIR}/*.key" /etc/cryptsetup-initramfs/conf-hook
-# Umask
-if file=$(cfg-get "${profile}" install/initramfs.conf); then
-    cp "${file}" /etc/initramfs-tools/conf.d/esubuntu.conf
-fi
 print-finish
+
+if dir=$(cfg-get "${profile}" install/initramfs/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" install/initramfs/local.d); then
+    _config local "${dir}"
+fi
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
