@@ -6,6 +6,31 @@
 ## mc        ##
 ###############
 
+###############
+## FUNCTIONS ##
+###############
+
+## Copy mc config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-header "Config mc [${selector}]..."
+    sudo mkdir -p /root/.config/mc
+    mkdir -p ~/.config/mc
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /root/.config/mc/ \;
+    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec cp --no-preserve=mode,ownership {} ~/.config/mc/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
 # Strict mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -14,11 +39,11 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
-if dir=$(cfg-get "${profile}" tools/mc); then
-    print-status "Copy mc config files..."
-    sudo cp -r "${dir}" /root/.config/
-    cp -r "${dir}" ~/.config/
-    print-finish
+if dir=$(cfg-get "${profile}" tools/mc/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" tools/mc/local.d); then
+    _config local "${dir}"
 fi
 
 exit 0
