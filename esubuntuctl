@@ -190,7 +190,7 @@ _customize() {
 ##################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 # Set default for PROJECT_ROOT
