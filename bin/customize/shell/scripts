@@ -32,18 +32,14 @@ fi
 if dir=$(cfg-get "${profile}" shell/lib/global.d); then
     print-status "Copy shell library [global]..."
     sudo mkdir -p "${GLOBAL_LIB}"
-    find -L "${dir}" -type f -exec sudo cp --no-preserve=mode,ownership {} "${GLOBAL_LIB}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${GLOBAL_LIB}/" \;
     print-finish
 fi
 if dir=$(cfg-get "${profile}" shell/lib/local.d); then
     print-status "Copy shell library [local]..."
     mkdir -p "${LOCAL_LIB}"
-    find -L "${dir}" -type f -exec cp --no-preserve=mode,ownership {} "${LOCAL_LIB}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_LIB}/" \;
     print-finish
 fi
-
-print-status "Link esubuntuctl..."
-[[ -e "${LOCAL_BIN}/esubuntuctl" ]] || ln -s "${PROJECT_ROOT}/esubuntuctl" "${LOCAL_BIN}/esubuntuctl"
-print-finish
 
 exit 0
