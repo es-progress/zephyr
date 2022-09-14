@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## node      ##
+###############
+
+###############
+## FUNCTIONS ##
+###############
+
+## Install node packages
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_install() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Install node modules [${selector}]..."
+    for line in $(cfg-read "${cfg_file}" node); do
+        IFS=$' \t' read -r package <<< "${line}"
+
+        print-header "Install ${package}..."
+        sudo npm install --global --no-fund "${package}"
+        print-finish
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -euo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+print-header "Install node..."
+sudo snap install node --classic
+print-finish
+
+print-header "Update npm..."
+sudo npm install --global --no-fund npm
+print-finish
+
+if file=$(cfg-get "${profile}" packages/global.cfg); then
+    _install global "${file}"
+fi
+if file=$(cfg-get "${profile}" packages/local.cfg); then
+    _install local "${file}"
+fi
+
+exit 0
