@@ -37,8 +37,7 @@ if ! udevadm info -q property "${disk}" | grep -qs "ID_BUS=usb"; then
 fi
 
 # Unmount
-mount_points=$(lsblk --noheadings -o mountpoint "${disk}")
-for mount_point in ${mount_points}; do
+for mount_point in $(lsblk --noheadings -o mountpoint "${disk}"); do
     if [[ -n "${mount_point}" ]]; then
         print-status "Unmounting ${mount_point}..."
         sudo umount "${mount_point}"

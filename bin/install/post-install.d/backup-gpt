@@ -49,8 +49,7 @@ mkdir -p "${GPT_BACKUP_DIR}"
 # Loop through maps
 for map_file in "${map_files[@]}"; do
     # Loop through disks
-    disks=$(cfg-read "${map_file}" DISKS)
-    for line in ${disks}; do
+    for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-header "Backup partition table for ${name}..."
         _gpt-backup "${device}" "${GPT_BACKUP_DIR}/${name}"

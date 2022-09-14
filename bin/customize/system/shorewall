@@ -46,13 +46,12 @@ if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
 fi
 
 print-status "Template interfaces..."
-interfaces=$(ls -1 /sys/class/net --hide lo)
-for iface in ${interfaces}; do
+while IFS= read -r -d '' iface; do
     # Duplicate template line
     sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
     # Insert actual interface to first occurance
     sudo sed -i "0,/{{ interface }}/ s/{{ interface }}/${iface}/" /etc/shorewall/interfaces
-done
+done < <(find /sys/class/net/ -mindepth 1 -not -path "*/lo" -printf "%f\0" | sort -z)
 # Delete untemplated lines
 sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
 print-finish
