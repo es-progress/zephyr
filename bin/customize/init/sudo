@@ -38,7 +38,7 @@ _copy-sudoers() {
 ##################
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"

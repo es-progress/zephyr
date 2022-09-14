@@ -20,7 +20,7 @@ exec_dir=(
 )
 
 # Strict mode
-set -euo pipefail
+set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bootstrap.sh"
