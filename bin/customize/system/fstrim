@@ -21,7 +21,7 @@ _config() {
 
     print-header "Config fstrim [${selector}]..."
     sudo mkdir -p /etc/systemd/system/fstrim.service.d
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/system/fstrim.service.d/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/system/fstrim.service.d/ \;
     print-finish
 }
 

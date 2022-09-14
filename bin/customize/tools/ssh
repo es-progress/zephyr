@@ -21,7 +21,7 @@ _config() {
 
     print-status "Config SSH [${selector}]..."
     mkdir -p ~/.ssh
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.ssh/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.ssh/ \;
     chmod -R o-rwx ~/.ssh
     print-finish
 }

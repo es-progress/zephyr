@@ -21,7 +21,7 @@ _config() {
 
     print-header "Config systemd-resolved [${selector}]..."
     sudo mkdir -p /etc/systemd/resolved.conf.d/
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/resolved.conf.d/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/resolved.conf.d/ \;
     print-finish
 }
 

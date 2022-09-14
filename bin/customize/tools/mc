@@ -22,8 +22,8 @@ _config() {
     print-header "Config mc [${selector}]..."
     sudo mkdir -p /root/.config/mc
     mkdir -p ~/.config/mc
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /root/.config/mc/ \;
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec cp --no-preserve=mode,ownership {} ~/.config/mc/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /root/.config/mc/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec cp --no-preserve=mode,ownership {} ~/.config/mc/ \;
     print-finish
 }
 
