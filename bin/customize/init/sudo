@@ -20,13 +20,12 @@ _copy-sudoers() {
     local cfg_dir="${2:?"Config dir missing"}"
 
     print-status "Customize sudoers [${selector}]..."
-    files=$(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f)
-    for file in ${files}; do
+    for file in $(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f); do
         file_name=$(basename "${file}")
         # Verify new file
         visudo -c -s "${file}" >/dev/null
         # Copy file
-        sudo cp "${file}" "/etc/sudoers.d/${file_name}"
+        sudo cp --no-preserve=mode,ownership "${file}" "/etc/sudoers.d/${file_name}"
         sudo chmod =0440 "/etc/sudoers.d/${file_name}"
         # Verify full sudoers
         sudo visudo -c -s >/dev/null

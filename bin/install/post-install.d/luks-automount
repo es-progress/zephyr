@@ -111,13 +111,11 @@ for map_file in "${map_files[@]}"; do
     print-finish
 
     # Loop through disks
-    disks=$(cfg-read "${map_file}" DISKS)
-    for line in ${disks}; do
+    for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
 
         # Loop through partitions
-        partitions=$(cfg-read "${map_file}" "PARTITIONS_${name}")
-        for part_line in ${partitions}; do
+        for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
             IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
 
             if [[ "${type}" == luks* ]]; then
