@@ -9,9 +9,9 @@
 # Dirs to run (Name;Path)
 exec_dir=(
     "Initialize;init"
-    "Setup system;system"
     "Install packages;packages"
     "Install services;services"
+    "Setup system;system"
     "Setup shell;shell"
     "Config tools;tools"
     "Config apps;apps"
