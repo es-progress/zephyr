@@ -20,7 +20,7 @@ _config() {
     local cfg_dir="${2:?"Config dir missing"}"
 
     print-status "Copy shorewall config [${selector}]..."
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/shorewall/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/shorewall/ \;
     sudo chmod -R o-rwx /etc/shorewall
     print-finish
 }

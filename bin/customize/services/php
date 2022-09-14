@@ -20,7 +20,7 @@ _config() {
     local cfg_dir="${2:?"Config dir missing"}"
 
     print-header "Config PHP [${selector}]..."
-    files=$(find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f)
+    files=$(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f)
     for file in ${files}; do
         file_name=$(basename "${file}")
         sudo cp --no-preserve=mode,ownership "${file}" "/etc/php/${version}/mods-available/${file_name}"

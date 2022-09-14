@@ -21,7 +21,7 @@ _copy-fonts() {
     local cfg_dir="${2:?"Config dir missing"}"
 
     print-status "Copy fonts [${selector}]..."
-    find "${cfg_dir}" -mindepth 1 -maxdepth 1 -type d -exec sudo cp -r --no-preserve=mode,ownership {} /usr/local/share/fonts \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type d -exec sudo cp -r --no-preserve=mode,ownership {} /usr/local/share/fonts \;
     print-finish
 }
 

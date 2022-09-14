@@ -43,12 +43,12 @@ profile="${1:?"Profile missing"}"
 # Nautilus links
 if file=$(cfg-get "${profile}" gnome/user-dirs.defaults); then
     print-status "Copy default dirs..."
-    sudo cp "${file}" /etc/xdg/
+    sudo cp --no-preserve=mode,ownership "${file}" /etc/xdg/
     print-finish
 fi
 if file=$(cfg-get "${profile}" gnome/user-dirs.dirs); then
     print-status "Copy user dirs..."
-    cp "${file}" ~/.config/
+    cp --no-preserve=mode,ownership "${file}" ~/.config/
     print-finish
 fi
 

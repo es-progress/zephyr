@@ -53,8 +53,8 @@ if [[ -e ~/.bash/goto ]]; then
 else
     exit 0
 fi
-# Source env vars
-[[ -r ~/.bash/env_vars.local ]] && source ~/.bash/env_vars.local
+# Source bashrc for local envvars, config 
+[[ -r ~/.bashrc ]] && source ~/.bashrc
 
 if file=$(cfg-get "${profile}" random/global.cfg); then
     _register global "${file}"

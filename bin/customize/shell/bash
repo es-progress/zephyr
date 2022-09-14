@@ -19,21 +19,21 @@ shopt -s dotglob
 
 if dir=$(cfg-get "${profile}" shell/bash/global.d); then
     print-status "Copy Bash files [global]..."
-    find "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
-    find "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/skel/ \;
-    find "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/skel/ \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
     print-finish
 fi
 
 if dir=$(cfg-get "${profile}" shell/bash/root.d); then
     print-status "Copy Bash files [root]..."
-    find "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
     print-finish
 fi
 
 if dir=$(cfg-get "${profile}" shell/bash/local.d); then
     print-status "Copy Bash files [local]..."
-    find "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
     print-finish
 fi
 

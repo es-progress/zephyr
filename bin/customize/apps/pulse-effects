@@ -21,7 +21,7 @@ _copy-presets() {
 
     print-status "Copy pulse-effect presets [${selector}]..."
     mkdir -p ~/.config/PulseEffects/output/
-    find "${cfg_dir}" -type f -exec cp {} ~/.config/PulseEffects/output/ \;
+    find -L "${cfg_dir}" -type f -exec cp --no-preserve=mode,ownership {} ~/.config/PulseEffects/output/ \;
     print-finish
 }
 
