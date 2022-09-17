@@ -37,7 +37,7 @@ findmnt --verify --tab-file "${tmp_file}" >/dev/null
 print-finish
 
 print-status "Update fstab..."
-sudo cp "${tmp_file}" /etc/fstab
+sudo cp --no-preserve=mode,ownership "${tmp_file}" /etc/fstab
 print-finish
 
 exit 0
