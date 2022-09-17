@@ -53,7 +53,7 @@ if ! grep -qs "\[connectivity\]" /etc/NetworkManager/NetworkManager.conf; then
     print-finish
 fi
 
-print-status "Reload Netplan..."
+print-header "Reload Netplan..."
 sudo netplan apply
 print-finish
 
