@@ -14,6 +14,22 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+root_ca_name=
+root_ca_subject=
+mok_key_name=
+mok_key_subject=
+
+if file=$(cfg-get "${profile}" system/global.cfg); then
+    cfg-eval "${file}" certificate
+fi
+if file=$(cfg-get "${profile}" system/local.cfg); then
+    cfg-eval "${file}" certificate
+fi
+
+[[ -z "${root_ca_name}" ]] && exit 1
+[[ -z "${root_ca_subject}" ]] && exit 1
+[[ -z "${mok_key_name}" ]] && exit 1
+[[ -z "${mok_key_subject}" ]] && exit 1
 
 # Machine Owner Key (MOK)
 #########################
@@ -23,11 +39,11 @@ print-finish
 
 key_created=""
 print-status "Create MOK private key..."
-if sudo test ! -e "/etc/ssl/private/${MOK_KEY_NAME}.key"; then
+if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
     sudo openssl genpkey \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
-        -out "/etc/ssl/private/${MOK_KEY_NAME}.key"
+        -out "/etc/ssl/private/${mok_key_name}.key"
     key_created=1
     print-finish
 else
@@ -35,26 +51,26 @@ else
 fi
 
 print-header "Create MOK certificate..."
-if [[ ! -e "/etc/ssl/certs/${MOK_KEY_NAME}.der" || -n "${key_created}" ]]; then
+if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
     sudo openssl req \
         -new \
         -x509 \
         -sha256 \
-        -key "/etc/ssl/private/${MOK_KEY_NAME}.key" \
+        -key "/etc/ssl/private/${mok_key_name}.key" \
         -outform DER \
-        -out "/etc/ssl/certs/${MOK_KEY_NAME}.der" \
+        -out "/etc/ssl/certs/${mok_key_name}.der" \
         -days 3650 \
-        -subj "${MOK_KEY_SUBJECT}"
+        -subj "${mok_key_subject}"
     print-finish
 else
     print-finish "Certificate found, skipped"
 fi
 
 print-header "Enroll MOK certificate..."
-cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${MOK_KEY_NAME}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
+cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
 # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
 if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
-    sudo mokutil --import "/etc/ssl/certs/${MOK_KEY_NAME}.der"
+    sudo mokutil --import "/etc/ssl/certs/${mok_key_name}.der"
     print-finish
 else
     print-finish "Already enrolled, skipped"
@@ -65,11 +81,11 @@ fi
 key_created=""
 cert_created=""
 print-status "Create ROOT CA private key..."
-if sudo test ! -e "/etc/ssl/private/${ROOT_CA_NAME}.key"; then
+if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     sudo openssl genpkey \
         -algorithm rsa \
         -pkeyopt rsa_keygen_bits:4096 \
-        -out "/etc/ssl/private/${ROOT_CA_NAME}.key"
+        -out "/etc/ssl/private/${root_ca_name}.key"
     key_created=1
     print-finish
 else
@@ -77,17 +93,17 @@ else
 fi
 
 print-status "Create self-signed ROOT CA certificate..."
-if [[ ! -e "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" || -n "${key_created}" ]]; then
+if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_created}" ]]; then
     sudo openssl req \
         -new \
         -x509 \
         -sha512 \
         -extensions v3_ca \
         -addext "keyUsage=critical,keyCertSign,cRLSign" \
-        -key "/etc/ssl/private/${ROOT_CA_NAME}.key" \
-        -out "/usr/local/share/ca-certificates/${ROOT_CA_NAME}.crt" \
+        -key "/etc/ssl/private/${root_ca_name}.key" \
+        -out "/usr/local/share/ca-certificates/${root_ca_name}.crt" \
         -days 3650 \
-        -subj "${ROOT_CA_SUBJECT}"
+        -subj "${root_ca_subject}"
     cert_created=1
     print-finish
 else
