@@ -14,31 +14,48 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+bin_global=
+bin_local=
+lib_global=
+lib_local=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" shell/global.cfg); then
+    cfg-eval "${file}" scripts
+fi
+if file=$(cfg-get "${profile}" shell/local.cfg); then
+    cfg-eval "${file}" scripts
+fi
+
+[[ -z "${bin_global}" ]] && exit 1
+[[ -z "${bin_local}" ]] && exit 1
+[[ -z "${lib_global}" ]] && exit 1
+[[ -z "${lib_local}" ]] && exit 1
 
 if dir=$(cfg-get "${profile}" shell/bin/global.d); then
     print-status "Copy shell scripts [global]..."
-    sudo mkdir -p "${GLOBAL_BIN}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${GLOBAL_BIN}/" \;
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} sudo chmod +x "${GLOBAL_BIN}/{}"
+    sudo mkdir -p "${bin_global}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${bin_global}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} sudo chmod +x "${bin_global}/{}"
     print-finish
 fi
 if dir=$(cfg-get "${profile}" shell/bin/local.d); then
     print-status "Copy shell scripts [local]..."
-    mkdir -p "${LOCAL_BIN}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_BIN}/" \;
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x "${LOCAL_BIN}/{}"
+    mkdir -p "${bin_local}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec cp -r --no-preserve=mode,ownership {} "${bin_local}/" \;
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x "${bin_local}/{}"
     print-finish
 fi
 if dir=$(cfg-get "${profile}" shell/lib/global.d); then
     print-status "Copy shell library [global]..."
-    sudo mkdir -p "${GLOBAL_LIB}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${GLOBAL_LIB}/" \;
+    sudo mkdir -p "${lib_global}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${lib_global}/" \;
     print-finish
 fi
 if dir=$(cfg-get "${profile}" shell/lib/local.d); then
     print-status "Copy shell library [local]..."
-    mkdir -p "${LOCAL_LIB}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} "${LOCAL_LIB}/" \;
+    mkdir -p "${lib_local}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} "${lib_local}/" \;
     print-finish
 fi
 
