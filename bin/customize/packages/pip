@@ -32,7 +32,7 @@ _install() {
 set -eufo pipefail
 IFS=$'\n\t'
 
-source "${PROJECT_ROOT}/bootstrap.sh"
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"

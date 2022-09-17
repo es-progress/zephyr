@@ -219,7 +219,7 @@ if ! printenv PROJECT_ROOT >/dev/null 2>&1; then
     export PROJECT_ROOT
 fi
 
-source "${PROJECT_ROOT}/bootstrap.sh"
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
 
 # Parse options
 cmd="${1:-}"

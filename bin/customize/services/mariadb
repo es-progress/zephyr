@@ -32,7 +32,7 @@ _config() {
 set -eufo pipefail
 IFS=$'\n\t'
 
-source "${PROJECT_ROOT}/bootstrap.sh"
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root || exit 1
 
 # Options
