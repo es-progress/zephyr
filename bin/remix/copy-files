@@ -23,6 +23,8 @@ sudo cp \
     "${PROJECT_ROOT}/esubuntuctl" \
     "${PROJECT_ROOT}/LICENSE" \
     "${PROJECT_ROOT}/README.md" "${target}/"
+# Bin
+sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
 # Profiles
 if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
     sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
