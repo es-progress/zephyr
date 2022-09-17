@@ -56,10 +56,12 @@ if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-status "Configure PHPMyAdmin..."
     secret=$(openssl rand -hex 32)
     sudo cp "${file}" "${target}/public"
-    sudo sed -i "s/{{ pma_user_name }}/${service_user}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s/{{ pma_user_pass }}/${service_pass}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s@{{ destination }}@${web_root}/phpmyadmin@g" "${target}/public/config.inc.php"
+    sudo sed -i \
+        "s/{{ pma_user_name }}/${service_user}/g" \
+        "s/{{ pma_user_pass }}/${service_pass}/g" \
+        "s/{{ blowfish_secret }}/${secret}/g" \
+        "s@{{ destination }}@${target}@g" \
+        "${target}/public/config.inc.php"
     print-finish
 fi
 
