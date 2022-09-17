@@ -15,18 +15,27 @@ check-not-root || exit 1
 
 print-status "Copy files to SquashFS..."
 target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
-# Main files
 sudo mkdir -p "${target}"
-sudo cp "${PROJECT_ROOT}/bootstrap.sh" "${target}/"
-sudo cp "${PROJECT_ROOT}/ESubuntu.cfg" "${target}/"
-sudo cp "${PROJECT_ROOT}/esubuntuctl" "${target}/"
-sudo cp "${PROJECT_ROOT}/LICENSE" "${target}/"
-sudo cp "${PROJECT_ROOT}/README.md" "${target}/"
+# General project files
+sudo cp \
+    "${PROJECT_ROOT}/bootstrap.sh" \
+    "${PROJECT_ROOT}/ESubuntu.cfg" \
+    "${PROJECT_ROOT}/esubuntuctl" \
+    "${PROJECT_ROOT}/LICENSE" \
+    "${PROJECT_ROOT}/README.md" "${target}/"
+# Bin
 sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
 # Profiles
 if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
     sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
 fi
+# Local config
+if [[ -e "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+    sudo cp "${PROJECT_ROOT}/ESubuntu.local.cfg" "${target}/"
+fi
+# Bash completion
+sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
+sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
 # Symlink controller
 sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
 sudo ln -s "${INSTALL_DIR}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
