@@ -38,6 +38,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
+print-header "Install shorewall..."
+sudo apt-get install --yes --no-install-recommends shorewall
+print-finish
+
 if dir=$(cfg-get default system/shorewall/global.d); then
     _config global "${dir}"
 fi
