@@ -49,16 +49,18 @@ if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
     _config local "${dir}"
 fi
 
-print-status "Template interfaces..."
-while IFS= read -r -d '' iface; do
-    # Duplicate template line
-    sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
-    # Insert actual interface to first occurance
-    sudo sed -i "0,/{{ interface }}/ s/{{ interface }}/${iface}/" /etc/shorewall/interfaces
-done < <(find /sys/class/net/ -mindepth 1 -not -path "*/lo" -printf "%f\0" | sort -z)
-# Delete untemplated lines
-sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
-print-finish
+if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
+    print-status "Template interfaces..."
+    while IFS= read -r -d '' iface; do
+        # Duplicate template line
+        sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
+        # Insert actual interface to first occurance
+        sudo sed -i "0,/{{ interface }}/ s/{{ interface }}/${iface}/" /etc/shorewall/interfaces
+    done < <(find /sys/class/net/ -mindepth 1 -not -path "*/lo" -printf "%f\0" | sort -z)
+    # Delete untemplated lines
+    sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
+    print-finish
+fi
 
 print-header "Start shorewall..."
 sudo systemctl enable shorewall.service
