@@ -122,36 +122,12 @@ _burn() {
 ###################
 _self-install() {
     print-status "Install ESubuntu..."
-    sudo rm -rf "${INSTALL_DIR}"
-    sudo mkdir -p "${INSTALL_DIR}"
-    # General project files
-    sudo cp \
-        "${PROJECT_ROOT}/bootstrap.sh" \
-        "${PROJECT_ROOT}/ESubuntu.cfg" \
-        "${PROJECT_ROOT}/esubuntuctl" \
-        "${PROJECT_ROOT}/LICENSE" \
-        "${PROJECT_ROOT}/README.md" "${INSTALL_DIR}/"
-    # Bin
-    sudo cp -r "${PROJECT_ROOT}/bin" "${INSTALL_DIR}/"
-    # Profiles
-    if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
-        sudo cp -Lr "${PROJECT_ROOT}/profiles" "${INSTALL_DIR}/"
-    fi
-    # Local config
-    if [[ -e "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
-        sudo cp "${PROJECT_ROOT}/ESubuntu.local.cfg" "${INSTALL_DIR}/"
-    fi
     # Bash completion
     sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/esubuntuctl
-    sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" /etc/bash_completion.d/esubuntuctl
+    sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/esubuntuctl
     # Symlink controller
     sudo rm -f /usr/local/bin/esubuntuctl
-    sudo ln -s "${INSTALL_DIR}/esubuntuctl" /usr/local/bin/esubuntuctl
-    print-finish
-
-    print-status "Set permissions..."
-    sudo chmod -R u+rw,go+r "${INSTALL_DIR}"
-    sudo find "${INSTALL_DIR}" -executable -exec chmod go+x '{}' \;
+    sudo ln -s "${PROJECT_ROOT}/esubuntuctl" /usr/local/bin/esubuntuctl
     print-finish
 }
 
