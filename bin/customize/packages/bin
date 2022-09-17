@@ -69,11 +69,11 @@ profile="${1:?"Profile missing"}"
 bin_global=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" global.cfg); then
-    cfg-eval "${file}" defaults
+if file=$(cfg-get "${profile}" shell/global.cfg); then
+    cfg-eval "${file}" scripts
 fi
-if file=$(cfg-get "${profile}" local.cfg); then
-    cfg-eval "${file}" defaults
+if file=$(cfg-get "${profile}" shell/local.cfg); then
+    cfg-eval "${file}" scripts
 fi
 
 [[ -z "${bin_global}" ]] && exit 1
