@@ -38,6 +38,8 @@ check-not-root || exit 1
 # Options
 profile="${1:?"Profile missing"}"
 repo=
+admin_name=
+admin_pass=
 
 # Read config file, get options
 if file=$(cfg-get "${profile}" services/global.cfg); then
@@ -47,6 +49,8 @@ if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" mariadb
 fi
 [[ -z "${repo}" ]] && exit 1
+[[ -z "${admin_name}" ]] && exit 1
+[[ -z "${admin_pass}" ]] && exit 1
 
 print-header "Add MariaDB GPG key..."
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
@@ -73,8 +77,8 @@ sudo systemctl restart mariadb.service
 print-finish
 
 print-status "Create DB admin..."
-sudo mysql -e "CREATE USER IF NOT EXISTS '${MARIADB_ADMIN_NAME}'@'localhost' IDENTIFIED BY '${MARIADB_ADMIN_PASS}';"
-sudo mysql -e "GRANT ALL ON *.* TO '${MARIADB_ADMIN_NAME}'@localhost WITH GRANT OPTION;"
+sudo mysql -e "CREATE USER IF NOT EXISTS '${admin_name}'@'localhost' IDENTIFIED BY '${admin_pass}';"
+sudo mysql -e "GRANT ALL ON *.* TO '${admin_name}'@localhost WITH GRANT OPTION;"
 sudo mysql -e "FLUSH PRIVILEGES;"
 print-finish
 
