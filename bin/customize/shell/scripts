@@ -20,11 +20,11 @@ lib_global=
 lib_local=
 
 # Read config file, get options
-if file=$(cfg-get "${profile}" shell/global.cfg); then
-    cfg-eval "${file}" scripts
+if file=$(cfg-get "${profile}" global.cfg); then
+    cfg-eval "${file}" defaults
 fi
-if file=$(cfg-get "${profile}" shell/local.cfg); then
-    cfg-eval "${file}" scripts
+if file=$(cfg-get "${profile}" local.cfg); then
+    cfg-eval "${file}" defaults
 fi
 
 [[ -z "${bin_global}" ]] && exit 1
