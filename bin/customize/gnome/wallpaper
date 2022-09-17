@@ -15,15 +15,27 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+res_global=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" global.cfg); then
+    cfg-eval "${file}" defaults
+fi
+if file=$(cfg-get "${profile}" local.cfg); then
+    cfg-eval "${file}" defaults
+fi
+
+[[ -z "${res_global}" ]] && exit 1
+
 if file=$(cfg-get "${profile}" gnome/wallpaper.jpg); then
     print-status "Copy wallpaper image..."
-    sudo mkdir -p "${GLOBAL_RES}"
-    sudo cp --no-preserve=mode,ownership "${file}" "${GLOBAL_RES}/wallpaper.jpg"
+    sudo mkdir -p "${res_global}"
+    sudo cp --no-preserve=mode,ownership "${file}" "${res_global}/wallpaper.jpg"
     print-finish
 
     print-status "Set wallpaper image..."
-    dconf write /org/gnome/desktop/background/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
-    dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${GLOBAL_RES}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/background/picture-uri "'file://${res_global}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${res_global}/wallpaper.jpg'"
     print-finish
 fi
 
