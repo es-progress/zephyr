@@ -33,7 +33,18 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
 profile="${1:?"Profile missing"}"
+backup_dir=
 shift
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" install/global.cfg); then
+    cfg-eval "${file}" backup-gpt
+fi
+if file=$(cfg-get "${profile}" install/local.cfg); then
+    cfg-eval "${file}" backup-gpt
+fi
+
+[[ -z "${backup_dir}" ]] && exit 1
 
 # Maps
 map_files=()
@@ -44,7 +55,7 @@ for map in "${@}"; do
 done
 [[ -z "${map_files[*]}" ]] && error-exit "No maps found"
 
-mkdir -p "${GPT_BACKUP_DIR}"
+mkdir -p "${backup_dir}"
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
@@ -52,7 +63,7 @@ for map_file in "${map_files[@]}"; do
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-header "Backup partition table for ${name}..."
-        _gpt-backup "${device}" "${GPT_BACKUP_DIR}/${name}"
+        _gpt-backup "${device}" "${backup_dir}/${name}"
         print-finish
     done
 done
