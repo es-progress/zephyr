@@ -20,15 +20,15 @@ _install() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install vendor shell programs [${selector}]..."
-    sudo mkdir -p "${GLOBAL_BIN}"
+    sudo mkdir -p "${bin_global}"
     for line in $(cfg-read "${cfg_file}" bin); do
         IFS=$' \t' read -r name url checksum <<< "${line}"
 
         print-header "Install ${name}..."
 
         # Check if already installed
-        if [[ -e "${GLOBAL_BIN}/${name}" ]]; then
-            hash=$(sha256sum "${GLOBAL_BIN}/${name}" | cut -d" " -f1)
+        if [[ -e "${bin_global}/${name}" ]]; then
+            hash=$(sha256sum "${bin_global}/${name}" | cut -d" " -f1)
             if [[ "${hash}" == "${checksum}" ]]; then
                 print-finish "Already installed, skipped."
                 continue
@@ -46,9 +46,9 @@ _install() {
             fi
         fi
 
-        sudo mv "${tmp_file}" "${GLOBAL_BIN}/${name}"
-        sudo chown root:root "${GLOBAL_BIN}/${name}"
-        sudo chmod =0755 "${GLOBAL_BIN}/${name}"
+        sudo mv "${tmp_file}" "${bin_global}/${name}"
+        sudo chown root:root "${bin_global}/${name}"
+        sudo chmod =0755 "${bin_global}/${name}"
         print-finish
     done
     print-finish
@@ -66,6 +66,17 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+bin_global=
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" shell/global.cfg); then
+    cfg-eval "${file}" scripts
+fi
+if file=$(cfg-get "${profile}" shell/local.cfg); then
+    cfg-eval "${file}" scripts
+fi
+
+[[ -z "${bin_global}" ]] && exit 1
 
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"

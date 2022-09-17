@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy files to SquashFS..."
-target="${PATH_EXTRACT}/squashfs-root/${GLOBAL_RES}"
+target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
 # Main files
 sudo mkdir -p "${target}"
 sudo cp "${PROJECT_ROOT}/bootstrap.sh" "${target}/"
@@ -28,8 +28,8 @@ if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
     sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
 fi
 # Symlink controller
-sudo rm -f "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
-sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
+sudo ln -s "${INSTALL_DIR}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
 print-finish
 
 print-status "Set permissions..."

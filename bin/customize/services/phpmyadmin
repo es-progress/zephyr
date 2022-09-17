@@ -18,17 +18,25 @@ profile="${1:?"Profile missing"}"
 version=
 url=
 checksum=
+service_user=
+service_pass=
+web_root=
 
 # Read config file, get options
 if file=$(cfg-get "${profile}" services/global.cfg); then
     cfg-eval "${file}" phpmyadmin
+    cfg-eval "${file}" apache
 fi
 if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" phpmyadmin
+    cfg-eval "${file}" apache
 fi
 [[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
+[[ -z "${service_user}" ]] && exit 1
+[[ -z "${service_pass}" ]] && exit 1
+[[ -z "${web_root}" ]] && exit 1
 
 print-header "Install PHPMyAdmin..."
 # Download tar
@@ -37,7 +45,7 @@ curl --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Unpack archive
-target="${WEB_ROOT}/phpmyadmin"
+target="${web_root}/phpmyadmin"
 sudo rm -rf "${target}"
 sudo mkdir -p "${target}"
 sudo tar -C "${target}" -xf "${tmp_file}"
@@ -48,10 +56,12 @@ if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-status "Configure PHPMyAdmin..."
     secret=$(openssl rand -hex 32)
     sudo cp "${file}" "${target}/public"
-    sudo sed -i "s/{{ pma_user_name }}/${PHPMYADMIN_CONTROL_NAME}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s/{{ pma_user_pass }}/${PHPMYADMIN_CONTROL_PASS}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s/{{ blowfish_secret }}/${secret}/g" "${target}/public/config.inc.php"
-    sudo sed -i "s@{{ destination }}@${WEB_ROOT}/phpmyadmin@g" "${target}/public/config.inc.php"
+    sudo sed -i \
+        "s/{{ pma_user_name }}/${service_user}/g" \
+        "s/{{ pma_user_pass }}/${service_pass}/g" \
+        "s/{{ blowfish_secret }}/${secret}/g" \
+        "s@{{ destination }}@${target}@g" \
+        "${target}/public/config.inc.php"
     print-finish
 fi
 
@@ -67,8 +77,8 @@ sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish
 
 print-status "Create PHPMyAdmin control user..."
-sudo mysql -e "CREATE USER IF NOT EXISTS '${PHPMYADMIN_CONTROL_NAME}'@'localhost' IDENTIFIED BY '${PHPMYADMIN_CONTROL_PASS}';"
-sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${PHPMYADMIN_CONTROL_NAME}'@localhost;"
+sudo mysql -e "CREATE USER IF NOT EXISTS '${service_user}'@'localhost' IDENTIFIED BY '${service_pass}';"
+sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${service_user}'@localhost;"
 sudo mysql -e "FLUSH PRIVILEGES;"
 print-finish
 
