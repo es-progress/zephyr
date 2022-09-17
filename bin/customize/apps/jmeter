@@ -18,6 +18,7 @@ profile="${1:?"Profile missing"}"
 version=
 url=
 checksum=
+install_dir=
 
 # Read config file, get options
 if file=$(cfg-get "${profile}" apps/global.cfg); then
@@ -30,19 +31,20 @@ fi
 [[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
+[[ -z "${install_dir}" ]] && exit 1
 
 print-header "Install jmeter..."
 # Download tar
 tmp_file=$(mktemp)
+tmp_dir=$(mktemp -d)
 curl --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha512sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Unpack archive
-sudo tar -C /opt -xf "${tmp_file}"
-sudo rm -rf /opt/jmeter
-sudo mv "/opt/apache-jmeter-${version}" /opt/jmeter
-sudo chown root:users -R /opt/jmeter
-sudo chmod g+w -R /opt/jmeter
+tar -C "${tmp_dir}" -xf "${tmp_file}"
+sudo rm -rf "${install_dir}"
+sudo cp -r "${tmp_dir}/apache-jmeter-${version}" "${install_dir}"
+rm -rf "${tmp_file}" "${tmp_dir}"
 print-finish
 
 exit 0
