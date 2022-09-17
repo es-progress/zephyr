@@ -20,7 +20,6 @@ sudo mkdir -p "${target}"
 sudo cp \
     "${PROJECT_ROOT}/bootstrap.sh" \
     "${PROJECT_ROOT}/ESubuntu.cfg" \
-    "${PROJECT_ROOT}/esubuntuctl" \
     "${PROJECT_ROOT}/LICENSE" \
     "${PROJECT_ROOT}/README.md" "${target}/"
 # Bin
@@ -38,7 +37,7 @@ sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH
 sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
 # Symlink controller
 sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
-sudo ln -s "${INSTALL_DIR}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
+sudo ln -s "${INSTALL_DIR}/bin/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
 print-finish
 
 print-status "Set permissions..."
