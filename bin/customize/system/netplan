@@ -45,6 +45,14 @@ if dir=$(cfg-get "${profile}" system/netplan/local.d); then
     _config local "${dir}"
 fi
 
+if ! grep -qs "\[connectivity\]" /etc/NetworkManager/NetworkManager.conf; then
+    print-status "Switch off connectivity checking..."
+    echo "[connectivity]" | sudo tee -a /etc/NetworkManager/NetworkManager.conf >/dev/null
+    echo "enabled=false" | sudo tee -a /etc/NetworkManager/NetworkManager.conf >/dev/null
+    sudo systemctl restart NetworkManager.service
+    print-finish
+fi
+
 print-status "Reload Netplan..."
 sudo netplan apply
 print-finish
