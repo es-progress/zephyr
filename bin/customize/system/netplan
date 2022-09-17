@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Netplan   ##
+###############
+
+###############
+## FUNCTIONS ##
+###############
+
+## Copy Netplan config file
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+####################################
+_config() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_dir="${2:?"Config dir missing"}"
+
+    print-status "Config Netplan [${selector}]..."
+    sudo mkdir -p /etc/netplan/
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/netplan/ \;
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bootstrap.sh"
+check-not-root || exit 1
+
+profile="${1:?"Profile missing"}"
+
+if dir=$(cfg-get "${profile}" system/netplan/global.d); then
+    _config global "${dir}"
+fi
+if dir=$(cfg-get "${profile}" system/netplan/local.d); then
+    _config local "${dir}"
+fi
+
+if ! grep -qs "\[connectivity\]" /etc/NetworkManager/NetworkManager.conf; then
+    print-status "Switch off connectivity checking..."
+    echo "[connectivity]" | sudo tee -a /etc/NetworkManager/NetworkManager.conf >/dev/null
+    echo "enabled=false" | sudo tee -a /etc/NetworkManager/NetworkManager.conf >/dev/null
+    sudo systemctl restart NetworkManager.service
+    print-finish
+fi
+
+print-header "Reload Netplan..."
+sudo netplan apply
+print-finish
+
+exit 0

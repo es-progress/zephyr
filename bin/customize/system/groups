@@ -39,10 +39,10 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 
-if file=$(cfg-get "${profile}" init/global.cfg); then
+if file=$(cfg-get "${profile}" system/global.cfg); then
     _add-to-group global "${file}"
 fi
-if file=$(cfg-get "${profile}" init/local.cfg); then
+if file=$(cfg-get "${profile}" system/local.cfg); then
     _add-to-group local "${file}"
 fi
 
