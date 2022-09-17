@@ -58,18 +58,25 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
+web_root=
+def_virt_host_subject=
 
 if file=$(cfg-get "${profile}" services/global.cfg); then
     _install-module global "${file}"
+    cfg-eval "${file}" apache
 fi
 if file=$(cfg-get "${profile}" services/local.cfg); then
     _install-module local "${file}"
+    cfg-eval "${file}" apache
 fi
 
+[[ -z "${web_root}" ]] && exit 1
+[[ -z "${def_virt_host_subject}" ]] && exit 1
+
 print-status "Create default web dirs..."
-sudo mkdir -p "${WEB_ROOT}/default"
-sudo touch "${WEB_ROOT}/default/index.html"
-sudo chown -R "${USER}:www-data" "${WEB_ROOT}"
+sudo mkdir -p "${web_root}/default"
+sudo touch "${web_root}/default/index.html"
+sudo chown -R "${USER}:www-data" "${web_root}"
 print-finish
 
 if dir=$(cfg-get "${profile}" services/apache/config.global.d); then
@@ -90,7 +97,7 @@ if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -
         -nodes \
         -keyout /etc/ssl/private/ESubuntu_Apache_default_vhost.key \
         -out "${csr}" \
-        -subj "${DEF_VIRT_HOST_SUBJECT}"
+        -subj "${def_virt_host_subject}"
 
     # Sign CSR --> create certificate
     tmp_config=$(sudo mktemp)
@@ -114,7 +121,7 @@ if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
     [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
     sudo cp "${file}" /etc/apache2/sites-available/000-default.conf
     sudo sed -i \
-        -e "s@{{ doc_root }}@${WEB_ROOT}/default@g" \
+        -e "s@{{ doc_root }}@${web_root}/default@g" \
         -e "s@{{ ROOT_CA_NAME }}@${ROOT_CA_NAME}@g" \
         /etc/apache2/sites-available/000-default.conf
     sudo a2ensite 000-default.conf
