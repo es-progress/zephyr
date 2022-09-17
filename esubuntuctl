@@ -21,6 +21,7 @@ _usage-main() {
     command+=("partition:Partition disk")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
+    command+=("self-install:Install ES-Ubuntu")
     command+=("help:Display help")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
@@ -75,16 +76,21 @@ _usage() {
             options+=("PROFILE:Customization profile to use")
             options+=("MODULE:Module to update (eg. packages, bash)")
             ;;
+        self-install)
+            usage="self-install"
+            ;;
         *) _usage-main ;;
     esac
 
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e "  esubuntuctl ${usage}\n"
-    echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
-    for line in "${options[@]}"; do
-        IFS=":" read -r name help <<<"${line}"
-        printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
-    done
+    if [[ -n "${options[*]}" ]]; then
+        echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
+        for line in "${options[@]}"; do
+            IFS=":" read -r name help <<<"${line}"
+            printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
+        done
+    fi
 }
 
 ## Create ISO
@@ -110,6 +116,40 @@ _burn() {
         exit 1
     fi
     "${PATH_SCRIPTS_REMIX}/burn" "${1}" "${2:-}"
+}
+
+## Install ESubuntu
+###################
+_self-install() {
+    print-status "Install ESubuntu..."
+    sudo rm -rf "${INSTALL_DIR}"
+    sudo mkdir -p "${INSTALL_DIR}"
+    # General project files
+    sudo cp \
+        "${PROJECT_ROOT}/bootstrap.sh" \
+        "${PROJECT_ROOT}/ESubuntu.cfg" \
+        "${PROJECT_ROOT}/esubuntuctl" \
+        "${PROJECT_ROOT}/LICENSE" \
+        "${PROJECT_ROOT}/README.md" "${INSTALL_DIR}/"
+    # Bin
+    sudo cp -r "${PROJECT_ROOT}/bin" "${INSTALL_DIR}/"
+    # Profiles
+    if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
+        sudo cp -Lr "${PROJECT_ROOT}/profiles" "${INSTALL_DIR}/"
+    fi
+    # Local config
+    if [[ -e "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+        sudo cp "${PROJECT_ROOT}/ESubuntu.local.cfg" "${INSTALL_DIR}/"
+    fi
+    # Symlink controller
+    sudo rm -f /usr/local/bin/esubuntuctl
+    sudo ln -s "${INSTALL_DIR}/esubuntuctl" /usr/local/bin/esubuntuctl
+    print-finish
+
+    print-status "Set permissions..."
+    sudo chmod -R u+rw,go+r "${INSTALL_DIR}"
+    sudo find "${INSTALL_DIR}" -executable -exec chmod go+x '{}' \;
+    print-finish
 }
 
 ## Partition disks
@@ -208,7 +248,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|partition|post-install|customize) "_${cmd}" "${@}" ;;
+    create|burn|partition|post-install|customize|self-install) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
