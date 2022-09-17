@@ -27,6 +27,6 @@ source "${PROJECT_ROOT}/bin/library.sh"
 # Defaults
 source "${PROJECT_ROOT}/ESubuntu.cfg"
 # Local configs
-if [[ -r "${PROJECT_ROOT}/ESubuntu.cfg.local" ]]; then
-    source "${PROJECT_ROOT}/ESubuntu.cfg.local"
+if [[ -r "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+    source "${PROJECT_ROOT}/ESubuntu.local.cfg"
 fi
