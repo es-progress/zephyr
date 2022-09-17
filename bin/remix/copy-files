@@ -10,7 +10,7 @@
 set -eufo pipefail
 IFS=$'\n\t'
 
-source "${PROJECT_ROOT}/bootstrap.sh"
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root || exit 1
 
 print-status "Copy files to SquashFS..."
@@ -18,9 +18,7 @@ target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
 sudo mkdir -p "${target}"
 # General project files
 sudo cp \
-    "${PROJECT_ROOT}/bootstrap.sh" \
     "${PROJECT_ROOT}/ESubuntu.cfg" \
-    "${PROJECT_ROOT}/esubuntuctl" \
     "${PROJECT_ROOT}/LICENSE" \
     "${PROJECT_ROOT}/README.md" "${target}/"
 # Bin
@@ -38,7 +36,7 @@ sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH
 sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
 # Symlink controller
 sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
-sudo ln -s "${INSTALL_DIR}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
+sudo ln -s "${INSTALL_DIR}/bin/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
 print-finish
 
 print-status "Set permissions..."

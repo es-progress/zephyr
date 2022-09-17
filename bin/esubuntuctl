@@ -127,7 +127,7 @@ _self-install() {
     sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/esubuntuctl
     # Symlink controller
     sudo rm -f /usr/local/bin/esubuntuctl
-    sudo ln -s "${PROJECT_ROOT}/esubuntuctl" /usr/local/bin/esubuntuctl
+    sudo ln -s "${PROJECT_ROOT}/bin/esubuntuctl" /usr/local/bin/esubuntuctl
     print-finish
 }
 
@@ -215,11 +215,11 @@ IFS=$'\n\t'
 # Set default for PROJECT_ROOT
 if ! printenv PROJECT_ROOT >/dev/null 2>&1; then
     path_self=$(realpath "${0}")
-    PROJECT_ROOT="$(cd "$(dirname "${path_self}")" >/dev/null 2>&1 && pwd)"
+    PROJECT_ROOT=$(cd "$(dirname "$(dirname "${path_self}")")" >/dev/null 2>&1 && pwd)
     export PROJECT_ROOT
 fi
 
-source "${PROJECT_ROOT}/bootstrap.sh"
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
 
 # Parse options
 cmd="${1:-}"
