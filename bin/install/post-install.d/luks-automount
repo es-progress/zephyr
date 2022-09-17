@@ -70,7 +70,20 @@ source "${PROJECT_ROOT}/bootstrap.sh"
 check-root || exit 1
 
 profile="${1:?"Profile missing"}"
+key_dir=
+key_slot=
 shift
+
+# Read config file, get options
+if file=$(cfg-get "${profile}" install/global.cfg); then
+    cfg-eval "${file}" luks
+fi
+if file=$(cfg-get "${profile}" install/local.cfg); then
+    cfg-eval "${file}" luks
+fi
+
+[[ -z "${key_dir}" ]] && exit 1
+[[ -z "${key_slot}" ]] && exit 1
 
 # Maps
 map_files=()
@@ -86,7 +99,7 @@ apt-get install --yes --no-install-recommends cryptsetup-initramfs
 print-finish
 
 print-status "Config cryptsetup-initramfs..."
-sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${LUKS_KEY_DIR}/*.key" /etc/cryptsetup-initramfs/conf-hook
+sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
 print-finish
 
 if dir=$(cfg-get "${profile}" install/initramfs/global.d); then
@@ -101,13 +114,13 @@ for map_file in "${map_files[@]}"; do
     partition=$(basename "${map_file}")
 
     print-header "Create key file for ${partition}..."
-    mkdir -p "${LUKS_KEY_DIR}"
-    dd if=/dev/urandom of="${LUKS_KEY_DIR}/${partition}.key" bs=4096 count=1
+    mkdir -p "${key_dir}"
+    dd if=/dev/urandom of="${key_dir}/${partition}.key" bs=4096 count=1
     print-finish
 
     print-status "Secure key-file for ${partition}..."
-    chmod o-rwx "${LUKS_KEY_DIR}"
-    chmod go-rwx "${LUKS_KEY_DIR}/${partition}.key"
+    chmod o-rwx "${key_dir}"
+    chmod go-rwx "${key_dir}/${partition}.key"
     print-finish
 
     # Loop through disks
@@ -120,11 +133,11 @@ for map_file in "${map_files[@]}"; do
 
             if [[ "${type}" == luks* ]]; then
                 print-header "Add machine key to LUKS ${label}..."
-                _luks-add-key "${device}${part_prefix}${number}" "${LUKS_KEY_DIR}/${partition}.key" "${LUKS_KEY_SLOT}"
+                _luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${partition}.key" "${key_slot}"
                 print-finish
 
                 print-status "Update crypttab with ${label}..."
-                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${LUKS_KEY_DIR}/${partition}.key"
+                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${partition}.key"
                 print-finish
             fi
         done
