@@ -18,7 +18,6 @@ target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
 sudo mkdir -p "${target}"
 # General project files
 sudo cp \
-    "${PROJECT_ROOT}/bootstrap.sh" \
     "${PROJECT_ROOT}/ESubuntu.cfg" \
     "${PROJECT_ROOT}/LICENSE" \
     "${PROJECT_ROOT}/README.md" "${target}/"
