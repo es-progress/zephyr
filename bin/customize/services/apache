@@ -59,6 +59,7 @@ check-not-root || exit 1
 
 profile="${1:?"Profile missing"}"
 web_root=
+def_virt_host_name=
 def_virt_host_subject=
 root_ca_name=
 
@@ -79,6 +80,7 @@ fi
 
 [[ -z "${web_root}" ]] && exit 1
 [[ -z "${def_virt_host_subject}" ]] && exit 1
+[[ -z "${def_virt_host_name}" ]] && exit 1
 [[ -z "${root_ca_name}" ]] && exit 1
 
 print-status "Create default web dirs..."
@@ -95,7 +97,7 @@ if dir=$(cfg-get "${profile}" services/apache/config.local.d); then
 fi
 
 print-header "Create certificate for default vhost..."
-if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -e "/etc/ssl/certs/ESubuntu_Apache_default_vhost.pem" ]]; then
+if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl/certs/${def_virt_host_name}.pem"; then
     # Create CSR
     csr=$(sudo mktemp)
     sudo openssl req \
@@ -103,7 +105,7 @@ if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -
         -sha512 \
         -newkey rsa:4096 \
         -nodes \
-        -keyout /etc/ssl/private/ESubuntu_Apache_default_vhost.key \
+        -keyout "/etc/ssl/private/${def_virt_host_name}.key" \
         -out "${csr}" \
         -subj "${def_virt_host_subject}"
 
@@ -117,7 +119,7 @@ if sudo test ! -e "/etc/ssl/private/ESubuntu_Apache_default_vhost.key" || [[ ! -
         -CA "/usr/local/share/ca-certificates/${root_ca_name}.crt" \
         -CAcreateserial \
         -in "${csr}" \
-        -out /etc/ssl/certs/ESubuntu_Apache_default_vhost.pem \
+        -out "/etc/ssl/certs/${def_virt_host_name}.pem" \
         -days 365
     print-finish
 else
@@ -127,10 +129,11 @@ fi
 if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
     print-header "Setup default vhosts..."
     [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
-    sudo cp "${file}" /etc/apache2/sites-available/000-default.conf
+    sudo cp --no-preserve=mode,ownership "${file}" /etc/apache2/sites-available/000-default.conf
     sudo sed -i \
         -e "s@{{ doc_root }}@${web_root}/default@g" \
         -e "s@{{ ROOT_CA_NAME }}@${root_ca_name}@g" \
+        -e "s@{{ DEF_VIRT_HOST_NAME }}@${def_virt_host_name}@g" \
         /etc/apache2/sites-available/000-default.conf
     sudo a2ensite 000-default.conf
     print-finish
