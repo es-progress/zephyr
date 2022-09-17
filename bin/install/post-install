@@ -34,7 +34,7 @@ print-finish
 
 # Run Post-install steps
 for step in $(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n"); do
-    chroot "${target}" env PROJECT_ROOT="${GLOBAL_RES}" "${GLOBAL_RES}/bin/install/post-install.d/${step}" "${profile}" "${@}"
+    chroot "${target}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}"
 done
 
 print-header "Update initramfs..."
