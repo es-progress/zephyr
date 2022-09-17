@@ -28,8 +28,8 @@ if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
     sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
 fi
 # Symlink controller
-sudo rm -f "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
-sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/${GLOBAL_BIN}/esubuntuctl"
+sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
+sudo ln -s "${GLOBAL_RES}/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
 print-finish
 
 print-status "Set permissions..."
