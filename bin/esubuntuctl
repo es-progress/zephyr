@@ -121,11 +121,12 @@ _burn() {
 ## Install ESubuntu
 ###################
 _self-install() {
-    print-status "Install ESubuntu..."
-    # Bash completion
+    print-status "Setup Bash completion..."
     sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/esubuntuctl
     sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/esubuntuctl
-    # Symlink controller
+    print-finish
+
+    print-status "Symlink controller..."
     sudo rm -f /usr/local/bin/esubuntuctl
     sudo ln -s "${PROJECT_ROOT}/bin/esubuntuctl" /usr/local/bin/esubuntuctl
     print-finish
