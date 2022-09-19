@@ -67,7 +67,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-root || exit 1
+check-root
 
 profile="${1:?"Profile missing"}"
 key_dir=
