@@ -56,7 +56,7 @@ if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
         sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
         # Insert actual interface to first occurance
         sudo sed -i "0,/{{ interface }}/ s/{{ interface }}/${iface}/" /etc/shorewall/interfaces
-    done < <(find /sys/class/net/ -mindepth 1 -not -path "*/lo" -printf "%f\0" | sort -z)
+    done < <(find /sys/class/net/ -mindepth 1 -not -path "*/lo" -printf "%f\0" | sort -z || true)
     # Delete untemplated lines
     sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
     print-finish

@@ -25,7 +25,7 @@ _config() {
         sudo cp --no-preserve=mode,ownership "${file}" "/etc/php/${version}/mods-available/${file_name}"
         [[ -e "/etc/php/${version}/fpm/conf.d/${file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${file_name}" "/etc/php/${version}/fpm/conf.d/${file_name}"
         [[ -e "/etc/php/${version}/cli/conf.d/${file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${file_name}" "/etc/php/${version}/cli/conf.d/${file_name}"
-    done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0)
+    done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 || true)
     print-finish
 }
 
