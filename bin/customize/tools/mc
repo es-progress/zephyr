@@ -39,9 +39,12 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?"Profile missing"}"
+
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/mc/global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/mc/local.d); then
     _config local "${dir}"
 fi

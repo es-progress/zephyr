@@ -40,9 +40,11 @@ check-not-root
 profile="${1:?"Profile missing"}"
 version=
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/global.cfg); then
     cfg-eval "${file}" dash-to-panel
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/local.cfg); then
     cfg-eval "${file}" dash-to-panel
 fi
@@ -61,9 +63,11 @@ gnome-extensions enable dash-to-panel@jderose9.github.com
 busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s "Meta.restart('Restarting...')"
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/dash-to-panel/global.dconf); then
     _config global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/dash-to-panel/local.dconf); then
     _config local "${file}"
 fi

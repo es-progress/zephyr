@@ -20,6 +20,7 @@ _register() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Register goto alias [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" goto); do
         IFS=$' \t' read -r alias dir <<< "${line}"
 
@@ -58,9 +59,11 @@ fi
 # shellcheck disable=SC1090
 [[ -r ~/.bashrc ]] && source ~/.bashrc
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" random/global.cfg); then
     _register global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" random/local.cfg); then
     _register local "${file}"
 fi

@@ -38,9 +38,11 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" gnome/fonts/global.d); then
     _copy-fonts global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" gnome/fonts/local.d); then
     _copy-fonts local "${dir}"
 fi

@@ -20,6 +20,7 @@ _install() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install snaps [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" snap); do
         IFS=$' \t' read -r package mode <<< "${line}"
         # Set options
@@ -52,9 +53,11 @@ sudo apt-get update
 sudo apt-get install --yes --no-install-recommends snapd
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/local.cfg); then
     _install local "${file}"
 fi

@@ -16,6 +16,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/wallpaper.jpg); then
     print-status "Copy wallpaper image..."
     sudo mkdir -p "${INSTALL_DIR}"

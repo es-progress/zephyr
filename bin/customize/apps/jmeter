@@ -21,9 +21,11 @@ checksum=
 install_dir=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/global.cfg); then
     cfg-eval "${file}" jmeter
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/local.cfg); then
     cfg-eval "${file}" jmeter
 fi

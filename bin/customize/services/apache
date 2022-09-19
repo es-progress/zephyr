@@ -21,6 +21,7 @@ _install-module() {
     local modules=()
 
     print-header "Install Apache modules [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for module in $(cfg-read "${cfg_file}" apache-module); do
         modules+=("${module}")
     done
@@ -60,16 +61,20 @@ def_virt_host_name=
 def_virt_host_subject=
 root_ca_name=
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     cfg-eval "${file}" certificate
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/local.cfg); then
     cfg-eval "${file}" certificate
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/global.cfg); then
     _install-module global "${file}"
     cfg-eval "${file}" apache
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/local.cfg); then
     _install-module local "${file}"
     cfg-eval "${file}" apache
@@ -86,9 +91,11 @@ sudo touch "${web_root}/default/index.html"
 sudo chown -R "${USER}:www-data" "${web_root}"
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/apache/config.global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/apache/config.local.d); then
     _config local "${dir}"
 fi
@@ -123,6 +130,7 @@ else
     print-finish "Key found, skipped"
 fi
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
     print-header "Setup default vhosts..."
     [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf

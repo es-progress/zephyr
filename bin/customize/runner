@@ -27,6 +27,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 # Parse options
 profile="${1?:"Profile missing"}"
 shift
+# shellcheck disable=SC2311
 modules=$(implode "|" "${@}")
 filter=()
 [[ -n "${modules}" ]] && filter=("--regex=^(${modules})\$")

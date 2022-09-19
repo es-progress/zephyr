@@ -19,9 +19,11 @@ url=
 checksum=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/global.cfg); then
     cfg-eval "${file}" gh
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" gh
 fi

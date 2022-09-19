@@ -45,17 +45,21 @@ profile="${1:?"Profile missing"}"
 version=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/global.cfg); then
     cfg-eval "${file}" php
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" php
 fi
 [[ -z "${version}" ]] && exit 1
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/php/global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/php/local.d); then
     _config local "${dir}"
 fi

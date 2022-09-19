@@ -46,9 +46,11 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/sudo/global.d); then
     _copy-sudoers global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/sudo/local.d); then
     _copy-sudoers local "${dir}"
 fi

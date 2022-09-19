@@ -19,9 +19,11 @@ root_ca_subject=
 mok_key_name=
 mok_key_subject=
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     cfg-eval "${file}" certificate
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/local.cfg); then
     cfg-eval "${file}" certificate
 fi
@@ -116,6 +118,7 @@ if [[ -n "${cert_created}" ]]; then
     sudo update-ca-certificates
     print-finish
 
+    # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" system/firefox-policies.json); then
         print-status "Install root CA certificate to Firefox..."
         sudo mkdir -p /usr/lib/firefox/distribution

@@ -42,9 +42,11 @@ print-header "Install shorewall..."
 sudo apt-get install --yes --no-install-recommends shorewall
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get default system/shorewall/global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
     _config local "${dir}"
 fi

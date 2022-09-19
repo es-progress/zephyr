@@ -21,6 +21,7 @@ _config() {
 
     print-status "Config VirtualBox [${selector}]..."
     # vboxmanage configs
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" virtualbox-vboxmanage); do
         IFS=$' \t' read -r cfg_name cfg_value <<< "${line}"
         [[ -z "${cfg_name}" || -z "${cfg_value}" ]] && continue
@@ -83,17 +84,21 @@ sudo modprobe vboxnetflt
 print-finish
 
 vm=()
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/global.cfg); then
     _config global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" apps/vbox/vm.global.d); then
     _register global "${dir}"
 fi
 
 vm=()
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/local.cfg); then
     _config local "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" apps/vbox/vm.local.d); then
     _register local "${dir}"
 fi

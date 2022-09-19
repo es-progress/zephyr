@@ -37,10 +37,11 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" gnome/config/global.d); then
     _config global "${dir}"
 fi
-
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" gnome/config/local.d); then
     _config local "${dir}"
 fi

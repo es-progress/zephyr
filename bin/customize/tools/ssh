@@ -38,6 +38,7 @@ _known-hosts() {
     print-status "Setup known hosts [${selector}]..."
     mkdir -p ~/.ssh
     touch ~/.ssh/known_hosts
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" ssh-known); do
         if ! grep -F -qs "${line}" ~/.ssh/known_hosts; then
             echo "${line}" >> ~/.ssh/known_hosts
@@ -59,15 +60,19 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/ssh/global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/ssh/local.d); then
     _config local "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/global.cfg); then
     _known-hosts global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     _known-hosts local "${file}"
 fi

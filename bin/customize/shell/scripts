@@ -20,9 +20,11 @@ lib_global=
 lib_local=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" shell/global.cfg); then
     cfg-eval "${file}" scripts
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" shell/local.cfg); then
     cfg-eval "${file}" scripts
 fi
@@ -32,6 +34,7 @@ fi
 [[ -z "${lib_global}" ]] && exit 1
 [[ -z "${lib_local}" ]] && exit 1
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bin/global.d); then
     print-status "Copy shell scripts [global]..."
     sudo mkdir -p "${bin_global}"
@@ -39,6 +42,7 @@ if dir=$(cfg-get "${profile}" shell/bin/global.d); then
     find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} sudo chmod +x "${bin_global}/{}"
     print-finish
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bin/local.d); then
     print-status "Copy shell scripts [local]..."
     mkdir -p "${bin_local}"
@@ -46,12 +50,14 @@ if dir=$(cfg-get "${profile}" shell/bin/local.d); then
     find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x "${bin_local}/{}"
     print-finish
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/lib/global.d); then
     print-status "Copy shell library [global]..."
     sudo mkdir -p "${lib_global}"
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} "${lib_global}/" \;
     print-finish
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/lib/local.d); then
     print-status "Copy shell library [local]..."
     mkdir -p "${lib_local}"

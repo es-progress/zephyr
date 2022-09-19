@@ -21,6 +21,7 @@ _install() {
 
     print-header "Install vendor shell programs [${selector}]..."
     sudo mkdir -p "${bin_global}"
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" bin); do
         IFS=$' \t' read -r name url checksum <<< "${line}"
 
@@ -69,18 +70,22 @@ profile="${1:?"Profile missing"}"
 bin_global=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" shell/global.cfg); then
     cfg-eval "${file}" scripts
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" shell/local.cfg); then
     cfg-eval "${file}" scripts
 fi
 
 [[ -z "${bin_global}" ]] && exit 1
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/local.cfg); then
     _install local "${file}"
 fi

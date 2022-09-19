@@ -20,6 +20,7 @@ _setup-weekly() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Setup weekly cron jobs [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" cron-weekly); do
         IFS=$' \t' read -r target name <<< "${line}"
         # eval target to let the shell expand tilde and env vars
@@ -40,6 +41,7 @@ _setup-daily() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Setup daily cron jobs [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" cron-daily); do
         IFS=$' \t' read -r target name <<< "${line}"
         # eval target to let the shell expand tilde and env vars
@@ -63,10 +65,12 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" random/global.cfg); then
     _setup-weekly global "${file}"
     _setup-daily global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" random/local.cfg); then
     _setup-weekly local "${file}"
     _setup-daily local "${file}"

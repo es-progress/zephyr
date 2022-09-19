@@ -20,6 +20,7 @@ _dirs-create() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Create dirs [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" dirs-create); do
         IFS=$' \t' read -r path owner <<< "${line}"
         # eval line to let the shell expand tilde and env vars
@@ -41,6 +42,7 @@ _dirs-remove() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Remove dirs [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" dirs-remove); do
         # eval line to let the shell expand tilde and env vars
         arg=$(eval echo "${line}")
@@ -62,10 +64,12 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     _dirs-create global "${file}"
     _dirs-remove global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/local.cfg); then
     _dirs-create local "${file}"
     _dirs-remove local "${file}"
