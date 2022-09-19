@@ -20,6 +20,7 @@ _add-to-group() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Add user to groups [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for group in $(cfg-read "${cfg_file}" groups); do
         sudo adduser "${USER}" "${group}"
     done
@@ -35,13 +36,15 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     _add-to-group global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/local.cfg); then
     _add-to-group local "${file}"
 fi

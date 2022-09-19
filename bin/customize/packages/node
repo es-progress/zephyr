@@ -20,6 +20,7 @@ _install() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-header "Install node modules [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" node); do
         IFS=$' \t' read -r package <<< "${line}"
 
@@ -39,7 +40,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
@@ -51,9 +52,11 @@ print-header "Update npm..."
 sudo npm install --global --no-fund npm
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/local.cfg); then
     _install local "${file}"
 fi

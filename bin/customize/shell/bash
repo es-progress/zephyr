@@ -11,12 +11,13 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
 shopt -s dotglob
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/global.d); then
     print-status "Copy Bash files [global]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
@@ -24,13 +25,13 @@ if dir=$(cfg-get "${profile}" shell/bash/global.d); then
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
     print-finish
 fi
-
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/root.d); then
     print-status "Copy Bash files [root]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
     print-finish
 fi
-
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/local.d); then
     print-status "Copy Bash files [local]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;

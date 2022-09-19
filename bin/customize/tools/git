@@ -20,6 +20,7 @@ _config() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Config git [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" git); do
         IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
         if [[ "${cfg_loc}" == "system" ]]; then
@@ -40,13 +41,15 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/global.cfg); then
     _config global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     _config local "${file}"
 fi

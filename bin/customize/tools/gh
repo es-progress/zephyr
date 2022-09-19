@@ -11,7 +11,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 # Options
 profile="${1:?"Profile missing"}"
@@ -19,9 +19,11 @@ url=
 checksum=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/global.cfg); then
     cfg-eval "${file}" gh
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" gh
 fi

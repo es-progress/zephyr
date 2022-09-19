@@ -20,7 +20,7 @@ _copy-sudoers() {
     local cfg_dir="${2:?"Config dir missing"}"
 
     print-status "Customize sudoers [${selector}]..."
-    for file in $(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f); do
+    while IFS= read -r -d '' file; do
         file_name=$(basename "${file}")
         # Verify new file
         visudo -c -s "${file}" >/dev/null
@@ -29,7 +29,7 @@ _copy-sudoers() {
         sudo chmod =0440 "/etc/sudoers.d/${file_name}"
         # Verify full sudoers
         sudo visudo -c -s >/dev/null
-    done
+    done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 || true)
     print-finish
 }
 
@@ -42,13 +42,15 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/sudo/global.d); then
     _copy-sudoers global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/sudo/local.d); then
     _copy-sudoers local "${dir}"
 fi

@@ -113,7 +113,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-root || exit 1
+check-root
 
 profile="${1:?"Profile missing"}"
 shift
@@ -121,6 +121,7 @@ shift
 # Maps
 map_files=()
 for map in "${@}"; do
+    # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
         map_files+=("${file}")
     fi
@@ -139,6 +140,7 @@ for map_file in "${map_files[@]}"; do
     [[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
     # Loop through disks
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
         print-section "Partition ${device}..."

@@ -20,6 +20,7 @@ _parse-install-packages() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Parse packages to install [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" apt-install); do
         IFS=$' \t' read -r package repo <<< "${line}"
         [[ -n "${repo}" ]] && repos+=("${repo}")
@@ -38,6 +39,7 @@ _parse-remove-packages() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Parse packages to remove [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for package in $(cfg-read "${cfg_file}" apt-remove); do
         packages_remove+=("${package}")
     done
@@ -53,7 +55,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
@@ -61,10 +63,12 @@ profile="${1:?"Profile missing"}"
 repos=()
 packages_install=()
 packages_remove=()
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _parse-install-packages global "${file}"
     _parse-remove-packages global "${file}"
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/local.cfg); then
     _parse-install-packages local "${file}"
     _parse-remove-packages local "${file}"

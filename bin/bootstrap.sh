@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034
 ##################
 ## ES-Ubuntu    ##
 ##              ##
@@ -28,5 +29,6 @@ source "${PROJECT_ROOT}/bin/library.sh"
 source "${PROJECT_ROOT}/ESubuntu.cfg"
 # Local configs
 if [[ -r "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+    # shellcheck disable=SC1091
     source "${PROJECT_ROOT}/ESubuntu.local.cfg"
 fi

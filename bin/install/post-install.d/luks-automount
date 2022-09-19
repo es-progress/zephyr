@@ -67,7 +67,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-root || exit 1
+check-root
 
 profile="${1:?"Profile missing"}"
 key_dir=
@@ -75,9 +75,11 @@ key_slot=
 shift
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" install/global.cfg); then
     cfg-eval "${file}" luks
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" install/local.cfg); then
     cfg-eval "${file}" luks
 fi
@@ -88,6 +90,7 @@ fi
 # Maps
 map_files=()
 for map in "${@}"; do
+    # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
         map_files+=("${file}")
     fi
@@ -102,9 +105,11 @@ print-status "Config cryptsetup-initramfs..."
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" install/initramfs/global.d); then
     _config global "${dir}"
 fi
+# shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" install/initramfs/local.d); then
     _config local "${dir}"
 fi
@@ -124,12 +129,13 @@ for map_file in "${map_files[@]}"; do
     print-finish
 
     # Loop through disks
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
 
         # Loop through partitions
         for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
-            IFS=$' \t' read -r number gap size type label format <<< "${part_line}"
+            IFS=$' \t' read -r number _ _ type label _ <<< "${part_line}"
 
             if [[ "${type}" == luks* ]]; then
                 print-header "Add machine key to LUKS ${label}..."

@@ -11,7 +11,7 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 # Options
 profile="${1:?"Profile missing"}"
@@ -23,10 +23,12 @@ service_pass=
 web_root=
 
 # Read config file, get options
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/global.cfg); then
     cfg-eval "${file}" phpmyadmin
     cfg-eval "${file}" apache
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" phpmyadmin
     cfg-eval "${file}" apache
@@ -52,6 +54,7 @@ sudo tar -C "${target}" -xf "${tmp_file}"
 sudo mv "${target}/phpMyAdmin-${version}-all-languages" "${target}/public"
 print-finish
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-status "Configure PHPMyAdmin..."
     secret=$(openssl rand -hex 32)
@@ -73,6 +76,7 @@ print-finish
 
 print-status "Create PHPMyAdmin control DB..."
 [[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
+# shellcheck disable=SC2024
 sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish
 

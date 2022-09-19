@@ -21,6 +21,7 @@ _copy-bookmarks() {
     local cfg_file="${2:?"Config file missing"}"
 
     print-status "Add bookmarks [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" bookmarks); do
         echo "${line}" >>"${bookmarks_file}"
     done
@@ -36,16 +37,18 @@ set -eufo pipefail
 IFS=$'\n\t'
 
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
-check-not-root || exit 1
+check-not-root
 
 profile="${1:?"Profile missing"}"
 
 # Nautilus links
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/user-dirs.defaults); then
     print-status "Copy default dirs..."
     sudo cp --no-preserve=mode,ownership "${file}" /etc/xdg/
     print-finish
 fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/user-dirs.dirs); then
     print-status "Copy user dirs..."
     cp --no-preserve=mode,ownership "${file}" ~/.config/
@@ -56,10 +59,11 @@ fi
 bookmarks_file=~/.config/gtk-3.0/bookmarks
 echo -n >"${bookmarks_file}"
 
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/global.cfg); then
     _copy-bookmarks global "${file}"
 fi
-
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/local.cfg); then
     _copy-bookmarks local "${file}"
 fi
