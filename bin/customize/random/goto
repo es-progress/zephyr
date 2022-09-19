@@ -49,11 +49,13 @@ check-not-root || exit 1
 profile="${1:?"Profile missing"}"
 
 if [[ -e ~/.bash/goto ]]; then
+    # shellcheck disable=SC1090
     source ~/.bash/goto
 else
     exit 0
 fi
 # Source bashrc for local envvars, config
+# shellcheck disable=SC1090
 [[ -r ~/.bashrc ]] && source ~/.bashrc
 
 if file=$(cfg-get "${profile}" random/global.cfg); then
