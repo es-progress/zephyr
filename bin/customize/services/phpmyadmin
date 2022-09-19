@@ -73,6 +73,7 @@ print-finish
 
 print-status "Create PHPMyAdmin control DB..."
 [[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
+# shellcheck disable=SC2024
 sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish
 
