@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 ## Bash completion for esubuntuctl
 ##################################
 __esubuntuctl_complete() {
