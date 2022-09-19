@@ -33,9 +33,9 @@ chroot "${target}" mount -a
 print-finish
 
 # Run Post-install steps
-for step in $(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\n"); do
+while IFS= read -r -d '' step; do
     chroot "${target}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}"
-done
+done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0")
 
 print-header "Update initramfs..."
 chroot "${target}" update-initramfs -u -k all
