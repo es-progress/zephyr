@@ -71,7 +71,7 @@ fi
 print-status "Create tmp dirs, set permissions..."
 sudo mkdir -p "${target}/upload" "${target}/save" "${target}/tmp"
 sudo chgrp -R www-data "${target}"
-sudo chmod g+w "${target}/upload" "${target}/save" "${target}/tmp"
+sudo chmod -R g+w "${target}/upload" "${target}/save" "${target}/tmp"
 print-finish
 
 print-status "Create PHPMyAdmin control DB..."
