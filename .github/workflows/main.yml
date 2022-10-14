@@ -37,7 +37,14 @@ jobs:
     runs-on: ubuntu-20.04
     # needs: linter
     outputs:
-      apps: ${{ steps.apps.outputs.changed }}
+      apps: ${{ steps.modules.outputs.apps }}
+      gnome: ${{ steps.modules.outputs.gnome }}
+      packages: ${{ steps.modules.outputs.packages }}
+      random: ${{ steps.modules.outputs.random }}
+      services: ${{ steps.modules.outputs.services }}
+      shell: ${{ steps.modules.outputs.shell }}
+      system: ${{ steps.modules.outputs.system }}
+      tools: ${{ steps.modules.outputs.tools }}
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -47,11 +54,32 @@ jobs:
       - name: Get changed files
         run: git diff --numstat origin/main... | awk '{print $3'} > ~/changed.files
 
-      - name: Check changed module (customize/apps)
-        id: apps
+      - name: Check changed modules
+        id: modules
         run: |
           if grep -qs customize/apps ~/changed.files; then
-            echo "::set-output name=changed::yes"
+            echo "::set-output name=apps::yes"
+          fi
+          if grep -qs customize/gnome ~/changed.files; then
+            echo "::set-output name=gnome::yes"
+          fi
+          if grep -qs customize/packages ~/changed.files; then
+            echo "::set-output name=packages::yes"
+          fi
+          if grep -qs customize/random ~/changed.files; then
+            echo "::set-output name=random::yes"
+          fi
+          if grep -qs customize/services ~/changed.files; then
+            echo "::set-output name=services::yes"
+          fi
+          if grep -qs customize/shell ~/changed.files; then
+            echo "::set-output name=shell::yes"
+          fi
+          if grep -qs customize/system ~/changed.files; then
+            echo "::set-output name=system::yes"
+          fi
+          if grep -qs customize/tools ~/changed.files; then
+            echo "::set-output name=tools::yes"
           fi
         shell: bash
   tests-apps:
