@@ -33,7 +33,7 @@ jobs:
   #       with:
   #         severity: style
   check:
-    name: Check for changed files
+    name: Check changed modules
     runs-on: ubuntu-20.04
     # needs: linter
     outputs:
@@ -86,7 +86,8 @@ jobs:
     name: Integration tests (customize/apps)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.apps == 'yes'
+    # if: needs.check.outputs.apps == 'yes'
+    if: needs.check.outputs.apps == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -113,4 +114,38 @@ jobs:
           ./bin/esubuntuctl customize default jmeter
           ./bin/esubuntuctl customize default pulse-effects
           ./bin/esubuntuctl customize default virtualbox
+        shell: bash
+  tests-gnome:
+    name: Integration tests (customize/gnome)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.gnome == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default autostart
+          # ./bin/esubuntuctl customize default dash-to-panel
+          ./bin/esubuntuctl customize default fonts
+          ./bin/esubuntuctl customize default gnome-config
+          ./bin/esubuntuctl customize default user-dirs
+          ./bin/esubuntuctl customize default wallpaper
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default autostart
+          # ./bin/esubuntuctl customize default dash-to-panel
+          ./bin/esubuntuctl customize default fonts
+          ./bin/esubuntuctl customize default gnome-config
+          ./bin/esubuntuctl customize default user-dirs
+          ./bin/esubuntuctl customize default wallpaper
         shell: bash
