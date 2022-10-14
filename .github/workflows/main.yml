@@ -6,29 +6,83 @@ on:
     paths:
       - "bin/**"
 jobs:
-  format:
-    name: Check format
+  # format:
+  #   name: Check format
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Install beautysh
+  #       run: sudo pip install beautysh
+  #
+  #     - name: Self checkout
+  #       uses: actions/checkout@v3
+  #
+  #     - name: Check code-style
+  #       run: find bin/ -type f -print0 | xargs -0 beautysh --force-function-style paronly --check
+  # linter:
+  #   name: Linting
+  #   runs-on: ubuntu-20.04
+  #   needs: format
+  #   steps:
+  #     - name: Self checkout
+  #       uses: actions/checkout@v3
+  #
+  #     - name: Run shellcheck
+  #       uses: ludeeus/action-shellcheck@master
+  #       env:
+  #         SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
+  #       with:
+  #         severity: style
+  check:
+    name: Check for changed files
     runs-on: ubuntu-20.04
+    # needs: linter
+    outputs:
+      apps: ${{ steps.apps.outputs.changed }}
     steps:
-      - name: Install beautysh
-        run: sudo pip install beautysh
-
       - name: Self checkout
         uses: actions/checkout@v3
-
-      - name: Check code-style
-        run: find bin/ -type f -print0 | xargs -0 beautysh --force-function-style paronly --check
-  linter:
-    name: Linting
-    runs-on: ubuntu-20.04
-    needs: format
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Run shellcheck
-        uses: ludeeus/action-shellcheck@master
-        env:
-          SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
         with:
-          severity: style
+          fetch-depth: 0
+
+      - name: Get changed files
+        run: git diff --numstat origin/main... | awk '{print $3'} > ~/changed.files
+
+      - name: Check changed module (customize/apps)
+        id: apps
+        run: |
+          if grep -qs customize/apps ~/changed.files; then
+            echo "::set-output name=changed::yes"
+          fi
+        shell: bash
+  tests-apps:
+    name: Integration tests (customize/apps)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.apps == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository --yes ppa:mikhailnov/pulseeffects
+          sudo apt-get install --yes --no-install-recommends pulseeffects virtualbox
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default atom
+          ./bin/esubuntuctl customize default jmeter
+          ./bin/esubuntuctl customize default pulse-effects
+          ./bin/esubuntuctl customize default virtualbox
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default atom
+          ./bin/esubuntuctl customize default jmeter
+          ./bin/esubuntuctl customize default pulse-effects
+          ./bin/esubuntuctl customize default virtualbox
+        shell: bash
