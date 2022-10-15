@@ -119,7 +119,8 @@ jobs:
     name: Integration tests (customize/gnome)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.gnome == 'yes'
+    # if: needs.check.outputs.gnome == 'yes'
+    if: needs.check.outputs.gnome == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -148,4 +149,33 @@ jobs:
           ./bin/esubuntuctl customize default gnome-config
           ./bin/esubuntuctl customize default user-dirs
           ./bin/esubuntuctl customize default wallpaper
+        shell: bash
+  tests-packages:
+    name: Integration tests (customize/packages)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.packages == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default apt
+          ./bin/esubuntuctl customize default bin
+          ./bin/esubuntuctl customize default node
+          ./bin/esubuntuctl customize default pip
+          ./bin/esubuntuctl customize default snap
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default apt
+          ./bin/esubuntuctl customize default bin
+          ./bin/esubuntuctl customize default node
+          ./bin/esubuntuctl customize default pip
+          ./bin/esubuntuctl customize default snap
         shell: bash
