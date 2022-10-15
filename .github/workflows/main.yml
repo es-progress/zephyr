@@ -154,7 +154,8 @@ jobs:
     name: Integration tests (customize/packages)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.packages == 'yes'
+    # if: needs.check.outputs.packages == 'yes'
+    if: needs.check.outputs.packages == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -178,4 +179,37 @@ jobs:
           ./bin/esubuntuctl customize default node
           ./bin/esubuntuctl customize default pip
           ./bin/esubuntuctl customize default snap
+        shell: bash
+  tests-random:
+    name: Integration tests (customize/random)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.random == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo mkdir -p /opt
+          sudo touch /opt/some-script /opt/other-script
+          git clone https://github.com/semseysandor/goto.git bash_goto
+          mkdir -p ~/.bash
+          cp bash_goto/goto.sh ~/.bash/goto
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default cron
+          ./bin/esubuntuctl customize default custom
+          ./bin/esubuntuctl customize default goto
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default cron
+          ./bin/esubuntuctl customize default custom
+          ./bin/esubuntuctl customize default goto
         shell: bash
