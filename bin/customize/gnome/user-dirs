@@ -57,6 +57,7 @@ fi
 
 # Bookmarks
 bookmarks_file=~/.config/gtk-3.0/bookmarks
+mkdir -p ~/.config/gtk-3.0
 echo -n >"${bookmarks_file}"
 
 # shellcheck disable=SC2310,SC2311
