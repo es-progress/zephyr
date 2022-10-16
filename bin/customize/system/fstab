@@ -33,7 +33,7 @@ awk '
 print-finish
 
 print-header "Verify fstab..."
-findmnt --verify --tab-file "${tmp_file}" >/dev/null
+findmnt --verify --tab-file "${tmp_file}"
 print-finish
 
 print-status "Update fstab..."
