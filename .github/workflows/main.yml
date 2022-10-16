@@ -251,7 +251,8 @@ jobs:
     name: Integration tests (customize/shell)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.shell == 'yes'
+    # if: needs.check.outputs.shell == 'yes'
+    if: needs.check.outputs.shell == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -269,4 +270,46 @@ jobs:
         run: |
           ./bin/esubuntuctl customize default bash
           ./bin/esubuntuctl customize default scripts
+        shell: bash
+  tests-system:
+    name: Integration tests (customize/system)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.system == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install --yes --no-install-recommends network-manager
+          sudo chmod =0440 /etc/sudoers.d/runner
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default certificates
+          ./bin/esubuntuctl customize default dirs
+          ./bin/esubuntuctl customize default fstab
+          ./bin/esubuntuctl customize default fstrim
+          ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default netplan
+          ./bin/esubuntuctl customize default resolved
+          ./bin/esubuntuctl customize default shorewall
+          ./bin/esubuntuctl customize default sudo
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default certificates
+          ./bin/esubuntuctl customize default dirs
+          ./bin/esubuntuctl customize default fstab
+          ./bin/esubuntuctl customize default fstrim
+          ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default netplan
+          ./bin/esubuntuctl customize default resolved
+          ./bin/esubuntuctl customize default shorewall
+          ./bin/esubuntuctl customize default sudo
         shell: bash
