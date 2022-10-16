@@ -218,7 +218,8 @@ jobs:
     name: Integration tests (customize/services)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.services == 'yes'
+    # if: needs.check.outputs.services == 'yes'
+    if: needs.check.outputs.services == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -245,4 +246,27 @@ jobs:
           ./bin/esubuntuctl customize default mariadb
           ./bin/esubuntuctl customize default php
           ./bin/esubuntuctl customize default phpmyadmin
+        shell: bash
+  tests-shell:
+    name: Integration tests (customize/shell)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.shell == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default bash
+          ./bin/esubuntuctl customize default scripts
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default bash
+          ./bin/esubuntuctl customize default scripts
         shell: bash
