@@ -184,7 +184,8 @@ jobs:
     name: Integration tests (customize/random)
     runs-on: ubuntu-20.04
     needs: check
-    if: needs.check.outputs.random == 'yes'
+    # if: needs.check.outputs.random == 'yes'
+    if: needs.check.outputs.random == 'no'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -212,4 +213,36 @@ jobs:
           ./bin/esubuntuctl customize default cron
           ./bin/esubuntuctl customize default custom
           ./bin/esubuntuctl customize default goto
+        shell: bash
+  tests-services:
+    name: Integration tests (customize/services)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.services == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install --yes --no-install-recommends apache2 php7.4
+          ./bin/esubuntuctl customize default certificates
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default apache
+          ./bin/esubuntuctl customize default mariadb
+          ./bin/esubuntuctl customize default php
+          ./bin/esubuntuctl customize default phpmyadmin
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default apache
+          ./bin/esubuntuctl customize default mariadb
+          ./bin/esubuntuctl customize default php
+          ./bin/esubuntuctl customize default phpmyadmin
         shell: bash
