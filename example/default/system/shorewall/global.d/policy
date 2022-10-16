@@ -1,0 +1,7 @@
+#SOURCE	DEST    POLICY    LOGLEVEL    RATE CONNLIMIT
+####################################################
+$FW     $FW     ACCEPT
+$FW     net     ACCEPT    $LOG_LEVEL
+net     all     DROP      $LOG_LEVEL
+# The FOLLOWING POLICY MUST BE LAST
+all     all     REJECT    $LOG_LEVEL

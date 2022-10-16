@@ -1,0 +1,9 @@
+network:
+  ethernets:
+    phone:
+      optional: true
+      dhcp4: true
+      dhcp6: true
+      match:
+        macaddress: aa:bb:cc:dd:ee:ff
+      set-name: phone
