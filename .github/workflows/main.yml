@@ -132,6 +132,7 @@ jobs:
       - name: Execute scripts (1st pass)
         run: |
           ./bin/esubuntuctl customize default autostart
+          # Dash-to-panel needs a running GNOME, was unable to do it in CI --> skip
           # ./bin/esubuntuctl customize default dash-to-panel
           ./bin/esubuntuctl customize default fonts
           ./bin/esubuntuctl customize default gnome-config
