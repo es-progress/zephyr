@@ -86,8 +86,7 @@ jobs:
     name: Integration tests (customize/apps)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.apps == 'yes'
-    if: needs.check.outputs.apps == 'no'
+    if: needs.check.outputs.apps == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -119,8 +118,7 @@ jobs:
     name: Integration tests (customize/gnome)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.gnome == 'yes'
-    if: needs.check.outputs.gnome == 'no'
+    if: needs.check.outputs.gnome == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -154,8 +152,7 @@ jobs:
     name: Integration tests (customize/packages)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.packages == 'yes'
-    if: needs.check.outputs.packages == 'no'
+    if: needs.check.outputs.packages == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -184,8 +181,7 @@ jobs:
     name: Integration tests (customize/random)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.random == 'yes'
-    if: needs.check.outputs.random == 'no'
+    if: needs.check.outputs.random == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -218,8 +214,7 @@ jobs:
     name: Integration tests (customize/services)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.services == 'yes'
-    if: needs.check.outputs.services == 'no'
+    if: needs.check.outputs.services == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -251,8 +246,7 @@ jobs:
     name: Integration tests (customize/shell)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.shell == 'yes'
-    if: needs.check.outputs.shell == 'no'
+    if: needs.check.outputs.shell == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -275,8 +269,7 @@ jobs:
     name: Integration tests (customize/system)
     runs-on: ubuntu-20.04
     needs: check
-    # if: needs.check.outputs.system == 'yes'
-    if: needs.check.outputs.system == 'no'
+    if: needs.check.outputs.system == 'yes'
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
