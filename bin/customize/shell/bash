@@ -4,7 +4,7 @@
 ##           ##
 ## Config    ##
 ## Bash      ##
-################
+###############
 
 # Strict mode
 set -eufo pipefail
