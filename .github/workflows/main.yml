@@ -45,6 +45,7 @@ jobs:
       shell: ${{ steps.modules.outputs.shell }}
       system: ${{ steps.modules.outputs.system }}
       tools: ${{ steps.modules.outputs.tools }}
+      remix: ${{ steps.modules.outputs.remix }}
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -80,6 +81,9 @@ jobs:
           fi
           if grep -qs customize/tools ~/changed.files; then
             echo "::set-output name=tools::yes"
+          fi
+          if grep -qs bin/remix ~/changed.files; then
+            echo "::set-output name=remix::yes"
           fi
         shell: bash
   tests-apps:
