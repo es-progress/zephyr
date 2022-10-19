@@ -45,6 +45,7 @@ jobs:
       shell: ${{ steps.modules.outputs.shell }}
       system: ${{ steps.modules.outputs.system }}
       tools: ${{ steps.modules.outputs.tools }}
+      remix: ${{ steps.modules.outputs.remix }}
     steps:
       - name: Self checkout
         uses: actions/checkout@v3
@@ -80,6 +81,9 @@ jobs:
           fi
           if grep -qs customize/tools ~/changed.files; then
             echo "::set-output name=tools::yes"
+          fi
+          if grep -qs bin/remix ~/changed.files; then
+            echo "::set-output name=remix::yes"
           fi
         shell: bash
   tests-apps:
@@ -351,4 +355,22 @@ jobs:
           ./bin/esubuntuctl customize default pass-update
           ./bin/esubuntuctl customize default ssh
           ./bin/esubuntuctl customize default tomb
+        shell: bash
+  tests-remix:
+    name: Integration tests (remix)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.remix == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Download Ubuntu Live CD
+        run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
+
+      - name: Create remix
+        run: ./bin/esubuntuctl create ubuntu.iso
         shell: bash
