@@ -3,15 +3,15 @@
 ## ES-Ubuntu    ##
 ##              ##
 ## Example      ##
-## Shell script ##
+## Local script ##
 ##################
 
 # Strict mode
 set -eufo pipefail
 IFS=$'\n\t'
 
-echo Running shell script...
-id -u
+echo Running local script...
+pwd
 echo Finished
 
 exit 0

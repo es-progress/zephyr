@@ -32,3 +32,323 @@ jobs:
           SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
         with:
           severity: style
+  check:
+    name: Check changed modules
+    runs-on: ubuntu-20.04
+    needs: linter
+    outputs:
+      apps: ${{ steps.modules.outputs.apps }}
+      gnome: ${{ steps.modules.outputs.gnome }}
+      packages: ${{ steps.modules.outputs.packages }}
+      random: ${{ steps.modules.outputs.random }}
+      services: ${{ steps.modules.outputs.services }}
+      shell: ${{ steps.modules.outputs.shell }}
+      system: ${{ steps.modules.outputs.system }}
+      tools: ${{ steps.modules.outputs.tools }}
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        run: git diff --numstat origin/main... | awk '{print $3'} > ~/changed.files
+
+      - name: Check changed modules
+        id: modules
+        run: |
+          if grep -qs customize/apps ~/changed.files; then
+            echo "::set-output name=apps::yes"
+          fi
+          if grep -qs customize/gnome ~/changed.files; then
+            echo "::set-output name=gnome::yes"
+          fi
+          if grep -qs customize/packages ~/changed.files; then
+            echo "::set-output name=packages::yes"
+          fi
+          if grep -qs customize/random ~/changed.files; then
+            echo "::set-output name=random::yes"
+          fi
+          if grep -qs customize/services ~/changed.files; then
+            echo "::set-output name=services::yes"
+          fi
+          if grep -qs customize/shell ~/changed.files; then
+            echo "::set-output name=shell::yes"
+          fi
+          if grep -qs customize/system ~/changed.files; then
+            echo "::set-output name=system::yes"
+          fi
+          if grep -qs customize/tools ~/changed.files; then
+            echo "::set-output name=tools::yes"
+          fi
+        shell: bash
+  tests-apps:
+    name: Integration tests (customize/apps)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.apps == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo add-apt-repository --yes ppa:mikhailnov/pulseeffects
+          sudo apt-get install --yes --no-install-recommends pulseeffects virtualbox
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default atom
+          ./bin/esubuntuctl customize default jmeter
+          ./bin/esubuntuctl customize default pulse-effects
+          ./bin/esubuntuctl customize default virtualbox
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default atom
+          ./bin/esubuntuctl customize default jmeter
+          ./bin/esubuntuctl customize default pulse-effects
+          ./bin/esubuntuctl customize default virtualbox
+        shell: bash
+  tests-gnome:
+    name: Integration tests (customize/gnome)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.gnome == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default autostart
+          # Dash-to-panel needs a running GNOME, was unable to do it in CI --> skip
+          # ./bin/esubuntuctl customize default dash-to-panel
+          ./bin/esubuntuctl customize default fonts
+          ./bin/esubuntuctl customize default gnome-config
+          ./bin/esubuntuctl customize default user-dirs
+          ./bin/esubuntuctl customize default wallpaper
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default autostart
+          # ./bin/esubuntuctl customize default dash-to-panel
+          ./bin/esubuntuctl customize default fonts
+          ./bin/esubuntuctl customize default gnome-config
+          ./bin/esubuntuctl customize default user-dirs
+          ./bin/esubuntuctl customize default wallpaper
+        shell: bash
+  tests-packages:
+    name: Integration tests (customize/packages)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.packages == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default apt
+          ./bin/esubuntuctl customize default bin
+          ./bin/esubuntuctl customize default node
+          ./bin/esubuntuctl customize default pip
+          ./bin/esubuntuctl customize default snap
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default apt
+          ./bin/esubuntuctl customize default bin
+          ./bin/esubuntuctl customize default node
+          ./bin/esubuntuctl customize default pip
+          ./bin/esubuntuctl customize default snap
+        shell: bash
+  tests-random:
+    name: Integration tests (customize/random)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.random == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo mkdir -p /opt
+          sudo touch /opt/some-script /opt/other-script
+          git clone https://github.com/semseysandor/goto.git bash_goto
+          mkdir -p ~/.bash
+          cp bash_goto/goto.sh ~/.bash/goto
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default cron
+          ./bin/esubuntuctl customize default custom
+          ./bin/esubuntuctl customize default goto
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default cron
+          ./bin/esubuntuctl customize default custom
+          ./bin/esubuntuctl customize default goto
+        shell: bash
+  tests-services:
+    name: Integration tests (customize/services)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.services == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install --yes --no-install-recommends apache2 php7.4
+          ./bin/esubuntuctl customize default certificates
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default apache
+          ./bin/esubuntuctl customize default mariadb
+          ./bin/esubuntuctl customize default php
+          ./bin/esubuntuctl customize default phpmyadmin
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default apache
+          ./bin/esubuntuctl customize default mariadb
+          ./bin/esubuntuctl customize default php
+          ./bin/esubuntuctl customize default phpmyadmin
+        shell: bash
+  tests-shell:
+    name: Integration tests (customize/shell)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.shell == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default bash
+          ./bin/esubuntuctl customize default scripts
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default bash
+          ./bin/esubuntuctl customize default scripts
+        shell: bash
+  tests-system:
+    name: Integration tests (customize/system)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.system == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install --yes --no-install-recommends network-manager
+          sudo chmod =0440 /etc/sudoers.d/runner
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default certificates
+          ./bin/esubuntuctl customize default dirs
+          ./bin/esubuntuctl customize default fstab
+          ./bin/esubuntuctl customize default fstrim
+          ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default netplan
+          ./bin/esubuntuctl customize default resolved
+          ./bin/esubuntuctl customize default shorewall
+          ./bin/esubuntuctl customize default sudo
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default certificates
+          ./bin/esubuntuctl customize default dirs
+          ./bin/esubuntuctl customize default fstab
+          ./bin/esubuntuctl customize default fstrim
+          ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default netplan
+          ./bin/esubuntuctl customize default resolved
+          ./bin/esubuntuctl customize default shorewall
+          ./bin/esubuntuctl customize default sudo
+        shell: bash
+  tests-tools:
+    name: Integration tests (customize/tools)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.tools == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install --yes --no-install-recommends dnsutils gpg mc
+          sudo snap install nmap
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/esubuntuctl customize default dig
+          ./bin/esubuntuctl customize default gh
+          ./bin/esubuntuctl customize default git
+          ./bin/esubuntuctl customize default gpg
+          ./bin/esubuntuctl customize default mc
+          ./bin/esubuntuctl customize default nano
+          ./bin/esubuntuctl customize default nmap
+          ./bin/esubuntuctl customize default pass-update
+          ./bin/esubuntuctl customize default ssh
+          ./bin/esubuntuctl customize default tomb
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/esubuntuctl customize default dig
+          ./bin/esubuntuctl customize default gh
+          ./bin/esubuntuctl customize default git
+          ./bin/esubuntuctl customize default gpg
+          ./bin/esubuntuctl customize default mc
+          ./bin/esubuntuctl customize default nano
+          ./bin/esubuntuctl customize default nmap
+          ./bin/esubuntuctl customize default pass-update
+          ./bin/esubuntuctl customize default ssh
+          ./bin/esubuntuctl customize default tomb
+        shell: bash

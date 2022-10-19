@@ -1,0 +1,4 @@
+?FORMAT 2
+#############################################################
+#ZONE   INTERFACE     OPTIONS
+net     {{ interface }}           dhcp,logmartians,nosmurfs,rpfilter
