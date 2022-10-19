@@ -4,7 +4,7 @@
 ##                 ##
 ## Remix           ##
 ## Burn ISO to USB ##
-######################
+#####################
 
 # Strict mode
 set -eufo pipefail
