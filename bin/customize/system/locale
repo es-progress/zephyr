@@ -40,7 +40,7 @@ _set-locale() {
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" locale); do
         IFS=$' \t' read -r category locale <<< "${line}"
-        sudo localectl set-locale "${category}=${locale}"
+        sudo update-locale "${category}=${locale}"
     done
     print-finish
 }
