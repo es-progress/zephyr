@@ -294,6 +294,7 @@ jobs:
           ./bin/esubuntuctl customize default fstab
           ./bin/esubuntuctl customize default fstrim
           ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default locale
           ./bin/esubuntuctl customize default netplan
           ./bin/esubuntuctl customize default resolved
           ./bin/esubuntuctl customize default shorewall
@@ -307,6 +308,7 @@ jobs:
           ./bin/esubuntuctl customize default fstab
           ./bin/esubuntuctl customize default fstrim
           ./bin/esubuntuctl customize default groups
+          ./bin/esubuntuctl customize default locale
           ./bin/esubuntuctl customize default netplan
           ./bin/esubuntuctl customize default resolved
           ./bin/esubuntuctl customize default shorewall
