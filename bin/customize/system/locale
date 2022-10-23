@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+###############
+## ES-Ubuntu ##
+##           ##
+## Config    ##
+## Locale    ##
+###############
+
+###############
+## FUNCTIONS ##
+###############
+
+## Install locale
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+###########################
+_install-locale() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-header "Install locale [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
+    for locale in $(cfg-read "${cfg_file}" locales); do
+        sudo locale-gen "${locale}"
+    done
+    print-finish
+}
+
+## Set system locale
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+###########################
+_set-locale() {
+    local selector="${1:?"Selector missing"}"
+    local cfg_file="${2:?"Config file missing"}"
+
+    print-status "Set locales [${selector}]..."
+    # shellcheck disable=SC2310,SC2311
+    for line in $(cfg-read "${cfg_file}" locale); do
+        IFS=$' \t' read -r category locale <<< "${line}"
+        sudo localectl set-locale "${category}=${locale}"
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-not-root
+
+profile="${1:?"Profile missing"}"
+
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" system/global.cfg); then
+    _install-locale global "${file}"
+    _set-locale global "${file}"
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" system/local.cfg); then
+    _install-locale local "${file}"
+    _set-locale local "${file}"
+fi
+
+exit 0
