@@ -59,6 +59,10 @@ fi
 # shellcheck disable=SC1090
 [[ -r ~/.bashrc ]] && source ~/.bashrc
 
+print-header "Cleanup aliases..."
+goto -c
+print-finish
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" random/global.cfg); then
     _register global "${file}"
@@ -67,9 +71,5 @@ fi
 if file=$(cfg-get "${profile}" random/local.cfg); then
     _register local "${file}"
 fi
-
-print-header "Cleanup aliases..."
-goto -c
-print-finish
 
 exit 0
