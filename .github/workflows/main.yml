@@ -17,7 +17,6 @@ jobs:
     uses: es-progress/shell/.github/workflows/reuse-shellcheck.yml@main
     with:
       dir: bin/
-      severity: style
   check:
     name: Check changed modules
     runs-on: ubuntu-20.04
