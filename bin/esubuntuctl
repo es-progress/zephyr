@@ -95,6 +95,7 @@ _usage() {
 
 ## Create ISO
 #############
+# shellcheck disable=SC2317
 _create() {
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
@@ -109,6 +110,7 @@ _create() {
 
 ## Burn ISO
 ###########
+# shellcheck disable=SC2317
 _burn() {
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
@@ -120,6 +122,7 @@ _burn() {
 
 ## Install ESubuntu
 ###################
+# shellcheck disable=SC2317
 _self-install() {
     print-status "Setup Bash completion..."
     sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/esubuntuctl
@@ -134,6 +137,7 @@ _self-install() {
 
 ## Partition disks
 ##################
+# shellcheck disable=SC2317
 _partition() {
     local profile
 
@@ -154,6 +158,7 @@ _partition() {
 
 ## Post-install
 ###############
+# shellcheck disable=SC2317
 _post-install() {
     local profile
 
@@ -176,6 +181,7 @@ _post-install() {
 ##
 ## @param   $1  Profile
 #######################
+# shellcheck disable=SC2317
 _customize() {
     local profile
     local module_selected=
