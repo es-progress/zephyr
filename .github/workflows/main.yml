@@ -9,14 +9,10 @@ jobs:
   format:
     name: Check format
     uses: es-progress/shell/.github/workflows/reuse-beautysh.yml@main
-    with:
-      dir: bin/
   linter:
     name: Linting
     needs: format
     uses: es-progress/shell/.github/workflows/reuse-shellcheck.yml@main
-    with:
-      dir: bin/
   check:
     name: Check changed modules
     runs-on: ubuntu-20.04
