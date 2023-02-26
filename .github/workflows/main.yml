@@ -8,30 +8,16 @@ on:
 jobs:
   format:
     name: Check format
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Install beautysh
-        run: sudo pip install beautysh
-
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Check code-style
-        run: find bin/ -type f -print0 | xargs -0 beautysh --force-function-style paronly --check
+    uses: es-progress/shell/.github/workflows/reuse-beautysh.yml@main
+    with:
+      dir: bin/
   linter:
     name: Linting
-    runs-on: ubuntu-20.04
     needs: format
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Run shellcheck
-        uses: ludeeus/action-shellcheck@master
-        env:
-          SHELLCHECK_OPTS: --external-sources --enable add-default-case,avoid-nullary-conditions,check-extra-masked-returns,check-set-e-suppressed,deprecate-which,quote-safe-variables,require-double-brackets,require-variable-braces --shell bash
-        with:
-          severity: style
+    uses: es-progress/shell/.github/workflows/reuse-shellcheck.yml@main
+    with:
+      dir: bin/
+      severity: style
   check:
     name: Check changed modules
     runs-on: ubuntu-20.04
