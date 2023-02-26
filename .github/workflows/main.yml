@@ -3,8 +3,8 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - "bin/**"
+    # paths:
+    #   - "bin/**"
 jobs:
   format:
     name: Check format
