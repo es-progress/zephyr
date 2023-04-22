@@ -1,10 +1,10 @@
-# ESubuntu
+# Zephyr
 
 [![CI](https://github.com/es-progress/ESubuntu/actions/workflows/main.yml/badge.svg)](https://github.com/es-progress/ESubuntu/actions/workflows/main.yml)
 
 This is a custom Ubuntu remix. It is packaged as a bootable ISO file,
 which can be burned to an USB stick and can act like a rescue (live) CD.
-Then you can install ESubuntu.
+Then you can install Zephyr.
 
 If you implement your own customizations (probably not the ones I prefer :wink:),
 you can have an installer that creates an Ubuntu system which is already configured for you.
@@ -46,4 +46,4 @@ Scripts included so you can build your own ISO.
 ## Note
 
 **DISCLAIMER**:
-Ubuntu is a registered trademark owned by Canonical. ESubuntu is NOT affiliated with, endorsed or sponsored by Canonical in any ways.
+Ubuntu is a registered trademark owned by Canonical. Zephyr is NOT affiliated with, endorsed or sponsored by Canonical in any ways.

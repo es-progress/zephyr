@@ -16,17 +16,17 @@ _usage-main() {
     local sorted_commands_array=()
     local line name help sorted_commands_string
 
-    command+=("create:Create ES-Ubuntu ISO")
+    command+=("create:Create Zephyr ISO")
     command+=("burn:Burn to ISO to USB")
     command+=("partition:Partition disk")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
-    command+=("self-install:Install ES-Ubuntu")
+    command+=("self-install:Install Zephyr")
     command+=("help:Display help")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
 
-    echo -e "${TXT_GREEN}ES-Ubuntu${TXT_NORM} controller\n"
+    echo -e "${TXT_GREEN}Zephyr${TXT_NORM} controller\n"
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e  "  zephyrctl COMMAND [OPTIONS]...\n"
     echo -e  "${TXT_YELLOW}Commands:${TXT_NORM}"
@@ -120,8 +120,8 @@ _burn() {
     "${PATH_SCRIPTS_REMIX}/burn" "${1}" "${2:-}"
 }
 
-## Install ESubuntu
-###################
+## Install Zephyr
+#################
 # shellcheck disable=SC2317
 _self-install() {
     print-status "Setup Bash completion..."
