@@ -1,7 +1,7 @@
 # shellcheck shell=bash
-## Bash completion for esubuntuctl
-##################################
-__esubuntuctl_complete() {
+## Bash completion for zephyrctl
+################################
+__zephyrctl_complete() {
     local cur words cword command commands profiles scripts
     _init_completion
 
@@ -11,19 +11,19 @@ __esubuntuctl_complete() {
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n")
 
     case "${cword}" in
-        1) __esubuntu_gen_word "${commands[*]}" ;;
+        1) __zephyr_gen_word "${commands[*]}" ;;
         2)
             case "${command}" in
-                help) __esubuntu_gen_word "${commands[*]}" ;;
-                customize) __esubuntu_gen_word "${profiles}" ;;
-                create|burn|install) __esubuntu_gen_file ;;
+                help) __zephyr_gen_word "${commands[*]}" ;;
+                customize) __zephyr_gen_word "${profiles}" ;;
+                create|burn|install) __zephyr_gen_file ;;
                 *) ;;
             esac
             ;;
         3)
             case "${command}" in
-                burn) __esubuntu_gen_file ;;
-                customize) __esubuntu_gen_word "${scripts}" ;;
+                burn) __zephyr_gen_file ;;
+                customize) __zephyr_gen_word "${scripts}" ;;
                 *) ;;
             esac
             ;;
@@ -35,7 +35,7 @@ __esubuntuctl_complete() {
 ##
 ## @param   $*  Word list
 ######################################
-__esubuntu_gen_word() {
+__zephyr_gen_word() {
     local result
     result=$(compgen -W "${*}" "${cur}")
     readarray -t COMPREPLY <<<"${result}"
@@ -43,10 +43,10 @@ __esubuntu_gen_word() {
 
 ## Generate completions from filenames
 ######################################
-__esubuntu_gen_file() {
+__zephyr_gen_file() {
     local result
     result=$(compgen -f "${cur}")
     readarray -t COMPREPLY <<<"${result}"
 }
 
-complete -F __esubuntuctl_complete -o filenames esubuntuctl
+complete -F __zephyrctl_complete -o filenames zephyrctl

@@ -32,11 +32,11 @@ if [[ -e "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
     sudo cp "${PROJECT_ROOT}/ESubuntu.local.cfg" "${target}/"
 fi
 # Bash completion
-sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
-sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/esubuntuctl"
+sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/zephyrctl"
+sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/zephyrctl"
 # Symlink controller
-sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
-sudo ln -s "${INSTALL_DIR}/bin/esubuntuctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/esubuntuctl"
+sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/zephyrctl"
+sudo ln -s "${INSTALL_DIR}/bin/zephyrctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/zephyrctl"
 print-finish
 
 print-status "Set permissions..."

@@ -28,7 +28,7 @@ _usage-main() {
 
     echo -e "${TXT_GREEN}ES-Ubuntu${TXT_NORM} controller\n"
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
-    echo -e  "  esubuntuctl COMMAND [OPTIONS]...\n"
+    echo -e  "  zephyrctl COMMAND [OPTIONS]...\n"
     echo -e  "${TXT_YELLOW}Commands:${TXT_NORM}"
     for line in "${sorted_commands_array[@]}"; do
         IFS=":" read -r name help <<<"${line}"
@@ -50,7 +50,7 @@ _usage() {
     case "${selector}" in
         "")
             usage="help COMMAND"
-            options+=("COMMAND:command to run (for available commands run 'esubuntuctl' without arguments")
+            options+=("COMMAND:command to run (for available commands run 'zephyrctl' without arguments")
             ;;
         create)
             usage="create ISO_FILE"
@@ -83,7 +83,7 @@ _usage() {
     esac
 
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
-    echo -e "  esubuntuctl ${usage}\n"
+    echo -e "  zephyrctl ${usage}\n"
     if [[ -n "${options[*]}" ]]; then
         echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
         for line in "${options[@]}"; do
@@ -125,13 +125,13 @@ _burn() {
 # shellcheck disable=SC2317
 _self-install() {
     print-status "Setup Bash completion..."
-    sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/esubuntuctl
-    sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/esubuntuctl
+    sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/zephyrctl
+    sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/zephyrctl
     print-finish
 
     print-status "Symlink controller..."
-    sudo rm -f /usr/local/bin/esubuntuctl
-    sudo ln -s "${PROJECT_ROOT}/bin/esubuntuctl" /usr/local/bin/esubuntuctl
+    sudo rm -f /usr/local/bin/zephyrctl
+    sudo ln -s "${PROJECT_ROOT}/bin/zephyrctl" /usr/local/bin/zephyrctl
     print-finish
 }
 
