@@ -30,8 +30,8 @@ theme:
   language: en
   # favicon: terminal.png
   # icon:
-    # logo: material/book
-    # repo: fontawesome/brands/github
+  # logo: material/book
+  # repo: fontawesome/brands/github
   font:
     text: Ubuntu
     code: Ubuntu Mono

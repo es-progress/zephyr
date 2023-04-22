@@ -15,22 +15,22 @@ Basically you can fully automate Ubuntu customization & configuration.
 
 There are several customizations:
 
-- Packages
-    - Install extra packages
-    - Removed some default ones
-- GNOME
-    - Key-bindings
-    - Bookmarks
-    - /home directory structure
-- bash
-    - Shell scripts
-    - Aliases
-    - `.bashrc`
-    - Bash completion
-- Config packages
-- Misc
-    - Set up cron jobs
-    - Create self-signed certificate
+-   Packages
+    -   Install extra packages
+    -   Removed some default ones
+-   GNOME
+    -   Key-bindings
+    -   Bookmarks
+    -   /home directory structure
+-   bash
+    -   Shell scripts
+    -   Aliases
+    -   `.bashrc`
+    -   Bash completion
+-   Config packages
+-   Misc
+    -   Set up cron jobs
+    -   Create self-signed certificate
 
 etc...
 
@@ -39,9 +39,10 @@ etc...
 Scripts included so you can build your own ISO.
 
 **Scripts**
-- Unpack official Ubuntu ISO
-- Apply customizations
-- Pack files and create bootable ISO file
+
+-   Unpack official Ubuntu ISO
+-   Apply customizations
+-   Pack files and create bootable ISO file
 
 ## Note
 
