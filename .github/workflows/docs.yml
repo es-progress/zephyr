@@ -1,0 +1,18 @@
+name: Docs
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+jobs:
+  format:
+    name: Check format
+    uses: es-progress/shell/.github/workflows/reuse-prettier.yml@main
+    with:
+      pattern: "**/*.{md,yml}"
+  deploy:
+    name: Deploy docs
+    uses: es-progress/shell/.github/workflows/reuse-mkdocs.yml@main
+    needs: format
