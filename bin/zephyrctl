@@ -26,7 +26,8 @@ _usage-main() {
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
 
-    echo -e "${TXT_GREEN}Zephyr${TXT_NORM} controller\n"
+    echo -e "${TXT_GREEN}Zephyr${TXT_NORM} controller"
+    echo -e "Copyright (C) 2023 Sandor Semsey\n"
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e  "  zephyrctl COMMAND [OPTIONS]...\n"
     echo -e  "${TXT_YELLOW}Commands:${TXT_NORM}"
