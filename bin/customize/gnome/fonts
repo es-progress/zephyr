@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## GNOME     ##
-## Fonts     ##
-###############
+############
+## Zephyr ##
+##        ##
+## Config ##
+## GNOME  ##
+## Fonts  ##
+############
 
 ###############
 ## FUNCTIONS ##

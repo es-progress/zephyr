@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## Netplan   ##
-###############
+#############
+## Zephyr  ##
+##         ##
+## Config  ##
+## Netplan ##
+#############
 
 ###############
 ## FUNCTIONS ##

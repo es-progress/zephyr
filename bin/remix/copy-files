@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ############################
-## ES-Ubuntu              ##
+## Zephyr                 ##
 ##                        ##
 ## Remix                  ##
 ## Copy files to SquashFS ##

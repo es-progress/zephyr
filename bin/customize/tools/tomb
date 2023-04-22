@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## Tomb      ##
-###############
+############
+## Zephyr ##
+##        ##
+## Config ##
+## Tomb   ##
+############
 
 # Strict mode
 set -eufo pipefail

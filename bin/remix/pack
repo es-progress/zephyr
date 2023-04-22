@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Remix     ##
-## Pack ISO  ##
-###############
+##############
+## Zephyr   ##
+##          ##
+## Remix    ##
+## Pack ISO ##
+##############
 
 # Strict mode
 set -eufo pipefail

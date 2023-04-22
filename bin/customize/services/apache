@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## Apache    ##
-###############
+############
+## Zephyr ##
+##        ##
+## Config ##
+## Apache ##
+############
 
 ###############
 ## FUNCTIONS ##
