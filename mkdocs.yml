@@ -15,7 +15,7 @@ edit_uri: edit/main/docs/
 
 theme:
   name: material
-  # custom_dir: docs/theme
+  custom_dir: docs/theme
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -28,7 +28,7 @@ theme:
         icon: material/weather-night
         name: Switch to light mode
   language: en
-  # favicon: terminal.png
+  favicon: sapphire.avif
   font:
     text: Ubuntu
     code: Ubuntu Mono
