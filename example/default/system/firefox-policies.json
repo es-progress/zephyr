@@ -3,7 +3,7 @@
     "Certificates": {
       "ImportEnterpriseRoots": true,
       "Install": [
-        "/usr/local/share/ca-certificates/ESubuntu_Root_Certification_Authority.crt"
+        "/usr/local/share/ca-certificates/Zephyr_Root_Certification_Authority.crt"
       ]
     }
   }

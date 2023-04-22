@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # shellcheck disable=SC2034
 ##################
-## ES-Ubuntu    ##
+## Zephyr       ##
 ##              ##
 ## Bootstrapper ##
 ##################
@@ -26,9 +26,9 @@ PATH_EXTRACT="${PROJECT_ROOT}/mixing/extract"
 # Shell library
 source "${PROJECT_ROOT}/bin/library.sh"
 # Defaults
-source "${PROJECT_ROOT}/ESubuntu.cfg"
+source "${PROJECT_ROOT}/zephyr.cfg"
 # Local configs
-if [[ -r "${PROJECT_ROOT}/ESubuntu.local.cfg" ]]; then
+if [[ -r "${PROJECT_ROOT}/zephyr.local.cfg" ]]; then
     # shellcheck disable=SC1091
-    source "${PROJECT_ROOT}/ESubuntu.local.cfg"
+    source "${PROJECT_ROOT}/zephyr.local.cfg"
 fi

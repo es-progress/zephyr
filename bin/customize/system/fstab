@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## fstab     ##
-###############
+############
+## Zephyr ##
+##        ##
+## Config ##
+## fstab  ##
+############
 
 # Strict mode
 set -eufo pipefail

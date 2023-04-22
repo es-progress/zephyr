@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 ######################
-## ES-Ubuntu        ##
+## Zephyr           ##
 ##                  ##
 ## Shell library    ##
 ## Helper functions ##

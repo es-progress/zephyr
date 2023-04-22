@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-###############
-## ES-Ubuntu ##
-##           ##
-## Config    ##
-## fstrim    ##
-###############
+############
+## Zephyr ##
+##        ##
+## Config ##
+## fstrim ##
+############
 
 ###############
 ## FUNCTIONS ##
