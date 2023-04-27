@@ -41,7 +41,7 @@ if [[ -e /sys/firmware/efi ]]; then
     sudo apt-get install --yes --no-install-recommends mokutil
     print-finish
 
-    key_created=""
+    key_created=
     print-status "Create MOK private key..."
     if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
         sudo openssl genpkey \
@@ -83,8 +83,8 @@ fi
 
 # Self-signed root CA certificate
 #################################
-key_created=""
-cert_created=""
+key_created=
+cert_created=
 print-status "Create ROOT CA private key..."
 if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     sudo openssl genpkey \
