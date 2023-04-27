@@ -15,7 +15,6 @@ check-not-root
 
 # Options
 profile="${1:?"Profile missing"}"
-version=
 url=
 checksum=
 
@@ -28,7 +27,6 @@ fi
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" tomb
 fi
-[[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
@@ -42,7 +40,9 @@ hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 tmp_dir=$(mktemp -d)
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 # Install
-sudo make -C "${tmp_dir}/Tomb-${version}" install
+[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit "Not single top level dir in archive"
+unpack_dir=$(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d)
+sudo make -C "${unpack_dir}" install
 print-finish
 
 exit 0
