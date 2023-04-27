@@ -15,7 +15,6 @@ check-not-root
 
 # Options
 profile="${1:?"Profile missing"}"
-version=
 url=
 checksum=
 install_dir=
@@ -30,7 +29,6 @@ if file=$(cfg-get "${profile}" apps/local.cfg); then
     cfg-eval "${file}" jmeter
 fi
 
-[[ -z "${version}" ]] && exit 1
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 [[ -z "${install_dir}" ]] && exit 1
@@ -45,7 +43,9 @@ hash=$(sha512sum "${tmp_file}" | cut -d" " -f1)
 # Unpack archive
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 sudo rm -rf "${install_dir}"
-sudo cp -r "${tmp_dir}/apache-jmeter-${version}" "${install_dir}"
+[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit "Not single top level dir in archive"
+unpack_dir=$(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d)
+sudo cp -r "${unpack_dir}" "${install_dir}"
 rm -rf "${tmp_file}" "${tmp_dir}"
 print-finish
 
