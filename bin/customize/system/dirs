@@ -63,21 +63,24 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?"Profile missing"}"
+perm_home=
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     _dirs-create global "${file}"
     _dirs-remove global "${file}"
+    cfg-eval "${file}" perms
 fi
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/local.cfg); then
     _dirs-create local "${file}"
     _dirs-remove local "${file}"
+    cfg-eval "${file}" perms
 fi
 
-print-status "Set permission on /home..."
-sudo chown -R "${USER}:${USER}" ~
-chmod -R o-rwx ~
+print-status "Set permission on /home/${USER}..."
+sudo chown "${USER}:${USER}" ~
+chmod "${perm_home}" ~
 print-finish
 
 exit 0
