@@ -75,6 +75,7 @@ if [[ -e /sys/firmware/efi ]]; then
     # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
     if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
         sudo mokutil --import "/etc/ssl/certs/${mok_key_name}.der"
+        sudo mokutil --timeout -1
         print-finish
     else
         print-finish "Already enrolled, skipped"
