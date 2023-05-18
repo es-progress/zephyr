@@ -314,6 +314,7 @@ jobs:
 
       - name: Execute scripts (1st pass)
         run: |
+          ./bin/zephyrctl customize default composer
           ./bin/zephyrctl customize default dig
           ./bin/zephyrctl customize default gh
           ./bin/zephyrctl customize default git
@@ -328,6 +329,7 @@ jobs:
 
       - name: Execute scripts (2nd pass)
         run: |
+          ./bin/zephyrctl customize default composer
           ./bin/zephyrctl customize default dig
           ./bin/zephyrctl customize default gh
           ./bin/zephyrctl customize default git
