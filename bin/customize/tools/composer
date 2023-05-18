@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+##############
+## Zephyr   ##
+##          ##
+## Config   ##
+## composer ##
+##############
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-not-root
+
+# Options
+profile="${1:?"Profile missing"}"
+bin_global=
+url=
+checksum=
+
+# Read config files, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" shell/global.cfg); then
+    cfg-eval "${file}" scripts
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" shell/local.cfg); then
+    cfg-eval "${file}" scripts
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" tools/global.cfg); then
+    cfg-eval "${file}" composer
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" tools/local.cfg); then
+    cfg-eval "${file}" composer
+fi
+[[ -z "${bin_global}" ]] && exit 1
+[[ -z "${url}" ]] && exit 1
+[[ -z "${checksum}" ]] && exit 1
+
+print-header "Install composer..."
+# Check if already installed
+if [[ -e "${bin_global}/composer" ]]; then
+    hash=$(sha256sum "${bin_global}/composer" | cut -d" " -f1)
+    if [[ "${hash}" == "${checksum}" ]]; then
+        print-finish "Already installed, skipped."
+        exit 0
+    fi
+fi
+# Download phar
+tmp_file=$(mktemp)
+curl --progress-bar -o "${tmp_file}" --url "${url}"
+hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
+[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
+# Move to bin
+sudo mv "${tmp_file}" "${bin_global}/composer"
+sudo chown root:root "${bin_global}/composer"
+sudo chmod =0755 "${bin_global}/composer"
+# Bash completion
+composer completion bash | sudo tee /etc/bash_completion.d/composer >/dev/null
+print-finish
+
+exit 0
