@@ -60,6 +60,8 @@ sudo chown root:root "${bin_global}/composer"
 sudo chmod =0755 "${bin_global}/composer"
 # Bash completion
 composer completion bash | sudo tee /etc/bash_completion.d/composer >/dev/null
+# Fix bug in completion
+sudo sed -ri 's@^(\s*)IFS=(.*)@\1local IFS=\2@g' /etc/bash_completion.d/composer
 print-finish
 
 exit 0
