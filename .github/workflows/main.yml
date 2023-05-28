@@ -186,14 +186,14 @@ jobs:
       - name: Execute scripts (1st pass)
         run: |
           ./bin/zephyrctl customize default cron
-          ./bin/zephyrctl customize default custom
+          ./bin/zephyrctl customize default local
           ./bin/zephyrctl customize default goto
         shell: bash
 
       - name: Execute scripts (2nd pass)
         run: |
           ./bin/zephyrctl customize default cron
-          ./bin/zephyrctl customize default custom
+          ./bin/zephyrctl customize default local
           ./bin/zephyrctl customize default goto
         shell: bash
   tests-services:

@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-####################
-## Zephyr         ##
-##                ##
-## Config         ##
-## Custom scripts ##
-####################
+###################
+## Zephyr        ##
+##               ##
+## Config        ##
+## Local scripts ##
+###################
 
 ###############
 ## FUNCTIONS ##
 ###############
 
-## Run custom scripts
+## Run local scripts
 ##
 ## @param   $1  Global/Local
 ## @param   $2  Config dir
@@ -19,7 +19,7 @@ _run() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Run custom scripts [${selector}]..."
+    print-header "Run local scripts [${selector}]..."
     (
         cd "${cfg_dir}"
         run-parts --exit-on-error --arg="${profile}" .
@@ -41,11 +41,11 @@ check-not-root
 profile="${1:?"Profile missing"}"
 
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" random/custom/global.d); then
+if dir=$(cfg-get "${profile}" random/local/global.d); then
     _run global "${dir}"
 fi
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" random/custom/local.d); then
+if dir=$(cfg-get "${profile}" random/local/local.d); then
     _run local "${dir}"
 fi
 
