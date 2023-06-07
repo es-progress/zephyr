@@ -66,6 +66,10 @@ print-header "Install MariaDB..."
 sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup python3-pymysql
 print-finish
 
+print-status "Load timezone data..."
+mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mysql -D mysql
+print-finish
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/mariadb/global.d); then
     _config global "${dir}"
