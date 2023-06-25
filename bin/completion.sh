@@ -6,7 +6,7 @@ __zephyrctl_complete() {
     _init_completion
 
     command="${words[1]}"
-    commands=(burn create help partition post-install customize self-install)
+    commands=(burn create help partition post-install customize install)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n")
 
