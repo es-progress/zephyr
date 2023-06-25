@@ -161,6 +161,10 @@ _uninstall() {
     print-status "Unlink controller..."
     sudo rm -f /usr/local/bin/zephyrctl
     print-finish
+
+    print-status "Remove Zephyr files..."
+    sudo rm -rf "${INSTALL_DIR}"
+    print-finish
 }
 
 ## Partition disks
