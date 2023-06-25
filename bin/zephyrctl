@@ -17,7 +17,7 @@ _usage-main() {
     local line name help sorted_commands_string
 
     command+=("create:Create Zephyr ISO")
-    command+=("burn:Burn to ISO to USB")
+    command+=("burn:Burn Zephyr ISO to USB")
     command+=("partition:Partition disk")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
@@ -51,42 +51,52 @@ _usage() {
 
     case "${selector}" in
         "")
+            description="Display help for a command"
             usage="help COMMAND"
-            options+=("COMMAND:command to run (for available commands run 'zephyrctl' without arguments")
+            options+=("COMMAND:The command name (to view available commands, run 'zephyrctl' without arguments)")
             ;;
         create)
-            usage="create ISO_FILE"
-            options+=("ISO_FILE:ISO to customize (e.g. ubuntu live-cd)")
+            description="Remix an Ubuntu image file and embed Zephyr (along with your profiles)"
+            usage="remix ISO_FILE"
+            options+=("ISO_FILE:ISO to remix (e.g. Ubuntu Live DVD)")
             ;;
         burn)
+            description="Create a bootable USB stick from an image file"
             usage="burn ISO_FILE [DISK]"
-            options+=("ISO_FILE:ISO to burn")
-            options+=("DISK:Device to copy to (eg. /dev/sdc)")
+            options+=("ISO_FILE:ISO to burn (e.g. remixed Ubuntu Live DVD)")
+            options+=("DISK:USB flash drive device file (e.g. /dev/sdc). If not specified, you can select one interactively.")
             ;;
         partition)
+            description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="partition PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         post-install)
+            description="Perform various OS post-install steps (e.g. GRUB configuration, backup GPT)"
             usage="post-install PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         customize)
+            description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MODULE:Module to update (eg. packages, bash)")
+            options+=("MODULE:Module to update (eg. packages, bash). If none given, all modules will be customized.")
             ;;
         install)
+            description="Install Zephyr on your computer"
             usage="install"
             ;;
         uninstall)
+            description="Remove Zephyr from your computer"
             usage="uninstall"
             ;;
         *) _usage-main ;;
     esac
 
+    echo -e "${TXT_YELLOW}Description:${TXT_NORM}"
+    echo -e "  ${description}\n"
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e "  zephyrctl ${usage}\n"
     if [[ -n "${options[*]}" ]]; then
