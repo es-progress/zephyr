@@ -26,7 +26,8 @@ _setup-weekly() {
         # eval target to let the shell expand tilde and env vars
         path=$(eval echo "${target}")
 
-        [[ -e "/etc/cron.weekly/${name}" ]] || sudo ln -s "${path}" "/etc/cron.weekly/${name}"
+        [[ -h "/etc/cron.weekly/${name}" ]] && sudo rm "/etc/cron.weekly/${name}"
+        sudo ln -s "${path}" "/etc/cron.weekly/${name}"
     done
     print-finish
 }
@@ -47,7 +48,8 @@ _setup-daily() {
         # eval target to let the shell expand tilde and env vars
         path=$(eval echo "${target}")
 
-        [[ -e "/etc/cron.daily/${name}" ]] || sudo ln -s "${path}" "/etc/cron.daily/${name}"
+        [[ -h "/etc/cron.daily/${name}" ]] && sudo rm "/etc/cron.daily/${name}"
+        sudo ln -s "${path}" "/etc/cron.daily/${name}"
     done
     print-finish
 }
