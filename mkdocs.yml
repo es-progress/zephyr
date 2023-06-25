@@ -28,7 +28,7 @@ theme:
         icon: material/weather-night
         name: Switch to light mode
   language: en
-  favicon: sapphire.avif
+  favicon: sapphire.png
   font:
     text: Ubuntu
     code: Ubuntu Mono

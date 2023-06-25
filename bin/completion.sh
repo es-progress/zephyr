@@ -6,7 +6,7 @@ __zephyrctl_complete() {
     _init_completion
 
     command="${words[1]}"
-    commands=(burn create help partition post-install customize self-install)
+    commands=(burn remix help partition post-install customize install uninstall)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n")
 
@@ -16,7 +16,7 @@ __zephyrctl_complete() {
             case "${command}" in
                 help) __zephyr_gen_word "${commands[*]}" ;;
                 customize) __zephyr_gen_word "${profiles}" ;;
-                create|burn) __zephyr_gen_file ;;
+                remix|burn) __zephyr_gen_file ;;
                 *) ;;
             esac
             ;;

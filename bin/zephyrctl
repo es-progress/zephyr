@@ -16,12 +16,13 @@ _usage-main() {
     local sorted_commands_array=()
     local line name help sorted_commands_string
 
-    command+=("create:Create Zephyr ISO")
-    command+=("burn:Burn to ISO to USB")
+    command+=("remix:Create Zephyr ISO")
+    command+=("burn:Burn Zephyr ISO to USB")
     command+=("partition:Partition disk")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
-    command+=("self-install:Install Zephyr")
+    command+=("install:Install Zephyr")
+    command+=("uninstall:Uninstall Zephyr")
     command+=("help:Display help")
     sorted_commands_string=$(sort <<<"${command[*]}")
     mapfile -t sorted_commands_array <<<"${sorted_commands_string[*]}"
@@ -50,39 +51,52 @@ _usage() {
 
     case "${selector}" in
         "")
+            description="Display help for a command"
             usage="help COMMAND"
-            options+=("COMMAND:command to run (for available commands run 'zephyrctl' without arguments")
+            options+=("COMMAND:The command name (to view available commands, run 'zephyrctl' without arguments)")
             ;;
-        create)
-            usage="create ISO_FILE"
-            options+=("ISO_FILE:ISO to customize (e.g. ubuntu live-cd)")
+        remix)
+            description="Remix an Ubuntu image file and embed Zephyr (along with your profiles)"
+            usage="remix ISO_FILE"
+            options+=("ISO_FILE:ISO to remix (e.g. Ubuntu Live DVD)")
             ;;
         burn)
+            description="Create a bootable USB stick from an image file"
             usage="burn ISO_FILE [DISK]"
-            options+=("ISO_FILE:ISO to burn")
-            options+=("DISK:Device to copy to (eg. /dev/sdc)")
+            options+=("ISO_FILE:ISO to burn (e.g. remixed Ubuntu Live DVD)")
+            options+=("DISK:USB flash drive device file (e.g. /dev/sdc). If not specified, you can select one interactively.")
             ;;
         partition)
+            description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="partition PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         post-install)
+            description="Perform various OS post-install steps (e.g. GRUB configuration, backup GPT)"
             usage="post-install PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
         customize)
+            description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MODULE:Module to update (eg. packages, bash)")
+            options+=("MODULE:Module to update (eg. packages, bash). If none given, all modules will be customized.")
             ;;
-        self-install)
-            usage="self-install"
+        install)
+            description="Install Zephyr on your computer"
+            usage="install"
+            ;;
+        uninstall)
+            description="Remove Zephyr from your computer"
+            usage="uninstall"
             ;;
         *) _usage-main ;;
     esac
 
+    echo -e "${TXT_YELLOW}Description:${TXT_NORM}"
+    echo -e "  ${description}\n"
     echo -e "${TXT_YELLOW}Usage:${TXT_NORM}"
     echo -e "  zephyrctl ${usage}\n"
     if [[ -n "${options[*]}" ]]; then
@@ -97,10 +111,10 @@ _usage() {
 ## Create ISO
 #############
 # shellcheck disable=SC2317
-_create() {
+_remix() {
     if [[ -z "${1:-}" ]]; then
         print-error "ISO image missing!"
-        _usage create
+        _usage remix
         exit 1
     fi
     "${PATH_SCRIPTS_REMIX}/unpack" "${1}"
@@ -124,8 +138,8 @@ _burn() {
 ## Install Zephyr
 #################
 # shellcheck disable=SC2317
-_self-install() {
-    print-status "Setup Bash completion..."
+_install() {
+    print-status "Set up Bash completion..."
     sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/zephyrctl
     sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/zephyrctl
     print-finish
@@ -133,6 +147,19 @@ _self-install() {
     print-status "Symlink controller..."
     sudo rm -f /usr/local/bin/zephyrctl
     sudo ln -s "${PROJECT_ROOT}/bin/zephyrctl" /usr/local/bin/zephyrctl
+    print-finish
+}
+
+## Uninstall Zephyr
+#################
+# shellcheck disable=SC2317
+_uninstall() {
+    print-status "Remove Bash completion..."
+    sudo rm /etc/bash_completion.d/zephyrctl
+    print-finish
+
+    print-status "Unlink controller..."
+    sudo rm -f /usr/local/bin/zephyrctl
     print-finish
 }
 
@@ -235,7 +262,7 @@ cmd="${1:-}"
 
 # Switch action
 case "${cmd}" in
-    create|burn|partition|post-install|customize|self-install) "_${cmd}" "${@}" ;;
+    remix|burn|partition|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
