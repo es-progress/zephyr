@@ -2,7 +2,7 @@
 
 You can install Zephyr locally by cloning the Git repository, modifying a few configurations (usually not necessary), running the installer and you're good to go!
 
-Here are the detailed **Installation steps**:
+Here are the detailed installation steps:
 
 1. Clone the Git repository from GitHub
     ```
@@ -29,7 +29,7 @@ It you want to start right away, and explore on your own, run `zephyrctl` withou
 
 ---
 
-If you decide to **uninstall** Zephyr later (sorry to see you go!), just follow these steps:
+If you decide to uninstall Zephyr later (sorry to see you go!), just follow these steps:
 
 1. Run `zephyrctl uninstall`
 1. Delete the Git repository
