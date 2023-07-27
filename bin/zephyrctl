@@ -57,8 +57,9 @@ _usage() {
             ;;
         remix)
             description="Remix an Ubuntu image file and embed Zephyr (along with your profiles)"
-            usage="remix ISO_FILE"
-            options+=("ISO_FILE:ISO to remix (e.g. Ubuntu Live DVD)")
+            usage="remix ISO_IN [ISO_OUT]"
+            options+=("ISO_IN:ISO to remix (e.g. Ubuntu Live DVD)")
+            options+=("ISO_OUT:Remixed ISO file. Defaults to zephyr.iso in current dir.")
             ;;
         burn)
             description="Create a bootable USB stick from an image file"
@@ -119,7 +120,7 @@ _remix() {
     fi
     "${PATH_SCRIPTS_REMIX}/unpack" "${1}"
     "${PATH_SCRIPTS_REMIX}/copy-files"
-    "${PATH_SCRIPTS_REMIX}/pack" "${1}"
+    "${PATH_SCRIPTS_REMIX}/pack" "${1}" "${2:-}"
     "${PATH_SCRIPTS_REMIX}/clean-up"
 }
 
