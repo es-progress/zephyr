@@ -18,8 +18,10 @@
 _install() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
+    local snaps_installed
 
     print-header "Install snaps [${selector}]..."
+    snaps_installed=$(snap list --color=never --unicode=never)
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" snap); do
         IFS=$' \t' read -r package mode <<< "${line}"
@@ -27,10 +29,16 @@ _install() {
         options=()
         [[ "${mode}" == "classic" ]] && options=(--classic)
 
-        # Install snap
-        print-header "Install ${package}..."
-        sudo snap install "${package}" "${options[@]}"
-        print-finish
+        # Update or install
+        if grep -qs "^${package}" <<<"${snaps_installed}"; then
+            print-header "Update ${package}..."
+            sudo snap refresh "${package}"
+            print-finish
+        else
+            print-header "Install ${package}..."
+            sudo snap install "${package}" "${options[@]}"
+            print-finish
+        fi
     done
     print-finish
 }
