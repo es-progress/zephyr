@@ -265,6 +265,16 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 cmd="${1:-}"
 [[ -n "${cmd}" ]] && shift
 
+# Show help if requested by option flag not help command
+if [[ "${cmd}" != "help" ]]; then
+    for arg in "${@}"; do
+        if [[ "${arg}" == "--help" || "${arg}" == "-h" ]]; then
+            "${PROJECT_ROOT}/bin/zephyrctl" help "${cmd}"
+            exit 0
+        fi
+    done
+fi
+
 # Switch action
 case "${cmd}" in
     remix|burn|partition|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
