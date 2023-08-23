@@ -8,11 +8,11 @@ on:
 jobs:
   format:
     name: Check format
-    uses: es-progress/shell/.github/workflows/reuse-beautysh.yml@main
+    uses: es-progress/.github/.github/workflows/beautysh.yml@main
   linter:
     name: Linting
     needs: format
-    uses: es-progress/shell/.github/workflows/reuse-shellcheck.yml@main
+    uses: es-progress/.github/.github/workflows/shellcheck.yml@main
   check:
     name: Check changed modules
     runs-on: ubuntu-20.04
