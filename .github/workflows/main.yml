@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get changed files
-        run: git diff --numstat origin/main... | awk '{print $3'} > ~/changed.files
+        run: git diff --numstat origin/main... | awk '{print $3}' > ~/changed.files
 
       - name: Check changed modules
         id: modules
