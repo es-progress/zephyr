@@ -39,7 +39,7 @@ check-not-root
 profile="${1:?"Profile missing"}"
 
 print-header "Install shorewall..."
-sudo apt-get install --yes --no-install-recommends shorewall
+sudo apt-get install --yes --no-install-recommends ipset shorewall
 print-finish
 
 # shellcheck disable=SC2310,SC2311
