@@ -72,19 +72,19 @@ _usage() {
             description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="partition PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MAP:Partition maps")
+            options+=("MAP:Disk maps")
             ;;
         format)
             description="(Re)format partitions. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="format PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MAP:Partition maps")
+            options+=("MAP:Disk maps")
             ;;
         post-install)
             description="Perform various OS post-install steps (e.g. GRUB configuration, backup GPT)"
             usage="post-install PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MAP:Partition maps")
+            options+=("MAP:Disk maps")
             ;;
         customize)
             description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."

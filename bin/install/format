@@ -74,7 +74,7 @@ shift
 map_files=()
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
-    if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
+    if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
         map_files+=("${file}")
     fi
 done
@@ -85,10 +85,10 @@ for map_file in "${map_files[@]}"; do
     print-section "Disks & partitions"
     lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
 
-    print-section "Parsed config"
+    print-section "Parsed disk map"
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
-    read -rp "WARNING! Partitions listed will be formatted! Proceed? Type 'YES': "
+    read -rp "WARNING! Partitions in map will be formatted! Proceed? Type 'YES': "
     [[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
     # Loop through disks

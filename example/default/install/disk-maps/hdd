@@ -1,9 +1,9 @@
-###################
-## Zephyr        ##
-##               ##
-## Install       ##
-## Partition map ##
-###################
+##############
+## Zephyr   ##
+##          ##
+## Install  ##
+## Disk map ##
+##############
 
 [DISKS]
 # NAME DEVICE    [PARTITION_PREFIX]

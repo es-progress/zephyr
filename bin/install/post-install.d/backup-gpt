@@ -52,7 +52,7 @@ fi
 map_files=()
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
-    if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
+    if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
         map_files+=("${file}")
     fi
 done
