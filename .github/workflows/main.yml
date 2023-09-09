@@ -37,6 +37,8 @@ jobs:
         run: git diff --numstat origin/main... | awk '{print $3}' > ~/changed.files
 
       - name: Check changed modules
+        # Step need an id to be defined to later retrieve the output value
+        id: modules
         run: |
           if grep -qs customize/apps ~/changed.files; then
             echo "::set-output name=apps::yes"
