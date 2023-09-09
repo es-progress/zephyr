@@ -33,8 +33,11 @@ chroot "${target}" mount -a
 print-finish
 
 # Run Post-install steps
+terminal=$(tty)
 while IFS= read -r -d '' step; do
-    chroot "${target}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}"
+    print-header "Running step: ${step}..."
+    chroot "${target}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
+    print-finish "Finished ${step}."
 done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0" || true)
 
 print-header "Update initramfs..."
