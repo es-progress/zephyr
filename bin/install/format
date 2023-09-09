@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+#######################
+## Zephyr            ##
+##                   ##
+## Install           ##
+## Format partitions ##
+#######################
+
+###############
+## FUNCTIONS ##
+###############
+
+## Encrypt LUKS partition
+##
+## @param    $1  Partition
+## @param    $2  LUKS Type (luks1, luks2)
+## @param    $3  Label
+#########################################
+_partition-luks-create() {
+    local partition="${1:?"Partition missing"}"
+    local type="${2:?"LUKS type missing"}"
+    local label="${3:?"Partition label missing"}"
+
+    cryptsetup luksFormat \
+        --verify-passphrase \
+        "--type=${type}" \
+        --cipher=aes-xts-plain64 \
+        --key-size=512 \
+        --hash=sha512 \
+        --iter-time=3000 \
+        --use-urandom -- "${partition}"
+    cryptsetup open --type luks "${partition}" "LUKS_${label}"
+}
+
+## Format partition
+##
+## @param    $1  Partition
+## @param    $2  Type (luks1, luks2, efi, msr, win, linux)
+## @param    $3  Label
+##########################################################
+_partition-format() {
+    local partition="${1:?"Partition missing"}"
+    local type="${2:?"Type missing"}"
+    local label="${3:?"Partition label missing"}"
+
+    case "${type}" in
+        luks1|luks2) mkfs.ext4 -L "${label}" "/dev/mapper/LUKS_${label}" ;;
+        efi) mkfs.vfat -F 32 -n "${label}" "${partition}" ;;
+        msr) dd if=/dev/zero "of=${partition}" status=progress || true ;;
+        win) mkntfs -f -L "${label}" "${partition}" ;;
+        linux) mkfs.ext4 -L "${label}" "${partition}" ;;
+        *)
+            print-error "Unsupported type: ${type}"
+            return 1
+            ;;
+    esac
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-root
+
+profile="${1:?"Profile missing"}"
+shift
+
+# Maps
+map_files=()
+for map in "${@}"; do
+    # shellcheck disable=SC2310,SC2311
+    if file=$(cfg-get "${profile}" "install/partition-maps/${map}"); then
+        map_files+=("${file}")
+    fi
+done
+[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
+
+# Loop through maps
+for map_file in "${map_files[@]}"; do
+    print-section "Disks & partitions"
+    lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
+
+    print-section "Parsed config"
+    sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
+    echo
+    read -rp "WARNING! Partitions listed will be formatted! Proceed? Type 'YES': "
+    [[ ${REPLY} != "YES" ]] && error-exit Aborted.
+
+    # Loop through disks
+    # shellcheck disable=SC2310,SC2311
+    for line in $(cfg-read "${map_file}" DISKS); do
+        IFS=$' \t' read -r name device part_prefix <<< "${line}"
+        print-section "Format ${device}"
+
+        # Loop through partitions
+        for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
+            IFS=$' \t' read -r number _ _ type label <<< "${part_line}"
+
+            if [[ "${type}" == luks* ]]; then
+                print-header "LUKS encrypting ${label}..."
+                _partition-luks-create "${device}${part_prefix}${number}" "${type}" "${label}"
+                print-finish
+            fi
+
+            print-header "Format ${label}..."
+            _partition-format "${device}${part_prefix}${number}" "${type}" "${label}"
+            print-finish
+        done
+        print-finish "Finished formatting ${device}"
+    done
+done
+print-finish "All formatting finished."
+
+exit 0
