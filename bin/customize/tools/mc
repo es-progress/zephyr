@@ -19,7 +19,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Config mc [${selector}]..."
+    print-status "Config mc [${selector}]..."
     sudo mkdir -p /root/.config/mc
     mkdir -p ~/.config/mc
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /root/.config/mc/ \;

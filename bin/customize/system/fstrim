@@ -19,7 +19,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Config fstrim [${selector}]..."
+    print-status "Config fstrim [${selector}]..."
     sudo mkdir -p /etc/systemd/system/fstrim.service.d
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/systemd/system/fstrim.service.d/ \;
     print-finish
