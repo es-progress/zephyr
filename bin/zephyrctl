@@ -19,6 +19,7 @@ _usage-main() {
     command+=("remix:Create Zephyr ISO")
     command+=("burn:Burn Zephyr ISO to USB")
     command+=("partition:Partition disk")
+    command+=("format:Format partitions")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("install:Install Zephyr")
@@ -70,6 +71,12 @@ _usage() {
         partition)
             description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="partition PROFILE MAP..."
+            options+=("PROFILE:Customization profile to use")
+            options+=("MAP:Partition maps")
+            ;;
+        format)
+            description="(Re)format partitions. Be careful, as it's a dangerous operation. Create backups beforehand!"
+            usage="format PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Partition maps")
             ;;
@@ -189,6 +196,27 @@ _partition() {
     sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${profile}" "${@}"
 }
 
+## Format partitions
+####################
+# shellcheck disable=SC2317
+_format() {
+    local profile
+
+    if [[ -z "${1:-}" ]]; then
+        print-error "Profile missing!"
+        _usage format
+        exit 1
+    fi
+    profile="${1}"
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error "Profile: ${profile} missing!"
+        exit 1
+    fi
+    shift
+
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/format" "${profile}" "${@}"
+}
+
 ## Post-install
 ###############
 # shellcheck disable=SC2317
@@ -277,7 +305,7 @@ fi
 
 # Switch action
 case "${cmd}" in
-    remix|burn|partition|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
+    remix|burn|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
