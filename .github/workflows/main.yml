@@ -37,33 +37,35 @@ jobs:
         run: git diff --numstat origin/main... | awk '{print $3}' > ~/changed.files
 
       - name: Check changed modules
+        # Step need an id to be defined to later retrieve the output value
+        id: modules
         run: |
           if grep -qs customize/apps ~/changed.files; then
-            echo "::set-output name=apps::yes"
+            echo "apps=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/gnome ~/changed.files; then
-            echo "::set-output name=gnome::yes"
+            echo "gnome=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/packages ~/changed.files; then
-            echo "::set-output name=packages::yes"
+            echo "packages=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/random ~/changed.files; then
-            echo "::set-output name=random::yes"
+            echo "random=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/services ~/changed.files; then
-            echo "::set-output name=services::yes"
+            echo "services=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/shell ~/changed.files; then
-            echo "::set-output name=shell::yes"
+            echo "shell=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/system ~/changed.files; then
-            echo "::set-output name=system::yes"
+            echo "system=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/tools ~/changed.files; then
-            echo "::set-output name=tools::yes"
+            echo "tools=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs bin/remix ~/changed.files; then
-            echo "::set-output name=remix::yes"
+            echo "remix=yes" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
   tests-apps:

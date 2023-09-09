@@ -19,7 +19,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Config PHP [${selector}]..."
+    print-status "Config PHP [${selector}]..."
     while IFS= read -r -d '' file; do
         file_name=$(basename "${file}")
         sudo cp --no-preserve=mode,ownership "${file}" "/etc/php/${version}/mods-available/${file_name}"

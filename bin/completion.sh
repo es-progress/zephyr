@@ -2,11 +2,11 @@
 ## Bash completion for zephyrctl
 ################################
 __zephyrctl_complete() {
-    local cur words cword command commands profiles scripts
+    local cur words cword command commands profiles scripts maps
     _init_completion
 
     command="${words[1]}"
-    commands=(burn remix help partition post-install customize install uninstall)
+    commands=(burn remix help partition format post-install customize install uninstall)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n")
 
@@ -15,7 +15,7 @@ __zephyrctl_complete() {
         2)
             case "${command}" in
                 help) __zephyr_gen_word "${commands[*]}" ;;
-                customize) __zephyr_gen_word "${profiles}" ;;
+                customize|partition|format|post-install) __zephyr_gen_word "${profiles}" ;;
                 remix|burn) __zephyr_gen_file ;;
                 *) ;;
             esac
@@ -24,10 +24,23 @@ __zephyrctl_complete() {
             case "${command}" in
                 burn) __zephyr_gen_file ;;
                 customize) __zephyr_gen_word "${scripts}" ;;
+                partition|format|post-install)
+                    maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
+                    __zephyr_gen_word "${maps}"
+                    ;;
                 *) ;;
             esac
             ;;
-        *) ;;
+        *)
+            case "${command}" in
+                partition|format|post-install)
+                    maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
+                    __zephyr_gen_word "${maps}"
+                    ;;
+                *) ;;
+            esac
+            ;;
+
     esac
 }
 

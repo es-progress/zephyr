@@ -75,7 +75,7 @@ if file=$(cfg-get "${profile}" packages/local.cfg); then
 fi
 
 for repo in "${repos[@]}"; do
-    print-header "Add apt repo: ${repo}..."
+    print-status "Add apt repo: ${repo}..."
     sudo add-apt-repository --yes --no-update "${repo}"
     print-finish
 done
