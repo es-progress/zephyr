@@ -41,44 +41,49 @@ if [[ -e /sys/firmware/efi ]]; then
     sudo apt-get install --yes --no-install-recommends mokutil
     print-finish
 
-    key_created=
-    print-status "Create MOK private key..."
-    if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
-        sudo openssl genpkey \
-            -algorithm rsa \
-            -pkeyopt rsa_keygen_bits:4096 \
-            -out "/etc/ssl/private/${mok_key_name}.key"
-        key_created=1
-        print-finish
+    # Check SecureBoot is enabled
+    if ! mokutil --sb-state; then
+        print-finish "SecureBoot not enabled/available, skipping MOK certificate"
     else
-        print-finish "Key found, skipped"
-    fi
+        key_created=
+        print-status "Create MOK private key..."
+        if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
+            sudo openssl genpkey \
+                -algorithm rsa \
+                -pkeyopt rsa_keygen_bits:4096 \
+                -out "/etc/ssl/private/${mok_key_name}.key"
+            key_created=1
+            print-finish
+        else
+            print-finish "Key found, skipped"
+        fi
 
-    print-header "Create MOK certificate..."
-    if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
-        sudo openssl req \
-            -new \
-            -x509 \
-            -sha256 \
-            -key "/etc/ssl/private/${mok_key_name}.key" \
-            -outform DER \
-            -out "/etc/ssl/certs/${mok_key_name}.der" \
-            -days 3650 \
-            -subj "${mok_key_subject}"
-        print-finish
-    else
-        print-finish "Certificate found, skipped"
-    fi
+        print-header "Create MOK certificate..."
+        if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
+            sudo openssl req \
+                -new \
+                -x509 \
+                -sha256 \
+                -key "/etc/ssl/private/${mok_key_name}.key" \
+                -outform DER \
+                -out "/etc/ssl/certs/${mok_key_name}.der" \
+                -days 3650 \
+                -subj "${mok_key_subject}"
+            print-finish
+        else
+            print-finish "Certificate found, skipped"
+        fi
 
-    print-header "Enroll MOK certificate..."
-    cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
-    # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
-    if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
-        sudo mokutil --import "/etc/ssl/certs/${mok_key_name}.der"
-        sudo mokutil --timeout -1
-        print-finish
-    else
-        print-finish "Already enrolled, skipped"
+        print-header "Enroll MOK certificate..."
+        cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
+        # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
+        if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
+            sudo mokutil --import "/etc/ssl/certs/${mok_key_name}.der"
+            sudo mokutil --timeout -1
+            print-finish
+        else
+            print-finish "Already enrolled, skipped"
+        fi
     fi
 fi
 
