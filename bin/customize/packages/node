@@ -48,10 +48,6 @@ print-header "Install node..."
 sudo snap install node --classic
 print-finish
 
-print-header "Update npm..."
-sudo npm install --global --no-fund npm
-print-finish
-
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"
