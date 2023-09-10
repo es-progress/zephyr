@@ -42,6 +42,7 @@ if [[ -e /sys/firmware/efi ]]; then
     print-finish
 
     # Check SecureBoot is enabled
+    echo -n "SecureBoot state: "
     if ! mokutil --sb-state; then
         print-finish "SecureBoot not enabled/available, skipping MOK certificate"
     else
@@ -58,7 +59,7 @@ if [[ -e /sys/firmware/efi ]]; then
             print-finish "Key found, skipped"
         fi
 
-        print-header "Create MOK certificate..."
+        print-status "Create MOK certificate..."
         if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
             sudo openssl req \
                 -new \
