@@ -96,7 +96,6 @@ for map_file in "${map_files[@]}"; do
     [[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
     # Loop through disks
-    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device _ <<< "${line}"
         print-section "Partition ${device}"
