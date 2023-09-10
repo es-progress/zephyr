@@ -114,36 +114,35 @@ if dir=$(cfg-get "${profile}" install/initramfs/local.d); then
     _config local "${dir}"
 fi
 
+print-status "Create LUKS keys dir..."
+mkdir -p "${key_dir}"
+chmod o-rwx "${key_dir}"
+print-finish
+
 # Loop through maps
 for map_file in "${map_files[@]}"; do
-    partition=$(basename "${map_file}")
-
-    print-header "Create key file for ${partition}..."
-    mkdir -p "${key_dir}"
-    dd if=/dev/urandom of="${key_dir}/${partition}.key" bs=4096 count=1
-    print-finish
-
-    print-status "Secure key-file for ${partition}..."
-    chmod o-rwx "${key_dir}"
-    chmod go-rwx "${key_dir}/${partition}.key"
-    print-finish
-
     # Loop through disks
-    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device part_prefix <<< "${line}"
-
         # Loop through partitions
         for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
             IFS=$' \t' read -r number _ _ type label <<< "${part_line}"
 
+            partition="${device}${part_prefix}${number}"
+            partition_key_file="${key_dir}/${partition#/dev/}-${label}.key"
+
             if [[ "${type}" == luks* ]]; then
+                print-header "Create key file for ${partition}..."
+                dd if=/dev/urandom of="${partition_key_file}" bs=4096 count=1
+                chmod go-rwx "${partition_key_file}"
+                print-finish
+
                 print-header "Add machine key to LUKS ${label}..."
-                _luks-add-key "${device}${part_prefix}${number}" "${key_dir}/${partition}.key" "${key_slot}"
+                _luks-add-key "${partition}" "${partition_key_file}" "${key_slot}"
                 print-finish
 
                 print-status "Update crypttab with ${label}..."
-                _luks-crypttab "${device}${part_prefix}${number}" "${label}" "${key_dir}/${partition}.key"
+                _luks-crypttab "${partition}" "${label}" "${partition_key_file}"
                 print-finish
             fi
         done

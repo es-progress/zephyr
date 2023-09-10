@@ -63,7 +63,6 @@ mkdir -p "${backup_dir}"
 # Loop through maps
 for map_file in "${map_files[@]}"; do
     # Loop through disks
-    # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device _ <<< "${line}"
         print-header "Backup partition table for ${name}..."
