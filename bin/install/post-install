@@ -16,7 +16,7 @@ check-root
 profile="${1:?"Profile missing"}"
 shift
 
-read -rp "WARNING! Possible dangerous operation! Proceed? Type 'YES': "
+read -rp "WARNING! This only meant to run after a clean Ubuntu install! Proceed? Type 'YES': "
 [[ ${REPLY} != "YES" ]] && error-exit Aborted.
 
 # Mount system
