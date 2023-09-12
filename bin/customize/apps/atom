@@ -24,7 +24,7 @@ _install-packages() {
     for package in $(cfg-read "${cfg_file}" atom-packages); do
         apm install "${package}"
     done
-    print-finish
+    print-finish "Deprecated, skip install."
 }
 
 ## Copy config files
