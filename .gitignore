@@ -6,9 +6,9 @@
 
 # Mixing: iso files, mounted images, extracted contents
 /mixing
-
 # Profiles
 /profiles
-
+# Payload
+/payload
 # Local config
 /zephyr.local.cfg
