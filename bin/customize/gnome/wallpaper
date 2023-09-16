@@ -19,13 +19,13 @@ profile="${1:?"Profile missing"}"
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/wallpaper.jpg); then
     print-status "Copy wallpaper image..."
-    sudo mkdir -p "${INSTALL_DIR}"
-    sudo cp --no-preserve=mode,ownership "${file}" "${INSTALL_DIR}/wallpaper.jpg"
+    sudo mkdir -p "${ASSETS_DIR}"
+    sudo cp --no-preserve=mode,ownership "${file}" "${ASSETS_DIR}/wallpaper.jpg"
     print-finish
 
     print-status "Set wallpaper image..."
-    dconf write /org/gnome/desktop/background/picture-uri "'file://${INSTALL_DIR}/wallpaper.jpg'"
-    dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${INSTALL_DIR}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/background/picture-uri "'file://${ASSETS_DIR}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${ASSETS_DIR}/wallpaper.jpg'"
     print-finish
 fi
 
