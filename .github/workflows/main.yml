@@ -358,5 +358,5 @@ jobs:
         run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
 
       - name: Create remix
-        run: ./bin/zephyrctl create ubuntu.iso
+        run: ./bin/zephyrctl remix ubuntu.iso
         shell: bash
