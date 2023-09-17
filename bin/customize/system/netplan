@@ -56,6 +56,10 @@ if ! grep -qs "\[connectivity\]" /etc/NetworkManager/NetworkManager.conf; then
 fi
 
 print-header "Reload Netplan..."
+# This needs to run twice. Couldn't figure out why...
+# On the first run netplan configs are applied, but interface is DOWN
+sudo netplan apply
+# On the second run interface is brought UP
 sudo netplan apply
 print-finish
 
