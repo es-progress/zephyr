@@ -113,7 +113,9 @@ jobs:
         run: ln -s example profiles
 
       - name: Install dependencies
-        run: sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
 
       - name: Execute scripts (1st pass)
         run: |
