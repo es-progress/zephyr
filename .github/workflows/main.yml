@@ -113,7 +113,9 @@ jobs:
         run: ln -s example profiles
 
       - name: Install dependencies
-        run: sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
 
       - name: Execute scripts (1st pass)
         run: |
@@ -358,5 +360,5 @@ jobs:
         run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
 
       - name: Create remix
-        run: ./bin/zephyrctl create ubuntu.iso
+        run: ./bin/zephyrctl remix ubuntu.iso
         shell: bash

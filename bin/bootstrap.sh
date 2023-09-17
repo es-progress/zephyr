@@ -14,6 +14,8 @@ PATH_SCRIPTS_CUSTOMIZE="${PROJECT_ROOT}/bin/customize"
 PATH_SCRIPTS_INSTALL="${PROJECT_ROOT}/bin/install"
 # Customization profiles
 PATH_PROFILES="${PROJECT_ROOT}/profiles"
+# Custom payload to copy to remixed SquashFS
+PATH_PAYLOAD="${PROJECT_ROOT}/payload"
 # Mount point for iso images
 PATH_MOUNT="${PROJECT_ROOT}/mixing/mnt"
 # Extracted files from iso image

@@ -24,8 +24,12 @@ sudo cp \
 # Bin
 sudo cp -r "${PROJECT_ROOT}/bin" "${target}/"
 # Profiles
-if [[ -e "${PROJECT_ROOT}/profiles" ]]; then
-    sudo cp -Lr "${PROJECT_ROOT}/profiles" "${target}/"
+if [[ -e "${PATH_PROFILES}" ]]; then
+    sudo cp -Lr "${PATH_PROFILES}" "${target}/"
+fi
+# Payload
+if [[ -e "${PATH_PAYLOAD}" ]]; then
+    sudo cp -Lr "${PATH_PAYLOAD}" "${target}/"
 fi
 # Local config
 if [[ -e "${PROJECT_ROOT}/zephyr.local.cfg" ]]; then
