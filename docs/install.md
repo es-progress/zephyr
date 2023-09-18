@@ -25,7 +25,7 @@ Here are the detailed installation steps:
 
 That's it, you're ready to roll! :metal:
 
-It you want to start right away, and explore on your own, run `zephyrctl` without arguments to view the available commands. If you prefer to get informed first, check next page where you can learn about how customization profiles work.
+It you want to start right away, and explore on your own, run `zephyrctl` without arguments to view the available commands. If you prefer to get informed first, check next page where you can learn about how [customization profiles](profiles.md) work.
 
 ---
 
