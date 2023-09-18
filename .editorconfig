@@ -6,5 +6,6 @@ end_of_line = lf
 indent_size = 4
 indent_style = space
 
-[*.yml]
+# netplan only accepts .yaml files...
+[{*.yml,*.yaml}]
 indent_size = 2
