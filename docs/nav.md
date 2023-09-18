@@ -1,2 +1,3 @@
 -   [Home](index.md)
 -   [Installation](install.md)
+-   [Profiles](profiles.md)
