@@ -57,15 +57,15 @@ _usage() {
             options+=("COMMAND:The command name (to view available commands, run 'zephyrctl' without arguments)")
             ;;
         remix)
-            description="Remix an Ubuntu image file and embed Zephyr (along with your profiles)"
+            description="Remix an Ubuntu image file and embed Zephyr (along with your profiles and payload)"
             usage="remix ISO_IN [ISO_OUT]"
-            options+=("ISO_IN:ISO to remix (e.g. Ubuntu Live DVD)")
+            options+=("ISO_IN:ISO to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)")
             options+=("ISO_OUT:Remixed ISO file. Defaults to zephyr.iso in current dir.")
             ;;
         burn)
             description="Create a bootable USB stick from an image file"
             usage="burn ISO_FILE [DISK]"
-            options+=("ISO_FILE:ISO to burn (e.g. remixed Ubuntu Live DVD)")
+            options+=("ISO_FILE:ISO to burn (e.g. zephyr.iso)")
             options+=("DISK:USB flash drive device file (e.g. /dev/sdc). If not specified, you can select one interactively.")
             ;;
         partition)
