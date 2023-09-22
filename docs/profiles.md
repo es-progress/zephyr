@@ -1,7 +1,7 @@
 # Profiles
 
-As _Profiles_ are the heart of all remixing, this part is very important to fully understand.
-This makes this section a bit longer, but don't worry the rest will be nice & easy after this. :wink:
+As _Profiles_ are the heart of remixing, this part is very important to fully understand.
+This makes this section a bit longer, but don't worry the rest will be nice & easy after this (they are handled by Zephyr). :wink:
 
 ## Introduction
 
@@ -19,7 +19,7 @@ This allows to have (let's say) different wallpapers on individual machines but 
 
     Currently only two levels of profiles are supported: default and other (named). No OOP-style profile inheritance is possible.
 
-You can create only a default or just a named one, if that fits, but all configurations need to be set in at least one of the profiles.
+You can create only a default or just a named one, if that fits, but all configurations (well, actually the ones you want to run) need to be set in at least one of the profiles.
 
 Zephyr will look for profiles in the `/profiles` dir in the local Git clone (e.g. `DIR_ZEPHYR/profiles`).
 This directory is ignored by Git, so you can freely add your configs, updating Zephyr won't mess up your files.
@@ -27,7 +27,7 @@ Symlinking works also, so you can have your profiles anywhere else just symlink 
 
 !!! tip
 
-    Store your profiles in a private Git repository and symlink your private config repo to `/profiles`.
+    Store your profiles in a Git repository and symlink your (probably private) config repo to `/profiles`.
 
     This way you can keep your configurations under version control and won't interfere with Zephyr.
 
@@ -76,4 +76,4 @@ You can mix global/local files in any profile (including default) to achieve you
 
     Happy profiling! :grinning:
 
-Now, that your profiles are ready, you can remix Ubuntu and create your custom ISO file!
+Now, if your profiles are ready :heavy_check_mark:, you can [remix Ubuntu](remix.md) and create your custom ISO file!
