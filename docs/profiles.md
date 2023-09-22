@@ -76,4 +76,4 @@ You can mix global/local files in any profile (including default) to achieve you
 
     Happy profiling! :grinning:
 
-Now, if your profiles are ready :heavy_check_mark:, you can remix Ubuntu and create your custom ISO file!
+Now, if your profiles are ready :heavy_check_mark:, you can [remix Ubuntu](remix.md) and create your custom ISO file!
