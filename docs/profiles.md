@@ -57,9 +57,12 @@ cp -r example/default profiles/bar
 
 ## Profile structure
 
-Inside profiles configuration files are grouped by category (e.g. apps, system) and then by name of customization (e.g. system/netplan, system/shorewall).
+Zephyr consists of different _Modules_ that are responsible to configure a specific application (Virtualbox, Apache etc.), tool (Git, `gpg` for example), Linux subsystem (like user groups, `sudo` or `systemd-resolved`), a system administration job (disk partitioning, backing up GPT partition table) or just one particular setting (e.g. GNOME wallpaper).
+For more about modules see _Customizations_.
 
-Each config file or directory has a global and a local counterpart. They have the same syntax and hold the same configurations.
+Inside profiles configuration files are grouped by category (e.g. apps, system) and then by name of module (e.g. system/netplan, system/shorewall).
+There are configurations for each module, and each config file or directory has a global and a local counterpart.
+They have the same syntax and hold the same configurations.
 The reason for this is to be able to override only parts of a configuration in a named profile.
 During customization, configuration values are merged from the named and the default profile.
 
@@ -77,3 +80,4 @@ You can mix global/local files in any profile (including default) to achieve you
     Happy profiling! :grinning:
 
 Now, if your profiles are ready :heavy_check_mark:, you can [remix Ubuntu](remix.md) and create your custom ISO file!
+Alternatively, if you just want to update any module on a live system go to **Customizations**.
