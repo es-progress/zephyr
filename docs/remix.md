@@ -65,4 +65,4 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 
         There are some safeguards, so hopefully won't overwrite your root filesystem, but please be careful and always double check that the correct device is selected :bangbang:
 
-At this point you have remixed Ubuntu. The next step is Ubuntu installation.
+At this point you have remixed Ubuntu. The next step is [Ubuntu installation](ubuntu.md).
