@@ -2,3 +2,4 @@
 -   [Installation](install.md)
 -   [Profiles](profiles.md)
 -   [Remix](remix.md)
+-   [Ubuntu install](ubuntu.md)
