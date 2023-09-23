@@ -45,7 +45,7 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 
     !!! success
 
-        If you want install your remix on a virtual machine then your ready!
+        If you want install your remix on a virtual machine then you're ready!
         Just boot from the newly generated ISO.
 
 1.  (Optional) Burn ISO to USB-stick, if you want install on a physical machine.
