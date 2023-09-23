@@ -1,19 +1,19 @@
 # Remixing
 
-After your profiles are all set up comes a more exciting part: the remixing!
+Once your profiles are all set up comes a more exciting part: the remixing!
 Now you can create _your own_ Ubuntu remix.
 
 !!! info
 
-    If you like to apply your configurations on a non freshly installed system that's fine too.
+    If you prefer applying your configurations to an existing system, that's perfectly fine as well.
     In that case you can skip this part and go directly to *Customizations*.
 
 Zephyr :eight_spoked_asterisk: and your configurations will be preinstalled on a stock Ubuntu ISO.
 So, after a fresh install no other setup is needed, applying the customizations can start right away.
 This results in a smooth (re)install/configure flow. :relaxed:
 
-Remixing process is totally automated, you only have to execute two `zephyrctl` commands (will see later).
-However you need to decide which Ubuntu ISO file to remix.
+Remixing process is entirely automated, you only have to execute two `zephyrctl` commands (will see later).
+However, you'll need to choose the Ubuntu ISO file you want to remix.
 
 !!! note
 
@@ -39,8 +39,8 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
     zephyrctl remix ubuntu-20.04.6-desktop-amd64.iso
     ```
 
-    By default this will create the remixed ISO file named `zephyr.iso` in current directory.
-    This default can be configured or you can set a filename on CLI also.
+    By default, this will create a remixed ISO file named `zephyr.iso` in the current directory.
+    This can be configured or you can set a filename on CLI also.
     For details run `zephyrctl help remix`.
 
     !!! success
@@ -61,7 +61,7 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 
     !!! warning "Data-loss danger"
 
-        Selected device will be overwritten, and **any previous data on the device will be inaccessible** afterward!
+        Selected device will be overwritten, and **any previous data on the device will become inaccessible!**
 
         There are some safeguards, so hopefully won't overwrite your root filesystem, but please be careful and always double check that the correct device is selected :bangbang:
 

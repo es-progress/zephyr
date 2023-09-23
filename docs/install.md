@@ -1,11 +1,12 @@
 # Installation
 
-You can install Zephyr locally by cloning the Git repository, modifying a few configurations (usually not necessary), running the installer and you're good to go!
+To install Zephyr :eight_spoked_asterisk: locally, clone the Git repository, modify a few configurations (usually unnecessary), run the installer and you're good to go!
 
-Here are the detailed installation steps:
+Below are the detailed installation steps:
 
 1. Clone the Git repository from GitHub
     ```
+    cd /path/to/desired/directory
     git clone https://github.com/es-progress/zephyr.git
     ```
 1. Configure Zephyr
@@ -19,6 +20,7 @@ Here are the detailed installation steps:
     - Set up Bash completion for `zephyrctl`
     - Create a symlink for `zephyrctl` in `/usr/local/bin`, making it accessible from anywhere (provided that `/usr/local/bin` is in your PATH).
     ```
+    # Replace ZEPHYR_DIR with the actual path where Zephyr were cloned earlier
     cd ZEPHYR_DIR
     ./bin/zephyrctl install
     ```
@@ -32,4 +34,4 @@ It you want to start right away, and explore on your own, run `zephyrctl` withou
 If you decide to uninstall Zephyr later (sorry to see you go!), just follow these steps:
 
 1. Run `zephyrctl uninstall`
-1. Delete the Git repository
+1. Delete the Git repository. Note: it may contain your local Zephyr configuration file. If you want to preserve that, make a backup before deleting.
