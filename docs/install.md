@@ -34,4 +34,6 @@ It you want to start right away, and explore on your own, run `zephyrctl` withou
 If you decide to uninstall Zephyr later (sorry to see you go!), just follow these steps:
 
 1. Run `zephyrctl uninstall`
-1. Delete the Git repository. Note: it may contain your local Zephyr configuration file. If you want to preserve that, make a backup before deleting.
+1. Delete the Git repository.
+
+    Note: it may contain your local Zephyr configuration file. If you want to preserve that, make a backup before deleting.
