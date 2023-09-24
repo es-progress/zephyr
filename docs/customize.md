@@ -1,4 +1,4 @@
-# Customize
+# Customization
 
 This chapter is about how to use Zephyr :eight_spoked_asterisk: to customize your Ubuntu install: install packages, apply configurations and generally set up the system.
 
