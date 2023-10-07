@@ -6,3 +6,4 @@
 -   [Customization](customize.md)
 -   Know-how
     -   [Create boot USB](know-how/create-boot-usb.md)
+    -   [Securely erase disk](know-how/erase-disk.md)
