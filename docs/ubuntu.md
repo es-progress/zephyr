@@ -37,12 +37,23 @@ At the end of this phase the actual install is not yet started, however the disk
 1. Open Terminal
 1. (Optional) This is a good time to securely wipe disks or perform memory cell clearing (only for SSD). This is a manual process.
 1. (Optional) Partition disk(s). If you don't want to change existing partitions this can be skipped.
+
     ```
-    zephyrctl partition <PROFILE> <DISK_MAP>...
+    zephyrctl partition PROFILE DISK_MAP...
+
+    where:
+    PROFILE            Selected customization profile
+    DISK_MAP           Disk-map to use
     ```
+
 1. Format partitions
+
     ```
-    zephyrctl format <PROFILE> <DISK_MAP>...
+    zephyrctl format PROFILE DISK_MAP...
+
+    where:
+    PROFILE            Selected customization profile
+    DISK_MAP           Disk-map to use
     ```
 
 !!! success "You now have clean & empty disks, ready for a fresh install. :white_flag:"
@@ -70,7 +81,11 @@ Then we will reboot the system and see the first boot (hopefully without any pro
 1.  Run post-install
 
     ```
-    zephyrctl post-install <PROFILE> <DISK_MAP>...
+    zephyrctl post-install PROFILE DISK_MAP...
+
+    where:
+    PROFILE            Selected customization profile
+    DISK_MAP           Disk-map to use
     ```
 
 1.  :red_circle: Reboot system
