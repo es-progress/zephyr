@@ -4,3 +4,5 @@
 -   [Remix](remix.md)
 -   [Ubuntu install](ubuntu.md)
 -   [Customization](customize.md)
+-   Know-how
+    -   [Create boot USB](know-how/create-boot-usb.md)
