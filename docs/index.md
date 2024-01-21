@@ -1,6 +1,6 @@
 # Welcome!
 
-This is the comprehensive documentation for [_Zephyr_ :eight_spoked_asterisk:](https://github.com/es-progress/zephyr){target=\_blank} your companion in streamlining Ubuntu installation and configuration (customization).
+This is the comprehensive documentation for [_Zephyr_ :eight_spoked_asterisk:](https://github.com/es-progress/zephyr){target=\_blank} -- your companion in streamlining Ubuntu installation and configuration (customization).
 If you're looking to optimize your customization workflow, you've come to the right place!
 
 ## What is Zephyr?
