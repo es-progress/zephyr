@@ -24,9 +24,11 @@ Executing a module is simple as this:
 
 ```
 zephyrctl customize PROFILE [MODULE]...
-```
 
-where `PROFILE` is the selected customization profile and `MODULE` is a list of modules to run.
+where:
+PROFILE            Selected customization profile
+MODULE             List of modules to run
+```
 
 This is the end of the guides.
 For now you should be familiar how Zephyr :eight_spoked_asterisk: works and how it can help you to streamline your Ubuntu install & configure workflow.
