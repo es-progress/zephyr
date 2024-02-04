@@ -8,3 +8,5 @@
     -   [Create boot USB](know-how/create-boot-usb.md)
     -   [Securely erase disk](know-how/erase-disk.md)
     -   [Rescue system](know-how/rescue.md)
+-   Reference
+    -   [zephyrctl](reference/zephyrctl.md)

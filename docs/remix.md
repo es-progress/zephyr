@@ -59,7 +59,7 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 
     For details execute `zephyrctl help burn`.
 
-    !!! warning "Data-loss danger"
+    !!! danger "Data-loss danger"
 
         Selected device will be overwritten, and **any previous data on the device will become inaccessible!**
 
