@@ -49,7 +49,7 @@ cd ZEPHYR_DIR
 mkdir -p profiles
 cp -r example/default profiles/
 
-# Create a new profile based on default
+# Create a new profile called "bar" based on default
 cd ZEPHYR_DIR
 mkdir -p profiles
 cp -r example/default profiles/bar

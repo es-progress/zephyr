@@ -54,14 +54,12 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
     zephyrctl burn zephyr.iso
     ```
 
-    This will interactively ask for a device. It's possible to give device as a parameter, in this case it will run non-interactively.
+    This will interactively ask for a disk (device file). It's possible to give the disk as a parameter, in this case it will run non-interactively.
     Also make sure the USB-stick is plugged in. :nerd_face:
 
     For details execute `zephyrctl help burn`.
 
-    !!! warning "Data-loss danger"
-
-        Selected device will be overwritten, and **any previous data on the device will become inaccessible!**
+    !!! danger "Any previous data on the disk will be deleted!"
 
         There are some safeguards, so hopefully won't overwrite your root filesystem, but please be careful and always double check that the correct device is selected :bangbang:
 
