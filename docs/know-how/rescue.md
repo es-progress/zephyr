@@ -12,7 +12,7 @@ Now let's see how to do these.
 ## Recover data
 
 1. Remove hard-drive and insert to another machine :hammer_and_wrench:
-1. Boot system
+1. :red_circle: Boot system
 1. (If encrypted) Open LUKS encryption
 
     ```
@@ -50,7 +50,7 @@ Now let's see how to do these.
 This method works if the machine is still bootable without faulty hardware.
 Basically you boot from a live USB and chroot to the installed system.
 
-1. Boot from live USB
+1. :red_circle: Boot from live USB
 1. Mount root partition. You can mount anywhere, but I'll use `/target` in this example.
 
     1. (If encrypted) Open LUKS encryption
@@ -79,7 +79,7 @@ Basically you boot from a live USB and chroot to the installed system.
 1. Mount device filesystems, so your installed system can access them
     ```
     ROOT=/target
-    for n in proc sys dev etc/resolv.conf; do mount --rbind /$n "$root/$n"; done
+    for n in proc sys dev etc/resolv.conf; do mount --rbind /$n "$ROOT/$n"; done
     ```
 1. Enter the installed system
     ```

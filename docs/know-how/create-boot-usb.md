@@ -7,9 +7,9 @@ It is possible to do it the other way around but it's just more hassle...
 
 Before you start, check your USB stick is empty or you've already backed up the files!
 
-!!! danger
+!!! danger "All files on the drive will be lost!"
 
-    This operation will reformat the drive and all files on the USB stick will be lost!
+    Create backups if necessary and double-check the device name!
 
 ## Ubuntu boot
 

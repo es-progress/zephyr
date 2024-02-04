@@ -32,7 +32,7 @@ At the end of this phase the actual install is not yet started, however the disk
 
 **Pre-install steps**
 
-1. Boot from live USB (Zephyr)
+1. :red_circle: Boot from live USB (Zephyr)
 1. :computer_mouse: **Try Ubuntu**
 1. Open Terminal
 1. (Optional) This is a good time to securely wipe disks or perform memory cell clearing (only for SSD). This is a manual process.
