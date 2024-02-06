@@ -11,3 +11,4 @@
 -   Reference
     -   [Configurations](reference/configs.md)
     -   [zephyrctl](reference/zephyrctl.md)
+    -   [Modules](reference/modules.md)
