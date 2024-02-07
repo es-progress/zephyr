@@ -150,3 +150,74 @@ With this module you can set the desktop background.
 **Configuration**
 
 -   `gnome/wallpaper.jpg`: your wallpaper image.
+
+---
+
+## Package modules
+
+With the help of the following modules you can install packages using various package managers.
+
+### apt
+
+The apt module assists with the management of packages using the Debian package manager (APT).
+
+!!! note "It also upgrades all installed packages!"
+
+**Configuration**
+
+-   `packages/global.cfg`:
+    -   `apt-install`: APT packages to install. Format: "package_name apt_repository" (one per line, apt_repository optional).
+    -   `apt-remove`: APT packages to remove. Format: "package_name" (one per line).
+
+---
+
+### bin
+
+Shell binaries (or scripts, PHAR files, basically any executable file) to download and install to `/usr/local/bin/`.
+
+!!! note
+
+    This module needs the `bin_global` configuration to be defined in `shell/scripts` module to work.
+
+**Configuration**
+
+-   `packages/global.cfg`:
+    -   `bin`: shell binaries to install. Format: "Name URL SHA256SUM" (one per line, SHA256SUM optional).
+
+---
+
+### node
+
+With the node module you can install Node.js packages.
+
+!!! note "It will also install nodejs and npm if not already installed."
+
+**Configuration**
+
+-   `packages/global.cfg`:
+    -   `node`: Node modules to install. Format: "package_name" (one per line).
+
+---
+
+### pip
+
+This module is used to manage Python packages installed via pip.
+
+!!! note "It will install pip if not installed."
+
+**Configuration**
+
+-   `packages/pip.global`: pip requirements file.
+
+---
+
+### snap
+
+The snap module assists with installing Snap packages.
+
+!!! note "It will install snapd if not installed and purge old revisions of installed snaps."
+
+**Configuration**
+
+-   `packages/global.cfg`:
+    -   `snap`: snaps to install. Format: "snap_name install_mode" (one per line, install_mode optional, e.g. "classic").
