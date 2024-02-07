@@ -263,3 +263,84 @@ This module executes your local, custom modules.
 
 -   `random/local/global.d`: any executable file in this directory will be run.
     During execution the current working directory will be this directory, so you can use relative paths to access files in this directory if your module needs extra files.
+
+---
+
+## Service modules
+
+These modules allow you to configure various services such as database servers, web servers.
+
+### apache
+
+The module is for the configuration of the Apache web server.
+
+!!! note
+
+    This module does not install Apache. Use the `packages/apt` module to install it!
+
+    Also you need to run `system/certificate` module beforehand to generate self-signed SSL certificates, which will be used by Apache.
+
+**Configuration**
+
+-   `services/apache/config.global.d`: use this directory to place Apache's configuration files (`.conf`).
+-   `services/apache/vhost-default.conf`: default virtual host file.
+-   `services/global.cfg`:
+    -   `apache`: apache script settings. Format: INI-file format.
+        -   `web_root`: web root for virtual hosts
+        -   `def_virt_host_name`: name for default vhost (which will also be used for certificate and key filenames)
+        -   `def_virt_host_subject`: default virtual host certificate subject
+    -   `apache-module`: list of Apache modules to enable. Format: "module_name" (one per line).
+
+---
+
+### mariadb
+
+This will install & customize MariaDB database server, including creating an admin user with full privileges.
+
+**Configuration**
+
+-   `services/mariadb/global.d`: directory for MariaDB's configuration files (`.cnf`).
+-   `services/global.cfg`:
+    -   `mariadb`: mariadb script settings. Format: INI-file format.
+        -   `repo`: MariaDB APT repository URL
+        -   `admin_name`: username for MySQL admin user
+        -   `admin_pass`: password for MySQL admin user
+
+---
+
+### php
+
+This module will configure PHP and start the PHP-FPM service with Apache.
+
+!!! note
+
+    This module does not install PHP. Use the `packages/apt` module to install it!
+
+    Also it expects Apache to be installed.
+
+**Configuration**
+
+-   `services/php/global.d`: directory for PHP's `.ini` configuration files.
+-   `services/global.cfg`:
+    -   `php`: php script settings. Format: INI-file format.
+        -   `version`: PHP version
+
+---
+
+### phpmyadmin
+
+Use this module to install and configure phpMyAdmin. It also creates phpMyAdmin control database & user.
+
+!!! note
+
+    phpMyAdmin needs a LAMP stack to work, so you need to install Apache, MariaDB and PHP first.
+
+**Configuration**
+
+-   `services/phpmyadmin/config.inc.php`: phpMyAdmin configuration file.
+-   `services/global.cfg`:
+    -   `phpmyadmin`: php script settings. Format: INI-file format.
+        -   `url`: Download URL for phpMyAdmin tarball
+        -   `checksum`: SHA256 checksum for download tar-archive
+        -   `service_user`: phpMyAdmin control user name
+        -   `service_pass`: phpMyAdmin control user password
