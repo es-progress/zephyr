@@ -344,3 +344,44 @@ Use this module to install and configure phpMyAdmin. It also creates phpMyAdmin 
         -   `checksum`: SHA256 checksum for download tar-archive
         -   `service_user`: phpMyAdmin control user name
         -   `service_pass`: phpMyAdmin control user password
+
+---
+
+## Shell modules
+
+Modules to customize Bash and install your custom shell scripts.
+
+### bash
+
+This module is called `bash` but it could have been called `home-dir` too, as it setup your whole home directory not just Bash (through `.bashrc`).
+Typically you would put your custom `.bashrc` here, but you can put any file here and it will be copied to your home directory: like `.profile`, `.inputrc` etc.
+In this module there is a difference between `global` and `local` files.
+Global files are installed globally for all users, and local files are installed only for the current user.
+
+**Configuration**
+
+-   `shell/bash/global.d`: all files here will be copied to your HOME directory, `/root`, `/etc/skel` so it will be default for new users and root too.
+    The directory structure will be preserved, so you can implement your custom directory structure.
+-   `shell/bash/local.d`: files in this directory will be copied only to your HOME directory so it's local for the current user only with directory structure preserved.
+-   `shell/bash/root.d`: these files will be copied to `/root` to customize root's Bash only (directory structure preserved).
+
+---
+
+### scripts
+
+This module installs your custom shell scripts to directories that are in your `PATH` (configurable).
+In this module there is a difference between `global` and `local` files.
+Global files are installed to `/usr/local/bin` (by default) - so it's global for all users - and local files are installed to `~/bin` (by default) - so it's local for the current user only.
+
+**Configuration**
+
+-   `shell/bin/global.d`: contains system-wide shell scripts.
+-   `shell/bin/local.d`: contains shell scripts for the current user.
+-   `shell/lib/global.d`: contains system-wide shell libraries.
+-   `shell/lib/local.d`: contains shell libraries for the current user.
+-   `shell/global.cfg`:
+    -   `scripts`: scripts script settings. Format: INI-file format.
+        -   `bin_global`: Directory for global shell scripts
+        -   `bin_local`: Directory for local shell scripts
+        -   `lib_global`: Directory for global shell library
+        -   `lib_local`: Directory for local shell library
