@@ -4,7 +4,7 @@
 
 Most of the time you'll customize a non-freshly installed OS.
 Probably you don't want to reinstall Ubuntu just because an environment variable is changed or a new Git alias is added to your configuration...
-In this case you can skip this part and see _Customization_.
+In this case you can skip this part and see [Customization](customize.md).
 
 But there are some tasks (like partitioning disks) that are best to do before a full reinstall.
 Also sometimes you might like to start fresh or you've got a new device and want to install and setup Ubuntu.
@@ -35,7 +35,7 @@ At the end of this phase the actual install is not yet started, however the disk
 1. :red_circle: Boot from live USB (Zephyr)
 1. :computer_mouse: **Try Ubuntu**
 1. Open Terminal
-1. (Optional) This is a good time to securely wipe disks or perform memory cell clearing (only for SSD). This is a manual process.
+1. (Optional) This is a good time to [securely wipe disks](know-how/erase-disk.md#securely-wipe-disk) or perform [memory cell clearing](know-how/erase-disk.md#memory-cell-clearing-only-for-ssds) (only for SSD). This is a manual process.
 1. (Optional) Partition disk(s). If you don't want to change existing partitions this can be skipped.
 
     ```
@@ -92,4 +92,4 @@ Then we will reboot the system and see the first boot (hopefully without any pro
 
 !!! success "You're done! You've successfully booted into your brand new system!"
 
-    Now, just one step (actually the most important :smile:) remains: customizing Ubuntu.
+    Now, just one step (actually the most important :smile:) remains: [customizing Ubuntu](customize.md).

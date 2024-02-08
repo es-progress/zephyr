@@ -9,7 +9,7 @@ However this is the easiest task. :wink:
 
 Customizations are organized into _Modules_.
 Each module configures a specific application, tool, Linux subsystem, system administration job (or just one particular setting) or installs a package from a package manager.
-For a comprehensive list of modules see Reference or the example profile in `example/default` directory.
+For a comprehensive list of modules see [Reference](reference/modules.md) or the example profile in `example/default` directory.
 
 Basically, customizing means running these modules. It's possible to run all or just one if you wish.
 You can execute a module multiple times, it will always update to the latest change in the configuration files.
@@ -35,4 +35,4 @@ For now you should be familiar how Zephyr :eight_spoked_asterisk: works and how 
 
 The best way to learn Zephyr is to jump right in and create your first configuration profile and run it! :smile:
 
-However, if you want to dig deeper into available modules, their configuration options and configurations for Zephyr itself or `zephyrctl` you can check the Reference.
+However, if you want to dig deeper into available modules, their configuration options and settings for Zephyr itself or `zephyrctl` you can check the Reference.

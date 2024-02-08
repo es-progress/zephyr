@@ -9,8 +9,8 @@ Below are the detailed installation steps:
     cd /path/to/desired/directory
     git clone https://github.com/es-progress/zephyr.git
     ```
-1. Configure Zephyr
-    1. Check the default configurations in `zephyr.cfg`
+1. (Optional) Configure Zephyr
+    1. Check the default configurations in `zephyr.cfg` or the [Reference](reference/configs.md) to understand what you can customize.
     1. Make a duplicate of this file and rename it to `zephyr.local.cfg`
         ```
         cp zephyr.cfg zephyr.local.cfg
@@ -18,7 +18,7 @@ Below are the detailed installation steps:
     1. Adjust configurations in the local configuration file. Any value provided here will overwrite the defaults in `zephyr.cfg`. If you omit a configuration, default value will be used.
 1. Run the installer, which will:
     - Set up Bash completion for `zephyrctl`
-    - Create a symlink for `zephyrctl` in `/usr/local/bin`, making it accessible from anywhere (provided that `/usr/local/bin` is in your PATH).
+    - Create a symlink for `zephyrctl` in `/usr/local/bin`, making it accessible from anywhere (if `/usr/local/bin` is in your PATH).
     ```
     # Replace ZEPHYR_DIR with the actual path where Zephyr were cloned earlier
     cd ZEPHYR_DIR
@@ -36,4 +36,4 @@ If you decide to uninstall Zephyr later (sorry to see you go!), just follow thes
 1. Run `zephyrctl uninstall`
 1. Delete the Git repository.
 
-    Note: it may contain your local Zephyr configuration file. If you want to preserve that, make a backup before deleting.
+    Note: it may contain your local configuration file or profiles. If you want to preserve that, make a backup before deleting.

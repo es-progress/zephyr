@@ -23,11 +23,14 @@ Zephyr relies on modules to apply specific configurations and customizations to 
 These modules perform a wide range of tasks, for example:
 
 -   Install packages (APT, node, pip, snap)
--   Configure applications & tools (Apache, PHP, VirtualBox, Git, gpg (GnuPG), dig, ssh, nmap, etc.)
+-   Configure applications & tools (Apache, PHP, VirtualBox, Git, dig, ssh, nmap, etc.)
 -   Configure GNOME, Bash
--   Set up Linux subsystems (sudo, cron, user groups, systemd)
+-   Set up Linux subsystems (e.g. sudo, cron, systemd)
 -   Disk partitioning & formatting
 -   Remix Ubuntu
+
+As you can see, the core modules cover the needs of a web developer, sysadmin, or power user.
+If you're missing a module, you can roll your own to extend Zephyr's capabilities!
 
 Additionally, `zephyrctl` is included, a handy tool to accomplish these jobs.
 
@@ -48,6 +51,8 @@ The [Ubuntu Installation](ubuntu.md) section provides guidance on the pre-instal
 
 [Customization](customize.md) is at the heart of Zephyr.
 In this section, you'll learn how to use modules to customize your system.
+
+Finally, the Reference sections provide detailed information about Zephyr [configurations](reference/configs.md), [zephyrctl](reference/zephyrctl.md) and the [modules](reference/modules.md).
 
 !!! note
 

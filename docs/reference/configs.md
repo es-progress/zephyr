@@ -1,14 +1,14 @@
 # Configurations
 
 This section is about the settings of Zephyr :eight_spoked_asterisk: itself.
-Do not confuse with the [Customization](../customize.md) section, which is about applying the different configurations and customizations (defined in Profiles) to your system using Zephyr.
+Do not confuse with the [Customization](../customize.md) section, which is about applying the different configurations and customizations (defined in [Profiles](../profiles.md)) to your system using Zephyr.
 
 You can find all Zephyr settings in the `zephyr.cfg` file.
 To alter any of these settings, create a copy of this file (called `zephyr.local.cfg`) in the project root and modify the parameters as needed.
 
 !!! info
 
-    Configuration files will be sourced by Bash, so you can use Bash syntax to define parameters, values or variables.
+    Configuration files will be sourced by Bash, so you can use Bash syntax to define variables, set values or use environment variables.
 
 Below is a list of options along with their descriptions.
 
