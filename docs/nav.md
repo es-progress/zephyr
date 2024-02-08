@@ -9,4 +9,6 @@
     -   [Securely erase disk](know-how/erase-disk.md)
     -   [Rescue system](know-how/rescue.md)
 -   Reference
+    -   [Configurations](reference/configs.md)
     -   [zephyrctl](reference/zephyrctl.md)
+    -   [Modules](reference/modules.md)
