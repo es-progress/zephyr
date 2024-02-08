@@ -1,10 +1,10 @@
 # Modules
 
-This is the reference documentation for the customization modules that are part of Zephyr :eight_spoked_asterisk:.
+This is the reference documentation for the [customization modules](../customize.md#modules) that are part of Zephyr :eight_spoked_asterisk:.
 These modules allow you to customize your system according to your preferences and usage.
 They are organized into different categories, such as `apps`, `services`, and more.
 
-Modules can be configured by Profiles, which are a collection of config files and possibly some other files that are relevant to the module (e.g. `.tff` files for Fonts module).
+Modules can be configured by [Profiles](../profiles.md), which are a collection of config files and possibly some other files that are relevant to the module (e.g. `.tff` files for Fonts module).
 Module-specific files are located in the directory named after the module, e.g. `gnome/fonts` for Fonts.
 Other module settings can be found in the category's config file, e.g. `gnome/global.cfg`.
 This file contains headers (`[some-header]`) that contains different settings and the format for the configurations are varied.
@@ -25,7 +25,7 @@ These modules allow you to modify applications according to your usage and prefe
 
 ### atom
 
-The module handles the installation of the Atom text editor and configuration of preferred packages, themes, and settings.
+The module handles the installation of the [Atom text editor](https://atom.io){target=\_blank} and configuration of preferred packages, themes, and settings.
 
 **Configuration**
 
@@ -38,7 +38,7 @@ The module handles the installation of the Atom text editor and configuration of
 
 ### jmeter
 
-Installation of Apache JMeter, a load-testing testing tool.
+Installation of [Apache JMeter](https://jmeter.apache.org/){target=\_blank}, a load-testing testing tool.
 
 **Configuration**
 
@@ -52,7 +52,7 @@ Installation of Apache JMeter, a load-testing testing tool.
 
 ### pulse-effects
 
-Manage output audio presets for PulseEffects.
+Manage output audio presets for [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank}.
 
 !!! warning "PulseEffects is not installed by this module"
 
@@ -66,7 +66,7 @@ Manage output audio presets for PulseEffects.
 
 ### vbox
 
-The module is for the configuration of VirtualBox virtualization software.
+The module is for the configuration of [VirtualBox virtualization software](https://www.virtualbox.org/){target=\_blank}.
 
 !!! warning "VirtualBox is not installed by this module"
 
@@ -85,7 +85,7 @@ The module is for the configuration of VirtualBox virtualization software.
 
 ## GNOME modules
 
-These modules allow you to customize and manage different aspects of your GNOME desktop environment.
+These modules allow you to customize and manage different aspects of your [GNOME desktop environment](https://www.gnome.org/){target=\_blank}.
 
 ### autostart
 
@@ -99,7 +99,7 @@ With the autostart module you can control which applications should start automa
 
 ### dash-to-panel
 
-This module installs the GNOME shell extension Dash to Panel and allows you to customize it.
+This module installs the GNOME shell extension [Dash to Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/){target=\_blank} and allows you to customize it.
 
 **Configuration**
 
@@ -272,7 +272,7 @@ These modules allow you to configure various services such as database servers, 
 
 ### apache
 
-The module is for the configuration of the Apache web server.
+The module is for the configuration of the [Apache web server](https://httpd.apache.org/){target=\_blank}.
 
 !!! note
 
@@ -295,7 +295,7 @@ The module is for the configuration of the Apache web server.
 
 ### mariadb
 
-This will install & customize MariaDB database server, including creating an admin user with full privileges.
+This will install & customize [MariaDB database server](https://mariadb.org/){target=\_blank}, including creating an admin user with full privileges.
 
 **Configuration**
 
@@ -310,7 +310,7 @@ This will install & customize MariaDB database server, including creating an adm
 
 ### php
 
-This module will configure PHP and start the PHP-FPM service with Apache.
+This module will configure [PHP](https://www.php.net/){target=\_blank} and start the PHP-FPM service with Apache.
 
 !!! note
 
@@ -329,7 +329,7 @@ This module will configure PHP and start the PHP-FPM service with Apache.
 
 ### phpmyadmin
 
-Use this module to install and configure phpMyAdmin. It also creates phpMyAdmin control database & user.
+Use this module to install and configure [phpMyAdmin](https://www.phpmyadmin.net/){target=\_blank}. It also creates phpMyAdmin control database & user.
 
 !!! note
 
@@ -487,7 +487,7 @@ Configure the systemd DNS resolver `systemd-resolved` service.
 
 ### shorewall
 
-This is used to install & configure the Shorewall firewall.
+This is used to install & configure the [Shorewall firewall](https://shorewall.org/){target=\_blank}.
 
 !!! note
 
@@ -522,7 +522,7 @@ The Tool modules provide configurations for various tools.
 
 ### composer
 
-This module provides configuration settings for the Composer dependency manager for PHP and installs it globally.
+This module provides configuration settings for the [Composer dependency manager](https://getcomposer.org/){target=\_blank} for PHP and installs it globally.
 Bash completion is also installed.
 
 **Configuration**
@@ -550,7 +550,7 @@ Configure `dig` DNS lookup utility.
 
 ### gh
 
-This installs the GitHub CLI tool with Bash completion.
+This installs the [GitHub CLI](https://cli.github.com/){target=\_blank} tool with Bash completion.
 
 **Configuration**
 
@@ -584,7 +584,7 @@ This provides configuration settings for the GPG encryption program.
 
 ### mc
 
-It allows you to configure Midnight Commander, a robust file manager.
+It allows you to configure [Midnight Commander](https://midnight-commander.org/){target=\_blank}, a robust file manager.
 
 !!! warning "Midnight Commander is not installed by this module"
 
@@ -612,7 +612,7 @@ With this module you can install additional syntax highlighting files for Nano.
 
 ### nmap
 
-This currently only installs a plugin ("network-control") for Nmap, a network mapper tool.
+This currently only installs a plugin ("network-control") for [Nmap](https://nmap.org/){target=\_blank}, a network mapper tool.
 
 !!! warning "Nmap is not installed by this module"
 
@@ -622,7 +622,7 @@ This currently only installs a plugin ("network-control") for Nmap, a network ma
 
 ### pass-update
 
-This module installs "pass-update" a plugin for the "pass" password manager.
+This module installs [pass-update](https://github.com/roddhjav/pass-update){target=\_blank} an extension for the [pass password manager](https://www.passwordstore.org/){target=\_blank}.
 
 **Configuration**
 
@@ -646,7 +646,7 @@ With this module you can configure SSH and add already known hosts.
 
 ### tomb
 
-This module installs the Tomb file encryption utility.
+This module installs the [Tomb file encryption utility](https://dyne.org/software/tomb/){target=\_blank}.
 
 **Configuration**
 

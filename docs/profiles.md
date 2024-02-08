@@ -10,7 +10,7 @@ It eliminates manual work but it knows nothing about the actual modifications, c
 All of that is contained in configuration profiles.
 This way we can separate the generalized scripts that do the heavy lifting and the content they manage.
 
-During customization you can choose which profile to use, and the system will get customized according to that.
+During [customization](customize.md) you can choose which profile to use, and the system will get customized according to that.
 You can design many "named" profiles and a default one.
 If a configuration value is not specified in the selected profile, it will fallback to the default.
 This allows to have (let's say) different wallpapers on individual machines but your common configs need to be defined only once in the default profile.
@@ -57,7 +57,7 @@ cp -r example/default profiles/bar
 
 ## Profile structure
 
-Zephyr consists of different _Modules_ that are responsible to configure a specific application (Virtualbox, Apache etc.), tool (Git, `gpg` for example), Linux subsystem (like user groups, `sudo` or `systemd-resolved`), a system administration job (disk partitioning, backing up GPT partition table) or just one particular setting (e.g. GNOME wallpaper).
+Zephyr consists of different _Modules_ that are responsible to configure a specific application (Virtualbox, Apache etc.), tool (Git, `gpg` for example), Linux subsystem (like `sudo` or `systemd-resolved`), a system administration job (disk partitioning, backing up GPT partition table) or just one particular setting (e.g. GNOME wallpaper).
 For more about modules see _Customizations_.
 
 Inside profiles configuration files are grouped by category (e.g. apps, system) and then by name of module (e.g. system/netplan, system/shorewall).
@@ -75,9 +75,9 @@ You can mix global/local files in any profile (including default) to achieve you
     Check profiles in `/example/default` and `/example/tester` for examples on using global and local config files.
 
     Also each available configuration is present in the default example profile with a short description.
-    For more details about configurations see Reference.
+    For more details about configurations see [Reference](reference/modules.md).
 
     Happy profiling! :grinning:
 
 Now, if your profiles are ready :heavy_check_mark:, you can [remix Ubuntu](remix.md) and create your custom ISO file!
-Alternatively, if you just want to update any module on a live system go to **Customizations**.
+Alternatively, if you just want to update any module on a live system go to [Customizations](customize.md).

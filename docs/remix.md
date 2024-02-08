@@ -6,7 +6,7 @@ Now you can create _your own_ Ubuntu remix.
 !!! info
 
     If you prefer applying your configurations to an existing system, that's perfectly fine as well.
-    In that case you can skip this part and go directly to *Customizations*.
+    In that case you can skip this part and go directly to [Customization](customize.md).
 
 Zephyr :eight_spoked_asterisk: and your configurations will be preinstalled on a stock Ubuntu ISO.
 So, after a fresh install no other setup is needed, applying the customizations can start right away.
