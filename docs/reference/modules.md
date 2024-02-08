@@ -385,3 +385,131 @@ Global files are installed to `/usr/local/bin` (by default) - so it's global for
         -   `bin_local`: Directory for local shell scripts
         -   `lib_global`: Directory for global shell library
         -   `lib_local`: Directory for local shell library
+
+---
+
+## System modules
+
+The modules under this category are mainly used for customizing system-wide settings and Linux subsystems.
+
+### certificates
+
+This module handles the generation and installation of a Machine Owner Key (MOK) and self-signed SSL certificates.
+This certificate is a root Certificate Authority (CA) for the system and can be used to sign other certificates.
+The CA certificate is installed in the system and Firefox trusted certificate store, so all certificates signed by this CA will be trusted by the system and Firefox.
+Certificates signed by this CA are used by the `services/apache` and the `services/phpmyadmin` module.
+
+**Configuration**
+
+-   `system/firefox-policies.json`: Firefox policy file.
+-   `system/global.cfg`:
+    -   `certificate`: certificates script settings. Format: INI-file format.
+        -   `root_ca_name`: self-signed Root Certificate Authority (CA) name
+        -   `root_ca_subject`: root CA subject
+        -   `mok_key_name`: Machine Owner Key (MOK) name
+        -   `mok_key_subject`: MOK subject
+
+---
+
+### dirs
+
+Create directories and set permissions for them.
+
+**Configuration**
+
+-   `system/global.cfg`:
+    -   `dirs-create`: directories to create, you can use variables like `$USER` as owner. Format: "path owner" (one per line, owner optional).
+    -   `dirs-remove`: directories to delete. Format: "path" (one per line).
+    -   `perms`: permission settings. Format: INI-file format.
+        -   `perm_home`: permission to set on $HOME (non-recursive). Use format allowed by `chmod` command.
+
+---
+
+### fstab
+
+Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
+
+---
+
+### fstrim
+
+Configure the `fstrim` service.
+
+**Configuration**
+
+-   `system/fstrim/global.d`: `systemd` service configuration files (`.conf`).
+
+---
+
+### groups
+
+Adds the current user to the specified groups.
+
+**Configuration**
+
+-   `system/global.cfg`:
+    -   `groups`: user groups to add current user to. Format: "group_name" (one per line).
+
+---
+
+### locale
+
+Configures system locale.
+
+**Configuration**
+
+-   `system/global.cfg`:
+    -   `locales`: locales to install. Format: "locale_name" (one per line).
+    -   `locale`: set locale. You can use different locale in each locale categories. Format: "category name" (one per line).
+
+---
+
+### netplan
+
+This module is responsible for network plan creation and management (netplan).
+Also disables connectivity checking.
+
+**Configuration**
+
+-   `system/netplan/global.d`: Place to put your network plans.
+
+---
+
+### resolved
+
+Configure the systemd DNS resolver `systemd-resolved` service.
+
+**Configuration**
+
+-   `system/resolved/global.d`: `systemd` service configuration files (`.conf`).
+
+---
+
+### shorewall
+
+This is used to install & configure the Shorewall firewall.
+
+!!! note
+
+    You can use the `{{ interface }}` string as template in the `interfaces` file and the module will replace it with the actual interface name.
+
+**Configuration**
+
+-   `system/shorewall/global.d`: Contains files for zones, policy, interfaces and rules.
+    All files here will be copied to `/etc/shorewall/` with directory structure preserved.
+
+---
+
+### sudo
+
+Configure `sudo`.
+
+!!! warning
+
+    Configuration files will be verified by `sudo` before they are installed, so syntax errors will be caught.
+
+    However, be careful with this module, as it can lock you out of `sudo` if you make a mistake in the configuration files!
+
+**Configuration**
+
+-   `system/sudo/global.d`: custom `sudoers` configuration files. These files will be copied to `/etc/sudoers.d/`.
