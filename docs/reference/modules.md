@@ -513,3 +513,144 @@ Configure `sudo`.
 **Configuration**
 
 -   `system/sudo/global.d`: custom `sudoers` configuration files. These files will be copied to `/etc/sudoers.d/`.
+
+---
+
+## Tool modules
+
+The Tool modules provide configurations for various tools.
+
+### composer
+
+This module provides configuration settings for the Composer dependency manager for PHP and installs it globally.
+Bash completion is also installed.
+
+**Configuration**
+
+-   `tools/global.cfg`:
+    -   `composer`: composer script settings. Format: INI-file format.
+        -   `url`: download URL for composer PHAR file
+        -   `checksum`: SHA256 checksum for downloaded PHAR file
+
+---
+
+### dig
+
+Configure `dig` DNS lookup utility.
+
+!!! warning "dig is not installed by this module"
+
+    Use the `packages/apt` module to install it!
+
+**Configuration**
+
+-   `tools/digrc`: your custom `.digrc` file.
+
+---
+
+### gh
+
+This installs the GitHub CLI tool with Bash completion.
+
+**Configuration**
+
+-   `tools/global.cfg`:
+    -   `gh`: gh script settings. Format: INI-file format.
+        -   `url`: download URL for GitHub CLI deb package
+        -   `checksum`: SHA256 checksum for downloaded deb file
+
+---
+
+### git
+
+This module configures Git.
+
+**Configuration**
+
+-   `tools/global.cfg`:
+    -   `git`: Git configurations. Format: "cfg-location config.name value" (one per line).
+
+---
+
+### gpg
+
+This provides configuration settings for the GPG encryption program.
+
+**Configuration**
+
+-   `tools/gpg-agent.conf`: your custom `gpg-agent.conf` file.
+
+---
+
+### mc
+
+It allows you to configure Midnight Commander, a robust file manager.
+
+!!! warning "Midnight Commander is not installed by this module"
+
+    Use the `packages/apt` module to install it!
+
+**Configuration**
+
+-   `tools/mc/global.d`: configuration files for Midnight Commander can be placed in this directory.
+
+---
+
+### nano
+
+With this module you can install additional syntax highlighting files for Nano.
+
+!!! tip
+
+    You can use `shell/bash` module to install your custom `.nanorc` file to configure Nano.
+
+**Configuration**
+
+-   `tools/nano/global.d`: syntax highlighting files for Nano.
+
+---
+
+### nmap
+
+This currently only installs a plugin ("network-control") for Nmap, a network mapper tool.
+
+!!! warning "Nmap is not installed by this module"
+
+    Use the `packages/snap` module to install it!
+
+---
+
+### pass-update
+
+This module installs "pass-update" a plugin for the "pass" password manager.
+
+**Configuration**
+
+-   `tools/global.cfg`:
+    -   `pass-update`: pass-update script settings. Format: INI-file format.
+        -   `version`: pass-update version to install (git tag to checkout)
+
+---
+
+### ssh
+
+With this module you can configure SSH and add already known hosts.
+
+**Configuration**
+
+-   `tools/ssh/global.d`: SSH configuration files. Will be copied to `~/.ssh/` with directory structure preserved.
+-   `tools/global.cfg`:
+    -   `ssh-known`: entries to SSH known host file (`.ssh/known_hosts`). Format: as-is, will be appended to the file verbatim.
+
+---
+
+### tomb
+
+This module installs the Tomb file encryption utility.
+
+**Configuration**
+
+-   `tools/global.cfg`:
+    -   `tomb`: tomb script settings. Format: INI-file format.
+        -   `url`: download URL for Tomb tarball
+        -   `checksum`: SHA256 checksum for downloaded tar-archive
