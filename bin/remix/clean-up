@@ -17,4 +17,8 @@ print-status "Remove extracted files..."
 sudo rm -rf "${PATH_EXTRACT}"
 print-finish
 
+print-status "Remove ISO mount point..."
+sudo rm -rf "${PATH_MOUNT}"
+print-finish
+
 exit 0
