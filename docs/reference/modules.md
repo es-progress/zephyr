@@ -240,21 +240,6 @@ With this module you can setup weekly and daily cron jobs.
 
 ---
 
-### goto
-
-With this module you can add aliases to to [Bash Goto](https://github.com/iridakos/goto){target=\_blank}.
-
-!!! note
-
-    For this to work you need to install Bash Goto first.
-
-**Configuration**
-
--   `random/global.cfg`:
-    -   `goto`: Bash Goto aliases. Format: "alias directory" (one per line).
-
----
-
 ### local
 
 This module executes your local, custom modules.
