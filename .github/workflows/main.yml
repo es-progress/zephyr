@@ -41,30 +41,39 @@ jobs:
         id: modules
         run: |
           if grep -qs customize/apps ~/changed.files; then
+            echo Will run customize/apps
             echo "apps=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/gnome ~/changed.files; then
+            echo Will run customize/gnome
             echo "gnome=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/other ~/changed.files; then
+            echo Will run customize/other
             echo "other=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/packages ~/changed.files; then
+            echo Will run customize/packages
             echo "packages=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/services ~/changed.files; then
+            echo Will run customize/services
             echo "services=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/shell ~/changed.files; then
+            echo Will run customize/shell
             echo "shell=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/system ~/changed.files; then
+            echo Will run customize/system
             echo "system=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/tools ~/changed.files; then
+            echo Will run customize/tools
             echo "tools=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs bin/remix ~/changed.files; then
+            echo Will run bin/remix
             echo "remix=yes" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
