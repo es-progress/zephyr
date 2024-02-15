@@ -38,10 +38,4 @@ if dir=$(cfg-get "${profile}" shell/bash/local.d); then
     print-finish
 fi
 
-if [[ -e ~/.bash_history ]]; then
-    print-status "Remove Bash history..."
-    rm ~/.bash_history
-    print-finish
-fi
-
 exit 0
