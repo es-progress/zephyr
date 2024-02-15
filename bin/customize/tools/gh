@@ -39,7 +39,7 @@ hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 # Install
 sudo dpkg -i "${tmp_file}"
 # Bash completion
-gh completion -s bash | sudo tee /etc/bash_completion.d/github-cli >/dev/null
+gh completion -s bash | sudo tee /usr/share/bash-completion/completions/gh >/dev/null
 print-finish
 
 exit 0
