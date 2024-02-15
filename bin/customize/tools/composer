@@ -51,7 +51,7 @@ if [[ -e "${bin_global}/composer" ]]; then
 fi
 # Download phar
 tmp_file=$(mktemp)
-curl --progress-bar -o "${tmp_file}" --url "${url}"
+curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Move to bin
