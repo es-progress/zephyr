@@ -153,6 +153,33 @@ With this module you can set the desktop background.
 
 ---
 
+## Other modules
+
+Random, non-categorized modules.
+
+### cron
+
+With this module you can setup weekly and daily cron jobs.
+
+**Configuration**
+
+-   `other/global.cfg`:
+    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
+
+---
+
+### local
+
+This module executes your local, custom modules.
+
+**Configuration**
+
+-   `other/local/global.d`: any executable file in this directory will be run.
+    During execution the current working directory will be this directory, so you can use relative paths to access files in this directory if your module needs extra files.
+
+---
+
 ## Package modules
 
 With the help of the following modules you can install packages using various package managers.
@@ -221,33 +248,6 @@ The snap module assists with installing Snap packages.
 
 -   `packages/global.cfg`:
     -   `snap`: snaps to install. Format: "snap_name install_mode" (one per line, install_mode optional, e.g. "classic").
-
----
-
-## Random modules
-
-Other, non-categorized modules.
-
-### cron
-
-With this module you can setup weekly and daily cron jobs.
-
-**Configuration**
-
--   `random/global.cfg`:
-    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
-    -   `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
-
----
-
-### local
-
-This module executes your local, custom modules.
-
-**Configuration**
-
--   `random/local/global.d`: any executable file in this directory will be run.
-    During execution the current working directory will be this directory, so you can use relative paths to access files in this directory if your module needs extra files.
 
 ---
 
