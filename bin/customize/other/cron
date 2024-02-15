@@ -2,7 +2,7 @@
 ###############
 ## Zephyr    ##
 ##           ##
-## Config    ##
+## Other     ##
 ## cron jobs ##
 ###############
 
@@ -68,12 +68,12 @@ check-not-root
 profile="${1:?"Profile missing"}"
 
 # shellcheck disable=SC2310,SC2311
-if file=$(cfg-get "${profile}" random/global.cfg); then
+if file=$(cfg-get "${profile}" other/global.cfg); then
     _setup-weekly global "${file}"
     _setup-daily global "${file}"
 fi
 # shellcheck disable=SC2310,SC2311
-if file=$(cfg-get "${profile}" random/local.cfg); then
+if file=$(cfg-get "${profile}" other/local.cfg); then
     _setup-weekly local "${file}"
     _setup-daily local "${file}"
 fi

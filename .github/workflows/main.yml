@@ -20,8 +20,8 @@ jobs:
     outputs:
       apps: ${{ steps.modules.outputs.apps }}
       gnome: ${{ steps.modules.outputs.gnome }}
+      other: ${{ steps.modules.outputs.other }}
       packages: ${{ steps.modules.outputs.packages }}
-      random: ${{ steps.modules.outputs.random }}
       services: ${{ steps.modules.outputs.services }}
       shell: ${{ steps.modules.outputs.shell }}
       system: ${{ steps.modules.outputs.system }}
@@ -46,11 +46,11 @@ jobs:
           if grep -qs customize/gnome ~/changed.files; then
             echo "gnome=yes" >> "$GITHUB_OUTPUT"
           fi
+          if grep -qs customize/other ~/changed.files; then
+            echo "other=yes" >> "$GITHUB_OUTPUT"
+          fi
           if grep -qs customize/packages ~/changed.files; then
             echo "packages=yes" >> "$GITHUB_OUTPUT"
-          fi
-          if grep -qs customize/random ~/changed.files; then
-            echo "random=yes" >> "$GITHUB_OUTPUT"
           fi
           if grep -qs customize/services ~/changed.files; then
             echo "services=yes" >> "$GITHUB_OUTPUT"
@@ -137,6 +137,34 @@ jobs:
           ./bin/zephyrctl customize default user-dirs
           ./bin/zephyrctl customize default wallpaper
         shell: bash
+  tests-other:
+    name: Integration tests (customize/other)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.other == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Install dependencies
+        run: |
+          sudo mkdir -p /opt
+          sudo touch /opt/some-script /opt/other-script
+
+      - name: Execute scripts (1st pass)
+        run: |
+          ./bin/zephyrctl customize default cron
+          ./bin/zephyrctl customize default local
+        shell: bash
+
+      - name: Execute scripts (2nd pass)
+        run: |
+          ./bin/zephyrctl customize default cron
+          ./bin/zephyrctl customize default local
+        shell: bash
   tests-packages:
     name: Integration tests (customize/packages)
     runs-on: ubuntu-20.04
@@ -165,39 +193,6 @@ jobs:
           ./bin/zephyrctl customize default node
           ./bin/zephyrctl customize default pip
           ./bin/zephyrctl customize default snap
-        shell: bash
-  tests-random:
-    name: Integration tests (customize/random)
-    runs-on: ubuntu-20.04
-    needs: check
-    if: needs.check.outputs.random == 'yes'
-    steps:
-      - name: Self checkout
-        uses: actions/checkout@v3
-
-      - name: Link profiles
-        run: ln -s example profiles
-
-      - name: Install dependencies
-        run: |
-          sudo mkdir -p /opt
-          sudo touch /opt/some-script /opt/other-script
-          git clone https://github.com/semseysandor/goto.git bash_goto
-          mkdir -p ~/.bash
-          cp bash_goto/goto.sh ~/.bash/goto
-
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize default cron
-          ./bin/zephyrctl customize default local
-          ./bin/zephyrctl customize default goto
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize default cron
-          ./bin/zephyrctl customize default local
-          ./bin/zephyrctl customize default goto
         shell: bash
   tests-services:
     name: Integration tests (customize/services)

@@ -51,7 +51,7 @@ if [[ -e "${bin_global}/composer" ]]; then
 fi
 # Download phar
 tmp_file=$(mktemp)
-curl --progress-bar -o "${tmp_file}" --url "${url}"
+curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Move to bin
@@ -59,9 +59,9 @@ sudo mv "${tmp_file}" "${bin_global}/composer"
 sudo chown root:root "${bin_global}/composer"
 sudo chmod =0755 "${bin_global}/composer"
 # Bash completion
-composer completion bash | sudo tee /etc/bash_completion.d/composer >/dev/null
+composer completion bash | sudo tee /usr/share/bash-completion/completions/composer >/dev/null
 # Fix bug in completion
-sudo sed -ri 's@^(\s*)IFS=(.*)@\1local IFS=\2@g' /etc/bash_completion.d/composer
+sudo sed -ri 's@^(\s*)IFS=(.*)@\1local IFS=\2@g' /usr/share/bash-completion/completions/composer
 print-finish
 
 exit 0

@@ -2,7 +2,7 @@
 ###################
 ## Zephyr        ##
 ##               ##
-## Config        ##
+## Other         ##
 ## Local scripts ##
 ###################
 
@@ -41,11 +41,11 @@ check-not-root
 profile="${1:?"Profile missing"}"
 
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" random/local/global.d); then
+if dir=$(cfg-get "${profile}" other/local/global.d); then
     _run global "${dir}"
 fi
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" random/local/local.d); then
+if dir=$(cfg-get "${profile}" other/local/local.d); then
     _run local "${dir}"
 fi
 

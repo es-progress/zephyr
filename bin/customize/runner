@@ -15,7 +15,7 @@ exec_dir=(
     "Config tools;tools"
     "Config apps;apps"
     "Config GNOME;gnome"
-    "Random configs;random"
+    "Other customizations;other"
 )
 
 # Strict mode

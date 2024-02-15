@@ -33,13 +33,13 @@ fi
 print-header "Install github-cli..."
 # Download deb
 tmp_file=$(mktemp)
-curl --progress-bar --location -o "${tmp_file}" --url "${url}"
+curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Install
 sudo dpkg -i "${tmp_file}"
 # Bash completion
-gh completion -s bash | sudo tee /etc/bash_completion.d/github-cli >/dev/null
+gh completion -s bash | sudo tee /usr/share/bash-completion/completions/gh >/dev/null
 print-finish
 
 exit 0

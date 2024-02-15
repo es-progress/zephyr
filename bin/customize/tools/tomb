@@ -33,7 +33,7 @@ fi
 print-header "Install Tomb..."
 # Download tar
 tmp_file=$(mktemp)
-curl --progress-bar -o "${tmp_file}" --url "${url}"
+curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 [[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
 # Unpack archive

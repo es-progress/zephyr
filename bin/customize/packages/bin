@@ -37,7 +37,7 @@ _install() {
         fi
 
         tmp_file=$(mktemp)
-        curl --progress-bar --location -o "${tmp_file}" --url "${url}"
+        curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"
 
         if [[ -n "${checksum}" ]]; then
             hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
