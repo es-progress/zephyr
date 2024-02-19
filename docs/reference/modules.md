@@ -268,7 +268,11 @@ The module is for the configuration of the [Apache web server](https://httpd.apa
 **Configuration**
 
 -   `services/apache/config.global.d`: use this directory to place Apache's configuration files (`.conf`).
--   `services/apache/vhost-default.conf`: default virtual host file.
+-   `services/apache/vhost-default.conf`: default virtual host file. You can use templated variables like `{{ DOC_ROOT }}` in this file.
+    It will be replaced with the actual value configured in `services/global.cfg`. The following variables are available:
+    -   `DOC_ROOT`: web root for virtual hosts
+    -   `DEF_VIRT_HOST_NAME`: name for default vhost
+    -   `ROOT_CA_NAME`: root CA name (configured in `system/certificate` module)
 -   `services/global.cfg`:
     -   `apache`: apache script settings. Format: INI-file format.
         -   `web_root`: web root for virtual hosts
