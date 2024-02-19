@@ -153,6 +153,57 @@ With this module you can set the desktop background.
 
 ---
 
+## Install modules
+
+These modules play a role in the [post-installation](../ubuntu.md#post-install) process.
+They can't be executed independently, all of them will run with `zephyrctl post-install` command.
+
+!!! note
+
+    Typically they are used after a fresh installation of the system, but they can be executed anytime to reconfigure a live system, as it is non-destructive.
+
+### backup-gpt
+
+This backups the GUID Partition Table (GPT) after the disk has been partitioned.
+In case of an emergency, the partition table can be restored from this backup.
+It uses Disk Maps to determine the disk(s) to backup.
+
+**Configuration**
+
+-   `install/global.cfg`:
+    -   `backup-gpt`: backup-gpt script settings. Format: INI-file format.
+        -   `backup_dir`: directory for GPT partition table backups
+
+---
+
+### grub-config
+
+This module assists in configuring the GRUB bootloader.
+
+**Configuration**
+
+-   `install/grub/global.d/`: configuration files for `grub-mkconfig` (these are shell scripts).
+
+---
+
+### luks-automount
+
+With this module you can set up automatic mounting of LUKS encrypted partitions.
+It creates an additional key to the LUKS partition (machine key) and adds an entry to `/etc/crypttab` to automatically unlock and mount the partition on boot.
+It needs Disk Maps to find LUKS partitions.
+
+You can configure `initramfs` also.
+
+**Configuration**
+
+-   `install/initramfs/global.d/`: `initramfs-tools` configuration files (`.conf`).
+-   `install/global.cfg`:
+    -   `luks`: luks-automount script settings. Format: INI-file format.
+        -   `key_dir`: directory for LUKS machine keys
+        -   `key_slot`: key slot number for LUKS machine keys
+
+---
+
 ## Other modules
 
 Random, non-categorized modules.
