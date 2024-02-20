@@ -13,7 +13,7 @@ If that's true this section could be interesting as Zephyr :eight_spoked_asteris
 This process consists of :three: distinctive phases: _Pre-install_, _Install_ and _Post-install_.
 It's mostly the standard (stock) Ubuntu installation (install phase) with some steps before/after that (pre-install, post-install).
 
-In pre/post-install _Disk-maps_ play a crucial role.
+In pre/post-install [Disk maps](reference/disk-maps.md) play a crucial role.
 They are just normal configuration files in your profiles and as the name suggest in these files you can describe your disks, partitions and file-systems and let Zephyr know about them.
 
 !!! danger "Backup"

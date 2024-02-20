@@ -136,7 +136,7 @@ if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
     [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
     sudo cp --no-preserve=mode,ownership "${file}" /etc/apache2/sites-available/000-default.conf
     sudo sed -i \
-        -e "s@{{ doc_root }}@${web_root}/default@g" \
+        -e "s@{{ DOC_ROOT }}@${web_root}/default@g" \
         -e "s@{{ ROOT_CA_NAME }}@${root_ca_name}@g" \
         -e "s@{{ DEF_VIRT_HOST_NAME }}@${def_virt_host_name}@g" \
         /etc/apache2/sites-available/000-default.conf

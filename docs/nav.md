@@ -12,3 +12,4 @@
     -   [Zephyr settings](reference/configs.md)
     -   [zephyrctl](reference/zephyrctl.md)
     -   [Modules](reference/modules.md)
+    -   [Disk maps](reference/disk-maps.md)

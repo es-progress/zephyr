@@ -11,6 +11,9 @@ Customizations are organized into _Modules_.
 Each module configures a specific application, tool, Linux subsystem, system administration job (or just one particular setting) or installs a package from a package manager.
 For a comprehensive list of modules see [Reference](reference/modules.md) or the example profile in `example/default` directory.
 
+It's possible to create your own modules too in case your tools (apps, etc.) are not covered by Zephyr.
+For details on how to create a module check [`other/local` module](reference/modules.md#local).
+
 Basically, customizing means running these modules. It's possible to run all or just one if you wish.
 You can execute a module multiple times, it will always update to the latest change in the configuration files.
 
