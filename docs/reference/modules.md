@@ -222,12 +222,18 @@ With this module you can setup weekly and daily cron jobs.
 
 ### local
 
-This module executes your local, custom modules.
+This module executes your local, custom modules (that are not part of Zephyr).
+
+A module is basically an executable file, so you can write your own module in any language you like.
+If you choose to write your module in Bash, you can use the functions from Zephyr, just source the bootstrap file (`${PROJECT_ROOT}/bin/bootstrap.sh`) to make them available.
+It's also possible to define new configuration sections in `other/global.cfg` and use them in your module.
+During execution the current working directory will be the script's directory, so you can use relative paths to access files should your module need extra files.
+
+For details check the example module in `example/default/other/local/global.d/` and study the core Zephyr modules in `bin/customize`.
 
 **Configuration**
 
 -   `other/local/global.d`: any executable file in this directory will be run.
-    During execution the current working directory will be this directory, so you can use relative paths to access files in this directory if your module needs extra files.
 
 ---
 
