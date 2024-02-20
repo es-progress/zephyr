@@ -166,7 +166,7 @@ They can't be executed independently, all of them will run with `zephyrctl post-
 
 This backups the GUID Partition Table (GPT) after the disk has been partitioned.
 In case of an emergency, the partition table can be restored from this backup.
-It uses Disk Maps to determine the disk(s) to backup.
+It uses Disk maps to determine the disk(s) to backup.
 
 **Configuration**
 
@@ -191,7 +191,7 @@ This module assists in configuring the GRUB bootloader.
 
 With this module you can set up automatic mounting of LUKS encrypted partitions.
 It creates an additional key to the LUKS partition (machine key) and adds an entry to `/etc/crypttab` to automatically unlock and mount the partition on boot.
-It needs Disk Maps to find LUKS partitions.
+It needs Disk maps to find LUKS partitions.
 
 You can configure `initramfs` also.
 
