@@ -182,6 +182,7 @@ This module assists in configuring the GRUB bootloader.
 
 **Configuration**
 
+-   `install/grub/default`: custom GRUB default config file (`/etc/default/grub`).
 -   `install/grub/global.d/`: configuration files for `grub-mkconfig` (these are shell scripts).
 
 ---

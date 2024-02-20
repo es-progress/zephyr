@@ -39,21 +39,12 @@ check-root
 profile="${1:?"Profile missing"}"
 shift
 
-print-status "Config GRUB [default]..."
-# Timeout
-sed -i '/GRUB_TIMEOUT_STYLE=/ c GRUB_TIMEOUT_STYLE=menu' /etc/default/grub
-sed -i '/GRUB_TIMEOUT=/ c GRUB_TIMEOUT=10' /etc/default/grub
-# GRUB menu resolution
-sed -i '/GRUB_GFXMODE/ c GRUB_GFXMODE=640x480' /etc/default/grub
-# Video settings
-if ! grep -qs "GRUB_GFXPAYLOAD_LINUX=keep" /etc/default/grub; then
-    cat <<EOF >>/etc/default/grub
-
-# Enable video settings
-GRUB_GFXPAYLOAD_LINUX=keep
-EOF
+# shellcheck disable=SC2310
+if file=$(cfg-get "${profile}" install/grub/default); then
+    print-status "Config GRUB [default]..."
+    sudo cp --no-preserve=mode,ownership "${file}" /etc/default/grub
+    print-finish
 fi
-print-finish
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" install/grub/global.d); then
