@@ -58,7 +58,7 @@ cp -r example/default profiles/bar
 ## Profile structure
 
 Zephyr consists of different _Modules_ that are responsible to configure a specific application (Virtualbox, Apache etc.), tool (Git, `gpg` for example), Linux subsystem (like `sudo` or `systemd-resolved`), a system administration job (disk partitioning, backing up GPT partition table) or just one particular setting (e.g. GNOME wallpaper).
-For more about modules see _Customizations_.
+For more about modules see [Customizations](customize.md).
 
 Inside profiles configuration files are grouped by category (e.g. apps, system) and then by name of module (e.g. system/netplan, system/shorewall).
 There are configurations for each module, and each config file or directory has a global and a local counterpart.
