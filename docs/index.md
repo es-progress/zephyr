@@ -1,7 +1,7 @@
 # Welcome!
 
 This is the comprehensive documentation for [_Zephyr_ :eight_spoked_asterisk:](https://github.com/es-progress/zephyr){target=\_blank} -- your companion in streamlining Ubuntu installation and configuration (customization).
-If you're looking to optimize your customization workflow, you've come to the right place!
+If you're looking to automate your customization workflow, you've come to the right place!
 
 ## What is Zephyr?
 
@@ -29,7 +29,7 @@ These modules perform a wide range of tasks, for example:
 -   Disk partitioning & formatting
 -   Remix Ubuntu
 
-As you can see, the core modules cover the needs of a web developer, sysadmin, or power user.
+As you might see, the core modules should cover the needs of a web developer, sysadmin, or power user.
 If you're missing a module, you can roll your own to extend Zephyr's capabilities!
 
 Additionally, `zephyrctl` is included, a handy tool to accomplish these jobs.
@@ -47,7 +47,7 @@ In the [Profiles](profiles.md) section, you'll discover how to create and manage
 Then you can learn how to create your own [Ubuntu remix](remix.md).
 
 Are you setting up a fresh system or reinstalling an existing one?
-The [Ubuntu Installation](ubuntu.md) section provides guidance on the pre-install, install, and post-install phases to ensure a smooth Ubuntu setup.
+The [Ubuntu Installation](ubuntu.md) section provides guidance on the pre-installation, installation, and post-installation phases to ensure a smooth Ubuntu setup.
 
 [Customization](customize.md) is at the heart of Zephyr.
 In this section, you'll learn how to use modules to customize your system.

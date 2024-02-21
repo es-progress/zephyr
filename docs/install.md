@@ -4,7 +4,7 @@ To install Zephyr :eight_spoked_asterisk: locally, clone the Git repository, mod
 
 Below are the detailed installation steps:
 
-1. Clone the Git repository from GitHub
+1. Clone the repository from GitHub
     ```
     cd /path/to/desired/directory
     git clone https://github.com/es-progress/zephyr.git
@@ -15,7 +15,7 @@ Below are the detailed installation steps:
         ```
         cp zephyr.cfg zephyr.local.cfg
         ```
-    1. Adjust configurations in the local configuration file. Any value provided here will overwrite the defaults in `zephyr.cfg`. If you omit a configuration, default value will be used.
+    1. Adjust configurations in the local configuration file. Any value provided here will overwrite the defaults in `zephyr.cfg`. If a setting is not defined, the default value will be applied.
 1. Run the installer, which will:
     - Set up Bash completion for `zephyrctl`
     - Create a symlink for `zephyrctl` in `/usr/local/bin`, making it accessible from anywhere (if `/usr/local/bin` is in your PATH).
@@ -25,9 +25,9 @@ Below are the detailed installation steps:
     ./bin/zephyrctl install
     ```
 
-That's it, you're ready to roll! :metal:
+And with that, you're all set! Let's rock! :metal:
 
-It you want to start right away, and explore on your own, run `zephyrctl` without arguments to view the available commands. If you prefer to get informed first, check next page where you can learn about how [customization profiles](profiles.md) work.
+If you want to start right away, and explore on your own, run `zephyrctl` without arguments to view the available commands. If you prefer to get informed first, check the next page to learn about how [customization profiles](profiles.md) work.
 
 ---
 

@@ -2,7 +2,7 @@
 
 This is how to create a bootable USB drive.
 
-Preferably, opt for the same OS for this as the bootable USB you want to burn (Windows-stick on Windows, Ubuntu-stick on Ubuntu).
+Preferably, opt for the same OS for this operation as the bootable USB you want to burn (Windows-stick on Windows, Ubuntu-stick on Ubuntu).
 It is possible to do it the other way around but it's just more hassle...
 
 Before you start, check your USB stick is empty or you've already backed up the files!

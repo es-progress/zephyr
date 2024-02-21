@@ -59,13 +59,13 @@ _usage() {
         remix)
             description="Remix an Ubuntu image file and embed Zephyr (along with your profiles and payload)"
             usage="remix ISO_IN [ISO_OUT]"
-            options+=("ISO_IN:ISO to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)")
+            options+=("ISO_IN:ISO file to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)")
             options+=("ISO_OUT:Remixed ISO file. Defaults to zephyr.iso in current dir.")
             ;;
         burn)
             description="Create a bootable USB stick from an image file"
             usage="burn ISO_FILE [DISK]"
-            options+=("ISO_FILE:ISO to burn (e.g. zephyr.iso)")
+            options+=("ISO_FILE:ISO file to burn (e.g. zephyr.iso)")
             options+=("DISK:USB flash drive device file (e.g. /dev/sdc). Interactive selection if not specified.")
             ;;
         partition)
@@ -90,7 +90,7 @@ _usage() {
             description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MODULE:Module to update (eg. packages, bash). If none given, all modules will be customized.")
+            options+=("MODULE:Module to run (eg. packages, bash). If none given, all modules will be executed.")
             ;;
         install)
             description="Install Zephyr on your computer"

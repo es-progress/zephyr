@@ -1,11 +1,11 @@
 # System rescue
 
-System Rescue means recovering a system after it has become un-bootable or unstable due to some sort of software complication (e.g. you've locked out yourself from `sudo`... :wink:) or hardware failure.
+System Rescue means recovering a system after it has become unbootable or unstable due to some sort of software complication (e.g. you've locked out yourself from `sudo`... :wink:) or hardware failure.
 Mostly you want to access the system to recover data or to fix the problem.
 These two goals need different approaches.
 
 In case of a hardware failure, you can remove the drive (provided not your hard-drive is the faulty one :smile:) and connect it to another computer to recover data.
-If you just need to fix a software issue, you can boot from a live USB and repair the system from there.
+If you just need to resolve a software issue, you can boot from a live USB and repair the system from there.
 
 Now let's see how to do these.
 
@@ -13,7 +13,7 @@ Now let's see how to do these.
 
 1. Remove hard-drive and insert to another machine :hammer_and_wrench:
 1. :red_circle: Boot system
-1. (If encrypted) Open LUKS encryption
+1. (If encrypted) Open LUKS container
 
     ```
     cryptsetup open DEVICE LUKS_DEVICE_NAME
@@ -53,7 +53,7 @@ Basically you boot from a live USB and chroot to the installed system.
 1. :red_circle: Boot from live USB
 1. Mount root partition. You can mount anywhere, but I'll use `/target` in this example.
 
-    1. (If encrypted) Open LUKS encryption
+    1. (If encrypted) Open LUKS container
 
         ```
         cryptsetup open DEVICE LUKS_DEVICE_NAME
@@ -81,7 +81,7 @@ Basically you boot from a live USB and chroot to the installed system.
     ROOT=/target
     for n in proc sys dev etc/resolv.conf; do mount --rbind /$n "$ROOT/$n"; done
     ```
-1. Enter the installed system
+1. Access the installed system
     ```
     chroot /target
     ```

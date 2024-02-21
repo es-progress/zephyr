@@ -22,7 +22,7 @@ This can be the remixed ISO file or any other disk-image file.
 zephyrctl burn ISO_FILE [DISK]
 
 Params:
-ISO_FILE           ISO to burn (e.g. zephyr.iso)
+ISO_FILE           ISO file to burn (e.g. zephyr.iso)
 DISK               Target USB flash drive device (e.g. /dev/sdc).
                    Interactive selection if not specified.
 ```
@@ -41,8 +41,8 @@ zephyrctl customize PROFILE [MODULE]...
 
 Params:
 PROFILE            Customization profile to use
-MODULE             Module to update (e.g. 'packages', 'bash').
-                   If not given, all modules will be executed.
+MODULE             Module to run (e.g. 'packages', 'bash').
+                   If none given, all modules will be executed.
 ```
 
 ---
@@ -53,7 +53,7 @@ Format partitions as per the provided profile and disk maps.
 
 !!! danger "This will delete all files on selected partitions!"
 
-    Don't forget to backup your data!
+    Don't forget to back up your data!
 
 **Usage**
 
@@ -101,7 +101,7 @@ Partition a drive according to the provided profile and disk maps.
 
 !!! danger "This will delete all files on selected partitions!"
 
-    Please watch out for possible data-loss and backup your data beforehand!
+    Please watch out for possible data-loss and back up your data beforehand!
 
 **Usage**
 
@@ -142,7 +142,7 @@ This payload can be any files or scripts that you want to embed into the ISO fil
 zephyrctl remix ISO_IN [ISO_OUT]
 
 Params:
-ISO_IN             ISO to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)
+ISO_IN             ISO file to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)
 ISO_OUT            Path to save the remixed ISO file.
                    Default is 'zephyr.iso' in the current directory.
 ```

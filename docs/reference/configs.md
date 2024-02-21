@@ -10,7 +10,7 @@ To alter any of these settings, create a copy of this file (called `zephyr.local
 
     Configuration files will be sourced by Bash, so you can use Bash syntax to define variables, set values or use environment variables.
 
-Below is a list of options along with their descriptions.
+Here is a list of options along with their descriptions.
 
 ---
 

@@ -7,15 +7,14 @@ They are organized into different categories, such as `apps`, `services`, and mo
 Modules can be configured by [Profiles](../profiles.md), which are a collection of config files and possibly some other files that are relevant to the module (e.g. `.tff` files for Fonts module).
 Module-specific files are located in the directory named after the module, e.g. `gnome/fonts` for Fonts.
 Other module settings can be found in the category's config file, e.g. `gnome/global.cfg`.
-This file contains headers (`[some-header]`) that contains different settings and the format for the configurations are varied.
-Empty lines and lines starting with `#` are ignored.
+This file contains headers (`[some-header]`). The settings and the syntax (format) is varied in each section, though empty lines and lines starting with `#` are always ignored.
 
 All global configuration directory and file have a local counterpart.
 If there is `global` in the name of a directory (or file) it can be replaced with `local` to get the counterpart.
-For example, `gnome/fonts/global.d` ==> `gnome/fonts/local.d` and `gnome/global.cfg` ==> `gnome/local.cfg`.
+For example, `gnome/fonts/global.d` :arrow_right: `gnome/fonts/local.d` and `gnome/global.cfg` :arrow_right: `gnome/local.cfg`.
 Only the `global` files will be listed in the documentation for brevity.
 
-For examples check the `example/default` directory.
+!!! note "For examples check the `example/default` directory."
 
 ---
 
@@ -387,7 +386,7 @@ Use this module to install and configure [phpMyAdmin](https://www.phpmyadmin.net
 -   `services/phpmyadmin/config.inc.php`: phpMyAdmin configuration file.
 -   `services/global.cfg`:
     -   `phpmyadmin`: php script settings. Format: INI-file format.
-        -   `url`: Download URL for phpMyAdmin tarball
+        -   `url`: download URL for phpMyAdmin tarball
         -   `checksum`: SHA256 checksum for download tar-archive
         -   `service_user`: phpMyAdmin control user name
         -   `service_pass`: phpMyAdmin control user password
@@ -428,10 +427,10 @@ Global files are installed to `/usr/local/bin` (by default) - so it's global for
 -   `shell/lib/local.d`: contains shell libraries for the current user.
 -   `shell/global.cfg`:
     -   `scripts`: scripts script settings. Format: INI-file format.
-        -   `bin_global`: Directory for global shell scripts
-        -   `bin_local`: Directory for local shell scripts
-        -   `lib_global`: Directory for global shell library
-        -   `lib_local`: Directory for local shell library
+        -   `bin_global`: directory for global shell scripts
+        -   `bin_local`: directory for local shell scripts
+        -   `lib_global`: directory for global shell library
+        -   `lib_local`: directory for local shell library
 
 ---
 
@@ -518,7 +517,7 @@ Also disables connectivity checking.
 
 **Configuration**
 
--   `system/netplan/global.d`: Place to put your network plans.
+-   `system/netplan/global.d`: place for your network plans (`.yaml` files).
 
 ---
 
@@ -542,7 +541,7 @@ This is used to install & configure the [Shorewall firewall](https://shorewall.o
 
 **Configuration**
 
--   `system/shorewall/global.d`: Contains files for zones, policy, interfaces and rules.
+-   `system/shorewall/global.d`: contains files for zones, policy, interfaces and rules.
     All files here will be copied to `/etc/shorewall/` with directory structure preserved.
 
 ---
