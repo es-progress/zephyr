@@ -5,7 +5,7 @@ This will determine how the system is laid out and how the data is stored.
 
 They are similar to configuration files for Modules, but there's no global/local distinction as disk maps are always specific to a system.
 They are found in `install/disk_maps` directory of a Profile.
-Disk maps are just text files, blank lines and lines starting with `#` are ignored with INI-like sections.
+Disk maps are simple text files. Blank lines and lines starting with `#` are ignored with INI-like sections.
 
 ## Disks
 
@@ -31,7 +31,7 @@ ssd     /dev/nvme0n1    p
 
 The next section(s) of a disk map is the `PARTITIONS`, which lists the partitions that are present on each disk.
 Each partition is listed on its own line, options are separated by whitespace.
-The section is named after the disk, such as `PARTITIONS_main` for the `main` disk (defined in the `DISKS` section), so you need a section for each disk.
+The section is named after the disk, such as `PARTITIONS_main` for the `main` disk (defined in the `DISKS` section), so you need a separate section for each disk.
 
 **Options**
 
