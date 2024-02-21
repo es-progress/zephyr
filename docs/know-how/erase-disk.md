@@ -9,7 +9,7 @@ This is how to erase a disk securely.
     This is a summarized abstract, that contains all essential steps to securely erasing your disks. For more detailed instructions and explanations, please refer to the Wiki.
 
 There are cases when you might want to securely wipe a disk.
-For example the device changes hands and you want to ensure that your sensitive files can not be recovered.
+For example, when the device changes hands, you might want to ensure that your sensitive files cannot be recovered.
 Or you want to restore an SSD drive (Solid State Drive) to its factory default write performance by Memory Cell Clearing.
 
 The disk you want to delete must **NOT** be mounted! If you can't unmount it (e.g. it's mounted at `/`), you can boot from an [Ubuntu USB stick](create-boot-usb.md) (live image).
@@ -68,7 +68,7 @@ This has the additional benefit, that the original write performance might be ac
 
 **Steps** for NVMe SSD drives:
 
-1. Get `nvme-cli` utility
+1. Install `nvme-cli` utility
     ```
     apt install nvme-cli
     ```
@@ -123,4 +123,4 @@ This has the additional benefit, that the original write performance might be ac
         - NVMe SSD, HDD: **30-40 MB/sec**, so for a 1TB drive it takes ~8 hours
         - SATA SSD: 140 MB/sec, that means 84 minutes for a 120GB drive
 
-!!! success "Finish! Drive is securely erased."
+!!! success "Finish! The drive has been securely erased."
