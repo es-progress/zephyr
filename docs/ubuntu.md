@@ -3,34 +3,34 @@
 ## Overview
 
 Most of the time you'll customize a non-freshly installed OS.
-Probably you don't want to reinstall Ubuntu just because an environment variable is changed or a new Git alias is added to your configuration...
+Chances are, you don't want to reinstall Ubuntu just because you've changed an environment variable or added a new Git alias to your configuration...
 In this case you can skip this part and see [Customization](customize.md).
 
-But there are some tasks (like partitioning disks) that are best to do before a full reinstall.
+However, there are some tasks (like partitioning disks) that are best to do before a full reinstall.
 Also sometimes you might like to start fresh or you've got a new device and want to install and setup Ubuntu.
-If that's true this section could be interesting as Zephyr :eight_spoked_asterisk: can help in that too!
+If that's true, you may find this section helpful as Zephyr :eight_spoked_asterisk: can assist with that too!
 
-This process consists of :three: distinctive phases: _Pre-install_, _Install_ and _Post-install_.
+This process consists of :three: distinctive phases: _Pre-installation_, _Installation_ and _Post-installation_.
 It's mostly the standard (stock) Ubuntu installation (install phase) with some steps before/after that (pre-install, post-install).
 
-In pre/post-install [Disk maps](reference/disk-maps.md) play a crucial role.
+In pre/post-installation [Disk maps](reference/disk-maps.md) play a crucial role.
 They are just normal configuration files in your profiles and as the name suggest in these files you can describe your disks, partitions and file-systems and let Zephyr know about them.
 
 !!! danger "Backup"
 
-    First and foremost **backup** all your data!
+    First and foremost, **back up** all your data!
 
     This is a destructive process **it will delete all files!**
 
-## Pre-install
+## Pre-installation
 
-After you've backed up any important files (Are you sure:question: Take a moment to reconsider, don't be sorry later!) you can boot from the remixed USB-stick (that have `zephyr.iso` burned).
+After you've backed up all your important files (Are you sure:question: Take a moment to reconsider, don't be sorry later!) you can boot from the remixed USB-stick (that have `zephyr.iso` burned).
 
 If you don't want to partition any disk or let the Ubuntu installer to format partitions you can skip phase.
 
-At the end of this phase the actual install is not yet started, however the disks & partitions are partitioned & formatted, so **all files will be deleted**.
+At the end of this phase the actual install is not yet started, however the disks and partitions are partitioned & formatted, so **all files will be deleted**.
 
-**Pre-install steps**
+**Pre-installation steps**
 
 1. :red_circle: Boot from live USB (Zephyr)
 1. :computer_mouse: **Try Ubuntu**
@@ -58,11 +58,11 @@ At the end of this phase the actual install is not yet started, however the disk
 
 !!! success "You now have clean & empty disks, ready for a fresh install. :white_flag:"
 
-## Install
+## Installation
 
 This is the standard Ubuntu install process.
 
-**Steps**
+**Installation steps**
 
 1. :computer_mouse: **Install Ubuntu**
 1. Complete forms, settings in GUI
@@ -71,12 +71,12 @@ This is the standard Ubuntu install process.
 
 !!! success "Stock Ubuntu is installed. In the next step we setup Zephyr and prepare for first boot! Yay!"
 
-## Post-install
+## Post-installation
 
-Ubuntu is already installed, but we need to perform the post-install steps too.
+Ubuntu is already installed, but we need to perform the post-installation steps too.
 Then we will reboot the system and see the first boot (hopefully without any problems! :crossed_fingers:)
 
-**Post-install steps**
+**Post-installation steps**
 
 1.  Run post-install
 

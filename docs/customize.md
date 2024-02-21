@@ -1,18 +1,18 @@
 # Customization
 
-This chapter is about how to use Zephyr :eight_spoked_asterisk: to customize your Ubuntu install: install packages, apply configurations and generally set up the system.
+This chapter covers how to use Zephyr :eight_spoked_asterisk: to tailor your Ubuntu installation process by installing packages, applying configurations, and setting up the system in general.
 
 This is the essential part, in fact it's the whole point of this project!
-However this is the easiest task. :wink:
+However, it's the simplest task. :wink:
 
 ## Modules
 
 Customizations are organized into _Modules_.
-Each module configures a specific application, tool, Linux subsystem, system administration job (or just one particular setting) or installs a package from a package manager.
+Each module is responsible for configuring a specific application, tool, Linux subsystem, system administration job (or even a single setting), or installs a package from a package manager.
 For a comprehensive list of modules see [Reference](reference/modules.md) or the example profile in `example/default` directory.
 
-It's possible to create your own modules too in case your tools (apps, etc.) are not covered by Zephyr.
-For details on how to create a module check [`other/local` module](reference/modules.md#local).
+It's also possible to create custom modules if your tools (apps, etc.) are not covered by Zephyr.
+For details on how to create a module check the [`other/local` module](reference/modules.md#local).
 
 Basically, customizing means running these modules. It's possible to run all or just one if you wish.
 You can execute a module multiple times, it will always update to the latest change in the configuration files.
@@ -23,7 +23,7 @@ Then on a live system, update just the modules which configuration have changed.
 
 ## Execute modules
 
-Executing a module is simple as this:
+Executing a module is as simple as this:
 
 ```
 zephyrctl customize PROFILE [MODULE]...
@@ -33,9 +33,11 @@ PROFILE            Selected customization profile
 MODULE             List of modules to run
 ```
 
+---
+
 This is the end of the guides.
-For now you should be familiar how Zephyr :eight_spoked_asterisk: works and how it can help you to streamline your Ubuntu install & configure workflow.
+By now, you should be familiar with how Zephyr :eight_spoked_asterisk: works and how it can streamline your Ubuntu installation & configuration workflow.
 
 The best way to learn Zephyr is to jump right in and create your first configuration profile and run it! :smile:
 
-However, if you want to dig deeper into available modules, their configuration options and settings for Zephyr itself or `zephyrctl` you can check the Reference.
+However, if you want to dig deeper into available modules, their configuration options and settings for either Zephyr itself or `zephyrctl` check the Reference.
