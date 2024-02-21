@@ -41,8 +41,9 @@ zephyrctl customize PROFILE [MODULE]...
 
 Params:
 PROFILE            Customization profile to use
-MODULE             Module to run (e.g. 'apt', 'bash').
-                   If prefixed with '~' module is skipped (e.g ~bash).
+MODULE             Module/category to run (eg. apt, system).
+                   If prefixed with '~', then the module
+                   or the whole category is skipped (e.g ~apt, ~system).
                    If none given, all modules will be executed.
 ```
 
@@ -55,8 +56,11 @@ zephyrctl customize default
 # Run only 'locale' and 'sudo' modules with the 'foo' profile
 zephyrctl customize foo locale sudo
 
-# Skip 'certificates' module but run all others with the 'bar' profile
-zephyrctl customize bar ~certificates
+# Skip 'certificates' and all 'tools' modules but run others
+zephyrctl customize default ~certificates ~tools
+
+# Skip 'apt' but run all other 'packages' modules
+zephyrctl customize default ~apt packages
 ```
 
 ---
