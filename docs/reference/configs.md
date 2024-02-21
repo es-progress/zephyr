@@ -53,5 +53,5 @@ Default is `''`.
 
 Comma-separated list of modules to be whitelisted. Only these modules will be executed during customization if no other module was specified (`zephyrctl customize`).
 You can still run any module if requested explicitly with `zephyrctl customize NOT_WHITELISTED_MODULE`.
-Use this setting to run only a few selected modules by default. If you want to disable some modules, use `MODULE_BLACKLIST` instead.
+Use this setting to run only a few selected modules by default. If you just want to disable some modules, use `MODULE_BLACKLIST` instead.
 Default is `''`.

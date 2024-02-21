@@ -8,7 +8,7 @@ __zephyrctl_complete() {
     command="${words[1]}"
     commands=(burn remix help partition format post-install customize install uninstall)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
-    scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n")
+    scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -type f -printf "%f\n~%f\n")
 
     case "${cword}" in
         1) __zephyr_gen_word "${commands[*]}" ;;
@@ -33,6 +33,7 @@ __zephyrctl_complete() {
             ;;
         *)
             case "${command}" in
+                customize) __zephyr_gen_word "${scripts}" ;;
                 partition|format|post-install)
                     maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
                     __zephyr_gen_word "${maps}"
