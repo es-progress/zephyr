@@ -6,16 +6,16 @@
 ## Customizations ##
 ####################
 
-# Dirs to run (Name;Path)
+# Directories to scan for modules (order matters)
 exec_dir=(
-    "Setup system;system"
-    "Install packages;packages"
-    "Install services;services"
-    "Setup shell;shell"
-    "Config tools;tools"
-    "Config apps;apps"
-    "Config GNOME;gnome"
-    "Other customizations;other"
+    system
+    packages
+    services
+    shell
+    tools
+    apps
+    gnome
+    other
 )
 
 # Strict mode
@@ -27,18 +27,47 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 # Parse options
 profile="${1?:"Profile missing"}"
 shift
-# shellcheck disable=SC2311
-modules=$(implode "|" "${@}")
-filter=()
-[[ -n "${modules}" ]] && filter=("--regex=^(${modules})\$")
-
-for item in "${exec_dir[@]}"; do
-    IFS=";" read -r name dir <<<"${item}"
-    runnable=$(run-parts --test "${filter[@]}" "${PATH_SCRIPTS_CUSTOMIZE}/${dir}")
-    if [[ -n "${runnable}" ]]; then
-        print-section "${name}"
-        run-parts --exit-on-error "${filter[@]}" --arg="${profile}" "${PATH_SCRIPTS_CUSTOMIZE}/${dir}"
+whitelist=()
+blacklist=()
+# Get white/blacklist from CLI
+for arg in "${@}"; do
+    # Check first character
+    if [[ "${arg:0:1}" == "~" ]]; then
+        # Remove first char
+        arg="${arg#?}"
+        blacklist+=("${arg}")
+    else
+        whitelist+=("${arg}")
     fi
+    shift
+done
+# Merge white/blacklist with config
+IFS="," read -r -a whitelist_cfg <<<"${MODULE_WHITELIST}"
+IFS="," read -r -a blacklist_cfg <<<"${MODULE_BLACKLIST}"
+if [[ -z "${whitelist[*]}" && -n "${whitelist_cfg[*]}" ]]; then
+    whitelist=("${whitelist_cfg[@]}")
+fi
+blacklist=("${blacklist[@]}" "${blacklist_cfg[@]}")
+
+for dir in "${exec_dir[@]}"; do
+    while IFS= read -r -d '' path; do
+        module=$(basename "${path}")
+
+        # Whitelist is provided and module is not on it --> skip
+        if [[ -n "${whitelist[*]}" ]] && ! printf "%s\0" "${whitelist[@]}" | grep -qFxz "${module}"; then
+            continue
+        fi
+        # Now check blacklist, if module is on it --> skip
+        if printf "%s\0" "${blacklist[@]}" | grep -qFxz "${module}"; then
+            continue
+        fi
+
+        ## Run module
+        if ! "${path}" "${profile}"; then
+            print-error "Error! Module: ${module} failed!"
+            exit 1
+        fi
+    done < <(find "${PATH_SCRIPTS_CUSTOMIZE}/${dir}" -type f -executable -print0 | sort -z || true)
 done
 
 exit 0

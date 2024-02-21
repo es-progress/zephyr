@@ -30,8 +30,12 @@ zephyrctl customize PROFILE [MODULE]...
 
 where:
 PROFILE            Selected customization profile
-MODULE             List of modules to run
+MODULE             List of modules to run.
+                   If prefixed with '~' module is skipped.
+                   If none given, all modules will be executed.
 ```
+
+For details see [Reference](reference/zephyrctl.md#customize).
 
 ---
 
