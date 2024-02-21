@@ -6,7 +6,7 @@
 
 Zephyr :eight_spoked_asterisk: is a powerful framework designed to simplify and improve your experience with Ubuntu installation & configuration.
 It separates the generalized scripts that apply the customizations (**Modules**) from the configurations they manage (**Profiles**).
-If you're looking to optimize your customization workflow, you've come to the right place!
+If you're looking to automate your customization workflow, you've come to the right place!
 
 Let's see these two core concepts as they tell the most about Zephyr and how it helps.
 
@@ -29,9 +29,9 @@ These modules perform a wide range of tasks, for example:
 -   Configure GNOME, Bash
 -   Set up Linux subsystems (e.g. sudo, cron, systemd)
 -   Disk partitioning & formatting
--   Remix Ubuntu
+-   Remix Ubuntu ISO
 
-As you can see, the core modules cover the needs of a web developer, sysadmin, or power user.
+As you might see, the core modules should cover the needs of a web developer, sysadmin, or power user.
 If you're missing a module, you can roll your own to extend Zephyr's capabilities!
 
 ## Installation
@@ -51,7 +51,7 @@ Below are the detailed installation steps:
         ```
         cp zephyr.cfg zephyr.local.cfg
         ```
-    1. Adjust configurations in the local configuration file. Any value provided here will overwrite the defaults in `zephyr.cfg`. If you omit a configuration, default value will be used.
+    1. Adjust configurations in the local configuration file. Any value provided here will overwrite the defaults in `zephyr.cfg`. If a setting is not defined, the default value will be applied.
 1. Run the installer, which will:
     - Set up Bash completion for `zephyrctl`
     - Create a symlink for `zephyrctl` in `/usr/local/bin`, making it accessible from anywhere (if `/usr/local/bin` is in your PATH).
@@ -63,7 +63,7 @@ Below are the detailed installation steps:
 
 ## Execute modules
 
-Executing a module is simple as this:
+Executing a module is as simple as this:
 
 ```
 zephyrctl customize PROFILE [MODULE]...
