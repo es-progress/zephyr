@@ -22,11 +22,11 @@ print-header Compress SquashFS filesystem...
 sudo mksquashfs "${PATH_EXTRACT}/squashfs-root/" "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 
-print-status "Calculate filesystem size..."
+print-status Calculate filesystem size...
 sudo du -sx --block-size=1 "${PATH_EXTRACT}/squashfs-root/" | cut -f1 | sudo tee "${PATH_EXTRACT}/iso/casper/filesystem.size" >/dev/null
 print-finish
 
-print-status "Calculate checksum..."
+print-status Calculate checksum...
 sudo find "${PATH_EXTRACT}/iso" -type f -print0  | sudo xargs -0 md5sum | sed -z "s,${PATH_EXTRACT}/iso,\.,g" | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee "${PATH_EXTRACT}/iso/md5sum.txt" >/dev/null
 print-finish
 

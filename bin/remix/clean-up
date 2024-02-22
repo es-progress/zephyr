@@ -13,11 +13,11 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-print-status "Remove extracted files..."
+print-status Remove extracted files...
 sudo rm -rf "${PATH_EXTRACT}"
 print-finish
 
-print-status "Remove ISO mount point..."
+print-status Remove ISO mount point...
 sudo rm -rf "${PATH_MOUNT}"
 print-finish
 

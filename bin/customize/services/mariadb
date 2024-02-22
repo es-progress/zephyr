@@ -66,7 +66,7 @@ print-header Install MariaDB...
 sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup python3-pymysql
 print-finish
 
-print-status "Load timezone data..."
+print-status Load timezone data...
 mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mysql -D mysql
 print-finish
 
@@ -84,7 +84,7 @@ sudo systemctl enable mariadb.service
 sudo systemctl restart mariadb.service
 print-finish
 
-print-status "Create DB admin..."
+print-status Create DB admin...
 sudo mysql -e "CREATE USER IF NOT EXISTS '${admin_name}'@'localhost' IDENTIFIED BY '${admin_pass}';"
 sudo mysql -e "GRANT ALL ON *.* TO '${admin_name}'@localhost WITH GRANT OPTION;"
 sudo mysql -e "FLUSH PRIVILEGES;"

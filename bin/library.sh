@@ -59,7 +59,8 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
-    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -ne ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print OK message

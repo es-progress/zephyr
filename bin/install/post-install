@@ -28,7 +28,7 @@ for dir in proc sys dev etc/resolv.conf; do
     fi
 done
 
-print-status "Mount all file-systems..."
+print-status Mount all file-systems...
 chroot "${target}" mount -a
 print-finish
 

@@ -85,7 +85,7 @@ fi
 [[ -z "${def_virt_host_name}" ]] && exit 1
 [[ -z "${root_ca_name}" ]] && exit 1
 
-print-status "Create default web dirs..."
+print-status Create default web dirs...
 sudo mkdir -p "${web_root}/default"
 sudo touch "${web_root}/default/index.html"
 sudo chown -R "${USER}:www-data" "${web_root}"

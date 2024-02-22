@@ -77,7 +77,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-status "Load vbox modules to kernel..."
+print-status Load vbox modules to kernel...
 sudo modprobe vboxdrv
 sudo modprobe vboxnetadp
 sudo modprobe vboxnetflt

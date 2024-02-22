@@ -52,7 +52,7 @@ if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
 fi
 
 if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
-    print-status "Template interfaces..."
+    print-status Template interfaces...
     while IFS= read -r -d '' iface; do
         # Duplicate template line
         sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces

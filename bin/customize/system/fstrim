@@ -47,7 +47,7 @@ if dir=$(cfg-get "${profile}" system/fstrim/local.d); then
     _config local "${dir}"
 fi
 
-print-status "Restart fstrim service..."
+print-status Restart fstrim service...
 sudo systemctl daemon-reload
 sudo systemctl restart fstrim.service
 print-finish

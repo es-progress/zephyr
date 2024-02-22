@@ -78,7 +78,7 @@ if file=$(cfg-get "${profile}" other/local.cfg); then
     _setup-daily local "${file}"
 fi
 
-print-status "Restart cron..."
+print-status Restart cron...
 sudo systemctl restart cron.service
 print-finish
 

@@ -47,7 +47,7 @@ if [[ -e /sys/firmware/efi ]]; then
         print-finish "SecureBoot not enabled/available, skipping MOK certificate"
     else
         key_created=
-        print-status "Create MOK private key..."
+        print-status Create MOK private key...
         if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
             sudo openssl genpkey \
                 -algorithm rsa \
@@ -59,7 +59,7 @@ if [[ -e /sys/firmware/efi ]]; then
             print-finish "Key found, skipped"
         fi
 
-        print-status "Create MOK certificate..."
+        print-status Create MOK certificate...
         if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
             sudo openssl req \
                 -new \
@@ -92,7 +92,7 @@ fi
 #################################
 key_created=
 cert_created=
-print-status "Create ROOT CA private key..."
+print-status Create ROOT CA private key...
 if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     sudo openssl genpkey \
         -algorithm rsa \
@@ -104,7 +104,7 @@ else
     print-finish "Key found, skipped"
 fi
 
-print-status "Create self-signed ROOT CA certificate..."
+print-status Create self-signed ROOT CA certificate...
 if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_created}" ]]; then
     sudo openssl req \
         -new \
@@ -130,7 +130,7 @@ if [[ -n "${cert_created}" ]]; then
 
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" system/firefox-policies.json); then
-        print-status "Install root CA certificate to Firefox..."
+        print-status Install root CA certificate to Firefox...
         sudo mkdir -p /usr/lib/firefox/distribution
         sudo cp --no-preserve=mode,ownership "${file}" /usr/lib/firefox/distribution/policies.json
         print-finish

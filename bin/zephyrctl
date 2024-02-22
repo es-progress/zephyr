@@ -158,12 +158,12 @@ _burn() {
 #################
 # shellcheck disable=SC2317
 _install() {
-    print-status "Set up Bash completion..."
+    print-status Set up Bash completion...
     sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/zephyrctl
     sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/zephyrctl
     print-finish
 
-    print-status "Symlink controller..."
+    print-status Symlink controller...
     sudo rm -f /usr/local/bin/zephyrctl
     sudo ln -s "${PROJECT_ROOT}/bin/zephyrctl" /usr/local/bin/zephyrctl
     print-finish
@@ -173,15 +173,15 @@ _install() {
 #################
 # shellcheck disable=SC2317
 _uninstall() {
-    print-status "Remove Bash completion..."
+    print-status Remove Bash completion...
     sudo rm /etc/bash_completion.d/zephyrctl
     print-finish
 
-    print-status "Unlink controller..."
+    print-status Unlink controller...
     sudo rm -f /usr/local/bin/zephyrctl
     print-finish
 
-    print-status "Remove Zephyr files..."
+    print-status Remove Zephyr files...
     sudo rm -rf "${INSTALL_DIR}"
     print-finish
 }
