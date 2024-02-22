@@ -37,7 +37,7 @@ fi
 #########################
 # Check if this is an EFI system
 if [[ -e /sys/firmware/efi ]]; then
-    print-header "Install mokutil..."
+    print-header Install mokutil...
     sudo apt-get install --yes --no-install-recommends mokutil
     print-finish
 
@@ -75,7 +75,7 @@ if [[ -e /sys/firmware/efi ]]; then
             print-finish "Certificate found, skipped"
         fi
 
-        print-header "Enroll MOK certificate..."
+        print-header Enroll MOK certificate...
         cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
         # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
         if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
@@ -124,7 +124,7 @@ fi
 
 # Update ca-cert
 if [[ -n "${cert_created}" ]]; then
-    print-header "Install root CA certificate to system..."
+    print-header Install root CA certificate to system...
     sudo update-ca-certificates
     print-finish
 

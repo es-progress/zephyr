@@ -22,7 +22,7 @@ if ! findmnt "${PATH_MOUNT}" >/dev/null; then
     print-finish
 fi
 
-print-header "Extract ISO contents..."
+print-header Extract ISO contents...
 mkdir -p "${PATH_EXTRACT}/iso"
 sudo rsync \
     -aAXHEh \
@@ -43,7 +43,7 @@ if [[ -e "${PATH_EXTRACT}/squashfs-root" ]]; then
     print-finish
 fi
 
-print-header "Extract SquashFS filesystem..."
+print-header Extract SquashFS filesystem...
 sudo unsquashfs -dest "${PATH_EXTRACT}/squashfs-root" "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 

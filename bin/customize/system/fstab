@@ -32,7 +32,7 @@ awk '
 ' /etc/fstab > "${tmp_file}"
 print-finish
 
-print-header "Verify fstab..."
+print-header Verify fstab...
 if findmnt --verify --tab-file "${tmp_file}"; then
     verified=1
     print-finish

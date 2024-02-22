@@ -40,7 +40,7 @@ fi
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
-print-header "Install composer..."
+print-header Install composer...
 # Check if already installed
 if [[ -e "${bin_global}/composer" ]]; then
     hash=$(sha256sum "${bin_global}/composer" | cut -d" " -f1)

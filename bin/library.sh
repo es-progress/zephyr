@@ -50,7 +50,8 @@ print-section() {
 ## @param    $*  Message
 ########################
 print-header() {
-    echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print status message

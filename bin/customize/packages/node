@@ -44,7 +44,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header "Install node..."
+print-header Install node...
 sudo snap install node --classic
 print-finish
 
