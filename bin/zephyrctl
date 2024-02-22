@@ -132,7 +132,7 @@ _usage() {
 # shellcheck disable=SC2317
 _remix() {
     if [[ -z "${1:-}" ]]; then
-        print-error "ISO image missing!"
+        print-error ISO image missing!
         _usage remix
         exit 1
     fi
@@ -147,7 +147,7 @@ _remix() {
 # shellcheck disable=SC2317
 _burn() {
     if [[ -z "${1:-}" ]]; then
-        print-error "ISO image missing!"
+        print-error ISO image missing!
         _usage burn
         exit 1
     fi
@@ -193,7 +193,7 @@ _partition() {
     local profile
 
     if [[ -z "${1:-}" ]]; then
-        print-error "Profile missing!"
+        print-error Profile missing!
         _usage partition
         exit 1
     fi
@@ -214,7 +214,7 @@ _format() {
     local profile
 
     if [[ -z "${1:-}" ]]; then
-        print-error "Profile missing!"
+        print-error Profile missing!
         _usage format
         exit 1
     fi
@@ -235,7 +235,7 @@ _post-install() {
     local profile
 
     if [[ -z "${1:-}" ]]; then
-        print-error "Profile missing!"
+        print-error Profile missing!
         _usage post-install
         exit 1
     fi
@@ -259,7 +259,7 @@ _customize() {
     local module_selected=
 
     if [[ -z "${1:-}" ]]; then
-        print-error "Profile missing!"
+        print-error Profile missing!
         _usage customize
         exit 1
     fi

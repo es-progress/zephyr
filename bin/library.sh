@@ -26,7 +26,8 @@ TXT_BLUE="\e[34m"
 ## @param    $*  Message
 ########################
 print-error() {
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
+    # shellcheck disable=SC2086
+    echo -e ${TXT_RED}${TXT_BOLD}${*}${TXT_NORM} >&2
 }
 
 ## Print section header
@@ -84,7 +85,7 @@ check-root() {
     local userid
     userid=$(id -u)
     if [[ "${userid}" -ne 0 ]]; then
-        print-error "Run as root!"
+        print-error Run as root!
         return 1
     fi
     return 0

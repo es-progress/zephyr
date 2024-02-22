@@ -38,7 +38,7 @@ if findmnt --verify --tab-file "${tmp_file}"; then
     print-finish
 else
     verified=
-    print-error "Fail"
+    print-error Fail
 fi
 
 if [[ -n "${verified}" ]]; then
