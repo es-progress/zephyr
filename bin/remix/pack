@@ -56,6 +56,6 @@ print-finish
 
 echo
 echo "Newly created image: ${new_iso_image}"
-print-finish "Zephyr ISO created!"
+print-finish Zephyr ISO created!
 
 exit 0

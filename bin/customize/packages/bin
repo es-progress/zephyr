@@ -31,7 +31,7 @@ _install() {
         if [[ -e "${bin_global}/${name}" ]]; then
             hash=$(sha256sum "${bin_global}/${name}" | cut -d" " -f1)
             if [[ "${hash}" == "${checksum}" ]]; then
-                print-finish "Already installed, skipped."
+                print-finish Already installed, skipped.
                 continue
             fi
         fi

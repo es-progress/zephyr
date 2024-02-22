@@ -276,7 +276,7 @@ _customize() {
     "${PATH_SCRIPTS_CUSTOMIZE}/runner" "${profile}" "${@}"
     [[ -z "${module_selected}" ]] && sudo systemctl start unattended-upgrades.service
 
-    print-finish "Customization finished!"
+    print-finish Customization finished!
     if [[ -z "${module_selected}" ]]; then
         read -r -p "Reboot is required, do you want it now? (y/n) "
         [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot

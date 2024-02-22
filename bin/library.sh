@@ -70,7 +70,8 @@ print-status() {
 ########################
 # shellcheck disable=SC2120
 print-finish() {
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}
 }
 
 ## Print error message and exit

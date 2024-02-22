@@ -44,7 +44,7 @@ if [[ -e /sys/firmware/efi ]]; then
     # Check SecureBoot is enabled
     echo -n "SecureBoot state: "
     if ! mokutil --sb-state; then
-        print-finish "SecureBoot not enabled/available, skipping MOK certificate"
+        print-finish SecureBoot not enabled/available, skipping MOK certificate
     else
         key_created=
         print-status Create MOK private key...
@@ -56,7 +56,7 @@ if [[ -e /sys/firmware/efi ]]; then
             key_created=1
             print-finish
         else
-            print-finish "Key found, skipped"
+            print-finish Key found, skipped
         fi
 
         print-status Create MOK certificate...
@@ -72,7 +72,7 @@ if [[ -e /sys/firmware/efi ]]; then
                 -subj "${mok_key_subject}"
             print-finish
         else
-            print-finish "Certificate found, skipped"
+            print-finish Certificate found, skipped
         fi
 
         print-header Enroll MOK certificate...
@@ -83,7 +83,7 @@ if [[ -e /sys/firmware/efi ]]; then
             sudo mokutil --timeout -1
             print-finish
         else
-            print-finish "Already enrolled, skipped"
+            print-finish Already enrolled, skipped
         fi
     fi
 fi
@@ -101,7 +101,7 @@ if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     key_created=1
     print-finish
 else
-    print-finish "Key found, skipped"
+    print-finish Key found, skipped
 fi
 
 print-status Create self-signed ROOT CA certificate...
@@ -119,7 +119,7 @@ if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_c
     cert_created=1
     print-finish
 else
-    print-finish "Certificate found, skipped"
+    print-finish Certificate found, skipped
 fi
 
 # Update ca-cert

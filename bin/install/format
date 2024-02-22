@@ -113,6 +113,6 @@ for map_file in "${map_files[@]}"; do
         print-finish "Finished formatting ${device}"
     done
 done
-print-finish "All formatting finished."
+print-finish All formatting finished.
 
 exit 0

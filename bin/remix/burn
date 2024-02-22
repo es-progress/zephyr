@@ -51,6 +51,6 @@ read -r -p "Are you sure? (y/n) ";
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 
-udisksctl power-off --block-device "${disk}" && print-finish "Device can be safely removed."
+udisksctl power-off --block-device "${disk}" && print-finish Device can be safely removed.
 
 exit 0
