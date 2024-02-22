@@ -86,10 +86,10 @@ done
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
-    print-section "Disks & partitions"
+    print-section Disks and partitions
     lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
 
-    print-section "Parsed disk map"
+    print-section Parsed disk map
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
     read -rp "WARNING! Disks in map will be erased! Proceed? Type 'YES': "

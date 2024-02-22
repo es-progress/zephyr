@@ -37,7 +37,8 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_BLUE}${TXT_BOLD}${*}${TXT_NORM}
     for ((i = 0 ; i < ${#msg} ; i++)); do
         echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
     done
