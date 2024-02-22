@@ -90,7 +90,7 @@ _usage() {
             description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MODULE:Module to run (eg. apt, bash). If prefixed with '~' module is skipped (e.g ~bash). If none given, all modules will be executed.")
+            options+=("MODULE:Module/category to run (eg. apt, system). If prefixed with '~', then the module or the whole category is skipped (e.g ~apt, ~system). If none given, all modules will be executed.")
             ;;
         install)
             description="Install Zephyr on your computer"
@@ -113,6 +113,17 @@ _usage() {
             IFS=":" read -r name help <<<"${line}"
             printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
         done
+
+        # Show available categories and modules for 'customize' command
+        if [[ "${selector}" == "customize" ]]; then
+            echo -e "\n${TXT_YELLOW}Available categories and modules:${TXT_NORM}"
+            while IFS= read -r -d '' path; do
+                echo -ne "  ${TXT_GREEN}$(basename "${path}")${TXT_NORM}:"
+                modules=$(find "${path}" -type f -executable -printf " %f\n" | sort)
+                # shellcheck disable=SC2068
+                implode "," ${modules[@]}
+            done < <(find "${PATH_SCRIPTS_CUSTOMIZE}" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z || true)
+        fi
     fi
 }
 

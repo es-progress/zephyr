@@ -50,19 +50,33 @@ fi
 blacklist=("${blacklist[@]}" "${blacklist_cfg[@]}")
 
 for dir in "${exec_dir[@]}"; do
+    # Category blacklisted --> skip whole category
+    if printf "%s\0" "${blacklist[@]}" | grep -qFxz "${dir}"; then
+        continue
+    fi
+
+    # Is whole category whitelisted?
+    category_whitelisted=
+    if printf "%s\0" "${whitelist[@]}" | grep -qFxz "${dir}"; then
+        category_whitelisted=1
+    fi
+
+    # Loop through modules
     while IFS= read -r -d '' path; do
         module=$(basename "${path}")
 
-        # Whitelist is provided and module is not on it --> skip
-        if [[ -n "${whitelist[*]}" ]] && ! printf "%s\0" "${whitelist[@]}" | grep -qFxz "${module}"; then
-            continue
-        fi
-        # Now check blacklist, if module is on it --> skip
+        # Module blacklisted --> skip
         if printf "%s\0" "${blacklist[@]}" | grep -qFxz "${module}"; then
             continue
         fi
 
-        ## Run module
+        # Category not whitelisted and whitelist is provided and module is not on it --> skip
+        if  [[ -z "${category_whitelisted}" ]] && [[ -n "${whitelist[*]}" ]] && ! printf "%s\0" "${whitelist[@]}" | grep -qFxz "${module}"; then
+            continue
+        fi
+
+        # Run module
+        print-section "${module}"
         if ! "${path}" "${profile}"; then
             print-error "Error! Module: ${module} failed!"
             exit 1

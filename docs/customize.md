@@ -30,8 +30,9 @@ zephyrctl customize PROFILE [MODULE]...
 
 where:
 PROFILE            Selected customization profile
-MODULE             List of modules to run.
-                   If prefixed with '~' module is skipped.
+MODULE             Module/category to run (eg. apt, system).
+                   If prefixed with '~', then the module
+                   or the whole category is skipped (e.g ~apt, ~system).
                    If none given, all modules will be executed.
 ```
 
