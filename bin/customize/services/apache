@@ -85,7 +85,7 @@ fi
 [[ -z "${def_virt_host_name}" ]] && exit 1
 [[ -z "${root_ca_name}" ]] && exit 1
 
-print-status "Create default web dirs..."
+print-status Create default web dirs...
 sudo mkdir -p "${web_root}/default"
 sudo touch "${web_root}/default/index.html"
 sudo chown -R "${USER}:www-data" "${web_root}"
@@ -100,7 +100,7 @@ if dir=$(cfg-get "${profile}" services/apache/config.local.d); then
     _config local "${dir}"
 fi
 
-print-header "Create certificate for default vhost..."
+print-header Create certificate for default vhost...
 if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl/certs/${def_virt_host_name}.pem"; then
     # Create CSR
     csr=$(sudo mktemp)
@@ -127,12 +127,12 @@ if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl
         -days 365
     print-finish
 else
-    print-finish "Key found, skipped"
+    print-finish Key found, skipped
 fi
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
-    print-header "Setup default vhosts..."
+    print-header Setup default vhosts...
     [[ -f /etc/apache2/sites-available/default-ssl.conf ]] && sudo rm /etc/apache2/sites-available/default-ssl.conf
     sudo cp --no-preserve=mode,ownership "${file}" /etc/apache2/sites-available/000-default.conf
     sudo sed -i \
@@ -144,7 +144,7 @@ if file=$(cfg-get "${profile}" services/apache/vhost-default.conf); then
     print-finish
 fi
 
-print-header "Restart services..."
+print-header Restart services...
 sudo systemctl enable apache2.service
 sudo systemctl restart apache2.service
 print-finish

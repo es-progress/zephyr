@@ -54,7 +54,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header "Add Atom GPG key..."
+print-header Add Atom GPG key...
 curl --disable -s --location --url https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
 print-finish
 

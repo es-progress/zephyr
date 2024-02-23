@@ -16,7 +16,7 @@ check-not-root
 profile="${1:?"Profile missing"}"
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/gpg-agent.conf); then
-    print-status "Copy gnupg config files..."
+    print-status Copy gnupg config files...
     mkdir -p ~/.gnupg
     cp --no-preserve=mode,ownership "${file}" ~/.gnupg/gpg-agent.conf
     chmod go-rwx -R ~/.gnupg/gpg-agent.conf

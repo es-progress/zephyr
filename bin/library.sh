@@ -10,12 +10,12 @@
 ## FORMAT CODES ##
 ##################
 
-TXT_NORM="\e[0m"
-TXT_BOLD="\e[1m"
-TXT_RED="\e[31m"
-TXT_YELLOW="\e[33m"
-TXT_GREEN="\e[32m"
-TXT_BLUE="\e[34m"
+TXT_NORM=$(tput sgr0)
+TXT_BOLD=$(tput bold)
+TXT_RED=$(tput setaf 1)
+TXT_YELLOW=$(tput setaf 3)
+TXT_GREEN=$(tput setaf 2)
+TXT_BLUE=$(tput setaf 4)
 
 ###############
 ## FUNCTIONS ##
@@ -26,7 +26,8 @@ TXT_BLUE="\e[34m"
 ## @param    $*  Message
 ########################
 print-error() {
-    echo -e "${TXT_RED}${TXT_BOLD}${*}${TXT_NORM}" >&2
+    # shellcheck disable=SC2086
+    echo -e ${TXT_RED}${TXT_BOLD}${*}${TXT_NORM} >&2
 }
 
 ## Print section header
@@ -36,7 +37,8 @@ print-error() {
 print-section() {
     local msg="${*}"
     echo
-    echo -e "${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_BLUE}${TXT_BOLD}${*}${TXT_NORM}
     for ((i = 0 ; i < ${#msg} ; i++)); do
         echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
     done
@@ -48,7 +50,8 @@ print-section() {
 ## @param    $*  Message
 ########################
 print-header() {
-    echo -e "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print status message
@@ -56,7 +59,8 @@ print-header() {
 ## @param    $*  Message
 ########################
 print-status() {
-    echo -ne "${TXT_YELLOW}${*}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -ne ${TXT_YELLOW}${*}${TXT_NORM}
 }
 
 ## Print OK message
@@ -66,7 +70,8 @@ print-status() {
 ########################
 # shellcheck disable=SC2120
 print-finish() {
-    echo -e "${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}"
+    # shellcheck disable=SC2086
+    echo -e ${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}
 }
 
 ## Print error message and exit
@@ -84,7 +89,7 @@ check-root() {
     local userid
     userid=$(id -u)
     if [[ "${userid}" -ne 0 ]]; then
-        print-error "Run as root!"
+        print-error Run as root!
         return 1
     fi
     return 0

@@ -97,11 +97,11 @@ for map in "${@}"; do
 done
 [[ -z "${map_files[*]}" ]] && error-exit "No maps found"
 
-print-header "Install cryptsetup-initramfs..."
+print-header Install cryptsetup-initramfs...
 apt-get install --yes --no-install-recommends cryptsetup-initramfs
 print-finish
 
-print-status "Config cryptsetup-initramfs..."
+print-status Config cryptsetup-initramfs...
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook
 print-finish
 
@@ -114,7 +114,7 @@ if dir=$(cfg-get "${profile}" install/initramfs/local.d); then
     _config local "${dir}"
 fi
 
-print-status "Create LUKS keys dir..."
+print-status Create LUKS keys dir...
 mkdir -p "${key_dir}"
 chmod o-rwx "${key_dir}"
 print-finish

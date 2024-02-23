@@ -13,7 +13,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-print-status "Create fstab new version..."
+print-status Create fstab new version...
 tmp_file=$(mktemp)
 awk '
 {
@@ -32,21 +32,21 @@ awk '
 ' /etc/fstab > "${tmp_file}"
 print-finish
 
-print-header "Verify fstab..."
+print-header Verify fstab...
 if findmnt --verify --tab-file "${tmp_file}"; then
     verified=1
     print-finish
 else
     verified=
-    print-error "Fail"
+    print-error Fail
 fi
 
 if [[ -n "${verified}" ]]; then
-    print-status "Update fstab to new version..."
+    print-status Update fstab to new version...
     sudo cp --no-preserve=mode,ownership "${tmp_file}" /etc/fstab
     print-finish
 else
-    print-status "Verify failed, skip updating fstab\n"
+    print-header Verify failed, skip updating fstab
 fi
 
 exit 0

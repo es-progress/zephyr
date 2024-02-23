@@ -17,20 +17,20 @@ check-not-root
 orig_iso_image="${1?:"Original ISO file missing"}"
 new_iso_image="${2:-"${ISO_FILE_NAME}"}"
 
-print-header "Compress SquashFS filesystem..."
+print-header Compress SquashFS filesystem...
 [[ -e "${PATH_EXTRACT}/iso/casper/filesystem.squashfs" ]] && sudo rm "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 sudo mksquashfs "${PATH_EXTRACT}/squashfs-root/" "${PATH_EXTRACT}/iso/casper/filesystem.squashfs"
 print-finish
 
-print-status "Calculate filesystem size..."
+print-status Calculate filesystem size...
 sudo du -sx --block-size=1 "${PATH_EXTRACT}/squashfs-root/" | cut -f1 | sudo tee "${PATH_EXTRACT}/iso/casper/filesystem.size" >/dev/null
 print-finish
 
-print-status "Calculate checksum..."
+print-status Calculate checksum...
 sudo find "${PATH_EXTRACT}/iso" -type f -print0  | sudo xargs -0 md5sum | sed -z "s,${PATH_EXTRACT}/iso,\.,g" | grep -v "\./md5sum.txt" | grep -v "\./isolinux" | sudo tee "${PATH_EXTRACT}/iso/md5sum.txt" >/dev/null
 print-finish
 
-print-header "Build ISO image..."
+print-header Build ISO image...
 # Copy MBR file
 mbr_file=$(mktemp)
 dd if="${orig_iso_image}" bs=1 count=446 of="${mbr_file}"
@@ -56,6 +56,6 @@ print-finish
 
 echo
 echo "Newly created image: ${new_iso_image}"
-print-finish "Zephyr ISO created!"
+print-finish Zephyr ISO created!
 
 exit 0

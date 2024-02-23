@@ -80,23 +80,23 @@ for repo in "${repos[@]}"; do
     print-finish
 done
 
-print-header "Update apt cache..."
+print-header Update apt cache...
 sudo apt-get update
 print-finish
 
-print-header "Install packages..."
+print-header Install packages...
 sudo apt-get install --yes --no-install-recommends "${packages_install[@]}"
 print-finish
 
-print-header "Remove packages..."
+print-header Remove packages...
 sudo apt-get remove --yes --purge --autoremove "${packages_remove[@]}"
 print-finish
 
-print-header "Upgrade packages..."
+print-header Upgrade packages...
 sudo apt-get upgrade --yes
 print-finish
 
-print-header "Run apt clean..."
+print-header Run apt clean...
 sudo apt-get clean
 print-finish
 

@@ -19,7 +19,7 @@ disk="${2:-}"
 
 # Select device
 if [[ -z "${disk}" ]]; then
-    print-header "Available disks"
+    print-header Available disks
     sudo lshw -short -class disk
     echo
     read -rep "Select disk: " -i /dev/ disk
@@ -45,12 +45,12 @@ for mount_point in $(lsblk --noheadings -o mountpoint "${disk}"); do
     fi
 done
 
-print-header "Burn ISO to USB..."
+print-header Burn ISO to USB...
 read -r -p "Are you sure? (y/n) ";
 [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] || error-exit "Aborted."
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 
-udisksctl power-off --block-device "${disk}" && print-finish "Device can be safely removed."
+udisksctl power-off --block-device "${disk}" && print-finish Device can be safely removed.
 
 exit 0

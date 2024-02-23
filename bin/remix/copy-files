@@ -13,7 +13,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-print-status "Copy files to SquashFS..."
+print-status Copy files to SquashFS...
 target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
 sudo mkdir -p "${target}"
 # General project files
@@ -43,12 +43,12 @@ sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/zephyrctl"
 sudo ln -s "${INSTALL_DIR}/bin/zephyrctl" "${PATH_EXTRACT}/squashfs-root/usr/local/bin/zephyrctl"
 print-finish
 
-print-status "Set permissions..."
+print-status Set permissions...
 sudo chmod -R u+rw,go+r "${target}"
 sudo find "${target}" -executable -exec chmod go+x '{}' \;
 print-finish
 
-print-status "Patch GRUB..."
+print-status Patch GRUB...
 # Boot from encrypted partition
 if ! grep -qs "GRUB_ENABLE_CRYPTODISK=y" "${PATH_EXTRACT}/squashfs-root/etc/default/grub"; then
     cat <<EOF | sudo tee -a "${PATH_EXTRACT}/squashfs-root/etc/default/grub" >/dev/null

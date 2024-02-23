@@ -38,7 +38,7 @@ fi
 [[ -z "${service_pass}" ]] && exit 1
 [[ -z "${web_root}" ]] && exit 1
 
-print-header "Install phpMyAdmin..."
+print-header Install phpMyAdmin...
 # Download tar
 tmp_file=$(mktemp)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
@@ -56,7 +56,7 @@ print-finish
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
-    print-status "Configure phpMyAdmin..."
+    print-status Configure phpMyAdmin...
     secret=$(openssl rand -hex 32)
     sudo cp --no-preserve=mode,ownership "${file}" "${target}/public"
     sudo sed -i \
@@ -68,19 +68,19 @@ if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-finish
 fi
 
-print-status "Create tmp dirs, set permissions..."
+print-status Create tmp dirs, set permissions...
 sudo mkdir -p "${target}/upload" "${target}/save" "${target}/tmp"
 sudo chgrp -R www-data "${target}"
 sudo chmod -R g+w "${target}/upload" "${target}/save" "${target}/tmp"
 print-finish
 
-print-status "Create phpMyAdmin control DB..."
+print-status Create phpMyAdmin control DB...
 [[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
 # shellcheck disable=SC2024
 sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish
 
-print-status "Create phpMyAdmin control user..."
+print-status Create phpMyAdmin control user...
 sudo mysql -e "CREATE USER IF NOT EXISTS '${service_user}'@'localhost' IDENTIFIED BY '${service_pass}';"
 sudo mysql -e "GRANT SELECT, INSERT, DELETE, UPDATE, ALTER ON phpmyadmin.* TO '${service_user}'@localhost;"
 sudo mysql -e "FLUSH PRIVILEGES;"

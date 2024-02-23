@@ -38,7 +38,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header "Install shorewall..."
+print-header Install shorewall...
 sudo apt-get install --yes --no-install-recommends ipset shorewall
 print-finish
 
@@ -52,7 +52,7 @@ if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
 fi
 
 if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
-    print-status "Template interfaces..."
+    print-status Template interfaces...
     while IFS= read -r -d '' iface; do
         # Duplicate template line
         sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
@@ -64,7 +64,7 @@ if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
     print-finish
 fi
 
-print-header "Start shorewall..."
+print-header Start shorewall...
 sudo systemctl enable shorewall.service
 sudo systemctl start shorewall.service
 sudo systemctl reload shorewall.service

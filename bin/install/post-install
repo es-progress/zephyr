@@ -28,7 +28,7 @@ for dir in proc sys dev etc/resolv.conf; do
     fi
 done
 
-print-status "Mount all file-systems..."
+print-status Mount all file-systems...
 chroot "${target}" mount -a
 print-finish
 
@@ -40,14 +40,14 @@ while IFS= read -r -d '' step; do
     print-finish "Finished ${step}."
 done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0" || true)
 
-print-header "Update initramfs..."
+print-header Update initramfs...
 chroot "${target}" update-initramfs -u -k all
 print-finish
 
-print-header "Update GRUB..."
+print-header Update GRUB...
 chroot "${target}" update-grub
 print-finish
 
-print-finish "Post-install finished."
+print-finish Post-install finished.
 
 exit 0

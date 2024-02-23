@@ -47,7 +47,7 @@ if dir=$(cfg-get "${profile}" gnome/fonts/local.d); then
     _copy-fonts local "${dir}"
 fi
 
-print-status "Flush font cache..."
+print-status Flush font cache...
 fc-cache -f
 print-finish
 

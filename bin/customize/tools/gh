@@ -30,7 +30,7 @@ fi
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
-print-header "Install github-cli..."
+print-header Install github-cli...
 # Download deb
 tmp_file=$(mktemp)
 curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"

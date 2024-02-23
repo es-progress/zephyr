@@ -44,13 +44,13 @@ profile="${1:?"Profile missing"}"
 # Nautilus links
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/user-dirs.defaults); then
-    print-status "Copy default dirs..."
+    print-status Copy default dirs...
     sudo cp --no-preserve=mode,ownership "${file}" /etc/xdg/
     print-finish
 fi
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/user-dirs.dirs); then
-    print-status "Copy user dirs..."
+    print-status Copy user dirs...
     cp --no-preserve=mode,ownership "${file}" ~/.config/
     print-finish
 fi

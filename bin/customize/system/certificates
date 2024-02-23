@@ -37,17 +37,17 @@ fi
 #########################
 # Check if this is an EFI system
 if [[ -e /sys/firmware/efi ]]; then
-    print-header "Install mokutil..."
+    print-header Install mokutil...
     sudo apt-get install --yes --no-install-recommends mokutil
     print-finish
 
     # Check SecureBoot is enabled
     echo -n "SecureBoot state: "
     if ! mokutil --sb-state; then
-        print-finish "SecureBoot not enabled/available, skipping MOK certificate"
+        print-finish SecureBoot not enabled/available, skipping MOK certificate
     else
         key_created=
-        print-status "Create MOK private key..."
+        print-status Create MOK private key...
         if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
             sudo openssl genpkey \
                 -algorithm rsa \
@@ -56,10 +56,10 @@ if [[ -e /sys/firmware/efi ]]; then
             key_created=1
             print-finish
         else
-            print-finish "Key found, skipped"
+            print-finish Key found, skipped
         fi
 
-        print-status "Create MOK certificate..."
+        print-status Create MOK certificate...
         if [[ ! -e "/etc/ssl/certs/${mok_key_name}.der" || -n "${key_created}" ]]; then
             sudo openssl req \
                 -new \
@@ -72,10 +72,10 @@ if [[ -e /sys/firmware/efi ]]; then
                 -subj "${mok_key_subject}"
             print-finish
         else
-            print-finish "Certificate found, skipped"
+            print-finish Certificate found, skipped
         fi
 
-        print-header "Enroll MOK certificate..."
+        print-header Enroll MOK certificate...
         cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
         # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
         if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
@@ -83,7 +83,7 @@ if [[ -e /sys/firmware/efi ]]; then
             sudo mokutil --timeout -1
             print-finish
         else
-            print-finish "Already enrolled, skipped"
+            print-finish Already enrolled, skipped
         fi
     fi
 fi
@@ -92,7 +92,7 @@ fi
 #################################
 key_created=
 cert_created=
-print-status "Create ROOT CA private key..."
+print-status Create ROOT CA private key...
 if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     sudo openssl genpkey \
         -algorithm rsa \
@@ -101,10 +101,10 @@ if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
     key_created=1
     print-finish
 else
-    print-finish "Key found, skipped"
+    print-finish Key found, skipped
 fi
 
-print-status "Create self-signed ROOT CA certificate..."
+print-status Create self-signed ROOT CA certificate...
 if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_created}" ]]; then
     sudo openssl req \
         -new \
@@ -119,18 +119,18 @@ if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_c
     cert_created=1
     print-finish
 else
-    print-finish "Certificate found, skipped"
+    print-finish Certificate found, skipped
 fi
 
 # Update ca-cert
 if [[ -n "${cert_created}" ]]; then
-    print-header "Install root CA certificate to system..."
+    print-header Install root CA certificate to system...
     sudo update-ca-certificates
     print-finish
 
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" system/firefox-policies.json); then
-        print-status "Install root CA certificate to Firefox..."
+        print-status Install root CA certificate to Firefox...
         sudo mkdir -p /usr/lib/firefox/distribution
         sudo cp --no-preserve=mode,ownership "${file}" /usr/lib/firefox/distribution/policies.json
         print-finish
