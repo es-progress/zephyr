@@ -30,6 +30,8 @@ fi
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
+install-apt curl make
+
 print-header Install Tomb...
 # Download tar
 tmp_file=$(mktemp)

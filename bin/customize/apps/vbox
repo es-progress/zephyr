@@ -77,6 +77,8 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+install-apt virtualbox
+
 print-status Load vbox modules to kernel...
 sudo modprobe vboxdrv
 sudo modprobe vboxnetadp

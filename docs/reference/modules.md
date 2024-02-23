@@ -51,11 +51,7 @@ Installation of [Apache JMeter](https://jmeter.apache.org/){target=\_blank}, a l
 
 ### pulse-effects
 
-Manage output audio presets for [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank}.
-
-!!! warning "PulseEffects is not installed by this module"
-
-    Use the `packages/apt` module to install it!
+Install [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank} and manage output audio presets.
 
 **Configuration**
 
@@ -65,11 +61,13 @@ Manage output audio presets for [PulseEffects](https://github.com/wwmm/easyeffec
 
 ### vbox
 
-The module is for the configuration of [VirtualBox virtualization software](https://www.virtualbox.org/){target=\_blank}.
+The module is for installation and the configuration of [VirtualBox virtualization software](https://www.virtualbox.org/){target=\_blank}.
 
-!!! warning "VirtualBox is not installed by this module"
+!!! tip
 
-    Use the `packages/apt` module to install it!
+    Only the base `virtualbox` package is installed by this module.
+    You might want to install `virtualbox-qt` (the GUI) and `virtualbox-guest-additions-iso` (for extra functions like shared folders and clipboard between host and guest).
+    Use the `packages/apt` module for that.
 
 **Configuration**
 
@@ -274,8 +272,6 @@ Shell binaries (or scripts, PHAR files, basically any executable file) to downlo
 
 With the node module you can install Node.js packages.
 
-!!! note "It will also install nodejs and npm if not already installed."
-
 **Configuration**
 
 -   `packages/global.cfg`:
@@ -287,8 +283,6 @@ With the node module you can install Node.js packages.
 
 This module is used to manage Python packages installed via pip.
 
-!!! note "It will install pip if not installed."
-
 **Configuration**
 
 -   `packages/pip.global`: pip requirements file.
@@ -299,7 +293,7 @@ This module is used to manage Python packages installed via pip.
 
 The snap module assists with installing Snap packages.
 
-!!! note "It will install snapd if not installed and purge old revisions of installed snaps."
+!!! note "It upgrades installed snaps and purges old revisions."
 
 **Configuration**
 
@@ -314,13 +308,11 @@ These modules allow you to configure various services such as database servers, 
 
 ### apache
 
-The module is for the configuration of the [Apache web server](https://httpd.apache.org/){target=\_blank}.
+The module is for installation and the configuration of the [Apache web server](https://httpd.apache.org/){target=\_blank}.
 
 !!! note
 
-    This module does not install Apache. Use the `packages/apt` module to install it!
-
-    Also you need to run `system/certificate` module beforehand to generate self-signed SSL certificates, which will be used by Apache.
+    You need to run `system/certificate` module beforehand to generate self-signed SSL certificates, which will be used by Apache.
 
 **Configuration**
 
@@ -356,13 +348,11 @@ This will install & customize [MariaDB database server](https://mariadb.org/){ta
 
 ### php
 
-This module will configure [PHP](https://www.php.net/){target=\_blank} and start the PHP-FPM service with Apache.
+This module will install and configure [PHP](https://www.php.net/){target=\_blank} and start the PHP-FPM service with Apache.
 
 !!! note
 
-    This module does not install PHP. Use the `packages/apt` module to install it!
-
-    Also it expects Apache to be installed.
+    It expects Apache to be installed. Use the `services/apache` module to install it!
 
 **Configuration**
 
@@ -379,7 +369,7 @@ Use this module to install and configure [phpMyAdmin](https://www.phpmyadmin.net
 
 !!! note
 
-    phpMyAdmin needs a LAMP stack to work, so you need to install Apache, MariaDB and PHP first.
+    phpMyAdmin needs a LAMP stack to work, so you need to install Apache, MariaDB and PHP first (see the `services/apache`, `services/mariadb` and `services/php` modules).
 
 **Configuration**
 
@@ -582,11 +572,7 @@ Bash completion is also installed.
 
 ### dig
 
-Configure `dig` DNS lookup utility.
-
-!!! warning "dig is not installed by this module"
-
-    Use the `packages/apt` module to install it!
+Install and configure `dig` DNS lookup utility.
 
 **Configuration**
 
@@ -630,11 +616,7 @@ This provides configuration settings for the GPG encryption program.
 
 ### mc
 
-It allows you to configure [Midnight Commander](https://midnight-commander.org/){target=\_blank}, a robust file manager.
-
-!!! warning "Midnight Commander is not installed by this module"
-
-    Use the `packages/apt` module to install it!
+It allows you to install and configure [Midnight Commander](https://midnight-commander.org/){target=\_blank}, a robust file manager.
 
 **Configuration**
 
@@ -658,11 +640,7 @@ With this module you can install additional syntax highlighting files for Nano.
 
 ### nmap
 
-This currently only installs a plugin ("network-control") for [Nmap](https://nmap.org/){target=\_blank}, a network mapper tool.
-
-!!! warning "Nmap is not installed by this module"
-
-    Use the `packages/snap` module to install it!
+This installs [Nmap](https://nmap.org/){target=\_blank} (network mapper tool), and - currently - only one plugin: "network-control".
 
 ---
 

@@ -33,6 +33,8 @@ fi
 [[ -z "${checksum}" ]] && exit 1
 [[ -z "${install_dir}" ]] && exit 1
 
+install-apt curl
+
 print-header "Install jmeter..."
 # Download tar
 tmp_file=$(mktemp)

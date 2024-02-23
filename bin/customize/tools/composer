@@ -40,6 +40,8 @@ fi
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
+install-apt curl
+
 print-header Install composer...
 # Check if already installed
 if [[ -e "${bin_global}/composer" ]]; then
@@ -58,10 +60,12 @@ hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
 sudo mv "${tmp_file}" "${bin_global}/composer"
 sudo chown root:root "${bin_global}/composer"
 sudo chmod =0755 "${bin_global}/composer"
-# Bash completion
-composer completion bash | sudo tee /usr/share/bash-completion/completions/composer >/dev/null
-# Fix bug in completion
-sudo sed -ri 's@^(\s*)IFS=(.*)@\1local IFS=\2@g' /usr/share/bash-completion/completions/composer
+# Install Bash completion if PHP is installed
+if command -v php > /dev/null 2>&1; then
+    composer completion bash | sudo tee /usr/share/bash-completion/completions/composer >/dev/null
+    # Fix bug in completion
+    sudo sed -ri 's@^(\s*)IFS=(.*)@\1local IFS=\2@g' /usr/share/bash-completion/completions/composer
+fi
 print-finish
 
 exit 0

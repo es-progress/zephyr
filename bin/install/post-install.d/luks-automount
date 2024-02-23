@@ -97,9 +97,7 @@ for map in "${@}"; do
 done
 [[ -z "${map_files[*]}" ]] && error-exit "No maps found"
 
-print-header Install cryptsetup-initramfs...
-apt-get install --yes --no-install-recommends cryptsetup-initramfs
-print-finish
+install-apt cryptsetup-initramfs
 
 print-status Config cryptsetup-initramfs...
 sed -i -r "/^#?KEYFILE_PATTERN=/ c KEYFILE_PATTERN=${key_dir}/*.key" /etc/cryptsetup-initramfs/conf-hook

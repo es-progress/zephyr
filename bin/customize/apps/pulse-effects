@@ -38,6 +38,12 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+print-status Add apt repo: ppa:mikhailnov/pulseeffects...
+sudo add-apt-repository --yes --no-update ppa:mikhailnov/pulseeffects
+print-finish
+
+install-apt pulseaudio pulseeffects
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" apps/pulse-effects/global.d); then
     _copy-presets global "${dir}"

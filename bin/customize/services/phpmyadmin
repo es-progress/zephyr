@@ -38,6 +38,8 @@ fi
 [[ -z "${service_pass}" ]] && exit 1
 [[ -z "${web_root}" ]] && exit 1
 
+install-apt curl
+
 print-header Install phpMyAdmin...
 # Download tar
 tmp_file=$(mktemp)

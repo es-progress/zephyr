@@ -45,6 +45,8 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+install-apt git
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/global.cfg); then
     _config global "${file}"

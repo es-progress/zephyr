@@ -55,6 +55,12 @@ if file=$(cfg-get "${profile}" services/local.cfg); then
 fi
 [[ -z "${version}" ]] && exit 1
 
+print-status Add apt repo: ppa:ondrej/php...
+sudo add-apt-repository --yes --no-update ppa:ondrej/php
+print-finish
+
+install-apt php"${version}" php"${version}"-fpm
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/php/global.d); then
     _config global "${dir}"

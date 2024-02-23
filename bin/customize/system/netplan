@@ -38,6 +38,8 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+install-apt network-manager
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" system/netplan/global.d); then
     _config global "${dir}"

@@ -30,6 +30,8 @@ fi
 [[ -z "${url}" ]] && exit 1
 [[ -z "${checksum}" ]] && exit 1
 
+install-apt curl git
+
 print-header Install github-cli...
 # Download deb
 tmp_file=$(mktemp)

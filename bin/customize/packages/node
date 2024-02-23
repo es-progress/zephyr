@@ -44,9 +44,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header Install node...
-sudo snap install node --classic
-print-finish
+install-snap node classic
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then

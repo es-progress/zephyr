@@ -62,9 +62,7 @@ print-header Add MariaDB APT repo...
 sudo add-apt-repository --yes "${repo}"
 print-finish
 
-print-header Install MariaDB...
-sudo apt-get install --yes --no-install-recommends mariadb-server mariadb-backup python3-pymysql
-print-finish
+install-apt mariadb-server mariadb-backup python3-pymysql
 
 print-status Load timezone data...
 mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mysql -D mysql
