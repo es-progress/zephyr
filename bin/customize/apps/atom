@@ -62,9 +62,7 @@ print-header "Add Atom repo..."
 sudo add-apt-repository --yes "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"
 print-finish
 
-print-header "Install Atom..."
-sudo apt-get install --yes --no-install-recommends atom
-print-finish
+install-apt atom
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/global.cfg); then

@@ -37,9 +37,7 @@ fi
 #########################
 # Check if this is an EFI system
 if [[ -e /sys/firmware/efi ]]; then
-    print-header Install mokutil...
-    sudo apt-get install --yes --no-install-recommends mokutil
-    print-finish
+    install-apt mokutil
 
     # Check SecureBoot is enabled
     echo -n "SecureBoot state: "

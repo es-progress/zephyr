@@ -176,3 +176,26 @@ implode() {
     shift
     echo "${*}"
 }
+
+## Install package via APT
+##
+## @param    $*  Packages
+##########################
+install-apt() {
+    for package in "${@}"; do
+        if dpkg --status "${package}" > /dev/null 2>&1; then
+            print-status "Install ${package}..."
+            print-finish Already installed, skip.
+            shift
+        fi
+    done
+
+    if [[ $# -lt 1 ]]; then
+        return 0
+    fi
+
+    print-header Install "${*}..."
+    sudo apt-get update
+    sudo apt-get install --yes --no-install-recommends "${@}"
+    print-finish
+}

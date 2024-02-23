@@ -287,8 +287,6 @@ With the node module you can install Node.js packages.
 
 This module is used to manage Python packages installed via pip.
 
-!!! note "It will install pip if not installed."
-
 **Configuration**
 
 -   `packages/pip.global`: pip requirements file.
@@ -299,7 +297,7 @@ This module is used to manage Python packages installed via pip.
 
 The snap module assists with installing Snap packages.
 
-!!! note "It will install snapd if not installed and purge old revisions of installed snaps."
+!!! note "It upgrades installed snaps and purges old revisions."
 
 **Configuration**
 

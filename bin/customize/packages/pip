@@ -37,9 +37,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header Install pip3...
-sudo apt-get install --yes --no-install-recommends python3-pip
-print-finish
+install-apt python3-pip
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/pip.global); then

@@ -56,10 +56,7 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
-print-header Install snapd...
-sudo apt-get update
-sudo apt-get install --yes --no-install-recommends snapd
-print-finish
+install-apt snapd
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
