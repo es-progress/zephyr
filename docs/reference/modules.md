@@ -274,8 +274,6 @@ Shell binaries (or scripts, PHAR files, basically any executable file) to downlo
 
 With the node module you can install Node.js packages.
 
-!!! note "It will also install nodejs and npm if not already installed."
-
 **Configuration**
 
 -   `packages/global.cfg`:

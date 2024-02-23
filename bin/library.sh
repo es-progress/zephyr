@@ -199,3 +199,28 @@ install-apt() {
     sudo apt-get install --yes --no-install-recommends "${@}"
     print-finish
 }
+
+## Install package via Snap
+##
+## @param    $1  Package
+## @param    $2  Install mode
+#############################
+install-snap() {
+    local package="${1:?"Package missing"}"
+    local mode="${2:-}"
+    local options=()
+    local snaps_installed
+
+    [[ "${mode}" == "classic" ]] && options=(--classic)
+
+    snaps_installed=$(snap list --color=never --unicode=never)
+    if grep -qs "^${package}" <<<"${snaps_installed}"; then
+        print-status "Install ${package}..."
+        print-finish Already installed, skip.
+        return 0
+    else
+        print-header "Install ${package}..."
+        sudo snap install "${package}" "${options[@]}"
+        print-finish
+    fi
+}
