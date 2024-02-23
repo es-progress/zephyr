@@ -15,6 +15,8 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+install-snap nmap
+
 print-status Install nmap plugins...
 sudo snap connect nmap:network-control
 print-finish

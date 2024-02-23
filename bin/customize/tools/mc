@@ -40,6 +40,8 @@ check-not-root
 
 profile="${1:?"Profile missing"}"
 
+install-apt mc
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/mc/global.d); then
     _config global "${dir}"
