@@ -50,6 +50,8 @@ if file=$(cfg-get "${profile}" gnome/local.cfg); then
 fi
 [[ -z "${version}" ]] && exit 1
 
+install-apt git make gettext
+
 print-header Install Dash-to-panel...
 # Create temp dir
 install_dir=$(mktemp -d)

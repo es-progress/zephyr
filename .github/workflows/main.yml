@@ -91,11 +91,6 @@ jobs:
       - name: Link profiles
         run: ln -s example profiles
 
-      - name: Install dependencies
-        run: |
-          sudo add-apt-repository --yes ppa:mikhailnov/pulseeffects
-          sudo apt-get install --yes --no-install-recommends pulseeffects virtualbox
-
       - name: Execute scripts (1st pass)
         run: |
           ./bin/zephyrctl customize default atom
@@ -123,10 +118,10 @@ jobs:
       - name: Link profiles
         run: ln -s example profiles
 
-      - name: Install dependencies
+      - name: Install GNOME
         run: |
           sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends gettext gnome-session gnome-software gnome-system-monitor gdm3 nautilus
+          sudo apt-get --quiet install --yes --no-install-recommends gnome-session gnome-software gnome-system-monitor gdm3 nautilus
 
       - name: Execute scripts (1st pass)
         run: |
@@ -218,9 +213,7 @@ jobs:
         run: ln -s example profiles
 
       - name: Install dependencies
-        run: |
-          sudo apt-get install --yes --no-install-recommends apache2 php7.4
-          ./bin/zephyrctl customize default certificates
+        run: ./bin/zephyrctl customize default certificates
 
       - name: Execute scripts (1st pass)
         run: |
@@ -273,9 +266,7 @@ jobs:
         run: ln -s example profiles
 
       - name: Install dependencies
-        run: |
-          sudo apt-get install --yes --no-install-recommends network-manager
-          sudo chmod =0440 /etc/sudoers.d/runner
+        run: sudo chmod =0440 /etc/sudoers.d/runner
 
       - name: Execute scripts (1st pass)
         run: |
@@ -315,11 +306,6 @@ jobs:
 
       - name: Link profiles
         run: ln -s example profiles
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get install --yes --no-install-recommends dnsutils gpg mc
-          sudo snap install nmap
 
       - name: Execute scripts (1st pass)
         run: |

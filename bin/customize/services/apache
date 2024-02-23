@@ -61,6 +61,12 @@ def_virt_host_name=
 def_virt_host_subject=
 root_ca_name=
 
+print-status Add apt repo: ppa:ondrej/apache2...
+sudo add-apt-repository --yes --no-update ppa:ondrej/apache2
+print-finish
+
+install-apt apache2
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then
     cfg-eval "${file}" certificate

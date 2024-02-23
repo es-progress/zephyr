@@ -310,13 +310,11 @@ These modules allow you to configure various services such as database servers, 
 
 ### apache
 
-The module is for the configuration of the [Apache web server](https://httpd.apache.org/){target=\_blank}.
+The module is for installation and the configuration of the [Apache web server](https://httpd.apache.org/){target=\_blank}.
 
 !!! note
 
-    This module does not install Apache. Use the `packages/apt` module to install it!
-
-    Also you need to run `system/certificate` module beforehand to generate self-signed SSL certificates, which will be used by Apache.
+    You need to run `system/certificate` module beforehand to generate self-signed SSL certificates, which will be used by Apache.
 
 **Configuration**
 
@@ -375,7 +373,7 @@ Use this module to install and configure [phpMyAdmin](https://www.phpmyadmin.net
 
 !!! note
 
-    phpMyAdmin needs a LAMP stack to work, so you need to install Apache, MariaDB and PHP first.
+    phpMyAdmin needs a LAMP stack to work, so you need to install Apache, MariaDB and PHP first (see the `services/apache`, `services/mariadb` and `services/php` modules).
 
 **Configuration**
 

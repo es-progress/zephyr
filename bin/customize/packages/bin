@@ -81,6 +81,8 @@ fi
 
 [[ -z "${bin_global}" ]] && exit 1
 
+install-apt curl
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
     _install global "${file}"
