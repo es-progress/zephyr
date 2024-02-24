@@ -13,40 +13,60 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
-profile="${1:?"Profile missing"}"
-shift
+environment="${1:?"Environment missing"}"
+profile="${2:?"Profile missing"}"
+shift 2
 
-read -rp "WARNING! This only meant to run after a clean Ubuntu install! Proceed? Type 'YES': "
-[[ ${REPLY} != "YES" ]] && error-exit Aborted.
+case "${environment}" in
+    live)
+        target=
+        do_chroot=()
+        ;;
+    install)
+        target=/target
+        do_chroot=(chroot "${target}")
+        ;;
+    dev)
+        target="${PATH_EXTRACT}/squashfs-root"
+        do_chroot=(chroot "${target}")
+        ;;
+    *) error-exit "Invalid environment: ${environment}" ;;
+esac
 
 # Mount system
-target=/target
-# target="${PATH_EXTRACT}/squashfs-root"
-for dir in proc sys dev etc/resolv.conf; do
-    if ! findmnt "${target}/${dir}" >/dev/null; then
-        mount --rbind "/${dir}" "${target}/${dir}"
-    fi
-done
-
-print-status Mount all file-systems...
-chroot "${target}" mount -a
-print-finish
+if [[ -n "${target}" ]]; then
+    for dir in proc sys dev etc/resolv.conf; do
+        print-status Mounting "/${dir}" to "${target}/${dir}..."
+        if ! findmnt "${target}/${dir}" >/dev/null; then
+            mount --rbind --make-rslave "/${dir}" "${target}/${dir}"
+            print-finish
+        else
+            print-finish Already mounted, skip.
+        fi
+    done
+fi
 
 # Run Post-install steps
 terminal=$(tty)
 while IFS= read -r -d '' step; do
     print-header "Running step: ${step}..."
-    chroot "${target}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
+    if [[ -n "${target}" ]]; then
+        "${do_chroot[@]}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
+    else
+        "${PATH_SCRIPTS_INSTALL}/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
+    fi
     print-finish "Finished ${step}."
-done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0" || true)
+done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0" | sort -z || true)
 
-print-header Update initramfs...
-chroot "${target}" update-initramfs -u -k all
-print-finish
+if [[ "${environment}" != dev ]]; then
+    print-header Update initramfs...
+    "${do_chroot[@]}" update-initramfs -u -k all
+    print-finish
 
-print-header Update GRUB...
-chroot "${target}" update-grub
-print-finish
+    print-header Update GRUB...
+    "${do_chroot[@]}" update-grub
+    print-finish
+fi
 
 print-finish Post-install finished.
 
