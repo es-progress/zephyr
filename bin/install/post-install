@@ -47,7 +47,9 @@ if [[ -n "${target}" ]]; then
 fi
 
 # Run Post-install steps
-terminal=$(tty)
+if ! terminal=$(tty); then
+    terminal=/dev/console
+fi
 while IFS= read -r -d '' step; do
     print-header "Running step: ${step}..."
     if [[ -n "${target}" ]]; then
