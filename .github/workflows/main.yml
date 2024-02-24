@@ -28,6 +28,7 @@ jobs:
       shell: ${{ steps.modules.outputs.shell }}
       system: ${{ steps.modules.outputs.system }}
       tools: ${{ steps.modules.outputs.tools }}
+      post-install: ${{ steps.modules.outputs.post-install }}
       remix: ${{ steps.modules.outputs.remix }}
     steps:
       - name: Self checkout
@@ -36,7 +37,9 @@ jobs:
           fetch-depth: 0
 
       - name: Get changed files
-        run: git diff --name-only origin/main... > ~/changed.files
+        run: |
+          git diff --name-only origin/main... > ~/changed.files
+          cat ~/changed.files
 
       - name: Check changed modules
         # Step need an id to be defined to later retrieve the output value
@@ -74,8 +77,12 @@ jobs:
             echo Will run customize/tools
             echo "tools=yes" >> "$GITHUB_OUTPUT"
           fi
+          if grep -qs bin/install/post-install ~/changed.files; then
+            echo Will run install/post-install
+            echo "post-install=yes" >> "$GITHUB_OUTPUT"
+          fi 
           if grep -qs bin/remix ~/changed.files; then
-            echo Will run bin/remix
+            echo Will run remix
             echo "remix=yes" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
@@ -336,6 +343,31 @@ jobs:
           ./bin/zephyrctl customize default ssh
           ./bin/zephyrctl customize default tomb
         shell: bash
+  tests-post-install:
+    name: Integration tests (post-install)
+    runs-on: ubuntu-20.04
+    needs: check
+    if: needs.check.outputs.post-install == 'yes'
+    steps:
+      - name: Self checkout
+        uses: actions/checkout@v3
+
+      - name: Link profiles
+        run: ln -s example profiles
+
+      - name: Compile disk-map
+        run: |
+          # Get where / is mounted
+          partition=$(findmnt --noheadings --output=SOURCE /)
+          # Get disk device file from partition device file
+          device=$(lsblk --noheadings --output PKNAME "${partition}")
+          # Update disk-map
+          sed -i "s@{{ DEVICE }}@${device}@g" profiles/tester/install/disk-maps/github-actions
+
+      - name: Run post-install
+        run: ./bin/zephyrctl post-install live tester github-actions
+        shell: bash
+
   tests-remix:
     name: Integration tests (remix)
     runs-on: ubuntu-20.04

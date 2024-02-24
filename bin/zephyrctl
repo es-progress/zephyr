@@ -82,7 +82,8 @@ _usage() {
             ;;
         post-install)
             description="Perform various OS post-install steps (e.g. GRUB configuration, backup GPT)"
-            usage="post-install PROFILE MAP..."
+            usage="post-install ENVIRONMENT PROFILE MAP..."
+            options+=("ENVIRONMENT:Environment where the command is executed (live: live system, install: Ubuntu post-installation, dev: Zephyr development)")
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Disk maps")
             ;;
@@ -232,21 +233,27 @@ _format() {
 ###############
 # shellcheck disable=SC2317
 _post-install() {
-    local profile
+    local environment profile
 
-    if [[ -z "${1:-}" ]]; then
+    environment="${1:-}"
+    profile="${2:-}"
+    if [[ -z "${environment}" ]]; then
+        print-error Environment missing!
+        _usage post-install
+        exit 1
+    fi
+    if [[ -z "${profile}" ]]; then
         print-error Profile missing!
         _usage post-install
         exit 1
     fi
-    profile="${1}"
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
         print-error "Profile: ${profile} missing!"
         exit 1
     fi
-    shift
+    shift 2
 
-    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${profile}" "${@}"
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/post-install" "${environment}" "${profile}" "${@}"
 }
 
 ## Customize

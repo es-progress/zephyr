@@ -157,7 +157,8 @@ They can't be executed independently, all of them will run with `zephyrctl post-
 
 !!! note
 
-    Typically they are used after a fresh installation of the system, but they can be executed anytime to reconfigure a live system, as it is non-destructive.
+    Typically they are used after a fresh installation of the system in the post-installation phase (in this case use the `install` environment).
+    But they can be executed anytime to reconfigure a live system (`live` environment), as it is non-destructive.
 
 ### backup-gpt
 

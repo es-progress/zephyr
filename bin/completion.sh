@@ -16,7 +16,8 @@ __zephyrctl_complete() {
         2)
             case "${command}" in
                 help) __zephyr_gen_word "${commands[*]}" ;;
-                customize|partition|format|post-install) __zephyr_gen_word "${profiles}" ;;
+                post-install) __zephyr_gen_word live install dev ;;
+                customize|partition|format) __zephyr_gen_word "${profiles}" ;;
                 remix|burn) __zephyr_gen_file ;;
                 *) ;;
             esac
@@ -25,7 +26,8 @@ __zephyrctl_complete() {
             case "${command}" in
                 burn) __zephyr_gen_file ;;
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
-                partition|format|post-install)
+                post-install) __zephyr_gen_word "${profiles}" ;;
+                partition|format)
                     maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
                     __zephyr_gen_word "${maps}"
                     ;;
@@ -35,7 +37,11 @@ __zephyrctl_complete() {
         *)
             case "${command}" in
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
-                partition|format|post-install)
+                post-install)
+                    maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[3]}/install/disk-maps*" -printf "%f\n")
+                    __zephyr_gen_word "${maps}"
+                    ;;
+                partition|format)
                     maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
                     __zephyr_gen_word "${maps}"
                     ;;

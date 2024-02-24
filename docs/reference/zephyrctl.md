@@ -140,9 +140,13 @@ Perform various OS post-installation steps such as GRUB configuration and GPT ba
 **Usage**
 
 ```
-zephyrctl post-install PROFILE MAP...
+zephyrctl post-install ENVIRONMENT PROFILE MAP...
 
 Params:
+ENVIRONMENT        Environment where the command is executed
+                     live: live system
+                     install: Ubuntu post-installation step
+                     dev: useful when developing Zephyr
 PROFILE            Customization profile to use
 MAP                Disk maps
 ```

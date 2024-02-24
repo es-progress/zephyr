@@ -81,7 +81,7 @@ Then we will reboot the system and see the first boot (hopefully without any pro
 1.  Run post-install
 
     ```
-    zephyrctl post-install PROFILE DISK_MAP...
+    zephyrctl post-install install PROFILE DISK_MAP...
 
     where:
     PROFILE            Selected customization profile
