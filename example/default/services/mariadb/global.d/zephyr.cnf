@@ -1,0 +1,14 @@
+#############
+## Zephyr  ##
+##         ##
+## MariaDB ##
+#############
+
+[mysql]
+# Output results in vertical if wider than terminal
+auto-vertical-output
+
+[mysqld]
+# Emergency recovery
+#innodb_force_recovery=1
+innodb_fast_shutdown=0
