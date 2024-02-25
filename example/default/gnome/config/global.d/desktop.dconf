@@ -1,0 +1,25 @@
+################
+## Zephyr     ##
+##            ##
+## GNOME conf ##
+################
+
+[org/gnome/desktop/background]
+picture-options='spanned'
+
+[org/gnome/desktop/calendar]
+show-weekdate=true
+
+[org/gnome/desktop/interface]
+gtk-im-module='gtk-im-context-simple'
+gtk-theme='Yaru-dark'
+
+[org/gnome/desktop/screensaver]
+lock-enabled=false
+picture-options='spanned'
+
+[org/gnome/desktop/session]
+idle-delay=uint32 480
+
+[org/gnome/shell/extensions/desktop-icons]
+show-home=false
