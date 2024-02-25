@@ -10,8 +10,8 @@
 set -eufo pipefail
 IFS=$'\n\t'
 
-echo Simulate backup shell script...
-echo rsync -av /home /mnt/backup
+echo Simulate local shell script...
+id -u
 echo Finished
 
 exit 0
