@@ -103,7 +103,7 @@ jobs:
           ./bin/zephyrctl customize tester atom
           ./bin/zephyrctl customize tester jmeter
           ./bin/zephyrctl customize tester pulse-effects
-          ./bin/zephyrctl customize tester virtualbox
+          ./bin/zephyrctl customize tester vbox
         shell: bash
 
       - name: Execute scripts (2nd pass)
@@ -111,7 +111,7 @@ jobs:
           ./bin/zephyrctl customize tester atom
           ./bin/zephyrctl customize tester jmeter
           ./bin/zephyrctl customize tester pulse-effects
-          ./bin/zephyrctl customize tester virtualbox
+          ./bin/zephyrctl customize tester vbox
         shell: bash
   tests-gnome:
     name: Integration tests (customize/gnome)
