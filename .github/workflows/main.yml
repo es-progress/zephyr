@@ -45,46 +45,46 @@ jobs:
         # Step need an id to be defined to later retrieve the output value
         id: modules
         run: |
-          #if grep -qs customize/apps ~/changed.files; then
+          if grep -qs customize/apps ~/changed.files; then
             echo Will run customize/apps
             echo "apps=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/gnome ~/changed.files; then
+          fi
+          if grep -qs customize/gnome ~/changed.files; then
             echo Will run customize/gnome
             echo "gnome=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/other ~/changed.files; then
+          fi
+          if grep -qs customize/other ~/changed.files; then
             echo Will run customize/other
             echo "other=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/packages ~/changed.files; then
+          fi
+          if grep -qs customize/packages ~/changed.files; then
             echo Will run customize/packages
             echo "packages=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/services ~/changed.files; then
+          fi
+          if grep -qs customize/services ~/changed.files; then
             echo Will run customize/services
             echo "services=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/shell ~/changed.files; then
+          fi
+          if grep -qs customize/shell ~/changed.files; then
             echo Will run customize/shell
             echo "shell=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/system ~/changed.files; then
+          fi
+          if grep -qs customize/system ~/changed.files; then
             echo Will run customize/system
             echo "system=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs customize/tools ~/changed.files; then
+          fi
+          if grep -qs customize/tools ~/changed.files; then
             echo Will run customize/tools
             echo "tools=yes" >> "$GITHUB_OUTPUT"
-          #fi
-          #if grep -qs bin/install/post-install ~/changed.files; then
+          fi
+          if grep -qs bin/install/post-install ~/changed.files; then
             echo Will run install/post-install
             echo "post-install=yes" >> "$GITHUB_OUTPUT"
-          #fi 
-          #if grep -qs bin/remix ~/changed.files; then
+          fi 
+          if grep -qs bin/remix ~/changed.files; then
             echo Will run remix
             echo "remix=yes" >> "$GITHUB_OUTPUT"
-          #fi
+          fi
         shell: bash
   tests-apps:
     name: Integration tests (customize/apps)
