@@ -1,2 +1,32 @@
+################
+## Zephyr     ##
+##            ##
+## GNOME conf ##
+################
+
 [org/gnome/terminal/legacy]
 menu-accelerator-enabled=false
+
+[org/gnome/terminal/legacy/keybindings]
+close-tab='<Super>q'
+copy='<Super>c'
+new-tab='<Super>w'
+next-tab='<Super>s'
+paste='<Super>v'
+prev-tab='<Super>a'
+
+[org/gnome/terminal/legacy/profiles:]
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9']
+
+[org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+audible-bell=false
+background-color='rgb(0,0,0)'
+default-size-columns=120
+default-size-rows=40
+font='Ubuntu Mono 12'
+foreground-color='rgb(255,255,255)'
+login-shell=false
+palette=['rgb(0,0,0)', 'rgb(205,0,0)', 'rgb(0,205,0)', 'rgb(205,205,0)', 'rgb(0,95,238)', 'rgb(205,0,205)', 'rgb(0,205,205)', 'rgb(229,229,229)', 'rgb(127,127,127)', 'rgb(255,0,0)', 'rgb(0,255,0)', 'rgb(255,255,0)', 'rgb(92,92,255)', 'rgb(255,0,255)', 'rgb(0,255,255)', 'rgb(255,255,255)']
+use-system-font=false
+use-theme-colors=false
+visible-name='Zephyr'

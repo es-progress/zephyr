@@ -14,6 +14,9 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?"Profile missing"}"
+
+install-apt gpg
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/gpg-agent.conf); then
     print-status Copy gnupg config files...

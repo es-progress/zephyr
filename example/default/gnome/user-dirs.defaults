@@ -1,12 +1,15 @@
-# Default settings for user directories
-#
-# The values are relative pathnames from the home directory and
-# will be translated on a per-path-element basis into the users locale
-DESKTOP=Desktop
-DOWNLOAD=Downloads
+###############
+## Zephyr    ##
+##           ##
+## User dirs ##
+## Default   ##
+###############
+
+DESKTOP=desktop
+DOWNLOAD=download
 #TEMPLATES=Templates
 #PUBLICSHARE=Public
-DOCUMENTS=Documents
+DOCUMENTS=docs
 #MUSIC=Music
-PICTURES=Pictures
+PICTURES=pictures
 #VIDEOS=Media

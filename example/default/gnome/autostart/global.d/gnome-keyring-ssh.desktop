@@ -1,3 +1,9 @@
+###############
+## Zephyr    ##
+##           ##
+## Autostart ##
+###############
+
 [Desktop Entry]
 Type=Application
 Name=SSH Key Agent

@@ -1,3 +1,15 @@
+# shellcheck shell=bash
+#############
+## Zephyr  ##
+##         ##
+## Bash RC ##
+## Root    ##
+#############
+
+##########
+# PROMPT #
+##########
+
 # Get chroot you work in
 if [[ -z "${debian_chroot:-}" ]] && [[ -r /etc/debian_chroot ]]; then
     debian_chroot=$(cat /etc/debian_chroot)

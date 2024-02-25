@@ -12,9 +12,17 @@ This file contains headers (`[some-header]`). The settings and the syntax (forma
 All global configuration directory and file have a local counterpart.
 If there is `global` in the name of a directory (or file) it can be replaced with `local` to get the counterpart.
 For example, `gnome/fonts/global.d` :arrow_right: `gnome/fonts/local.d` and `gnome/global.cfg` :arrow_right: `gnome/local.cfg`.
+
+Local files don't replace global files, they complement global configuration files as local ones contain extra settings.
+If you want to override a global setting, you need to add a global file with the same name to the profile (e.g `default/other/global.cfg` and `tester/other/global.cfg`).
+There's one exception to this rule: if a setting is a simple key-value pair (e.g. `url` in `tools/composer` module), then the local setting will override the global one.
+
 Only the `global` files will be listed in the documentation for brevity.
 
-!!! note "For examples check the `example/default` directory."
+!!! note
+
+    For examples check the profiles in `example/default` and `example/tester`.
+    A default profile and a named profile is provided with different types of configuration overrides mentioned above.
 
 ---
 

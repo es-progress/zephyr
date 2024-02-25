@@ -1,3 +1,10 @@
+###############
+## Zephyr    ##
+##           ##
+## Shorewall ##
+## Policy    ##
+###############
+
 #SOURCE	DEST    POLICY    LOGLEVEL    RATE CONNLIMIT
 ####################################################
 $FW     $FW     ACCEPT
