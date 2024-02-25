@@ -196,7 +196,7 @@ install-apt() {
 
     print-header Install "${*}..."
     sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends "${@}"
+    sudo apt-get install --yes --no-install-recommends --autoremove "${@}"
     print-finish
 }
 
