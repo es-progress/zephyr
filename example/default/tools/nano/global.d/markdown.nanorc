@@ -1,3 +1,11 @@
+#########################
+## Zephyr              ##
+##                     ##
+## nano                ##
+## Syntax highlighting ##
+## markdown files      ##
+#########################
+
 syntax "Markdown" "\.(md|mkd|mkdn|markdown)$"
 
 # Tables (Github extension)
