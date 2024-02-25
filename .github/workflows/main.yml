@@ -363,6 +363,8 @@ jobs:
           device=$(lsblk --noheadings --output PKNAME "${partition}")
           # Update disk-map
           sed -i "s@{{ DEVICE }}@${device}@g" profiles/tester/install/disk-maps/github-actions
+          echo Compiled disk-map:
+          cat profiles/tester/install/disk-maps/github-actions
 
       - name: Run post-install
         run: ./bin/zephyrctl post-install live tester github-actions
