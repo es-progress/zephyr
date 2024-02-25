@@ -1,4 +1,13 @@
+################
+## Zephyr     ##
+##            ##
+## Shorewall  ##
+## Interfaces ##
+################
+
 ?FORMAT 2
 #############################################################
-#ZONE   INTERFACE     OPTIONS
-net     {{ interface }}           dhcp,logmartians,nosmurfs,rpfilter
+#ZONE   INTERFACE         OPTIONS
+net     {{ interface }}   dhcp,logmartians,nosmurfs,rpfilter
+net     vboxnet+          dhcp,logmartians,nosmurfs,rpfilter,optional
+net     phone             dhcp,logmartians,nosmurfs,rpfilter,optional

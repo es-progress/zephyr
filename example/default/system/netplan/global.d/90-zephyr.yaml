@@ -1,3 +1,11 @@
+#############
+## Zephyr  ##
+##         ##
+## netplan ##
+## Config  ##
+## Global  ##
+#############
+---
 network:
   ethernets:
     phone:

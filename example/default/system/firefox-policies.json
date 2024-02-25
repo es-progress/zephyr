@@ -2,9 +2,7 @@
     "policies": {
         "Certificates": {
             "ImportEnterpriseRoots": true,
-            "Install": [
-                "/usr/local/share/ca-certificates/Zephyr_Root_Certification_Authority.crt"
-            ]
+            "Install": ["/usr/local/share/ca-certificates/Zephyr.crt"]
         }
     }
 }
