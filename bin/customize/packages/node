@@ -28,7 +28,7 @@ _install() {
         sudo npm install --global --no-fund "${package}"
         print-finish
     done
-    print-finish
+    print-finish Node modules installed.
 }
 
 ##################

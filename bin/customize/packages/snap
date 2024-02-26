@@ -40,7 +40,7 @@ _install() {
             print-finish
         fi
     done
-    print-finish
+    print-finish Snaps installed.
 }
 
 ##################

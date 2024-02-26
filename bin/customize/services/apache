@@ -133,7 +133,7 @@ if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl
         -days 365
     print-finish
 else
-    print-finish Key found, skipped
+    print-finish Key found, skip.
 fi
 
 # shellcheck disable=SC2310,SC2311

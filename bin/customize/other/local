@@ -24,7 +24,7 @@ _run() {
         cd "${cfg_dir}"
         run-parts --exit-on-error --arg="${profile}" .
     )
-    print-finish
+    print-finish Local scripts finished.
 }
 
 ##################

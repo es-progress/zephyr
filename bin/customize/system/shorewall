@@ -49,8 +49,8 @@ if dir=$(cfg-get "${profile}" system/shorewall/local.d); then
     _config local "${dir}"
 fi
 
+print-status Template interfaces...
 if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
-    print-status Template interfaces...
     while IFS= read -r -d '' iface; do
         # Duplicate template line
         sudo sed -i "/{{ interface }}/p" /etc/shorewall/interfaces
@@ -60,6 +60,8 @@ if sudo grep -qs -F '{{ interface }}' /etc/shorewall/interfaces; then
     # Delete un-templated lines
     sudo sed -i "/{{ interface }}/d" /etc/shorewall/interfaces
     print-finish
+else
+    print-finish Already templated, skip.
 fi
 
 print-header Start shorewall...

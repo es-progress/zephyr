@@ -47,7 +47,7 @@ print-header Install composer...
 if [[ -e "${bin_global}/composer" ]]; then
     hash=$(sha256sum "${bin_global}/composer" | cut -d" " -f1)
     if [[ "${hash}" == "${checksum}" ]]; then
-        print-finish Already installed, skipped.
+        print-finish Already installed, skip.
         exit 0
     fi
 fi

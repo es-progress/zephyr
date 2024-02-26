@@ -38,10 +38,12 @@ fi
 
 # Unmount
 for mount_point in $(lsblk --noheadings -o mountpoint "${disk}"); do
+    print-status Unmounting "${mount_point}..."
     if [[ -n "${mount_point}" ]]; then
-        print-status Unmounting "${mount_point}..."
         sudo umount "${mount_point}"
         print-finish
+    else
+        print-finish Already unmounted, skip.
     fi
 done
 
