@@ -37,12 +37,12 @@ print-header Install Tomb...
 tmp_file=$(mktemp)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
+[[ "${hash}" != "${checksum}" ]] && error-exit Bad checksum, exiting
 # Unpack archive
 tmp_dir=$(mktemp -d)
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 # Install
-[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit "Not single top level dir in archive"
+[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit Not single top level dir in archive
 unpack_dir=$(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d)
 sudo make -C "${unpack_dir}" install
 print-finish

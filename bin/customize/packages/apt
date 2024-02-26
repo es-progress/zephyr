@@ -19,7 +19,7 @@ _parse-install-packages() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Parse packages to install [${selector}]..."
+    print-status Parse packages to install "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" apt-install); do
         IFS=$' \t' read -r package repo <<< "${line}"
@@ -38,7 +38,7 @@ _parse-remove-packages() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Parse packages to remove [${selector}]..."
+    print-status Parse packages to remove "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for package in $(cfg-read "${cfg_file}" apt-remove); do
         packages_remove+=("${package}")
@@ -75,7 +75,7 @@ if file=$(cfg-get "${profile}" packages/local.cfg); then
 fi
 
 for repo in "${repos[@]}"; do
-    print-status "Add apt repo: ${repo}..."
+    print-status Add apt repo: "${repo}..."
     sudo add-apt-repository --yes --no-update "${repo}"
     print-finish
 done

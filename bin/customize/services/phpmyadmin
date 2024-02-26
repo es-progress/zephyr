@@ -45,13 +45,13 @@ print-header Install phpMyAdmin...
 tmp_file=$(mktemp)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
+[[ "${hash}" != "${checksum}" ]] && error-exit Bad checksum, exiting
 # Unpack archive
 target="${web_root}/phpmyadmin"
 sudo rm -rf "${target}"
 sudo mkdir -p "${target}"
 sudo tar -C "${target}" -xf "${tmp_file}"
-[[ $(find "${target}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit "Not single top level dir in archive"
+[[ $(find "${target}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit Not single top level dir in archive
 unpack_dir=$(find "${target}" -mindepth 1 -maxdepth 1 -type d)
 sudo mv "${unpack_dir}" "${target}/public"
 print-finish
@@ -77,7 +77,7 @@ sudo chmod -R g+w "${target}/upload" "${target}/save" "${target}/tmp"
 print-finish
 
 print-status Create phpMyAdmin control DB...
-[[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit "Import SQL file missing"
+[[ -f "${target}/public/sql/create_tables.sql" ]] || error-exit Import SQL file missing
 # shellcheck disable=SC2024
 sudo mysql <"${target}/public/sql/create_tables.sql"
 print-finish

@@ -27,19 +27,19 @@ fi
 
 # Check if valid disk
 if ! udevadm info -q property "${disk}" | grep -qs "DEVTYPE=disk"; then
-    error-exit "${disk} is not a disk!"
+    error-exit "${disk}" is not a disk!
 fi
 
 # Check if USB
 if ! udevadm info -q property "${disk}" | grep -qs "ID_BUS=usb"; then
     echo
-    error-exit "This device is not an USB stick!"
+    error-exit This device is not an USB stick!
 fi
 
 # Unmount
 for mount_point in $(lsblk --noheadings -o mountpoint "${disk}"); do
     if [[ -n "${mount_point}" ]]; then
-        print-status "Unmounting ${mount_point}..."
+        print-status Unmounting "${mount_point}..."
         sudo umount "${mount_point}"
         print-finish
     fi
@@ -47,7 +47,7 @@ done
 
 print-header Burn ISO to USB...
 read -r -p "Are you sure? (y/n) ";
-[[ ${REPLY} == "y" || ${REPLY} == "Y" ]] || error-exit "Aborted."
+[[ ${REPLY} == "y" || ${REPLY} == "Y" ]] || error-exit Aborted.
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 

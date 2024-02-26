@@ -53,7 +53,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Config initramfs [${selector}]..."
+    print-status Config initramfs "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/initramfs-tools/conf.d/ \;
     print-finish
 }
@@ -95,7 +95,7 @@ for map in "${@}"; do
         map_files+=("${file}")
     fi
 done
-[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
+[[ -z "${map_files[*]}" ]] && error-exit No maps found
 
 install-apt cryptsetup-initramfs
 
@@ -130,16 +130,16 @@ for map_file in "${map_files[@]}"; do
             partition_key_file="${key_dir}/${partition#/dev/}-${label}.key"
 
             if [[ "${type}" == luks* ]]; then
-                print-header "Create key file for ${partition}..."
+                print-header Create key file for "${partition}..."
                 dd if=/dev/urandom of="${partition_key_file}" bs=4096 count=1
                 chmod go-rwx "${partition_key_file}"
                 print-finish
 
-                print-header "Add machine key to LUKS ${label}..."
+                print-header Add machine key to LUKS "${label}..."
                 _luks-add-key "${partition}" "${partition_key_file}" "${key_slot}"
                 print-finish
 
-                print-status "Update crypttab with ${label}..."
+                print-status Update crypttab with "${label}..."
                 _luks-crypttab "${partition}" "${label}" "${partition_key_file}"
                 print-finish
             fi

@@ -20,7 +20,7 @@ _copy-autostart() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Copy autostart files [${selector}]..."
+    print-status Copy autostart files "[${selector}]..."
     mkdir -p ~/.config/autostart
     find -L "${cfg_dir}" -type f -exec cp --no-preserve=mode,ownership {} ~/.config/autostart/ \;
     print-finish

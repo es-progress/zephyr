@@ -95,11 +95,11 @@ _usage() {
             ;;
         install)
             description="Install Zephyr on your computer"
-            usage="install"
+            usage=install
             ;;
         uninstall)
             description="Remove Zephyr from your computer"
-            usage="uninstall"
+            usage=uninstall
             ;;
         *) _usage-main ;;
     esac
@@ -116,7 +116,7 @@ _usage() {
         done
 
         # Show available categories and modules for 'customize' command
-        if [[ "${selector}" == "customize" ]]; then
+        if [[ "${selector}" == customize ]]; then
             echo -e "\n${TXT_YELLOW}Available categories and modules:${TXT_NORM}"
             while IFS= read -r -d '' path; do
                 echo -ne "  ${TXT_GREEN}$(basename "${path}")${TXT_NORM}:"
@@ -200,7 +200,7 @@ _partition() {
     fi
     profile="${1}"
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error "Profile: ${profile} missing!"
+        print-error Profile: "${profile}" missing!
         exit 1
     fi
     shift
@@ -221,7 +221,7 @@ _format() {
     fi
     profile="${1}"
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error "Profile: ${profile} missing!"
+        print-error Profile: "${profile}" missing!
         exit 1
     fi
     shift
@@ -248,7 +248,7 @@ _post-install() {
         exit 1
     fi
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error "Profile: ${profile} missing!"
+        print-error Profile: "${profile}" missing!
         exit 1
     fi
     shift 2
@@ -272,7 +272,7 @@ _customize() {
     fi
     profile="${1}"
     if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error "Profile: ${profile} missing!"
+        print-error Profile: "${profile}" missing!
         exit 1
     fi
     shift
@@ -312,7 +312,7 @@ cmd="${1:-}"
 [[ -n "${cmd}" ]] && shift
 
 # Show help if requested by option flag not help command
-if [[ "${cmd}" != "help" ]]; then
+if [[ "${cmd}" != help ]]; then
     for arg in "${@}"; do
         if [[ "${arg}" == "--help" || "${arg}" == "-h" ]]; then
             "${PROJECT_ROOT}/bin/zephyrctl" help "${cmd}"

@@ -19,7 +19,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Config VirtualBox [${selector}]..."
+    print-status Config VirtualBox "[${selector}]..."
     # vboxmanage configs
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" virtualbox-vboxmanage); do
@@ -52,7 +52,7 @@ _register() {
     registered_vms=$(vboxmanage list vms)
     for def in "${vm[@]:-}"; do
         IFS="@" read -r vm uuid <<<"${def}"
-        print-status "Register VM: ${vm} [${selector}]..."
+        print-status Register VM: "${vm}" "[${selector}]..."
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
             [[ -e "${cfg_dir}/${vm}" ]] || continue

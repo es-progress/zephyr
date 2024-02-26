@@ -55,7 +55,7 @@ fi
 tmp_file=$(mktemp)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
+[[ "${hash}" != "${checksum}" ]] && error-exit Bad checksum, exiting
 # Move to bin
 sudo mv "${tmp_file}" "${bin_global}/composer"
 sudo chown root:root "${bin_global}/composer"

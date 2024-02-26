@@ -19,7 +19,7 @@ _add-to-group() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-header "Add user to groups [${selector}]..."
+    print-header Add user to groups "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for group in $(cfg-read "${cfg_file}" groups); do
         sudo adduser "${USER}" "${group}"

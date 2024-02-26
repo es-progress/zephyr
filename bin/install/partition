@@ -48,7 +48,7 @@ _partition-create() {
         win) type_code=0700 ;;
         linux) type_code=8300 ;;
         *)
-            print-error "Unsupported type: ${type}"
+            print-error Unsupported type: "${type}"
             return 1
             ;;
     esac
@@ -82,7 +82,7 @@ for map in "${@}"; do
         map_files+=("${file}")
     fi
 done
-[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
+[[ -z "${map_files[*]}" ]] && error-exit No maps found
 
 # Loop through maps
 for map_file in "${map_files[@]}"; do
@@ -93,25 +93,25 @@ for map_file in "${map_files[@]}"; do
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
     read -rp "WARNING! Disks in map will be erased! Proceed? Type 'YES': "
-    [[ ${REPLY} != "YES" ]] && error-exit Aborted.
+    [[ ${REPLY} != YES ]] && error-exit Aborted.
 
     # Loop through disks
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device _ <<< "${line}"
-        print-section "Partition ${device}"
+        print-section Partition "${device}"
 
-        print-header "Destroy partition table on ${device} (${name})..."
+        print-header Destroy partition table on "${device}" "(${name})..."
         _partition-zap "${device}"
         print-finish
 
         # Loop through partitions
         for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
             IFS=$' \t' read -r number gap size type label <<< "${part_line}"
-            print-header "Create partition: ${label}..."
+            print-header Create partition: "${label}..."
             _partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
         done
-        print-finish "Finished partitioning ${device}"
+        print-finish Finished partitioning "${device}"
     done
 done
 print-finish All partitioning finished.

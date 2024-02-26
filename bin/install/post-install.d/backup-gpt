@@ -56,7 +56,7 @@ for map in "${@}"; do
         map_files+=("${file}")
     fi
 done
-[[ -z "${map_files[*]}" ]] && error-exit "No maps found"
+[[ -z "${map_files[*]}" ]] && error-exit No maps found
 
 mkdir -p "${backup_dir}"
 
@@ -65,7 +65,7 @@ for map_file in "${map_files[@]}"; do
     # Loop through disks
     for line in $(cfg-read "${map_file}" DISKS); do
         IFS=$' \t' read -r name device _ <<< "${line}"
-        print-header "Backup partition table for ${name}..."
+        print-header Backup partition table for "${name}..."
         _gpt-backup "${device}" "${backup_dir}/${name}"
         print-finish
     done

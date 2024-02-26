@@ -35,17 +35,17 @@ fi
 
 install-apt curl
 
-print-header "Install jmeter..."
+print-header Install jmeter...
 # Download tar
 tmp_file=$(mktemp)
 tmp_dir=$(mktemp -d)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
 hash=$(sha512sum "${tmp_file}" | cut -d" " -f1)
-[[ "${hash}" != "${checksum}" ]] && error-exit "Bad checksum, exiting"
+[[ "${hash}" != "${checksum}" ]] && error-exit Bad checksum, exiting
 # Unpack archive
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 sudo rm -rf "${install_dir}"
-[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit "Not single top level dir in archive"
+[[ $(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit Not single top level dir in archive
 unpack_dir=$(find "${tmp_dir}" -mindepth 1 -maxdepth 1 -type d)
 sudo cp -r "${unpack_dir}" "${install_dir}"
 rm -rf "${tmp_file}" "${tmp_dir}"
