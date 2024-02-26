@@ -25,7 +25,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 
 # Parse options
-profile="${1?:"Profile missing"}"
+profile="${1?:Profile missing}"
 shift
 whitelist=()
 blacklist=()
@@ -42,8 +42,8 @@ for arg in "${@}"; do
     shift
 done
 # Merge white/blacklist with config
-IFS="," read -r -a whitelist_cfg <<<"${MODULE_WHITELIST}"
-IFS="," read -r -a blacklist_cfg <<<"${MODULE_BLACKLIST}"
+IFS=, read -r -a whitelist_cfg <<<"${MODULE_WHITELIST}"
+IFS=, read -r -a blacklist_cfg <<<"${MODULE_BLACKLIST}"
 if [[ -z "${whitelist[*]}" && -n "${whitelist_cfg[*]}" ]]; then
     whitelist=("${whitelist_cfg[@]}")
 fi

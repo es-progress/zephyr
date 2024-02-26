@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Config VirtualBox "[${selector}]..."
     # vboxmanage configs
@@ -43,15 +43,15 @@ _config() {
 ## @param   $2  Config dir
 ############################
 _register() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     # Get & create machine folder
     mkdir -p "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
     # Register VMs
     registered_vms=$(vboxmanage list vms)
     for def in "${vm[@]:-}"; do
-        IFS="@" read -r vm uuid <<<"${def}"
+        IFS=@ read -r vm uuid <<<"${def}"
         print-status Register VM: "${vm}" "[${selector}]..."
         # Check if already registered
         if ! grep -qs "${uuid}" <<<"${registered_vms}"; then
@@ -77,7 +77,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 install-apt virtualbox
 

@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 # Options
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 url=
 checksum=
 install_dir=

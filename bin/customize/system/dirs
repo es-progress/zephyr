@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ############################
 _dirs-create() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Create dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -38,8 +38,8 @@ _dirs-create() {
 ## @param   $2  Config file
 ############################
 _dirs-remove() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Remove dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -62,7 +62,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 perm_home=
 
 # shellcheck disable=SC2310,SC2311

@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 # Options
-orig_iso_image="${1?:"Original ISO file missing"}"
+orig_iso_image="${1?:Original ISO file missing}"
 new_iso_image="${2:-"${ISO_FILE_NAME}"}"
 
 print-header Compress SquashFS filesystem...

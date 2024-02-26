@@ -16,8 +16,8 @@
 ## @param   $2  Config dir
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-status Config SSH "[${selector}]..."
     mkdir -p ~/.ssh
@@ -32,8 +32,8 @@ _config() {
 ## @param   $2  Config file
 ############################
 _known-hosts() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Setup known hosts "[${selector}]..."
     mkdir -p ~/.ssh
@@ -58,7 +58,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/ssh/global.d); then

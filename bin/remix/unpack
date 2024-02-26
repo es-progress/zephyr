@@ -13,7 +13,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-iso_image="${1?:"ISO file missing"}"
+iso_image="${1?:ISO file missing}"
 
 print-status Mount ISO...
 if ! findmnt "${PATH_MOUNT}" >/dev/null; then

@@ -17,8 +17,8 @@
 ## @param   $2  Config file
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Config Dash-to-panel "[${selector}]..."
     sed -e '/^#/d' -e '/^$/d' "${cfg_file}" | dconf load /org/gnome/shell/extensions/
@@ -37,7 +37,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 # Options
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 version=
 # Read config file, get options
 # shellcheck disable=SC2310,SC2311
@@ -56,7 +56,7 @@ print-header Install Dash-to-panel...
 # Create temp dir
 install_dir=$(mktemp -d)
 # Get source
-git clone "https://github.com/home-sweet-gnome/dash-to-panel.git" "${install_dir}"
+git clone https://github.com/home-sweet-gnome/dash-to-panel.git "${install_dir}"
 git -C "${install_dir}" checkout "${version}"
 # Install
 make -C "${install_dir}" install

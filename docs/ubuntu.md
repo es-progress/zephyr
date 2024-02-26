@@ -16,7 +16,7 @@ It's mostly the standard (stock) Ubuntu installation (install phase) with some s
 In pre/post-installation [Disk maps](reference/disk-maps.md) play a crucial role.
 They are just normal configuration files in your profiles and as the name suggest in these files you can describe your disks, partitions and file-systems and let Zephyr know about them.
 
-!!! danger "Backup"
+!!! danger Backup
 
     First and foremost, **back up** all your data!
 

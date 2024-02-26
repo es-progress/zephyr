@@ -15,7 +15,7 @@
 ## @param    $1  Device
 ##########################
 _partition-zap() {
-    local device="${1:?"Device missing"}"
+    local device="${1:?Device missing}"
     sgdisk --zap-all "${device}"
 
     # Inform kernel about partitions
@@ -33,12 +33,12 @@ _partition-zap() {
 ## @param    $6  Label
 ##########################################################
 _partition-create() {
-    local device="${1:?"Device missing"}"
-    local number="${2:?"Partition number missing"}"
-    local gap="${3:?"Gap size missing"}"
-    local size="${4:?"Partition size missing"}"
-    local type="${5:?"Partition type missing"}"
-    local label="${6:?"Partition label missing"}"
+    local device="${1:?Device missing}"
+    local number="${2:?Partition number missing}"
+    local gap="${3:?Gap size missing}"
+    local size="${4:?Partition size missing}"
+    local type="${5:?Partition type missing}"
+    local label="${6:?Partition label missing}"
     local type_code
 
     case "${type}" in
@@ -71,7 +71,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 shift
 
 # Maps

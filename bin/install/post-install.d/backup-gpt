@@ -16,8 +16,8 @@
 ## @param    $2  Backup file
 #############################
 _gpt-backup() {
-    local device="${1:?"Device missing"}"
-    local backup_file="${2:?"Backup filename missing"}"
+    local device="${1:?Device missing}"
+    local backup_file="${2:?Backup filename missing}"
     sgdisk -b "${backup_file}" "${device}"
 }
 
@@ -32,7 +32,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 backup_dir=
 shift
 

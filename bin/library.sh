@@ -113,8 +113,8 @@ check-not-root() {
 ## @param   $1  Config file
 ############################
 cfg-get() {
-    local profile="${1:?"Profile missing"}"
-    local file="${2:?"Config file missing"}"
+    local profile="${1:?Profile missing}"
+    local file="${2:?Config file missing}"
 
     # First check in selected profile
     if [[ -r "${PATH_PROFILES}/${profile}/${file}" ]]; then
@@ -138,7 +138,7 @@ cfg-get() {
 ## @param    $2  Section (read only this section)
 #################################################
 cfg-read() {
-    local file="${1:?"File missing"}"
+    local file="${1:?File missing}"
     local section="${2:-}"
     local contents
 
@@ -158,7 +158,7 @@ cfg-read() {
 ## @param    $2  Section (eval only this section)
 #################################################
 cfg-eval() {
-    local cfg_file="${1:?"Config file missing"}"
+    local cfg_file="${1:?Config file missing}"
     local section="${2:-}"
 
     for line in $(cfg-read "${cfg_file}" "${section}"); do
@@ -172,7 +172,7 @@ cfg-eval() {
 ## @param    $*  Items to join
 ##################################
 implode() {
-    local IFS="${1:?"Field separator missing"}"
+    local IFS="${1:?Field separator missing}"
     shift
     echo "${*}"
 }
@@ -208,7 +208,7 @@ install-apt() {
 ## @param    $2  Install mode
 #############################
 install-snap() {
-    local package="${1:?"Package missing"}"
+    local package="${1:?Package missing}"
     local mode="${2:-}"
     local options=()
     local snaps_installed

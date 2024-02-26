@@ -13,8 +13,8 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
-environment="${1:?"Environment missing"}"
-profile="${2:?"Profile missing"}"
+environment="${1:?Environment missing}"
+profile="${2:?Profile missing}"
 shift 2
 
 case "${environment}" in
