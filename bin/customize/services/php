@@ -59,7 +59,7 @@ print-status Add apt repo: ppa:ondrej/php...
 sudo add-apt-repository --yes --no-update ppa:ondrej/php
 print-finish
 
-install-apt php"${version}" php"${version}"-fpm
+install-apt "php${version}" "php${version}-fpm"
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" services/php/global.d); then

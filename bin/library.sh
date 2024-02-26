@@ -182,21 +182,23 @@ implode() {
 ## @param    $*  Packages
 ##########################
 install-apt() {
+    local install=()
     for package in "${@}"; do
         if dpkg --status "${package}" > /dev/null 2>&1; then
             print-status "Install ${package}..."
             print-finish Already installed, skip.
-            shift
+        else
+            install+=("${package}")
         fi
     done
 
-    if [[ $# -lt 1 ]]; then
+    if [[ -z "${install[*]}" ]]; then
         return 0
     fi
 
-    print-header Install "${*}..."
+    print-header Install "${install[*]}..."
     sudo apt-get update
-    sudo apt-get install --yes --no-install-recommends --autoremove "${@}"
+    sudo apt-get install --yes --no-install-recommends --autoremove "${install[@]}"
     print-finish
 }
 
