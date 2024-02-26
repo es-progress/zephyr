@@ -13,7 +13,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 root_ca_name=
 root_ca_subject=
 mok_key_name=
@@ -109,7 +109,7 @@ if [[ ! -e "/usr/local/share/ca-certificates/${root_ca_name}.crt" || -n "${key_c
         -x509 \
         -sha512 \
         -extensions v3_ca \
-        -addext "keyUsage=critical,keyCertSign,cRLSign" \
+        -addext keyUsage=critical,keyCertSign,cRLSign \
         -key "/etc/ssl/private/${root_ca_name}.key" \
         -out "/usr/local/share/ca-certificates/${root_ca_name}.crt" \
         -days 3650 \

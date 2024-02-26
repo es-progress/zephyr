@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ###########################
 _install-locale() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-header Install locale "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -33,8 +33,8 @@ _install-locale() {
 ## @param   $2  Config file
 ###########################
 _set-locale() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Set locales "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -56,7 +56,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" system/global.cfg); then

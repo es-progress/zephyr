@@ -34,7 +34,7 @@ _usage-main() {
     echo -e  "  zephyrctl COMMAND [OPTIONS]...\n"
     echo -e  "${TXT_YELLOW}Commands:${TXT_NORM}"
     for line in "${sorted_commands_array[@]}"; do
-        IFS=":" read -r name help <<<"${line}"
+        IFS=: read -r name help <<<"${line}"
         printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
     done
 
@@ -111,7 +111,7 @@ _usage() {
     if [[ -n "${options[*]}" ]]; then
         echo -e "${TXT_YELLOW}Options:${TXT_NORM}"
         for line in "${options[@]}"; do
-            IFS=":" read -r name help <<<"${line}"
+            IFS=: read -r name help <<<"${line}"
             printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
         done
 
@@ -122,7 +122,7 @@ _usage() {
                 echo -ne "  ${TXT_GREEN}$(basename "${path}")${TXT_NORM}:"
                 modules=$(find "${path}" -type f -executable -printf " %f\n" | sort)
                 # shellcheck disable=SC2068
-                implode "," ${modules[@]}
+                implode , ${modules[@]}
             done < <(find "${PATH_SCRIPTS_CUSTOMIZE}" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z || true)
         fi
     fi
@@ -286,7 +286,7 @@ _customize() {
     print-finish Customization finished!
     if [[ -z "${module_selected}" ]]; then
         read -r -p "Reboot is required, do you want it now? (y/n) "
-        [[ ${REPLY} == "y" || ${REPLY} == "Y" ]] && reboot
+        [[ ${REPLY} == y || ${REPLY} == Y ]] && reboot
     fi
 }
 

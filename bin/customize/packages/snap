@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ############################
 _install() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
     local snaps_installed
 
     print-header Install snaps "[${selector}]..."
@@ -54,7 +54,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 install-apt snapd
 

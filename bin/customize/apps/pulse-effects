@@ -16,8 +16,8 @@
 ## @param   $2  Config dir
 ############################
 _copy-presets() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-status Copy pulse-effect presets "[${selector}]..."
     mkdir -p ~/.config/PulseEffects/output/
@@ -36,7 +36,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 print-status Add apt repo: ppa:mikhailnov/pulseeffects...
 sudo add-apt-repository --yes --no-update ppa:mikhailnov/pulseeffects

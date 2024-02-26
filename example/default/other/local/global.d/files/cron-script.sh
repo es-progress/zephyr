@@ -4,6 +4,6 @@
 set -eufo pipefail
 IFS=$'\n\t'
 
-echo "Hello, World!"
+echo Hello, World!
 
 exit 0

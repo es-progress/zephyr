@@ -16,8 +16,8 @@
 ## @param   $2  Config dir
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-status Config MariaDB "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/mysql/conf.d/ \;
@@ -36,7 +36,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 # Options
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 repo=
 admin_name=
 admin_pass=

@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ############################
 _setup-weekly() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Setup weekly cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -38,8 +38,8 @@ _setup-weekly() {
 ## @param   $2  Config file
 ############################
 _setup-daily() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
 
     print-status Setup daily cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -65,7 +65,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" other/global.cfg); then

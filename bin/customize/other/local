@@ -16,8 +16,8 @@
 ## @param   $2  Config dir
 ############################
 _run() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-header Run local scripts "[${selector}]..."
     (
@@ -38,7 +38,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" other/local/global.d); then

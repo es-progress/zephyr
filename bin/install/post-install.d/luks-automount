@@ -17,9 +17,9 @@
 ## @param    $3  Key slot
 ###############################
 _luks-add-key() {
-    local partition="${1:?"Partition missing"}"
-    local key_file="${2:?"Key file missing"}"
-    local key_slot="${3:?"Key slot missing"}"
+    local partition="${1:?Partition missing}"
+    local key_file="${2:?Key file missing}"
+    local key_slot="${3:?Key slot missing}"
 
     # Deleting previous key
     cryptsetup luksKillSlot -q "${partition}" "${key_slot}" || true
@@ -34,9 +34,9 @@ _luks-add-key() {
 ## @param    $3  Key file
 ###############################
 _luks-crypttab() {
-    local partition="${1:?"Partition missing"}"
-    local label="${2:?"Label missing"}"
-    local key_file="${3:?"Key file missing"}"
+    local partition="${1:?Partition missing}"
+    local label="${2:?Label missing}"
+    local key_file="${3:?Key file missing}"
 
     UUID=$(blkid -s UUID -o value "${partition}")
     if ! grep -qs "${UUID}" /etc/crypttab; then
@@ -50,8 +50,8 @@ _luks-crypttab() {
 ## @param   $2  Config dir
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-status Config initramfs "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/initramfs-tools/conf.d/ \;
@@ -69,7 +69,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 key_dir=
 key_slot=
 shift

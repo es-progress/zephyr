@@ -16,8 +16,8 @@
 ## @param   $2  Config file
 ############################
 _install-module() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_file="${2:?"Config file missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
     local modules=()
 
     print-header Install Apache modules "[${selector}]..."
@@ -35,8 +35,8 @@ _install-module() {
 ## @param   $2  Config dir
 ############################
 _config() {
-    local selector="${1:?"Selector missing"}"
-    local cfg_dir="${2:?"Config dir missing"}"
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
 
     print-header Config Apache "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/apache2/conf-available/ \;
@@ -55,7 +55,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
-profile="${1:?"Profile missing"}"
+profile="${1:?Profile missing}"
 web_root=
 def_virt_host_name=
 def_virt_host_subject=
