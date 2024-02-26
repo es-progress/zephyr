@@ -44,6 +44,10 @@ if [[ -n "${target}" ]]; then
             print-finish Already mounted, skip.
         fi
     done
+
+    print-status Mounting all filesystems...
+    mount -a
+    print-finish
 fi
 
 # Run Post-install steps
