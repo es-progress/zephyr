@@ -30,7 +30,7 @@ case "${environment}" in
         target="${PATH_EXTRACT}/squashfs-root"
         do_chroot=(chroot "${target}")
         ;;
-    *) error-exit "Invalid environment: ${environment}" ;;
+    *) error-exit Invalid environment: "${environment}" ;;
 esac
 
 # Mount system
@@ -55,13 +55,13 @@ if ! terminal=$(tty); then
     terminal=/dev/console
 fi
 while IFS= read -r -d '' step; do
-    print-header "Running step: ${step}..."
+    print-header Running step: "${step}..."
     if [[ -n "${target}" ]]; then
         "${do_chroot[@]}" env PROJECT_ROOT="${INSTALL_DIR}" "${INSTALL_DIR}/bin/install/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
     else
         "${PATH_SCRIPTS_INSTALL}/post-install.d/${step}" "${profile}" "${@}" < "${terminal}"
     fi
-    print-finish "Finished ${step}."
+    print-finish Finished "${step}."
 done < <(find "${PATH_SCRIPTS_INSTALL}/post-install.d" -maxdepth 1 -type f -executable -printf "%P\0" | sort -z || true)
 
 if [[ "${environment}" != dev ]]; then

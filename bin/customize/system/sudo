@@ -19,7 +19,7 @@ _copy-sudoers() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Customize sudoers [${selector}]..."
+    print-status Customize sudoers "[${selector}]..."
     while IFS= read -r -d '' file; do
         file_name=$(basename "${file}")
         # Verify new file

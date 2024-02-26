@@ -185,7 +185,7 @@ install-apt() {
     local install=()
     for package in "${@}"; do
         if dpkg --status "${package}" > /dev/null 2>&1; then
-            print-status "Install ${package}..."
+            print-status Install "${package}..."
             print-finish Already installed, skip.
         else
             install+=("${package}")
@@ -213,15 +213,15 @@ install-snap() {
     local options=()
     local snaps_installed
 
-    [[ "${mode}" == "classic" ]] && options=(--classic)
+    [[ "${mode}" == classic ]] && options=(--classic)
 
     snaps_installed=$(snap list --color=never --unicode=never)
     if grep -qs "^${package}" <<<"${snaps_installed}"; then
-        print-status "Install ${package}..."
+        print-status Install "${package}..."
         print-finish Already installed, skip.
         return 0
     else
-        print-header "Install ${package}..."
+        print-header Install "${package}..."
         sudo snap install "${package}" "${options[@]}"
         print-finish
     fi

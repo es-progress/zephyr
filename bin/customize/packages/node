@@ -19,16 +19,16 @@ _install() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-header "Install node modules [${selector}]..."
+    print-header Install node modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" node); do
         IFS=$' \t' read -r package <<< "${line}"
 
-        print-header "Install ${package}..."
+        print-header Install "${package}..."
         sudo npm install --global --no-fund "${package}"
         print-finish
     done
-    print-finish
+    print-finish Node modules installed.
 }
 
 ##################

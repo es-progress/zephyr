@@ -78,7 +78,7 @@ for dir in "${exec_dir[@]}"; do
         # Run module
         print-section "${module}"
         if ! "${path}" "${profile}"; then
-            print-error "Error! Module: ${module} failed!"
+            print-error Error! Module: "${module}" failed!
             exit 1
         fi
     done < <(find "${PATH_SCRIPTS_CUSTOMIZE}/${dir}" -type f -executable -print0 | sort -z || true)

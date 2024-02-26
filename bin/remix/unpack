@@ -15,11 +15,13 @@ check-not-root
 
 iso_image="${1?:"ISO file missing"}"
 
+print-status Mount ISO...
 if ! findmnt "${PATH_MOUNT}" >/dev/null; then
-    print-status Mount ISO...
     mkdir -p "${PATH_MOUNT}"
     sudo mount -o ro,loop "${iso_image}" "${PATH_MOUNT}"
     print-finish
+else
+    print-finish Already mounted, skip.
 fi
 
 print-header Extract ISO contents...
@@ -31,16 +33,20 @@ sudo rsync \
     "${PATH_MOUNT}/" "${PATH_EXTRACT}/iso"
 print-finish
 
+print-status Unmount ISO...
 if findmnt "${PATH_MOUNT}" >/dev/null; then
-    print-status Unmount ISO...
     sudo umount "${PATH_MOUNT}"
     print-finish
+else
+    print-finish Already unmounted, skip.
 fi
 
+print-status Clear SquashFS extracting directory...
 if [[ -e "${PATH_EXTRACT}/squashfs-root" ]]; then
-    print-status Clear SquashFS extracting directory...
     sudo rm -rf "${PATH_EXTRACT}/squashfs-root"
     print-finish
+else
+    print-finish Already cleared, skip.
 fi
 
 print-header Extract SquashFS filesystem...

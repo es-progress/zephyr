@@ -19,7 +19,7 @@ shopt -s dotglob
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/global.d); then
-    print-status "Copy Bash files [global]..."
+    print-status Copy Bash files "[global]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /etc/skel/ \;
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
@@ -27,13 +27,13 @@ if dir=$(cfg-get "${profile}" shell/bash/global.d); then
 fi
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/root.d); then
-    print-status "Copy Bash files [root]..."
+    print-status Copy Bash files "[root]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=mode,ownership {} /root/ \;
     print-finish
 fi
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bash/local.d); then
-    print-status "Copy Bash files [local]..."
+    print-status Copy Bash files "[local]..."
     find -L "${dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/ \;
     print-finish
 fi

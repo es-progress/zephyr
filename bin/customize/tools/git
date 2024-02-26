@@ -19,11 +19,11 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Config git [${selector}]..."
+    print-status Config git "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" git); do
         IFS=$' \t' read -r cfg_loc cfg_name cfg_value <<< "${line}"
-        if [[ "${cfg_loc}" == "system" ]]; then
+        if [[ "${cfg_loc}" == system ]]; then
             sudo git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"
         else
             git config "--${cfg_loc}" "${cfg_name}" "${cfg_value}"

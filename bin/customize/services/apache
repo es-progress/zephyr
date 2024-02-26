@@ -20,7 +20,7 @@ _install-module() {
     local cfg_file="${2:?"Config file missing"}"
     local modules=()
 
-    print-header "Install Apache modules [${selector}]..."
+    print-header Install Apache modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for module in $(cfg-read "${cfg_file}" apache-module); do
         modules+=("${module}")
@@ -38,7 +38,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Config Apache [${selector}]..."
+    print-header Config Apache "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/apache2/conf-available/ \;
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 | xargs -0I{} basename -z {} .conf | xargs -0L1 sudo a2enconf
     print-finish
@@ -133,7 +133,7 @@ if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl
         -days 365
     print-finish
 else
-    print-finish Key found, skipped
+    print-finish Key found, skip.
 fi
 
 # shellcheck disable=SC2310,SC2311

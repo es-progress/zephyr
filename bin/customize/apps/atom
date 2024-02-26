@@ -19,7 +19,7 @@ _install-packages() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-header "Install Atom packages [${selector}]..."
+    print-header Install Atom packages "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for package in $(cfg-read "${cfg_file}" atom-packages); do
         apm install "${package}"
@@ -36,7 +36,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Copy Atom config [${selector}]..."
+    print-status Copy Atom config "[${selector}]..."
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.atom/ \;
     print-finish
 }
@@ -60,7 +60,7 @@ print-header Add Atom GPG key...
 curl --disable -s --location --url https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
 print-finish
 
-print-header "Add Atom repo..."
+print-header Add Atom repo...
 sudo add-apt-repository --yes "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main"
 print-finish
 

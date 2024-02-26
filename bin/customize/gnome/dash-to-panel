@@ -20,7 +20,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Config Dash-to-panel [${selector}]..."
+    print-status Config Dash-to-panel "[${selector}]..."
     sed -e '/^#/d' -e '/^$/d' "${cfg_file}" | dconf load /org/gnome/shell/extensions/
     print-finish
 }

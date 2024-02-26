@@ -19,12 +19,12 @@ _run() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-header "Run local scripts [${selector}]..."
+    print-header Run local scripts "[${selector}]..."
     (
         cd "${cfg_dir}"
         run-parts --exit-on-error --arg="${profile}" .
     )
-    print-finish
+    print-finish Local scripts finished.
 }
 
 ##################

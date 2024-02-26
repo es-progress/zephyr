@@ -19,7 +19,7 @@ _config() {
     local selector="${1:?"Selector missing"}"
     local cfg_dir="${2:?"Config dir missing"}"
 
-    print-status "Config SSH [${selector}]..."
+    print-status Config SSH "[${selector}]..."
     mkdir -p ~/.ssh
     find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec cp -r --no-preserve=mode,ownership {} ~/.ssh/ \;
     chmod -R o-rwx ~/.ssh
@@ -35,7 +35,7 @@ _known-hosts() {
     local selector="${1:?"Selector missing"}"
     local cfg_file="${2:?"Config file missing"}"
 
-    print-status "Setup known hosts [${selector}]..."
+    print-status Setup known hosts "[${selector}]..."
     mkdir -p ~/.ssh
     touch ~/.ssh/known_hosts
     # shellcheck disable=SC2310,SC2311
