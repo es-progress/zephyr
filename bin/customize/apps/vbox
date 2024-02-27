@@ -58,7 +58,7 @@ _register() {
             [[ -e "${cfg_dir}/${vm}" ]] || continue
 
             cp -r --no-preserve=mode,ownership "${cfg_dir}/${vm}" "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
-            find "${VM_LOCAL_DIR:-~/.config/VirtualBox}/${vm}" -name "*.vbox" -exec vboxmanage registervm '{}' \;
+            find "${VM_LOCAL_DIR:-~/.config/VirtualBox}/${vm}" -name "*.vbox" -exec vboxmanage registervm {} \;
             print-finish
         else
             print-finish Already registered, skip.
