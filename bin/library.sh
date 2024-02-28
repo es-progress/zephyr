@@ -184,7 +184,7 @@ implode() {
 install-apt() {
     local install=()
     for package in "${@}"; do
-        if dpkg --status "${package}" > /dev/null 2>&1; then
+        if dpkg --status "${package}" >/dev/null 2>&1; then
             print-status Install "${package}..."
             print-finish Already installed, skip.
         else
