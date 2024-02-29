@@ -567,6 +567,21 @@ This module can install new `systemd` units (services, timers, etc.) and can ove
 
 ---
 
+### users
+
+Create users (normal and system users too) and optionally add them to groups.
+
+**Configuration**
+
+-   `system/global.cfg`:
+
+    -   `users`: users to add to the system. Format: "user_name type groups" (one per line), "type" can be `normal` or `system` if omitted defaults to `normal`, "groups" is an optional comma-separated list of groups to add the user to. Groups will be created if not exist.
+        For normal users login will be disabled (so the module can run unattented), to enable the account you will be need to manually set a password later with `passwd`.
+
+        !!! tip "You can use environment variables (like `$USER`) as user name!"
+
+---
+
 ## Tool modules
 
 The Tool modules provide configurations for various tools.

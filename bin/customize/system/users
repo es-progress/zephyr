@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+###################
+## Zephyr        ##
+##               ##
+## Config        ##
+## Users, groups ##
+###################
+
+###############
+## FUNCTIONS ##
+###############
+
+## Create users
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_create-user() {
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
+    local existent_users user type existent_groups groups group options
+
+    existent_users=$(getent passwd | cut -d: -f1)
+    existent_groups=$(getent group | cut -d: -f1)
+
+    print-header Create users "[${selector}]..."
+    for line in $(cfg-read "${cfg_file}" users); do
+        IFS=$' \t' read -r user type groups <<< "${line}"
+        IFS=, read -r -a groups <<< "${groups}"
+        user=$(eval echo "${user}")
+
+        if [[ "${type}" == system ]]; then
+            options=(--system)
+        else
+            options=(--disabled-login --gecos '')
+        fi
+
+        if ! grep -qs "${user}" <<<"${existent_users}"; then
+            print-header Add "${type}" user: "${user}..."
+            sudo adduser "${options[@]}" "${user}"
+            print-finish
+        else
+            print-status Add "${type}" user: "${user}..."
+            print-finish Already added, skip.
+        fi
+
+        for group in "${groups[@]}"; do
+            if ! grep -qs "${group}" <<<"${existent_groups}"; then
+                print-header Create group: "${group}..."
+                sudo adduser --group "${group}"
+                print-finish
+            else
+                print-status Create group: "${group}..."
+                print-finish Already created, skip.
+            fi
+
+            print-header Add "${user}" to group: "${group}..."
+            sudo adduser "${user}" "${group}"
+            print-finish
+        done
+    done
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-not-root
+
+profile="${1:?Profile missing}"
+
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" system/global.cfg); then
+    _create-user global "${file}"
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" system/local.cfg); then
+    _create-user local "${file}"
+fi
+
+exit 0

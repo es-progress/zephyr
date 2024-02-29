@@ -282,6 +282,7 @@ jobs:
           ./bin/zephyrctl customize tester shorewall
           ./bin/zephyrctl customize tester sudo
           ./bin/zephyrctl customize tester systemd
+          ./bin/zephyrctl customize tester users
         shell: bash
 
       - name: Execute scripts (2nd pass)
@@ -296,6 +297,7 @@ jobs:
           ./bin/zephyrctl customize tester shorewall
           ./bin/zephyrctl customize tester sudo
           ./bin/zephyrctl customize tester systemd
+          ./bin/zephyrctl customize tester users
         shell: bash
   tests-tools:
     name: Integration tests (customize/tools)
