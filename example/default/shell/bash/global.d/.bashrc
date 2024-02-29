@@ -48,24 +48,6 @@ case "${TERM}" in
     *) ;;
 esac
 
-########
-# PATH #
-########
-
-# set PATH so it includes user's private bin if it exists
-if [[ -d "${HOME}/bin" ]] ; then
-    if ! grep -qs -F "${HOME}/bin" <<< "${PATH}"; then
-        PATH="${HOME}/bin:${PATH}"
-    fi
-fi
-
-# set PATH so it includes user's private bin if it exists
-if [[ -d "${HOME}/.local/bin" ]] ; then
-    if ! grep -qs -F "${HOME}/.local/bin" <<< "${PATH}"; then
-        PATH="${HOME}/.local/bin:${PATH}"
-    fi
-fi
-
 ##########
 # RANDOM #
 ##########
