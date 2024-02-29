@@ -416,7 +416,7 @@ Global files are installed globally for all users, and local files are installed
 
 This module installs your custom shell scripts to directories that are in your `PATH` (configurable).
 In this module there is a difference between `global` and `local` files.
-Global files are installed to `/usr/local/bin` (by default) - so it's global for all users - and local files are installed to `~/bin` (by default) - so it's local for the current user only.
+Global files are installed to `/usr/local/bin` (by default) - so it's global for all users - and local files are installed to `~/.local/bin` (by default) - so it's local for the current user only.
 
 **Configuration**
 
