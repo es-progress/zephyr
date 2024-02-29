@@ -476,17 +476,6 @@ Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
 
 ---
 
-### groups
-
-Adds the current user to the specified groups.
-
-**Configuration**
-
--   `system/global.cfg`:
-    -   `groups`: user groups to add current user to. Format: "group_name" (one per line).
-
----
-
 ### locale
 
 Configures system locale.
@@ -564,6 +553,21 @@ This module can install new `systemd` units (services, timers, etc.) and can ove
 -   `system/systemd/files.global.d`: additional files (script, resources) that are needed for units, like an executable for a service. These files will be copied to `lib_global` dir as configured in `shell/scripts` module.
 -   `system/systemd/override.global.d`: place `.conf` files for each unit you want to override in a subdirectory named as the unit (e.g. "fstrim.service").
 -   `system/systemd/install.global.d`: put your new custom unit files here. These will be copied to `/usr/local/lib/systemd/system`. You can use `{{ GLOBAL_LIB }}` template string in unit files, it will be replaced with the actual directory. This can be useful in a `ExecStart` directive.
+
+---
+
+### users
+
+Create users (normal and system users too) and optionally add them to groups.
+
+**Configuration**
+
+-   `system/global.cfg`:
+
+    -   `users`: users to add to the system. Format: "user_name type groups" (one per line), "type" can be `normal` or `system` if omitted defaults to `normal`, "groups" is an optional comma-separated list of groups to add the user to. Groups will be created if not exist.
+        For normal users login will be disabled (so the module can run unattented), to enable the account you will be need to manually set a password later with `passwd`.
+
+        !!! tip "You can use environment variables (like `$USER`) as user name!"
 
 ---
 
