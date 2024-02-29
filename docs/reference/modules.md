@@ -476,17 +476,6 @@ Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
 
 ---
 
-### groups
-
-Adds the current user to the specified groups.
-
-**Configuration**
-
--   `system/global.cfg`:
-    -   `groups`: user groups to add current user to. Format: "group_name" (one per line).
-
----
-
 ### locale
 
 Configures system locale.
