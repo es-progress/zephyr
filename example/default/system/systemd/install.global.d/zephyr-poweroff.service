@@ -1,0 +1,17 @@
+######################
+## Zephyr           ##
+##                  ##
+## Poweroff service ##
+######################
+
+[Unit]
+Description=Zephyr poweroff routine
+DefaultDependencies=no
+Before=poweroff.target reboot.target
+
+[Service]
+Type=oneshot
+ExecStart={{ LIB_GLOBAL }}/zephyr-poweroff.sh
+
+[Install]
+WantedBy=poweroff.target reboot.target
