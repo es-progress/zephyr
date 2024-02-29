@@ -47,7 +47,7 @@ _usage-main() {
 ###############################
 _usage() {
     local selector="${1:-}"
-    local usage line name help
+    local description usage line name help path modules
     local options=()
 
     case "${selector}" in

@@ -2,7 +2,7 @@
 ## Bash completion for zephyrctl
 ################################
 __zephyrctl_complete() {
-    local cur words cword command commands profiles scripts maps
+    local cur words cword command commands profiles scripts categories maps
     _init_completion
 
     command="${words[1]}"

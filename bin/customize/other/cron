@@ -18,6 +18,7 @@
 _setup-weekly() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line target name path
 
     print-status Setup weekly cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -40,6 +41,7 @@ _setup-weekly() {
 _setup-daily() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line target name path
 
     print-status Setup daily cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

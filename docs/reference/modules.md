@@ -476,16 +476,6 @@ Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
 
 ---
 
-### fstrim
-
-Configure the `fstrim` service.
-
-**Configuration**
-
--   `system/fstrim/global.d`: `systemd` service configuration files (`.conf`).
-
----
-
 ### groups
 
 Adds the current user to the specified groups.
@@ -558,6 +548,22 @@ Configure `sudo`.
 **Configuration**
 
 -   `system/sudo/global.d`: custom `sudoers` configuration files. These files will be copied to `/etc/sudoers.d/`.
+
+---
+
+### systemd
+
+This module can install new `systemd` units (services, timers, etc.) and can override existing units (e.g. `fstrim.service`).
+
+!!! note
+
+    This module needs the `lib_global` configuration to be defined in `shell/scripts` module to work.
+
+**Configuration**
+
+-   `system/systemd/files.global.d`: additional files (script, resources) that are needed for units, like an executable for a service. These files will be copied to `lib_global` dir as configured in `shell/scripts` module.
+-   `system/systemd/override.global.d`: place `.conf` files for each unit you want to override in a subdirectory named as the unit (e.g. "fstrim.service").
+-   `system/systemd/install.global.d`: put your new custom unit files here. These will be copied to `/usr/local/lib/systemd/system`. You can use `{{ GLOBAL_LIB }}` template string in unit files, it will be replaced with the actual directory. This can be useful in a `ExecStart` directive.
 
 ---
 

@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+#############
+## Zephyr  ##
+##         ##
+## Config  ##
+## systemd ##
+#############
+
+############
+## CONFIG ##
+############
+systemd_dir=/usr/local/lib/systemd/system
+
+###############
+## FUNCTIONS ##
+###############
+
+## Copy library files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_copy-lib() {
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
+
+    print-status Copy library files "[${selector}]..."
+    sudo mkdir -p "${lib_global}"
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -exec sudo cp -r --no-preserve=ownership {} "${lib_global}/" \;
+    print-finish
+}
+
+## Override unit files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_override() {
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
+    local unit dir
+
+    print-header Override systemd units "[${selector}]..."
+    while IFS= read -r -d '' unit; do
+        print-status Override "${unit}..."
+        dir="${systemd_dir}/${unit}.d"
+        sudo mkdir -p "${dir}"
+        find -L "${cfg_dir}/${unit}" -mindepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${dir}" \;
+        print-finish
+
+        print-status Restart "${unit}..."
+        sudo systemctl daemon-reload
+        sudo systemctl restart "${unit}"
+        print-finish
+    done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type d -printf "%P\0" || true)
+    print-finish
+}
+
+## Install unit files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_install() {
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
+    local file unit
+
+    print-header Install systemd units "[${selector}]..."
+    sudo mkdir -p "${systemd_dir}"
+    while IFS= read -r -d '' file; do
+        unit=$(basename "${file}")
+
+        print-status Install "${unit}..."
+        sudo cp --no-preserve=mode,ownership "${file}" "${systemd_dir}"
+        sudo sed -i "s@{{ LIB_GLOBAL }}@${lib_global}@g" "${systemd_dir}/${unit}"
+        print-finish
+
+        print-header Enable "${unit}..."
+        sudo systemctl daemon-reload
+        sudo systemctl enable "${unit}"
+        print-finish
+    done < <(find -L "${cfg_dir}" -mindepth 1 -type f -print0 || true)
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-not-root
+
+profile="${1:?Profile missing}"
+lib_global=
+
+# Read config file, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" shell/global.cfg); then
+    cfg-eval "${file}" scripts
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" shell/local.cfg); then
+    cfg-eval "${file}" scripts
+fi
+[[ -z "${lib_global}" ]] && exit 1
+
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/files.global.d); then
+    _copy-lib global "${dir}"
+fi
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/files.local.d); then
+    _copy-lib local "${dir}"
+fi
+
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/override.global.d); then
+    _override global "${dir}"
+fi
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/override.local.d); then
+    _override local "${dir}"
+fi
+
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/install.global.d); then
+    _install global "${dir}"
+fi
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/systemd/install.local.d); then
+    _install local "${dir}"
+fi
+
+exit 0

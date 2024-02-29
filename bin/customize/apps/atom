@@ -18,6 +18,7 @@
 _install-packages() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local package
 
     print-header Install Atom packages "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

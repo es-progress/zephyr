@@ -18,6 +18,7 @@
 _config() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line cfg_name cfg_value
 
     print-status Config VirtualBox "[${selector}]..."
     # vboxmanage configs
@@ -45,6 +46,7 @@ _config() {
 _register() {
     local selector="${1:?Selector missing}"
     local cfg_dir="${2:?Config dir missing}"
+    local registered_vms def vm uuid
 
     # Get & create machine folder
     mkdir -p "${VM_LOCAL_DIR:-~/.config/VirtualBox}"

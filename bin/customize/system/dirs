@@ -18,6 +18,7 @@
 _dirs-create() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line path owner
 
     print-status Create dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -40,13 +41,14 @@ _dirs-create() {
 _dirs-remove() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line
 
     print-status Remove dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" dirs-remove); do
         # eval line to let the shell expand tilde and env vars
-        arg=$(eval echo "${line}")
-        sudo rm -rf "${arg}"
+        line=$(eval echo "${line}")
+        sudo rm -rf "${line}"
     done
     print-finish
 }

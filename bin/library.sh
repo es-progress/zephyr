@@ -38,7 +38,7 @@ print-section() {
     local msg="${*}"
     echo
     # shellcheck disable=SC2086
-    echo -e ${TXT_BLUE}${TXT_BOLD}${*}${TXT_NORM}
+    echo -e ${TXT_BLUE}${TXT_BOLD}${msg}${TXT_NORM}
     for ((i = 0 ; i < ${#msg} ; i++)); do
         echo -ne "${TXT_BLUE}${TXT_BOLD}=${TXT_NORM}"
     done
@@ -160,6 +160,7 @@ cfg-read() {
 cfg-eval() {
     local cfg_file="${1:?Config file missing}"
     local section="${2:-}"
+    local line
 
     for line in $(cfg-read "${cfg_file}" "${section}"); do
         eval "${line}"
@@ -182,7 +183,7 @@ implode() {
 ## @param    $*  Packages
 ##########################
 install-apt() {
-    local install=()
+    local package install=()
     for package in "${@}"; do
         if dpkg --status "${package}" >/dev/null 2>&1; then
             print-status Install "${package}..."

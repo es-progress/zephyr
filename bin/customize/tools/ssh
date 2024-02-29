@@ -34,6 +34,7 @@ _config() {
 _known-hosts() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line
 
     print-status Setup known hosts "[${selector}]..."
     mkdir -p ~/.ssh

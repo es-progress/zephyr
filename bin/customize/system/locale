@@ -18,6 +18,7 @@
 _install-locale() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local locale
 
     print-header Install locale "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -35,6 +36,7 @@ _install-locale() {
 _set-locale() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line category locale
 
     print-status Set locales "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

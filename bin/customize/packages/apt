@@ -18,6 +18,7 @@
 _parse-install-packages() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line package repo
 
     print-status Parse packages to install "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -37,6 +38,7 @@ _parse-install-packages() {
 _parse-remove-packages() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local package
 
     print-status Parse packages to remove "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

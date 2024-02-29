@@ -18,7 +18,7 @@
 _install() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
-    local snaps_installed
+    local snaps_installed line package mode options
 
     print-header Install snaps "[${selector}]..."
     snaps_installed=$(snap list --color=never --unicode=never)

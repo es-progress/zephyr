@@ -18,6 +18,7 @@
 _copy-sudoers() {
     local selector="${1:?Selector missing}"
     local cfg_dir="${2:?Config dir missing}"
+    local file file_name
 
     print-status Customize sudoers "[${selector}]..."
     while IFS= read -r -d '' file; do
