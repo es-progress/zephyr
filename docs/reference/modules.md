@@ -476,16 +476,6 @@ Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
 
 ---
 
-### fstrim
-
-Configure the `fstrim` service.
-
-**Configuration**
-
--   `system/fstrim/global.d`: `systemd` service configuration files (`.conf`).
-
----
-
 ### groups
 
 Adds the current user to the specified groups.
