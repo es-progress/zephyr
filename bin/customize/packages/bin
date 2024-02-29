@@ -18,6 +18,7 @@
 _install() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line name url checksum hash tmp_file
 
     print-header Install vendor shell programs "[${selector}]..."
     sudo mkdir -p "${bin_global}"

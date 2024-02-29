@@ -18,6 +18,7 @@
 _config() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line cfg_loc cfg_name cfg_value
 
     print-status Config git "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

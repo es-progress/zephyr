@@ -18,7 +18,7 @@
 _install-module() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
-    local modules=()
+    local module modules=()
 
     print-header Install Apache modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311

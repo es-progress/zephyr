@@ -18,6 +18,7 @@
 _install() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
+    local line package
 
     print-header Install node modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
