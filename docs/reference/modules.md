@@ -222,8 +222,10 @@ With this module you can setup weekly and daily cron jobs.
 **Configuration**
 
 -   `other/global.cfg`:
-    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-hourly`: hourly cron jobs. Format: "script_path job_name" (one per line).
     -   `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-monthly`: monthly cron jobs. Format: "script_path job_name" (one per line).
 
 ---
 
