@@ -36,6 +36,11 @@ _known-hosts() {
     local cfg_file="${2:?Config file missing}"
     local line
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" ssh-known; then
+        return 0
+    fi
+
     print-status Setup known hosts "[${selector}]..."
     mkdir -p ~/.ssh
     touch ~/.ssh/known_hosts

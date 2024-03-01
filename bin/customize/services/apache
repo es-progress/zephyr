@@ -20,6 +20,11 @@ _install-module() {
     local cfg_file="${2:?Config file missing}"
     local module modules=()
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" apache-module; then
+        return 0
+    fi
+
     print-header Install Apache modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for module in $(cfg-read "${cfg_file}" apache-module); do

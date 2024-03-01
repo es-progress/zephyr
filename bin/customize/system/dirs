@@ -20,6 +20,11 @@ _dirs-create() {
     local cfg_file="${2:?Config file missing}"
     local line path owner
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" dirs-create; then
+        return 0
+    fi
+
     print-status Create dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" dirs-create); do
@@ -42,6 +47,11 @@ _dirs-remove() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
     local line
+
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" dirs-remove; then
+        return 0
+    fi
 
     print-status Remove dirs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -79,6 +89,7 @@ if file=$(cfg-get "${profile}" system/local.cfg); then
     _dirs-remove local "${file}"
     cfg-eval "${file}" perms
 fi
+[[ -z "${perm_home}" ]] && exit 1
 
 print-status Set permission on "/home/${USER}..."
 sudo chown "${USER}:${USER}" ~

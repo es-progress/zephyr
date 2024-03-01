@@ -152,6 +152,20 @@ cfg-read() {
     sed -r -e '/^\s*\[/ d' <<<"${contents}"
 }
 
+## Check section is defined and not empty in config file
+##
+## @param    $1  Config File
+## @param    $2  Section
+########################################################
+is-empty-section() {
+    local file="${1:?File missing}"
+    local section="${2:?Section missing}"
+    local contents
+
+    contents=$(cfg-read "${cfg_file}" "${section}")
+    [[ -z "${contents}" ]]
+}
+
 ## Eval config file
 ##
 ## @param    $1  Config File

@@ -20,6 +20,11 @@ _install-packages() {
     local cfg_file="${2:?Config file missing}"
     local package
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" atom-packages; then
+        return 0
+    fi
+
     print-header Install Atom packages "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for package in $(cfg-read "${cfg_file}" atom-packages); do

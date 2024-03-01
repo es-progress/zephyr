@@ -20,6 +20,11 @@ _parse-install-packages() {
     local cfg_file="${2:?Config file missing}"
     local line package repo
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" apt-install; then
+        return 0
+    fi
+
     print-status Parse packages to install "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" apt-install); do
@@ -39,6 +44,11 @@ _parse-remove-packages() {
     local selector="${1:?Selector missing}"
     local cfg_file="${2:?Config file missing}"
     local package
+
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" apt-remove; then
+        return 0
+    fi
 
     print-status Parse packages to remove "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
@@ -86,13 +96,17 @@ print-header Update apt cache...
 sudo apt-get update
 print-finish
 
-print-header Install "${packages_install[*]}..."
-sudo apt-get install --yes --no-install-recommends "${packages_install[@]}"
-print-finish
+if [[ -n "${packages_install[*]}" ]]; then
+    print-header Install "${packages_install[*]}..."
+    sudo apt-get install --yes --no-install-recommends "${packages_install[@]}"
+    print-finish
+fi
 
-print-header Remove "${packages_remove[*]}..."
-sudo apt-get remove --yes --purge --autoremove "${packages_remove[@]}"
-print-finish
+if [[ -n "${packages_remove[*]}" ]]; then
+    print-header Remove "${packages_remove[*]}..."
+    sudo apt-get remove --yes --purge --autoremove "${packages_remove[@]}"
+    print-finish
+fi
 
 print-header Upgrade packages...
 sudo apt-get upgrade --yes
