@@ -20,6 +20,11 @@ _config() {
     local cfg_file="${2:?Config file missing}"
     local line cfg_loc cfg_name cfg_value
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" git; then
+        return 0
+    fi
+
     print-status Config git "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" git); do

@@ -23,6 +23,11 @@ _setup-cronjob() {
     local cfg_file="${3:?Config file missing}"
     local line target name path
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" "cron-${frequency}"; then
+        return 0
+    fi
+
     print-status Setup "${frequency}" cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" "cron-${frequency}"); do

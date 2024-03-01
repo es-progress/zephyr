@@ -18,6 +18,12 @@
 _run() {
     local selector="${1:?Selector missing}"
     local cfg_dir="${2:?Config dir missing}"
+    local scripts
+
+    scripts=$(run-parts --test "${cfg_dir}")
+    if [[ -z "${scripts}" ]]; then
+        return 0
+    fi
 
     print-header Run local scripts "[${selector}]..."
     (

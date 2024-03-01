@@ -20,6 +20,11 @@ _install() {
     local cfg_file="${2:?Config file missing}"
     local line package
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" node; then
+        return 0
+    fi
+
     print-header Install node modules "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" node); do

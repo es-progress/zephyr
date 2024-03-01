@@ -20,6 +20,11 @@ _create-user() {
     local cfg_file="${2:?Config file missing}"
     local existent_users user type existent_groups groups group options
 
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" users; then
+        return 0
+    fi
+
     existent_users=$(getent passwd | cut -d: -f1)
     existent_groups=$(getent group | cut -d: -f1)
 
