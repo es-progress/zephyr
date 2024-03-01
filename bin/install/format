@@ -35,9 +35,10 @@ _partition-luks-create() {
 ## Format partition
 ##
 ## @param    $1  Partition
-## @param    $2  Type (luks1, luks2, efi, msr, win, linux)
+## @param    $2  Type
+##               luks1, luks2, efi, msr, win, linux, swap
 ## @param    $3  Label
-##########################################################
+#########################################################
 _partition-format() {
     local partition="${1:?Partition missing}"
     local type="${2:?Type missing}"
@@ -49,6 +50,7 @@ _partition-format() {
         msr) dd if=/dev/zero "of=${partition}" status=progress || true ;;
         win) mkntfs -f -L "${label}" "${partition}" ;;
         linux) mkfs.ext4 -L "${label}" "${partition}" ;;
+        swap) mkswap -L "${label}" "${partition}" ;;
         *)
             print-error Unsupported type: "${type}"
             return 1
