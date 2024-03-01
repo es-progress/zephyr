@@ -49,6 +49,9 @@ if [[ -z "${whitelist[*]}" && -n "${whitelist_cfg[*]}" ]]; then
 fi
 blacklist=("${blacklist[@]}" "${blacklist_cfg[@]}")
 
+if ! terminal=$(tty); then
+    terminal=/dev/ptmx
+fi
 for dir in "${exec_dir[@]}"; do
     # Category blacklisted --> skip whole category
     if printf "%s\0" "${blacklist[@]}" | grep -qFxz "${dir}"; then
@@ -77,7 +80,7 @@ for dir in "${exec_dir[@]}"; do
 
         # Run module
         print-section "${module}"
-        if ! "${path}" "${profile}"; then
+        if ! "${path}" "${profile}" < "${terminal}"; then
             print-error Error! Module: "${module}" failed!
             exit 1
         fi
