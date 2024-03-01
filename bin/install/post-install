@@ -46,7 +46,7 @@ if [[ -n "${target}" ]]; then
     done
 
     print-status Mounting all filesystems...
-    mount -a
+    "${do_chroot[@]}" mount -a
     print-finish
 fi
 
