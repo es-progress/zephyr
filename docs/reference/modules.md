@@ -84,7 +84,7 @@ The module is for installation and the configuration of [VirtualBox virtualizati
 -   `apps/global.cfg`:
     -   `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
     -   `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
-    -   `virtualbox-virtmachines`: virtual machines definitions. Format: "vm+=(vm_dir@UUID)".
+    -   `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
 
 ---
 

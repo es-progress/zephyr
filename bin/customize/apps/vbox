@@ -52,7 +52,7 @@ _register() {
     mkdir -p "${VM_LOCAL_DIR:-~/.config/VirtualBox}"
     # Register VMs
     registered_vms=$(vboxmanage list vms)
-    for def in "${vm[@]:-}"; do
+    for def in "${virtmachines[@]}"; do
         IFS=@ read -r vm uuid <<<"${def}"
         print-status Register VM: "${vm}" "[${selector}]..."
         # Check if already registered
@@ -89,7 +89,7 @@ sudo modprobe vboxnetadp
 sudo modprobe vboxnetflt
 print-finish
 
-vm=()
+virtmachines=()
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/global.cfg); then
     _config global "${file}"
@@ -99,7 +99,7 @@ if dir=$(cfg-get "${profile}" apps/vbox/vm.global.d); then
     _register global "${dir}"
 fi
 
-vm=()
+virtmachines=()
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" apps/local.cfg); then
     _config local "${file}"
