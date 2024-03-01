@@ -10,48 +10,28 @@
 ## FUNCTIONS ##
 ###############
 
-## Setup weekly cronjobs
+## Setup cronjobs
 ##
-## @param   $1  Global/Local
-## @param   $2  Config file
-############################
-_setup-weekly() {
-    local selector="${1:?Selector missing}"
-    local cfg_file="${2:?Config file missing}"
+## @param   $1  Run frequency
+##              hourly/daily/weekly/monthly
+## @param   $2  Global/Local
+## @param   $3  Config file
+###########################################
+_setup-cronjob() {
+    local frequency="${1:?Cron frequency missing}"
+    local selector="${2:?Selector missing}"
+    local cfg_file="${3:?Config file missing}"
     local line target name path
 
-    print-status Setup weekly cron jobs "[${selector}]..."
+    print-status Setup "${frequency}" cron jobs "[${selector}]..."
     # shellcheck disable=SC2310,SC2311
-    for line in $(cfg-read "${cfg_file}" cron-weekly); do
+    for line in $(cfg-read "${cfg_file}" "cron-${frequency}"); do
         IFS=$' \t' read -r target name <<< "${line}"
         # eval target to let the shell expand tilde and env vars
         path=$(eval echo "${target}")
 
-        [[ -h "/etc/cron.weekly/${name}" ]] && sudo rm "/etc/cron.weekly/${name}"
-        sudo ln -s "${path}" "/etc/cron.weekly/${name}"
-    done
-    print-finish
-}
-
-## Setup daily cronjobs
-##
-## @param   $1  Global/Local
-## @param   $2  Config file
-############################
-_setup-daily() {
-    local selector="${1:?Selector missing}"
-    local cfg_file="${2:?Config file missing}"
-    local line target name path
-
-    print-status Setup daily cron jobs "[${selector}]..."
-    # shellcheck disable=SC2310,SC2311
-    for line in $(cfg-read "${cfg_file}" cron-daily); do
-        IFS=$' \t' read -r target name <<< "${line}"
-        # eval target to let the shell expand tilde and env vars
-        path=$(eval echo "${target}")
-
-        [[ -h "/etc/cron.daily/${name}" ]] && sudo rm "/etc/cron.daily/${name}"
-        sudo ln -s "${path}" "/etc/cron.daily/${name}"
+        [[ -h "/etc/cron.${frequency}/${name}" ]] && sudo rm "/etc/cron.${frequency}/${name}"
+        sudo ln -s "${path}" "/etc/cron.${frequency}/${name}"
     done
     print-finish
 }
@@ -71,13 +51,17 @@ profile="${1:?Profile missing}"
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" other/global.cfg); then
-    _setup-weekly global "${file}"
-    _setup-daily global "${file}"
+    _setup-cronjob hourly global "${file}"
+    _setup-cronjob daily global "${file}"
+    _setup-cronjob weekly global "${file}"
+    _setup-cronjob monthly global "${file}"
 fi
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" other/local.cfg); then
-    _setup-weekly local "${file}"
-    _setup-daily local "${file}"
+    _setup-cronjob hourly local "${file}"
+    _setup-cronjob daily local "${file}"
+    _setup-cronjob weekly local "${file}"
+    _setup-cronjob monthly local "${file}"
 fi
 
 print-status Restart cron...

@@ -76,9 +76,9 @@ if file=$(cfg-get "${profile}" packages/local.cfg); then
     _parse-remove-packages local "${file}"
 fi
 
-for repo in "${repos[@]}"; do
-    print-status Add apt repo: "${repo}..."
-    sudo add-apt-repository --yes --no-update "${repo}"
+for apt_repo in "${repos[@]}"; do
+    print-status Add apt repo: "${apt_repo}..."
+    sudo add-apt-repository --yes --no-update "${apt_repo}"
     print-finish
 done
 

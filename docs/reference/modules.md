@@ -84,7 +84,7 @@ The module is for installation and the configuration of [VirtualBox virtualizati
 -   `apps/global.cfg`:
     -   `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
     -   `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
-    -   `virtualbox-virtmachines`: virtual machines definitions. Format: "vm+=(vm_dir@UUID)".
+    -   `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
 
 ---
 
@@ -222,8 +222,10 @@ With this module you can setup weekly and daily cron jobs.
 **Configuration**
 
 -   `other/global.cfg`:
-    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-hourly`: hourly cron jobs. Format: "script_path job_name" (one per line).
     -   `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    -   `cron-monthly`: monthly cron jobs. Format: "script_path job_name" (one per line).
 
 ---
 
