@@ -29,9 +29,10 @@ _partition-zap() {
 ## @param    $2  Partition number
 ## @param    $3  Gap (free space before this partition)
 ## @param    $4  Size
-## @param    $5  Type (luks1, luks2, efi, msr, win, linux)
+## @param    $5  Type
+##               luks1, luks2, efi, msr, win, linux, swap
 ## @param    $6  Label
-##########################################################
+#########################################################
 _partition-create() {
     local device="${1:?Device missing}"
     local number="${2:?Partition number missing}"
@@ -47,6 +48,7 @@ _partition-create() {
         msr) type_code=0c01 ;;
         win) type_code=0700 ;;
         linux) type_code=8300 ;;
+        swap) type_code=8200 ;;
         *)
             print-error Unsupported type: "${type}"
             return 1

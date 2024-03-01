@@ -44,6 +44,7 @@ The section is named after the disk, such as `PARTITIONS_main` for the `main` di
     -   `msr` Microsoft reserved
     -   `win` Microsoft basic data (NTFS)
     -   `linux` Linux filesystem (ext4)
+    -   `swap` Linux swap partition
 -   `LABEL`: The label of the partition.
 
 **Example**
@@ -53,5 +54,6 @@ The section is named after the disk, such as `PARTITIONS_main` for the `main` di
 # PARTNUM   GAP     SIZE    TYPE    LABEL
 1           0       512M    efi     EFI
 2           0       1G      luks1   BOOT
-3           128M    8G      luks2   SYSTEM
+3           128M    18G     luks2   SYSTEM
+4           128M    1G      swap    SWAP
 ```
