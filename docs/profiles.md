@@ -35,7 +35,7 @@ Symlinking also works, so you can have your profiles anywhere else just symlink 
 
 To define a profile, you create a directory in `/profiles` named as your new profile.
 
-```
+```bash
 # This will create a named profile called "foo"
 cd ZEPHYR_DIR
 mkdir -p profiles/foo
@@ -43,7 +43,7 @@ mkdir -p profiles/foo
 
 You can also create from scratch, but an easier way is to copy the default profile in `/example` directory.
 
-```
+```bash
 # Use supplied default profile
 cd ZEPHYR_DIR
 mkdir -p profiles

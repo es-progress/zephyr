@@ -78,6 +78,16 @@ Then we will reboot the system and see the first boot (hopefully without any pro
 
 **Post-installation steps**
 
+1.  Mount root filesystem to `/target` if unmounted
+
+    ```bash
+    # Check still mounted
+    findmnt /target
+
+    # No lines returned --> not mounted --> mount
+    sudo mount ROOT_FS_DEVICE /target
+    ```
+
 1.  Run post-install
 
     ```
