@@ -64,7 +64,7 @@ Basically you boot from a live USB and chroot to the installed system.
         ```
 
     1. Create mount point
-        ```
+        ```bash
         mkdir /target
         ```
     1. Mount drive
@@ -77,16 +77,16 @@ Basically you boot from a live USB and chroot to the installed system.
         ```
 
 1. Mount device filesystems, so your installed system can access them
-    ```
+    ```bash
     ROOT=/target
-    for n in proc sys dev etc/resolv.conf; do mount --rbind /$n "$ROOT/$n"; done
+    for n in proc sys dev etc/resolv.conf; do mount --rbind --make-rslave /$n "$ROOT/$n"; done
     ```
 1. Access the installed system
-    ```
+    ```bash
     chroot /target
     ```
 1. (Optional) Mount other partitions from `/etc/fstab`
-    ```
+    ```bash
     mount -a
     ```
 

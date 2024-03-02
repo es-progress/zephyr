@@ -29,13 +29,13 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 **Remixing steps**
 
 1.  Download the ISO file that will be remixed (e.g. Ubuntu 20.04 desktop ISO)
-    ```
+    ```bash
     # There are many methods, in this example I use 'wget'
     wget https://releases.ubuntu.com/20.04.6/ubuntu-20.04.6-desktop-amd64.iso
     ```
 1.  Remix the ISO file
 
-    ```
+    ```bash
     zephyrctl remix ubuntu-20.04.6-desktop-amd64.iso
     ```
 
@@ -51,7 +51,7 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
 
 1.  (Optional) Burn the ISO file to a USB-stick, if you want install on a physical machine.
 
-    ```
+    ```bash
     zephyrctl burn zephyr.iso
     ```
 

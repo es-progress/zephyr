@@ -69,7 +69,7 @@ This has the additional benefit, that the original write performance might be ac
 **Steps** for NVMe SSD drives:
 
 1. Install `nvme-cli` utility
-    ```
+    ```bash
     apt install nvme-cli
     ```
 1. Verify what is supported by the drive
@@ -95,7 +95,7 @@ This has the additional benefit, that the original write performance might be ac
 ## Securely wipe disk
 
 1.  List drives & partitions to select disk to delete
-    ```
+    ```bash
     lsblk
     ```
 1.  Info about a drive

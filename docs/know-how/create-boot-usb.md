@@ -39,11 +39,11 @@ Before you start, check your USB stick is empty or you've already backed up the 
     - on Ubuntu: it's a bit complicated, but you can use [WoeUSB](https://github.com/WoeUSB/WoeUSB){target=\_blank}
 
         1. Clone Git repository
-            ```
+            ```bash
             git clone https://github.com/WoeUSB/WoeUSB.git
             ```
         1. Install dependencies
-            ```
+            ```bash
             apt install wimtools
             ```
         1. Download [Windows ISO](https://www.microsoft.com/software-download/windows10ISO){target=\_blank}
