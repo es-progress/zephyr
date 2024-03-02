@@ -472,12 +472,6 @@ Create directories and set permissions for them.
 
 ---
 
-### fstab
-
-Manage the `/etc/fstab` file. Currently only adds `noatime` to all partitions.
-
----
-
 ### locale
 
 Configures system locale.

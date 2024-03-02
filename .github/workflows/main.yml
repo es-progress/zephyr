@@ -274,7 +274,6 @@ jobs:
         run: |
           ./bin/zephyrctl customize tester certificates
           ./bin/zephyrctl customize tester dirs
-          ./bin/zephyrctl customize tester fstab
           ./bin/zephyrctl customize tester locale
           ./bin/zephyrctl customize tester netplan
           ./bin/zephyrctl customize tester resolved
@@ -288,7 +287,6 @@ jobs:
         run: |
           ./bin/zephyrctl customize tester certificates
           ./bin/zephyrctl customize tester dirs
-          ./bin/zephyrctl customize tester fstab
           ./bin/zephyrctl customize tester locale
           ./bin/zephyrctl customize tester netplan
           ./bin/zephyrctl customize tester resolved
