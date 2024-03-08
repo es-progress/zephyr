@@ -30,19 +30,6 @@ Only the `global` files will be listed in the documentation for brevity.
 
 These modules allow you to modify applications according to your usage and preferences.
 
-### atom
-
-The module handles the installation of the [Atom text editor](https://atom.io){target=\_blank} and configuration of preferred packages, themes, and settings.
-
-**Configuration**
-
--   `apps/atom/global.d`: files in this directory will be copied to `~/.atom/` and the directory structure will be preserved.
-    You can put your configuration files here like `config.cson`, `init.coffee`, `keymap.cson` etc.
--   `apps/global.cfg`:
-    -   `atom-packages`: a list of Atom packages to install. Format: one package per line.
-
----
-
 ### jmeter
 
 Installation of [Apache JMeter](https://jmeter.apache.org/){target=\_blank}, a load-testing testing tool.

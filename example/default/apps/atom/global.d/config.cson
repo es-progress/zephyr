@@ -1,7 +1,0 @@
-"*":
-  "sync-settings":
-    autoCheckForUpdatedBackup: "no"
-    extraFiles: [
-      "toolbar.cson"
-      "config.cson"
-    ]

@@ -100,7 +100,6 @@ jobs:
 
       - name: Execute scripts (1st pass)
         run: |
-          ./bin/zephyrctl customize tester atom
           ./bin/zephyrctl customize tester jmeter
           ./bin/zephyrctl customize tester pulse-effects
           ./bin/zephyrctl customize tester vbox
@@ -108,7 +107,6 @@ jobs:
 
       - name: Execute scripts (2nd pass)
         run: |
-          ./bin/zephyrctl customize tester atom
           ./bin/zephyrctl customize tester jmeter
           ./bin/zephyrctl customize tester pulse-effects
           ./bin/zephyrctl customize tester vbox
