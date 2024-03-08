@@ -38,9 +38,10 @@ Before you start, check your USB stick is empty or you've already backed up the 
     - on Windows: use "MediaCreationTool", the native Windows tool for this purpose
     - on Ubuntu: it's a bit complicated, but you can use [WoeUSB](https://github.com/WoeUSB/WoeUSB){target=\_blank}
 
-        1. Clone Git repository
+        1. Download Bash script from [WoeUSB releases](https://github.com/WoeUSB/WoeUSB/releases){target=\_blank} and make executable
             ```bash
-            git clone https://github.com/WoeUSB/WoeUSB.git
+            wget https://github.com/WoeUSB/WoeUSB/releases/download/v5.2.4/woeusb-5.2.4.bash
+            chmod +x woeusb-5.2.4.bash
             ```
         1. Install dependencies
             ```bash
@@ -50,8 +51,7 @@ Before you start, check your USB stick is empty or you've already backed up the 
         1. Burn ISO to USB
 
             ```
-            cd WoeUSB
-            ./woeusb-5.2.4.bash --device ISO_FILE USB_DEVICE
+            sudo ./woeusb-5.2.4.bash --device ISO_FILE USB_DEVICE
 
             where:
             ISO_FILE            Windows image file
