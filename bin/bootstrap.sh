@@ -28,7 +28,13 @@ source "${PROJECT_ROOT}/bin/library.sh"
 # Defaults
 source "${PROJECT_ROOT}/zephyr.cfg"
 # Local configs
-if [[ -r "${PROJECT_ROOT}/zephyr.local.cfg" ]]; then
+if [[ -n "${ZEPHYR_CONFIG:-}" && -r "${ZEPHYR_CONFIG}" ]]; then
+    # shellcheck disable=SC1090
+    source "${ZEPHYR_CONFIG}"
+elif [[ -r "${PATH_PROFILES}/zephyr.local.cfg" ]]; then
+    # shellcheck disable=SC1091
+    source "${PATH_PROFILES}/zephyr.local.cfg"
+elif [[ -r "${PROJECT_ROOT}/zephyr.local.cfg" ]]; then
     # shellcheck disable=SC1091
     source "${PROJECT_ROOT}/zephyr.local.cfg"
 fi
