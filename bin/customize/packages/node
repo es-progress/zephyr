@@ -49,8 +49,21 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?Profile missing}"
+node_version=
 
-install-snap node classic
+# Read config file, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" packages/global.cfg); then
+    cfg-eval "${file}" managers
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" packages/local.cfg); then
+    cfg-eval "${file}" managers
+fi
+
+[[ -z "${node_version}" ]] && error-exit Missing node_version
+
+install-snap node "classic,channel=${node_version}/stable"
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/global.cfg); then
