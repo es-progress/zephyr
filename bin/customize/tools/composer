@@ -36,9 +36,9 @@ fi
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" composer
 fi
-[[ -z "${bin_global}" ]] && exit 1
-[[ -z "${url}" ]] && exit 1
-[[ -z "${checksum}" ]] && exit 1
+[[ -z "${bin_global}" ]] && error-exit Missing bin_global
+[[ -z "${url}" ]] && error-exit Missing url
+[[ -z "${checksum}" ]] && error-exit Missing checksum
 
 install-apt curl
 

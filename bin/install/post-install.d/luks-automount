@@ -84,8 +84,8 @@ if file=$(cfg-get "${profile}" install/local.cfg); then
     cfg-eval "${file}" luks
 fi
 
-[[ -z "${key_dir}" ]] && exit 1
-[[ -z "${key_slot}" ]] && exit 1
+[[ -z "${key_dir}" ]] && error-exit Missing key_dir
+[[ -z "${key_slot}" ]] && error-exit Missing key_slot
 
 # Maps
 map_files=()

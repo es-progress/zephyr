@@ -29,9 +29,9 @@ if file=$(cfg-get "${profile}" apps/local.cfg); then
     cfg-eval "${file}" jmeter
 fi
 
-[[ -z "${url}" ]] && exit 1
-[[ -z "${checksum}" ]] && exit 1
-[[ -z "${install_dir}" ]] && exit 1
+[[ -z "${url}" ]] && error-exit Missing url
+[[ -z "${checksum}" ]] && error-exit Missing checksum
+[[ -z "${install_dir}" ]] && error-exit Missing install_dir
 
 install-apt curl
 

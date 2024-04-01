@@ -28,10 +28,10 @@ if file=$(cfg-get "${profile}" system/local.cfg); then
     cfg-eval "${file}" certificate
 fi
 
-[[ -z "${root_ca_name}" ]] && exit 1
-[[ -z "${root_ca_subject}" ]] && exit 1
-[[ -z "${mok_key_name}" ]] && exit 1
-[[ -z "${mok_key_subject}" ]] && exit 1
+[[ -z "${root_ca_name}" ]] && error-exit Missing root_ca_name
+[[ -z "${root_ca_subject}" ]] && error-exit Missing root_ca_subject
+[[ -z "${mok_key_name}" ]] && error-exit Missing mok_key_name
+[[ -z "${mok_key_subject}" ]] && error-exit Missing mok_key_subject
 
 # Machine Owner Key (MOK)
 #########################

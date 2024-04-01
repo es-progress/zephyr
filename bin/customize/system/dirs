@@ -89,7 +89,7 @@ if file=$(cfg-get "${profile}" system/local.cfg); then
     _dirs-remove local "${file}"
     cfg-eval "${file}" perms
 fi
-[[ -z "${perm_home}" ]] && exit 1
+[[ -z "${perm_home}" ]] && error-exit Missing perm_home
 
 print-status Set permission on "/home/${USER}..."
 sudo chown "${USER}:${USER}" ~

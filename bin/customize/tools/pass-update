@@ -26,7 +26,7 @@ fi
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" pass-update
 fi
-[[ -z "${version}" ]] && exit 1
+[[ -z "${version}" ]] && error-exit Missing version
 
 install-apt git make
 

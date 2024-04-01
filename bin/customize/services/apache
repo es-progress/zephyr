@@ -91,10 +91,10 @@ if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" apache
 fi
 
-[[ -z "${web_root}" ]] && exit 1
-[[ -z "${def_virt_host_subject}" ]] && exit 1
-[[ -z "${def_virt_host_name}" ]] && exit 1
-[[ -z "${root_ca_name}" ]] && exit 1
+[[ -z "${web_root}" ]] && error-exit Missing web_root
+[[ -z "${def_virt_host_subject}" ]] && error-exit Missing def_virt_host_subject
+[[ -z "${def_virt_host_name}" ]] && error-exit Missing def_virt_host_name
+[[ -z "${root_ca_name}" ]] && error-exit Missing root_ca_name
 
 print-status Create default web dirs...
 sudo mkdir -p "${web_root}/default"

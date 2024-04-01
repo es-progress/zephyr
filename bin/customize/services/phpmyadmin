@@ -32,11 +32,11 @@ if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" phpmyadmin
     cfg-eval "${file}" apache
 fi
-[[ -z "${url}" ]] && exit 1
-[[ -z "${checksum}" ]] && exit 1
-[[ -z "${service_user}" ]] && exit 1
-[[ -z "${service_pass}" ]] && exit 1
-[[ -z "${web_root}" ]] && exit 1
+[[ -z "${url}" ]] && error-exit Missing url
+[[ -z "${checksum}" ]] && error-exit Missing checksum
+[[ -z "${service_user}" ]] && error-exit Missing service_user
+[[ -z "${service_pass}" ]] && error-exit Missing service_pass
+[[ -z "${web_root}" ]] && error-exit Missing web_root
 
 install-apt curl
 
