@@ -29,10 +29,10 @@ if file=$(cfg-get "${profile}" shell/local.cfg); then
     cfg-eval "${file}" scripts
 fi
 
-[[ -z "${bin_global}" ]] && exit 1
-[[ -z "${bin_local}" ]] && exit 1
-[[ -z "${lib_global}" ]] && exit 1
-[[ -z "${lib_local}" ]] && exit 1
+[[ -z "${bin_global}" ]] && error-exit Missing bin_global
+[[ -z "${bin_local}" ]] && error-exit Missing bin_local
+[[ -z "${lib_global}" ]] && error-exit Missing lib_global
+[[ -z "${lib_local}" ]] && error-exit Missing lib_local
 
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bin/global.d); then

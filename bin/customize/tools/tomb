@@ -27,8 +27,8 @@ fi
 if file=$(cfg-get "${profile}" tools/local.cfg); then
     cfg-eval "${file}" tomb
 fi
-[[ -z "${url}" ]] && exit 1
-[[ -z "${checksum}" ]] && exit 1
+[[ -z "${url}" ]] && error-exit Missing url
+[[ -z "${checksum}" ]] && error-exit Missing checksum
 
 install-apt curl make
 

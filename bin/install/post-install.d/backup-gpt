@@ -46,7 +46,7 @@ if file=$(cfg-get "${profile}" install/local.cfg); then
     cfg-eval "${file}" backup-gpt
 fi
 
-[[ -z "${backup_dir}" ]] && exit 1
+[[ -z "${backup_dir}" ]] && error-exit Missing backup_dir
 
 # Maps
 map_files=()

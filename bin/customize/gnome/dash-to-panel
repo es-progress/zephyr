@@ -48,7 +48,7 @@ fi
 if file=$(cfg-get "${profile}" gnome/local.cfg); then
     cfg-eval "${file}" dash-to-panel
 fi
-[[ -z "${version}" ]] && exit 1
+[[ -z "${version}" ]] && error-exit Missing version
 
 install-apt git make gettext
 

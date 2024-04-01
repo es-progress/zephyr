@@ -85,7 +85,7 @@ if file=$(cfg-get "${profile}" shell/local.cfg); then
     cfg-eval "${file}" scripts
 fi
 
-[[ -z "${bin_global}" ]] && exit 1
+[[ -z "${bin_global}" ]] && error-exit Missing bin_global
 
 install-apt curl
 

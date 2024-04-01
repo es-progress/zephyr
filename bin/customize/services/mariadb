@@ -50,9 +50,9 @@ fi
 if file=$(cfg-get "${profile}" services/local.cfg); then
     cfg-eval "${file}" mariadb
 fi
-[[ -z "${repo}" ]] && exit 1
-[[ -z "${admin_name}" ]] && exit 1
-[[ -z "${admin_pass}" ]] && exit 1
+[[ -z "${repo}" ]] && error-exit Missing repo
+[[ -z "${admin_name}" ]] && error-exit Missing admin_name
+[[ -z "${admin_pass}" ]] && error-exit Missing admin_pass
 
 print-header Add MariaDB GPG key...
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
