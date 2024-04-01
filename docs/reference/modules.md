@@ -296,7 +296,8 @@ The snap module assists with installing Snap packages.
 **Configuration**
 
 -   `packages/global.cfg`:
-    -   `snap`: snaps to install. Format: "snap_name install_mode" (one per line, install_mode optional, e.g. "classic").
+    -   `snap`: snaps to install. Format: "snap_name install_options" (one per line).
+        "install_options" is an optional comma-separated list of options to pass to `snap install` without the hyphens (`--`) e.g. `classic,channel=18/stable`.
 
 ---
 
