@@ -273,6 +273,8 @@ With the node module you can install Node.js packages.
 **Configuration**
 
 -   `packages/global.cfg`:
+    -   `managers`: package manager settings. Format: INI-file format.
+        -   `node_version`: major version of Node to install e.g. `18`, `20`.
     -   `node`: Node modules to install. Format: "package_name" (one per line).
 
 ---
