@@ -220,15 +220,18 @@ install-apt() {
 ## Install package via Snap
 ##
 ## @param    $1  Package
-## @param    $2  Install mode
-#############################
+## @param    $2  Install options
+################################
 install-snap() {
     local package="${1:?Package missing}"
-    local mode="${2:-}"
-    local options=()
-    local snaps_installed
+    local install_options="${2:-}"
+    local options=(--color=always --unicode=always)
+    local option snaps_installed
 
-    [[ "${mode}" == classic ]] && options=(--classic)
+    IFS=, read -r -a install_options <<< "${install_options}"
+    for option in "${install_options[@]}"; do
+        options+=("--${option}")
+    done
 
     snaps_installed=$(snap list --color=never --unicode=never)
     if grep -qs "^${package}" <<<"${snaps_installed}"; then
