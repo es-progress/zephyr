@@ -24,7 +24,7 @@ __zephyrctl_complete() {
             ;;
         3)
             case "${command}" in
-                burn) __zephyr_gen_file ;;
+                remix|burn) __zephyr_gen_file ;;
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
                 post-install) __zephyr_gen_word "${profiles}" ;;
                 partition|format)
