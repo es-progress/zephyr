@@ -32,7 +32,7 @@ jobs:
       remix: ${{ steps.modules.outputs.remix }}
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -93,7 +93,7 @@ jobs:
     if: needs.check.outputs.apps == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -118,7 +118,7 @@ jobs:
     if: needs.check.outputs.gnome == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -155,7 +155,7 @@ jobs:
     if: needs.check.outputs.other == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -178,7 +178,7 @@ jobs:
     if: needs.check.outputs.packages == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -207,7 +207,7 @@ jobs:
     if: needs.check.outputs.services == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -237,7 +237,7 @@ jobs:
     if: needs.check.outputs.shell == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -260,7 +260,7 @@ jobs:
     if: needs.check.outputs.system == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -300,7 +300,7 @@ jobs:
     if: needs.check.outputs.tools == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -341,7 +341,7 @@ jobs:
     if: needs.check.outputs.post-install == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
@@ -368,7 +368,7 @@ jobs:
     if: needs.check.outputs.remix == 'yes'
     steps:
       - name: Self checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Link profiles
         run: ln -s example profiles
