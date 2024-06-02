@@ -46,8 +46,7 @@ _install() {
         curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"
 
         if [[ -n "${checksum}" ]]; then
-            hash=$(sha256sum "${tmp_file}" | cut -d" " -f1)
-            if [[ "${hash}" != "${checksum}" ]]; then
+            if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; then
                 print-error Bad checksum for "${name}", skip.
                 continue
             fi
