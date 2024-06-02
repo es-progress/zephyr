@@ -40,8 +40,9 @@ print-header Install jmeter...
 tmp_file=$(mktemp)
 tmp_dir=$(mktemp -d)
 curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
-hash=$(sha512sum "${tmp_file}" | cut -d" " -f1)
-[[ "${hash}" != "${checksum}" ]] && error-exit Bad checksum, exiting
+if ! echo "${checksum}  ${tmp_file}" | sha512sum --check --status --strict -; then
+    error-exit Bad checksum, exiting
+fi
 # Unpack archive
 tar -C "${tmp_dir}" -xf "${tmp_file}"
 sudo rm -rf "${install_dir}"
