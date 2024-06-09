@@ -12,10 +12,12 @@
 
 TXT_NORM=$(tput sgr0)
 TXT_BOLD=$(tput bold)
+TXT_BLACK=$(tput setaf 0)
 TXT_RED=$(tput setaf 1)
-TXT_YELLOW=$(tput setaf 3)
 TXT_GREEN=$(tput setaf 2)
+TXT_YELLOW=$(tput setaf 3)
 TXT_BLUE=$(tput setaf 4)
+BACK_YELLOW=$(tput setab 3)
 
 ###############
 ## FUNCTIONS ##
@@ -28,6 +30,16 @@ TXT_BLUE=$(tput setaf 4)
 print-error() {
     # shellcheck disable=SC2086
     echo -e ${TXT_RED}${TXT_BOLD}${*}${TXT_NORM} >&2
+}
+
+## Print warning message
+##
+## @param    $*  Message
+########################
+print-warning() {
+    [[ -n "${ES_PRINT_HUSH:-}" ]] && return 0
+    # shellcheck disable=SC2086
+    echo -e ${BACK_YELLOW}${TXT_BLACK}${TXT_BOLD}${*}${TXT_NORM} >&2
 }
 
 ## Print section header

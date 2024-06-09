@@ -90,7 +90,8 @@ for map_file in "${map_files[@]}"; do
     print-section Parsed disk map
     sed -r -e '/^\s*$/ d' -e '/\s*#/ d' "${map_file}"
     echo
-    read -rp "WARNING! Partitions in map will be formatted! Proceed? Type 'YES': "
+    print-warning "WARNING! Partitions in above disk map(s) will be formatted!"
+    read -rp "Proceed? Type 'YES': "
     [[ ${REPLY} != YES ]] && error-exit Aborted.
 
     # Loop through disks
