@@ -20,7 +20,7 @@ _install() {
     local cfg_file="${2:?Config file missing}"
 
     print-header Install pip packages "[${selector}]..."
-    pip install --upgrade --no-warn-script-location --progress-bar ascii -r "${cfg_file}"
+    pip install --upgrade --no-warn-script-location -r "${cfg_file}"
     print-finish
 }
 
@@ -37,7 +37,11 @@ check-not-root
 
 profile="${1:?Profile missing}"
 
-install-apt python3-pip
+print-header Install pip...
+tmp_file=$(mktemp)
+curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
+sudo python3 "${tmp_file}" --root-user-action=ignore
+print-finish
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/pip.global); then
