@@ -147,7 +147,7 @@ With this module you can set the desktop background.
 
 ## Install modules
 
-These modules play a role in the [post-installation](../ubuntu.md#post-install) process.
+These modules play a role in the [post-installation](../ubuntu.md#post-installation) process.
 They can't be executed independently, all of them will run with `zephyrctl post-install` command.
 
 !!! note
