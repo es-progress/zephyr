@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - .github/workflows/main.yml
+      - .shellcheckrc
       - "bin/**"
 env:
   TERM: xterm-256color
