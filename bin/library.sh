@@ -10,14 +10,14 @@
 ## FORMAT CODES ##
 ##################
 
-TXT_NORM=$(tput sgr0)
-TXT_BOLD=$(tput bold)
-TXT_BLACK=$(tput setaf 0)
-TXT_RED=$(tput setaf 1)
-TXT_GREEN=$(tput setaf 2)
-TXT_YELLOW=$(tput setaf 3)
-TXT_BLUE=$(tput setaf 4)
-BACK_YELLOW=$(tput setab 3)
+TXT_NORM=$(tput sgr0 2>/dev/null || printf '')
+TXT_BOLD=$(tput bold 2>/dev/null || printf '')
+TXT_BLACK=$(tput setaf 0 2>/dev/null || printf '')
+TXT_RED=$(tput setaf 1 2>/dev/null || printf '')
+TXT_GREEN=$(tput setaf 2 2>/dev/null || printf '')
+TXT_YELLOW=$(tput setaf 3) 2>/dev/null || printf ''
+TXT_BLUE=$(tput setaf 4 2>/dev/null || printf '')
+BACK_YELLOW=$(tput setab 3 2>/dev/null || printf '')
 
 ###############
 ## FUNCTIONS ##
