@@ -20,8 +20,7 @@ _config() {
     local cfg_dir="${2:?Config dir missing}"
 
     print-status Config GRUB "[${selector}]..."
-    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/grub.d/ \;
-    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x /etc/grub.d/{}
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo install {} /etc/grub.d/ \;
     print-finish
 }
 
@@ -42,7 +41,7 @@ shift
 # shellcheck disable=SC2310
 if file=$(cfg-get "${profile}" install/grub/default); then
     print-status Config GRUB "[default]..."
-    sudo cp --no-preserve=mode,ownership "${file}" /etc/default/grub
+    sudo install --mode=0644 --no-target-directory "${file}" /etc/default/grub
     print-finish
 fi
 

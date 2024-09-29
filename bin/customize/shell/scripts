@@ -38,16 +38,14 @@ fi
 if dir=$(cfg-get "${profile}" shell/bin/global.d); then
     print-status Copy shell scripts "[global]..."
     sudo mkdir -p "${bin_global}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${bin_global}/" \;
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} sudo chmod +x "${bin_global}/{}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo install {} "${bin_global}/" \;
     print-finish
 fi
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" shell/bin/local.d); then
     print-status Copy shell scripts "[local]..."
     mkdir -p "${bin_local}"
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec cp --no-preserve=mode,ownership {} "${bin_local}/" \;
-    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -printf "%f\0" | xargs -0I {} chmod +x "${bin_local}/{}"
+    find -L "${dir}" -mindepth 1 -maxdepth 1 -type f -exec install {} "${bin_local}/" \;
     print-finish
 fi
 # shellcheck disable=SC2310,SC2311

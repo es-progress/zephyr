@@ -36,7 +36,7 @@ if [[ -e "${PROJECT_ROOT}/zephyr.local.cfg" ]]; then
     sudo cp "${PROJECT_ROOT}/zephyr.local.cfg" "${target}/"
 fi
 # Bash completion
-sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/zephyrctl"
+sudo install --mode=0644 --no-target-directory "${PROJECT_ROOT}/bin/completion.sh" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/zephyrctl"
 sudo sed -i "s@{{ INSTALL_DIR }}@${INSTALL_DIR}@g" "${PATH_EXTRACT}/squashfs-root/etc/bash_completion.d/zephyrctl"
 # Symlink controller
 sudo rm -f "${PATH_EXTRACT}/squashfs-root/usr/local/bin/zephyrctl"

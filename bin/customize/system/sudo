@@ -25,7 +25,7 @@ _copy-sudoers() {
         # Verify new file
         visudo -c -s "${file}" >/dev/null
         # Copy file
-        sudo install --mode=0440 "${file}" /etc/sudoers.d
+        sudo install --mode=0440 "${file}" /etc/sudoers.d/
         # Verify full sudoers
         sudo visudo -c -s >/dev/null
     done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 || true)

@@ -21,7 +21,7 @@ _config() {
 
     print-status Config Netplan "[${selector}]..."
     sudo mkdir -p /etc/netplan/
-    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} /etc/netplan/ \;
+    find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -exec sudo install --mode=0644 {} /etc/netplan/ \;
     print-finish
 }
 

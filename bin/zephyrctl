@@ -160,7 +160,7 @@ _burn() {
 # shellcheck disable=SC2317
 _install() {
     print-status Set up Bash completion...
-    sudo cp --no-preserve=mode,ownership "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/zephyrctl
+    sudo install --mode=0644 --no-target-directory "${PROJECT_ROOT}/bin/completion.sh" /etc/bash_completion.d/zephyrctl
     sudo sed -i "s@{{ INSTALL_DIR }}@${PROJECT_ROOT}@g" /etc/bash_completion.d/zephyrctl
     print-finish
 
