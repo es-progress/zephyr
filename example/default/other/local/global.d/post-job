@@ -15,12 +15,11 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 print-status Copy cron job...
-sudo cp --no-preserve=mode,ownership files/cron-script.sh /opt/cron-script
-sudo chmod +x /opt/cron-script
+sudo install --no-target-directory files/cron-script.sh /opt/cron-script
 print-finish
 
 print-status Configuring lftp...
-sudo cp --no-preserve=mode,ownership files/lftp.conf /etc/lftp.conf
+sudo install --mode=0644 files/lftp.conf /etc/
 print-finish
 
 exit 0

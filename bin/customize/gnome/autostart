@@ -22,7 +22,7 @@ _copy-autostart() {
 
     print-status Copy autostart files "[${selector}]..."
     mkdir -p ~/.config/autostart
-    find -L "${cfg_dir}" -type f -exec cp --no-preserve=mode,ownership {} ~/.config/autostart/ \;
+    find -L "${cfg_dir}" -type f -exec install --mode=0664 {} ~/.config/autostart/ \;
     print-finish
 }
 

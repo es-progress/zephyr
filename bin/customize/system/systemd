@@ -45,7 +45,7 @@ _override() {
         print-status Override "${unit}..."
         dir="${systemd_dir}/${unit}.d"
         sudo mkdir -p "${dir}"
-        find -L "${cfg_dir}/${unit}" -mindepth 1 -type f -exec sudo cp --no-preserve=mode,ownership {} "${dir}" \;
+        find -L "${cfg_dir}/${unit}" -mindepth 1 -type f -exec sudo install --mode=0644 {} "${dir}" \;
         print-finish
 
         print-status Restart "${unit}..."
@@ -72,7 +72,7 @@ _install() {
         unit=$(basename "${file}")
 
         print-status Install "${unit}..."
-        sudo cp --no-preserve=mode,ownership "${file}" "${systemd_dir}"
+        sudo install --mode=0644 "${file}" "${systemd_dir}"
         sudo sed -i "s@{{ LIB_GLOBAL }}@${lib_global}@g" "${systemd_dir}/${unit}"
         print-finish
 

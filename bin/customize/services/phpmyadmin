@@ -61,7 +61,7 @@ print-finish
 if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-status Configure phpMyAdmin...
     secret=$(openssl rand -hex 32)
-    sudo cp --no-preserve=mode,ownership "${file}" "${target}/public"
+    sudo install --mode=0644 "${file}" "${target}/public/"
     sudo sed -i \
         -e "s/{{ pma_user_name }}/${service_user}/g" \
         -e "s/{{ pma_user_pass }}/${service_pass}/g" \

@@ -20,7 +20,7 @@ install-apt dnsutils
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/digrc); then
     print-status Config dig...
-    cp --no-preserve=mode,ownership "${file}" ~/.digrc
+    install --mode=0664 --no-target-directory "${file}" ~/.digrc
     print-finish
 fi
 
