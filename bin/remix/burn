@@ -26,12 +26,12 @@ if [[ -z "${disk}" ]]; then
 fi
 
 # Check if valid disk
-if ! udevadm info -q property "${disk}" | grep -qs "DEVTYPE=disk"; then
+if ! udevadm info -q property "${disk}" | grep -qsx "DEVTYPE=disk"; then
     error-exit "${disk}" is not a disk!
 fi
 
 # Check if USB
-if ! udevadm info -q property "${disk}" | grep -qs "ID_BUS=usb"; then
+if ! udevadm info -q property "${disk}" | grep -qsx "ID_BUS=usb"; then
     echo
     error-exit This device is not an USB stick!
 fi

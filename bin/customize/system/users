@@ -40,7 +40,7 @@ _create-user() {
             options=(--disabled-login --gecos '')
         fi
 
-        if ! grep -qs "${user}" <<<"${existent_users}"; then
+        if ! grep -qsx "${user}" <<<"${existent_users}"; then
             print-header Add "${type}" user: "${user}..."
             sudo adduser "${options[@]}" "${user}"
             print-finish
@@ -50,7 +50,7 @@ _create-user() {
         fi
 
         for group in "${groups[@]}"; do
-            if ! grep -qs "${group}" <<<"${existent_groups}"; then
+            if ! grep -qsx "${group}" <<<"${existent_groups}"; then
                 print-header Create group: "${group}..."
                 sudo adduser --group "${group}"
                 print-finish

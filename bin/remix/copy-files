@@ -50,7 +50,7 @@ print-finish
 
 print-status Patch GRUB...
 # Boot from encrypted partition
-if ! grep -qs "GRUB_ENABLE_CRYPTODISK=y" "${PATH_EXTRACT}/squashfs-root/etc/default/grub"; then
+if ! grep -qsx "GRUB_ENABLE_CRYPTODISK=y" "${PATH_EXTRACT}/squashfs-root/etc/default/grub"; then
     cat <<EOF | sudo tee -a "${PATH_EXTRACT}/squashfs-root/etc/default/grub" >/dev/null
 
 # Enabling boot from LUKS

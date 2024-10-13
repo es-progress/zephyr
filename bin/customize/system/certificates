@@ -76,7 +76,7 @@ if [[ -e /sys/firmware/efi ]]; then
         print-header Enroll MOK certificate...
         cert_fingerprint=$(openssl x509 -noout -sha1 -fingerprint -inform DER -in "/etc/ssl/certs/${mok_key_name}.der" | cut -d= -f2 | tr '[:upper:]' '[:lower:]')
         # grep -q exits as a match is found --> a pipe needs a reader and writer process also --> avoid grep -q in a pipe
-        if ! mokutil --list-enrolled | grep -s "SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
+        if ! mokutil --list-enrolled | grep -s "^SHA1 Fingerprint: ${cert_fingerprint}" >/dev/null; then
             sudo mokutil --import "/etc/ssl/certs/${mok_key_name}.der"
             sudo mokutil --timeout -1
             print-finish

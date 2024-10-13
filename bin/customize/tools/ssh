@@ -46,7 +46,7 @@ _known-hosts() {
     touch ~/.ssh/known_hosts
     # shellcheck disable=SC2310,SC2311
     for line in $(cfg-read "${cfg_file}" ssh-known); do
-        if ! grep -F -qs "${line}" ~/.ssh/known_hosts; then
+        if ! grep -F -qsx "${line}" ~/.ssh/known_hosts; then
             echo "${line}" >> ~/.ssh/known_hosts
         fi
     done
