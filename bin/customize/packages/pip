@@ -20,7 +20,7 @@ _install() {
     local cfg_file="${2:?Config file missing}"
 
     print-header Install pip packages "[${selector}]..."
-    pip install --upgrade --no-warn-script-location -r "${cfg_file}"
+    pip install --upgrade --upgrade-strategy eager --no-warn-script-location -r "${cfg_file}"
     print-finish
 }
 
@@ -40,7 +40,8 @@ profile="${1:?Profile missing}"
 print-header Install pip...
 tmp_file=$(mktemp)
 curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
-sudo python3 "${tmp_file}" --root-user-action=ignore
+sudo python3 "${tmp_file}" --root-user-action ignore --target "$(python3 -c 'import sys; print(sys.path[-1])' || true)"
+sudo python3 -m pip install --upgrade pip --root-user-action ignore
 print-finish
 
 # shellcheck disable=SC2310,SC2311
