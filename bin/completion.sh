@@ -6,7 +6,7 @@ __zephyrctl_complete() {
     _init_completion
 
     command="${words[1]}"
-    commands=(burn remix help partition format post-install customize install uninstall)
+    commands=(extract-grub burn remix help partition format post-install customize install uninstall)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 2 -type f -executable -printf "%f\n~%f\n")
     categories=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 1 -maxdepth 1 -type d -printf "%f\n~%f\n")
@@ -18,13 +18,13 @@ __zephyrctl_complete() {
                 help) __zephyr_gen_word "${commands[*]}" ;;
                 post-install) __zephyr_gen_word live install dev ;;
                 customize|partition|format) __zephyr_gen_word "${profiles}" ;;
-                remix|burn) __zephyr_gen_file ;;
+                extract-grub|remix|burn) __zephyr_gen_file ;;
                 *) ;;
             esac
             ;;
         3)
             case "${command}" in
-                remix|burn) __zephyr_gen_file ;;
+                extract-grub|remix|burn) __zephyr_gen_file ;;
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
                 post-install) __zephyr_gen_word "${profiles}" ;;
                 partition|format)

@@ -14,9 +14,9 @@ Each disk is listed on its own line, options are separated by whitespace.
 
 **Options**
 
--   `NAME`: A name for the disk, used to refer to it in the rest of the disk map.
--   `DEVICE`: The device file for the disk, such as `/dev/sda` or `/dev/nvme0n1`.
--   `PARTITION_PREFIX`: (Optional) A prefix to be used for the partition device files, such as `p` in `/dev/nvme0n1p1`.
+- `NAME`: A name for the disk, used to refer to it in the rest of the disk map.
+- `DEVICE`: The device file for the disk, such as `/dev/sda` or `/dev/nvme0n1`.
+- `PARTITION_PREFIX`: (Optional) A prefix to be used for the partition device files, such as `p` in `/dev/nvme0n1p1`.
 
 **Example**
 
@@ -35,17 +35,17 @@ The section is named after the disk, such as `PARTITIONS_main` for the `main` di
 
 **Options**
 
--   `PARTNUM`: The partition number. Use `1` for the first partition.
--   `GAP`: The gap between the previous partition and this one. You can use `K` for kibibytes, `M` for mebibytes, `G` gibibytes and so on.
--   `SIZE`: The size of the partition, use the same units as `GAP`.
--   `TYPE`: The type of the partition. Available types:
-    -   `luks1`/`luks2`: Linux LUKS container
-    -   `efi` EFI system partition (FAT32)
-    -   `msr` Microsoft reserved
-    -   `win` Microsoft basic data (NTFS)
-    -   `linux` Linux filesystem (ext4)
-    -   `swap` Linux swap partition
--   `LABEL`: The label of the partition.
+- `PARTNUM`: The partition number. Use `1` for the first partition.
+- `GAP`: The gap between the previous partition and this one. You can use `K` for kibibytes, `M` for mebibytes, `G` gibibytes and so on.
+- `SIZE`: The size of the partition, use the same units as `GAP`.
+- `TYPE`: The type of the partition. Available types:
+    - `luks1`/`luks2`: Linux LUKS container
+    - `efi` EFI system partition (FAT32)
+    - `msr` Microsoft reserved
+    - `win` Microsoft basic data (NTFS)
+    - `linux` Linux filesystem (ext4)
+    - `swap` Linux swap partition
+- `LABEL`: The label of the partition.
 
 **Example**
 
