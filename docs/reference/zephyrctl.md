@@ -65,6 +65,24 @@ zephyrctl customize default ~apt packages
 
 ---
 
+## extract-grub
+
+It is possible to override the GRUB configuration in the remixed ISO file.
+To create this custom GRUB config file, you can use this command to extract `grub.cfg` from the stock Ubuntu ISO file and modify it.
+
+**Usage**
+
+```
+zephyrctl extract-grub ISO_FILE [EXTRACTED]
+
+Params:
+ISO_FILE           ISO file to extract GRUB configuration from
+EXTRACTED          Path to save the extracted 'grub.cfg'.
+                   Default is 'extracted.grub.cfg' in the current directory.
+```
+
+---
+
 ## format
 
 Format partitions as per the provided profile and disk maps.

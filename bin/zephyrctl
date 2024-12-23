@@ -16,6 +16,7 @@ _usage-main() {
     local sorted_commands_array=()
     local line name help sorted_commands_string
 
+    command+=("extract-grub:Extract grub.cfg from ISO")
     command+=("remix:Create Zephyr ISO")
     command+=("burn:Burn Zephyr ISO to USB")
     command+=("partition:Partition disk")
@@ -55,6 +56,12 @@ _usage() {
             description="Display help for a command"
             usage="help COMMAND"
             options+=("COMMAND:The command name (to view available commands, run 'zephyrctl' without arguments)")
+            ;;
+        extract-grub)
+            description="Extract grub.cfg from ISO file. Can be used as a starting point for a custom GRUB configuration."
+            usage="extract-grub ISO_IN [EXTRACTED]"
+            options+=("ISO_IN:ISO file to remix (e.g. path/to/ubuntu-20.04.6-desktop-amd64.iso)")
+            options+=("EXTRACTED:Path to save the extracted 'grub.cfg'. Defaults to 'extracted.grub.cfg' in current dir.")
             ;;
         remix)
             description="Remix an Ubuntu image file and embed Zephyr (along with your profiles and payload)"
@@ -126,6 +133,25 @@ _usage() {
             done < <(find "${PATH_SCRIPTS_CUSTOMIZE}" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z || true)
         fi
     fi
+}
+
+## Extract GRUB config from ISO
+###############################
+# shellcheck disable=SC2317
+_extract-grub() {
+    if [[ -z "${1:-}" ]]; then
+        print-error ISO image missing!
+        _usage extract-grub
+        exit 1
+    fi
+    local extracted="${2:-extracted.grub.cfg}"
+
+    "${PATH_SCRIPTS_REMIX}/unpack" "${1}"
+    print-status Extract grub.cfg from ISO...
+    [[ -e "${extracted}" ]] && rm -f "${extracted}"
+    cp "${PATH_EXTRACT}/iso/boot/grub/grub.cfg" "${extracted}"
+    print-finish
+    "${PATH_SCRIPTS_REMIX}/clean-up"
 }
 
 ## Create ISO
@@ -323,7 +349,7 @@ fi
 
 # Switch action
 case "${cmd}" in
-    remix|burn|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
+    extract-grub|remix|burn|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
