@@ -59,4 +59,12 @@ EOF
 fi
 print-finish
 
+print-status Override grub.cfg...
+if [[ -e "${PATH_REMIX}/grub.cfg" ]]; then
+    sudo install --mode=0444 "${PATH_REMIX}/grub.cfg" "${PATH_EXTRACT}/iso/boot/grub/"
+    print-finish
+else
+    print-finish Not found custom grub.cfg, skip.
+fi
+
 exit 0
