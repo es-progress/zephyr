@@ -67,4 +67,12 @@ else
     print-finish Not found custom grub.cfg, skip.
 fi
 
+print-status Copy preseed files...
+if [[ -e "${PATH_REMIX}/preseeds" ]]; then
+    sudo find -L "${PATH_REMIX}/preseeds" -type f -exec install --mode=0444 -t "${PATH_EXTRACT}/iso/preseed/" {} +
+    print-finish
+else
+    print-finish Not found any preseed files, skip.
+fi
+
 exit 0
