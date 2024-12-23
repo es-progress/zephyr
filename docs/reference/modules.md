@@ -36,11 +36,11 @@ Installation of [Apache JMeter](https://jmeter.apache.org/){target=\_blank}, a l
 
 **Configuration**
 
--   `apps/global.cfg`:
-    -   `jmeter`: jmeter script settings. Format: INI-file format.
-        -   `url`: download URL
-        -   `checksum`: SHA512 checksum
-        -   `install_dir`: installation directory
+- `apps/global.cfg`:
+    - `jmeter`: jmeter script settings. Format: INI-file format.
+        - `url`: download URL
+        - `checksum`: SHA512 checksum
+        - `install_dir`: installation directory
 
 ---
 
@@ -50,7 +50,7 @@ Install [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank} and 
 
 **Configuration**
 
--   `apps/pulse-effects/global.d`: output presets.
+- `apps/pulse-effects/global.d`: output presets.
 
 ---
 
@@ -66,12 +66,12 @@ The module is for installation and the configuration of [VirtualBox virtualizati
 
 **Configuration**
 
--   `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
+- `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
 
--   `apps/global.cfg`:
-    -   `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
-    -   `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
-    -   `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
+- `apps/global.cfg`:
+    - `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
+    - `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
+    - `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
 
 ---
 
@@ -85,7 +85,7 @@ With the autostart module you can control which applications should start automa
 
 **Configuration**
 
--   `gnome/autostart/global.d`: `.desktop` files for each application you wish to autostart.
+- `gnome/autostart/global.d`: `.desktop` files for each application you wish to autostart.
 
 ---
 
@@ -95,10 +95,10 @@ This module installs the GNOME shell extension [Dash to Panel](https://extension
 
 **Configuration**
 
--   `gnome/dash-to-panel/global.d`: `.dconf` configuration files for Dash to Panel.
--   `gnome/global.cfg`:
-    -   `dash-to-panel`: dash-to-panel script settings. Format: INI-file format.
-        -   `version`: Dash to Panel extension version to install (git tag to checkout)
+- `gnome/dash-to-panel/global.d`: `.dconf` configuration files for Dash to Panel.
+- `gnome/global.cfg`:
+    - `dash-to-panel`: dash-to-panel script settings. Format: INI-file format.
+        - `version`: Dash to Panel extension version to install (git tag to checkout)
 
 ---
 
@@ -108,7 +108,7 @@ It installs additional fonts.
 
 **Configuration**
 
--   `gnome/fonts/global.d`: `.tff` files for different fonts. Create a sub-directory for each font family and put the `.tff` files in it.
+- `gnome/fonts/global.d`: `.tff` files for different fonts. Create a sub-directory for each font family and put the `.tff` files in it.
 
 ---
 
@@ -118,7 +118,7 @@ This module provides global configuration options for the GNOME desktop environm
 
 **Configuration**
 
--   `gnome/config/global.d`: you can place your GNOME desktop-wide customization files in this directory (`.dconf` files).
+- `gnome/config/global.d`: you can place your GNOME desktop-wide customization files in this directory (`.dconf` files).
 
 ---
 
@@ -128,10 +128,10 @@ This module is responsible for customizing user directories.
 
 **Configuration**
 
--   `gnome/user-dirs.defaults`: this will be your custom `/etc/xdg/user-dirs.defaults` file.
--   `gnome/user-dirs.dirs`: your custom `~/.config/user-dirs.dirs` file.
--   `gnome/global.cfg`:
-    -   `bookmarks`: Nautilus bookmarks. Format: "file:///path/to/bookmarked/dir" (one per line).
+- `gnome/user-dirs.defaults`: this will be your custom `/etc/xdg/user-dirs.defaults` file.
+- `gnome/user-dirs.dirs`: your custom `~/.config/user-dirs.dirs` file.
+- `gnome/global.cfg`:
+    - `bookmarks`: Nautilus bookmarks. Format: "file:///path/to/bookmarked/dir" (one per line).
 
 ---
 
@@ -141,7 +141,7 @@ With this module you can set the desktop background.
 
 **Configuration**
 
--   `gnome/wallpaper.jpg`: your wallpaper image.
+- `gnome/wallpaper.jpg`: your wallpaper image.
 
 ---
 
@@ -163,9 +163,9 @@ It uses Disk maps to determine the disk(s) to backup.
 
 **Configuration**
 
--   `install/global.cfg`:
-    -   `backup-gpt`: backup-gpt script settings. Format: INI-file format.
-        -   `backup_dir`: directory for GPT partition table backups
+- `install/global.cfg`:
+    - `backup-gpt`: backup-gpt script settings. Format: INI-file format.
+        - `backup_dir`: directory for GPT partition table backups
 
 ---
 
@@ -175,8 +175,8 @@ This module assists in configuring the GRUB bootloader.
 
 **Configuration**
 
--   `install/grub/default`: custom GRUB default config file (`/etc/default/grub`).
--   `install/grub/global.d/`: configuration files for `grub-mkconfig` (these are shell scripts).
+- `install/grub/default`: custom GRUB default config file (`/etc/default/grub`).
+- `install/grub/global.d/`: configuration files for `grub-mkconfig` (these are shell scripts).
 
 ---
 
@@ -190,11 +190,11 @@ You can configure `initramfs` also.
 
 **Configuration**
 
--   `install/initramfs/global.d/`: `initramfs-tools` configuration files (`.conf`).
--   `install/global.cfg`:
-    -   `luks`: luks-automount script settings. Format: INI-file format.
-        -   `key_dir`: directory for LUKS machine keys
-        -   `key_slot`: key slot number for LUKS machine keys
+- `install/initramfs/global.d/`: `initramfs-tools` configuration files (`.conf`).
+- `install/global.cfg`:
+    - `luks`: luks-automount script settings. Format: INI-file format.
+        - `key_dir`: directory for LUKS machine keys
+        - `key_slot`: key slot number for LUKS machine keys
 
 ---
 
@@ -208,11 +208,11 @@ With this module you can setup weekly and daily cron jobs.
 
 **Configuration**
 
--   `other/global.cfg`:
-    -   `cron-hourly`: hourly cron jobs. Format: "script_path job_name" (one per line).
-    -   `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
-    -   `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
-    -   `cron-monthly`: monthly cron jobs. Format: "script_path job_name" (one per line).
+- `other/global.cfg`:
+    - `cron-hourly`: hourly cron jobs. Format: "script_path job_name" (one per line).
+    - `cron-daily`: daily cron jobs. Format: "script_path job_name" (one per line).
+    - `cron-weekly`: weekly cron jobs. Format: "script_path job_name" (one per line).
+    - `cron-monthly`: monthly cron jobs. Format: "script_path job_name" (one per line).
 
 ---
 
@@ -229,7 +229,7 @@ For details check the example module in `example/default/other/local/global.d/` 
 
 **Configuration**
 
--   `other/local/global.d`: any executable file in this directory will be run.
+- `other/local/global.d`: any executable file in this directory will be run.
 
 ---
 
@@ -245,9 +245,9 @@ The apt module assists with the management of packages using the Debian package 
 
 **Configuration**
 
--   `packages/global.cfg`:
-    -   `apt-install`: APT packages to install. Format: "package_name apt_repository" (one per line, apt_repository optional).
-    -   `apt-remove`: APT packages to remove. Format: "package_name" (one per line).
+- `packages/global.cfg`:
+    - `apt-install`: APT packages to install. Format: "package_name apt_repository" (one per line, apt_repository optional).
+    - `apt-remove`: APT packages to remove. Format: "package_name" (one per line).
 
 ---
 
@@ -261,8 +261,8 @@ Shell binaries (or scripts, PHAR files, basically any executable file) to downlo
 
 **Configuration**
 
--   `packages/global.cfg`:
-    -   `bin`: shell binaries to install. Format: "Name URL SHA256SUM" (one per line, SHA256SUM optional).
+- `packages/global.cfg`:
+    - `bin`: shell binaries to install. Format: "Name URL SHA256SUM" (one per line, SHA256SUM optional).
 
 ---
 
@@ -272,10 +272,10 @@ With the node module you can install Node.js packages.
 
 **Configuration**
 
--   `packages/global.cfg`:
-    -   `managers`: package manager settings. Format: INI-file format.
-        -   `node_version`: major version of Node to install e.g. `18`, `20`.
-    -   `node`: Node modules to install. Format: "package_name" (one per line).
+- `packages/global.cfg`:
+    - `managers`: package manager settings. Format: INI-file format.
+        - `node_version`: major version of Node to install e.g. `18`, `20`.
+    - `node`: Node modules to install. Format: "package_name" (one per line).
 
 ---
 
@@ -285,7 +285,7 @@ This module is used to manage Python packages installed via pip.
 
 **Configuration**
 
--   `packages/pip.global`: pip requirements file.
+- `packages/pip.global`: pip requirements file.
 
 ---
 
@@ -297,9 +297,9 @@ The snap module assists with installing Snap packages.
 
 **Configuration**
 
--   `packages/global.cfg`:
-    -   `snap`: snaps to install. Format: "snap_name install_options" (one per line).
-        "install_options" is an optional comma-separated list of options to pass to `snap install` without the hyphens (`--`) e.g. `classic,channel=18/stable`.
+- `packages/global.cfg`:
+    - `snap`: snaps to install. Format: "snap_name install_options" (one per line).
+      "install_options" is an optional comma-separated list of options to pass to `snap install` without the hyphens (`--`) e.g. `classic,channel=18/stable`.
 
 ---
 
@@ -317,18 +317,18 @@ The module is for installation and the configuration of the [Apache web server](
 
 **Configuration**
 
--   `services/apache/config.global.d`: use this directory to place Apache's configuration files (`.conf`).
--   `services/apache/vhost-default.conf`: default virtual host file. You can use templated variables like `{{ DOC_ROOT }}` in this file.
-    It will be replaced with the actual value configured in `services/global.cfg`. The following variables are available:
-    -   `DOC_ROOT`: web root for virtual hosts
-    -   `DEF_VIRT_HOST_NAME`: name for default vhost
-    -   `ROOT_CA_NAME`: root CA name (configured in `system/certificate` module)
--   `services/global.cfg`:
-    -   `apache`: apache script settings. Format: INI-file format.
-        -   `web_root`: web root for virtual hosts
-        -   `def_virt_host_name`: name for default vhost (which will also be used for certificate and key filenames)
-        -   `def_virt_host_subject`: default virtual host certificate subject
-    -   `apache-module`: list of Apache modules to enable. Format: "module_name" (one per line).
+- `services/apache/config.global.d`: use this directory to place Apache's configuration files (`.conf`).
+- `services/apache/vhost-default.conf`: default virtual host file. You can use templated variables like `{{ DOC_ROOT }}` in this file.
+  It will be replaced with the actual value configured in `services/global.cfg`. The following variables are available:
+    - `DOC_ROOT`: web root for virtual hosts
+    - `DEF_VIRT_HOST_NAME`: name for default vhost
+    - `ROOT_CA_NAME`: root CA name (configured in `system/certificate` module)
+- `services/global.cfg`:
+    - `apache`: apache script settings. Format: INI-file format.
+        - `web_root`: web root for virtual hosts
+        - `def_virt_host_name`: name for default vhost (which will also be used for certificate and key filenames)
+        - `def_virt_host_subject`: default virtual host certificate subject
+    - `apache-module`: list of Apache modules to enable. Format: "module_name" (one per line).
 
 ---
 
@@ -338,12 +338,12 @@ This will install & customize [MariaDB database server](https://mariadb.org/){ta
 
 **Configuration**
 
--   `services/mariadb/global.d`: directory for MariaDB's configuration files (`.cnf`).
--   `services/global.cfg`:
-    -   `mariadb`: mariadb script settings. Format: INI-file format.
-        -   `repo`: MariaDB APT repository URL
-        -   `admin_name`: username for MySQL admin user
-        -   `admin_pass`: password for MySQL admin user
+- `services/mariadb/global.d`: directory for MariaDB's configuration files (`.cnf`).
+- `services/global.cfg`:
+    - `mariadb`: mariadb script settings. Format: INI-file format.
+        - `repo`: MariaDB APT repository URL
+        - `admin_name`: username for MySQL admin user
+        - `admin_pass`: password for MySQL admin user
 
 ---
 
@@ -357,10 +357,10 @@ This module will install and configure [PHP](https://www.php.net/){target=\_blan
 
 **Configuration**
 
--   `services/php/global.d`: directory for PHP's `.ini` configuration files.
--   `services/global.cfg`:
-    -   `php`: php script settings. Format: INI-file format.
-        -   `version`: PHP version
+- `services/php/global.d`: directory for PHP's `.ini` configuration files.
+- `services/global.cfg`:
+    - `php`: php script settings. Format: INI-file format.
+        - `version`: PHP version
 
 ---
 
@@ -374,13 +374,13 @@ Use this module to install and configure [phpMyAdmin](https://www.phpmyadmin.net
 
 **Configuration**
 
--   `services/phpmyadmin/config.inc.php`: phpMyAdmin configuration file.
--   `services/global.cfg`:
-    -   `phpmyadmin`: php script settings. Format: INI-file format.
-        -   `url`: download URL for phpMyAdmin tarball
-        -   `checksum`: SHA256 checksum for download tar-archive
-        -   `service_user`: phpMyAdmin control user name
-        -   `service_pass`: phpMyAdmin control user password
+- `services/phpmyadmin/config.inc.php`: phpMyAdmin configuration file.
+- `services/global.cfg`:
+    - `phpmyadmin`: php script settings. Format: INI-file format.
+        - `url`: download URL for phpMyAdmin tarball
+        - `checksum`: SHA256 checksum for download tar-archive
+        - `service_user`: phpMyAdmin control user name
+        - `service_pass`: phpMyAdmin control user password
 
 ---
 
@@ -397,10 +397,10 @@ Global files are installed globally for all users, and local files are installed
 
 **Configuration**
 
--   `shell/bash/global.d`: all files here will be copied to your HOME directory, `/root`, `/etc/skel` so it will be default for new users and root too.
-    The directory structure will be preserved, so you can implement your custom directory structure.
--   `shell/bash/local.d`: files in this directory will be copied only to your HOME directory so it's local for the current user only with directory structure preserved.
--   `shell/bash/root.d`: these files will be copied to `/root` to customize root's Bash only (directory structure preserved).
+- `shell/bash/global.d`: all files here will be copied to your HOME directory, `/root`, `/etc/skel` so it will be default for new users and root too.
+  The directory structure will be preserved, so you can implement your custom directory structure.
+- `shell/bash/local.d`: files in this directory will be copied only to your HOME directory so it's local for the current user only with directory structure preserved.
+- `shell/bash/root.d`: these files will be copied to `/root` to customize root's Bash only (directory structure preserved).
 
 ---
 
@@ -412,16 +412,16 @@ Global files are installed to `/usr/local/bin` (by default) - so it's global for
 
 **Configuration**
 
--   `shell/bin/global.d`: contains system-wide shell scripts.
--   `shell/bin/local.d`: contains shell scripts for the current user.
--   `shell/lib/global.d`: contains system-wide shell libraries.
--   `shell/lib/local.d`: contains shell libraries for the current user.
--   `shell/global.cfg`:
-    -   `scripts`: scripts script settings. Format: INI-file format.
-        -   `bin_global`: directory for global shell scripts
-        -   `bin_local`: directory for local shell scripts
-        -   `lib_global`: directory for global shell library
-        -   `lib_local`: directory for local shell library
+- `shell/bin/global.d`: contains system-wide shell scripts.
+- `shell/bin/local.d`: contains shell scripts for the current user.
+- `shell/lib/global.d`: contains system-wide shell libraries.
+- `shell/lib/local.d`: contains shell libraries for the current user.
+- `shell/global.cfg`:
+    - `scripts`: scripts script settings. Format: INI-file format.
+        - `bin_global`: directory for global shell scripts
+        - `bin_local`: directory for local shell scripts
+        - `lib_global`: directory for global shell library
+        - `lib_local`: directory for local shell library
 
 ---
 
@@ -438,13 +438,13 @@ Certificates signed by this CA are used by the `services/apache` and the `servic
 
 **Configuration**
 
--   `system/firefox-policies.json`: Firefox policy file.
--   `system/global.cfg`:
-    -   `certificate`: certificates script settings. Format: INI-file format.
-        -   `root_ca_name`: self-signed Root Certificate Authority (CA) name
-        -   `root_ca_subject`: root CA subject
-        -   `mok_key_name`: Machine Owner Key (MOK) name
-        -   `mok_key_subject`: MOK subject
+- `system/firefox-policies.json`: Firefox policy file.
+- `system/global.cfg`:
+    - `certificate`: certificates script settings. Format: INI-file format.
+        - `root_ca_name`: self-signed Root Certificate Authority (CA) name
+        - `root_ca_subject`: root CA subject
+        - `mok_key_name`: Machine Owner Key (MOK) name
+        - `mok_key_subject`: MOK subject
 
 ---
 
@@ -454,11 +454,11 @@ Create directories and set permissions for them.
 
 **Configuration**
 
--   `system/global.cfg`:
-    -   `dirs-create`: directories to create, you can use variables like `$USER` as owner. Format: "path owner" (one per line, owner optional).
-    -   `dirs-remove`: directories to delete. Format: "path" (one per line).
-    -   `perms`: permission settings. Format: INI-file format.
-        -   `perm_home`: permission to set on $HOME (non-recursive). Use format allowed by `chmod` command.
+- `system/global.cfg`:
+    - `dirs-create`: directories to create, you can use variables like `$USER` as owner. Format: "path owner" (one per line, owner optional).
+    - `dirs-remove`: directories to delete. Format: "path" (one per line).
+    - `perms`: permission settings. Format: INI-file format.
+        - `perm_home`: permission to set on $HOME (non-recursive). Use format allowed by `chmod` command.
 
 ---
 
@@ -468,9 +468,9 @@ Configures system locale.
 
 **Configuration**
 
--   `system/global.cfg`:
-    -   `locales`: locales to install. Format: "locale_name" (one per line).
-    -   `locale`: set locale. You can use different locale in each locale categories. Format: "category name" (one per line).
+- `system/global.cfg`:
+    - `locales`: locales to install. Format: "locale_name" (one per line).
+    - `locale`: set locale. You can use different locale in each locale categories. Format: "category name" (one per line).
 
 ---
 
@@ -481,7 +481,7 @@ Also disables connectivity checking.
 
 **Configuration**
 
--   `system/netplan/global.d`: place for your network plans (`.yaml` files).
+- `system/netplan/global.d`: place for your network plans (`.yaml` files).
 
 ---
 
@@ -491,7 +491,7 @@ Configure the systemd DNS resolver `systemd-resolved` service.
 
 **Configuration**
 
--   `system/resolved/global.d`: `systemd` service configuration files (`.conf`).
+- `system/resolved/global.d`: `systemd` service configuration files (`.conf`).
 
 ---
 
@@ -505,8 +505,8 @@ This is used to install & configure the [Shorewall firewall](https://shorewall.o
 
 **Configuration**
 
--   `system/shorewall/global.d`: contains files for zones, policy, interfaces and rules.
-    All files here will be copied to `/etc/shorewall/` with directory structure preserved.
+- `system/shorewall/global.d`: contains files for zones, policy, interfaces and rules.
+  All files here will be copied to `/etc/shorewall/` with directory structure preserved.
 
 ---
 
@@ -522,7 +522,7 @@ Configure `sudo`.
 
 **Configuration**
 
--   `system/sudo/global.d`: custom `sudoers` configuration files. These files will be copied to `/etc/sudoers.d/`.
+- `system/sudo/global.d`: custom `sudoers` configuration files. These files will be copied to `/etc/sudoers.d/`.
 
 ---
 
@@ -536,9 +536,9 @@ This module can install new `systemd` units (services, timers, etc.) and can ove
 
 **Configuration**
 
--   `system/systemd/files.global.d`: additional files (script, resources) that are needed for units, like an executable for a service. These files will be copied to `lib_global` dir as configured in `shell/scripts` module.
--   `system/systemd/override.global.d`: place `.conf` files for each unit you want to override in a subdirectory named as the unit (e.g. "fstrim.service").
--   `system/systemd/install.global.d`: put your new custom unit files here. These will be copied to `/usr/local/lib/systemd/system`. You can use `{{ GLOBAL_LIB }}` template string in unit files, it will be replaced with the actual directory. This can be useful in a `ExecStart` directive.
+- `system/systemd/files.global.d`: additional files (script, resources) that are needed for units, like an executable for a service. These files will be copied to `lib_global` dir as configured in `shell/scripts` module.
+- `system/systemd/override.global.d`: place `.conf` files for each unit you want to override in a subdirectory named as the unit (e.g. "fstrim.service").
+- `system/systemd/install.global.d`: put your new custom unit files here. These will be copied to `/usr/local/lib/systemd/system`. You can use `{{ GLOBAL_LIB }}` template string in unit files, it will be replaced with the actual directory. This can be useful in a `ExecStart` directive.
 
 ---
 
@@ -548,10 +548,10 @@ Create users (normal and system users too) and optionally add them to groups.
 
 **Configuration**
 
--   `system/global.cfg`:
+- `system/global.cfg`:
 
-    -   `users`: users to add to the system. Format: "user_name type groups" (one per line), "type" can be `normal` or `system` if omitted defaults to `normal`, "groups" is an optional comma-separated list of groups to add the user to. Groups will be created if not exist.
-        For normal users login will be disabled (so the module can run unattented), to enable the account you will be need to manually set a password later with `passwd`.
+    - `users`: users to add to the system. Format: "user_name type groups" (one per line), "type" can be `normal` or `system` if omitted defaults to `normal`, "groups" is an optional comma-separated list of groups to add the user to. Groups will be created if not exist.
+      For normal users login will be disabled (so the module can run unattented), to enable the account you will be need to manually set a password later with `passwd`.
 
         !!! tip "You can use environment variables (like `$USER`) as user name!"
 
@@ -568,10 +568,10 @@ Bash completion is also installed.
 
 **Configuration**
 
--   `tools/global.cfg`:
-    -   `composer`: composer script settings. Format: INI-file format.
-        -   `url`: download URL for composer PHAR file
-        -   `checksum`: SHA256 checksum for downloaded PHAR file
+- `tools/global.cfg`:
+    - `composer`: composer script settings. Format: INI-file format.
+        - `url`: download URL for composer PHAR file
+        - `checksum`: SHA256 checksum for downloaded PHAR file
 
 ---
 
@@ -581,7 +581,7 @@ Install and configure `dig` DNS lookup utility.
 
 **Configuration**
 
--   `tools/digrc`: your custom `.digrc` file.
+- `tools/digrc`: your custom `.digrc` file.
 
 ---
 
@@ -591,10 +591,10 @@ This installs the [GitHub CLI](https://cli.github.com/){target=\_blank} tool wit
 
 **Configuration**
 
--   `tools/global.cfg`:
-    -   `gh`: gh script settings. Format: INI-file format.
-        -   `url`: download URL for GitHub CLI deb package
-        -   `checksum`: SHA256 checksum for downloaded deb file
+- `tools/global.cfg`:
+    - `gh`: gh script settings. Format: INI-file format.
+        - `url`: download URL for GitHub CLI deb package
+        - `checksum`: SHA256 checksum for downloaded deb file
 
 ---
 
@@ -604,8 +604,8 @@ This module configures Git.
 
 **Configuration**
 
--   `tools/global.cfg`:
-    -   `git`: Git configurations. Format: "cfg-location config.name value" (one per line).
+- `tools/global.cfg`:
+    - `git`: Git configurations. Format: "cfg-location config.name value" (one per line).
 
 ---
 
@@ -615,7 +615,7 @@ This provides configuration settings for the GPG encryption program.
 
 **Configuration**
 
--   `tools/gpg-agent.conf`: your custom `gpg-agent.conf` file.
+- `tools/gpg-agent.conf`: your custom `gpg-agent.conf` file.
 
 ---
 
@@ -625,7 +625,7 @@ It allows you to install and configure [Midnight Commander](https://midnight-com
 
 **Configuration**
 
--   `tools/mc/global.d`: configuration files for Midnight Commander can be placed in this directory.
+- `tools/mc/global.d`: configuration files for Midnight Commander can be placed in this directory.
 
 ---
 
@@ -639,7 +639,7 @@ With this module you can install additional syntax highlighting files for Nano.
 
 **Configuration**
 
--   `tools/nano/global.d`: syntax highlighting files for Nano.
+- `tools/nano/global.d`: syntax highlighting files for Nano.
 
 ---
 
@@ -655,9 +655,9 @@ This module installs [pass-update](https://github.com/roddhjav/pass-update){targ
 
 **Configuration**
 
--   `tools/global.cfg`:
-    -   `pass-update`: pass-update script settings. Format: INI-file format.
-        -   `version`: pass-update version to install (git tag to checkout)
+- `tools/global.cfg`:
+    - `pass-update`: pass-update script settings. Format: INI-file format.
+        - `version`: pass-update version to install (git tag to checkout)
 
 ---
 
@@ -667,9 +667,9 @@ With this module you can configure SSH and add already known hosts.
 
 **Configuration**
 
--   `tools/ssh/global.d`: SSH configuration files. Will be copied to `~/.ssh/` with directory structure preserved.
--   `tools/global.cfg`:
-    -   `ssh-known`: entries to SSH known host file (`.ssh/known_hosts`). Format: as-is, will be appended to the file verbatim.
+- `tools/ssh/global.d`: SSH configuration files. Will be copied to `~/.ssh/` with directory structure preserved.
+- `tools/global.cfg`:
+    - `ssh-known`: entries to SSH known host file (`.ssh/known_hosts`). Format: as-is, will be appended to the file verbatim.
 
 ---
 
@@ -679,7 +679,7 @@ This module installs the [Tomb file encryption utility](https://dyne.org/softwar
 
 **Configuration**
 
--   `tools/global.cfg`:
-    -   `tomb`: tomb script settings. Format: INI-file format.
-        -   `url`: download URL for Tomb tarball
-        -   `checksum`: SHA256 checksum for downloaded tar-archive
+- `tools/global.cfg`:
+    - `tomb`: tomb script settings. Format: INI-file format.
+        - `url`: download URL for Tomb tarball
+        - `checksum`: SHA256 checksum for downloaded tar-archive

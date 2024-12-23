@@ -22,12 +22,12 @@ This provides flexibility so you can tailor customization to your needs.
 Zephyr relies on modules to apply specific configurations and customizations to your system.
 These modules perform a wide range of tasks, for example:
 
--   Install packages (APT, node, pip, snap)
--   Configure applications & tools (Apache, PHP, VirtualBox, Git, dig, ssh, nmap, etc.)
--   Configure GNOME, Bash
--   Set up Linux subsystems (e.g. sudo, cron, systemd)
--   Disk partitioning & formatting
--   Remix Ubuntu
+- Install packages (APT, node, pip, snap)
+- Configure applications & tools (Apache, PHP, VirtualBox, Git, dig, ssh, nmap, etc.)
+- Configure GNOME, Bash
+- Set up Linux subsystems (e.g. sudo, cron, systemd)
+- Disk partitioning & formatting
+- Remix Ubuntu
 
 As you might see, the core modules should cover the needs of a web developer, sysadmin, or power user.
 If you're missing a module, you can roll your own to extend Zephyr's capabilities!
