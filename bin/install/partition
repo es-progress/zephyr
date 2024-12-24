@@ -96,8 +96,8 @@ for map_file in "${map_files[@]}"; do
     echo
     print-warning "WARNING! Disks in above map(s) will be erased!"
     read -rp "Proceed? (yes/skip/abort): "
-    [[ ${REPLY,,} == skip ]] && continue
-    [[ ${REPLY,,} != yes ]] && error-exit Aborted.
+    [[ ${REPLY,,} == skip || ${REPLY,,} == s ]] && continue
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Loop through disks
     for line in $(cfg-read "${map_file}" DISKS); do
