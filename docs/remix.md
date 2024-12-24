@@ -12,7 +12,7 @@ Zephyr :eight_spoked_asterisk: with your profiles will be preinstalled on a stoc
 So, after a fresh install no other setup is needed, applying the customizations can start right away.
 This results in a smooth (re)install/configure flow. :relaxed:
 
-The remixing process is entirely automated; you will only have to run two `zephyrctl` commands (as explained later).
+The remixing process is entirely automated; you will only have to run a few `zephyrctl` commands (as explained later).
 However, you'll need to choose the Ubuntu ISO file you want to remix.
 
 !!! note
@@ -26,6 +26,9 @@ It's similar in concept to `/profiles` dir: it's ignored by Git, so you can copy
 That directory and its contents will be packed into the _SquashFS_ filesystem, so they are available when booting from the ISO (live desktop), and they are copied to the freshly installed system too!
 You can find them in `/usr/local/share/zephyr/payload` by default, but this can be changed (see `INSTALL_DIR` config).
 
+Besides the payload, you can further customize the remixing, like adding your own preseed files.
+The configuration files live in the `/remix` directory. This works similarly to the `/profiles` and `/payload` directories.
+
 **Remixing steps**
 
 1.  Download the ISO file that will be remixed (e.g. Ubuntu 20.04 desktop ISO)
@@ -33,6 +36,26 @@ You can find them in `/usr/local/share/zephyr/payload` by default, but this can 
     # There are many methods, in this example I use 'wget'
     wget https://releases.ubuntu.com/20.04.6/ubuntu-20.04.6-desktop-amd64.iso
     ```
+1.  (Optional) Create preseed files in `/remix/preseeds` directory.
+
+    These files will be included in the remixed ISO image, and they can be used to bootstrap the installation process by [preseeding](https://wiki.ubuntu.com/UbiquityAutomation){target=\_blank} the installer with answers to questions it asks.
+    You need to give the preseed file as kernel boot parameter to the installer.
+
+    ```
+    linux	/casper/vmlinuz  file=/cdrom/preseed/zephyr.seed maybe-ubiquity quiet splash ---
+    ```
+
+1.  (Optional) Customize GRUB menu of the remixed ISO.
+
+    You can override the stock `grub.cfg` with your own at `/remix/grub.cfg`.
+    This is useful if you want to add extra boot options (maybe ones with your preseed files as boot options) or change the default boot entry.
+
+    There's a [helper](reference/zephyrctl.md#extract-grub) to extract the stock `grub.cfg` from the ISO file, so you can start from that.
+
+    ```bash
+    zephyrctl extract-grub ubuntu-20.04.6-desktop-amd64.iso
+    ```
+
 1.  Remix the ISO file
 
     ```bash

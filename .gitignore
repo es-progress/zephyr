@@ -1,8 +1,10 @@
-# Mixing: config files, mounted images, iso files, extracted contents
+# Temp dir for mixing: mounted images, extracted contents
 /mixing
 # Profiles
 /profiles
 # Payload
 /payload
+# Remix config files
+/remix
 # Local config
 /zephyr.local.cfg

@@ -59,4 +59,20 @@ EOF
 fi
 print-finish
 
+print-status Override grub.cfg...
+if [[ -e "${PATH_REMIX}/grub.cfg" ]]; then
+    sudo install --mode=0444 "${PATH_REMIX}/grub.cfg" "${PATH_EXTRACT}/iso/boot/grub/"
+    print-finish
+else
+    print-finish Not found custom grub.cfg, skip.
+fi
+
+print-status Copy preseed files...
+if [[ -e "${PATH_REMIX}/preseeds" ]]; then
+    sudo find -L "${PATH_REMIX}/preseeds" -type f -exec install --mode=0444 -t "${PATH_EXTRACT}/iso/preseed/" {} +
+    print-finish
+else
+    print-finish Not found any preseed files, skip.
+fi
+
 exit 0
