@@ -45,6 +45,18 @@ The configuration files live in the `/remix` directory. This works similarly to 
     linux	/casper/vmlinuz  file=/cdrom/preseed/zephyr.seed maybe-ubiquity quiet splash ---
     ```
 
+    !!! tip
+
+        In preseed files, an include directive is supported, so you can split your preseed configuration into multiple files.
+
+        **Example**
+        ```
+        # zephyr.seed
+
+        #!include default.seed
+        d-i ubiquity/custom_title_text string Custom Title Text only in zephyr.seed
+        ```
+
 1.  (Optional) Customize GRUB menu of the remixed ISO.
 
     You can override the stock `grub.cfg` with your own at `/remix/grub.cfg`.
