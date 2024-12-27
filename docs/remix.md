@@ -48,14 +48,7 @@ The configuration files live in the `/remix` directory. This works similarly to 
     !!! tip
 
         In preseed files, an include directive is supported, so you can split your preseed configuration into multiple files.
-
-        **Example**
-        ```
-        # zephyr.seed
-
-        #!include default.seed
-        d-i ubiquity/custom_title_text string Custom Title Text only in zephyr.seed
-        ```
+        For examples check preseed files in `/example/remix/preseeds` directory.
 
 1.  (Optional) Customize GRUB menu of the remixed ISO.
 
@@ -63,6 +56,7 @@ The configuration files live in the `/remix` directory. This works similarly to 
     This is useful if you want to add extra boot options (maybe ones with your preseed files as boot options) or change the default boot entry.
 
     There's a [helper](reference/zephyrctl.md#extract-grub) to extract the stock `grub.cfg` from the ISO file, so you can start from that.
+    Also you can check the example at `/example/remix/grub.cfg` for inspiration.
 
     ```bash
     zephyrctl extract-grub ubuntu-20.04.6-desktop-amd64.iso

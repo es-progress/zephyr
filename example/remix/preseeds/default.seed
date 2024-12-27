@@ -1,0 +1,47 @@
+#############
+## Zephyr  ##
+##         ##
+## Remix   ##
+## Preseed ##
+## Default ##
+#############
+
+# Language
+d-i debconf/language string en
+d-i debian-installer/country string GB
+d-i debian-installer/language string en
+d-i debian-installer/locale string en_GB.UTF-8
+d-i localechooser/languagelist string en
+d-i localechooser/preferred-locale string en_GB.UTF-8
+d-i localechooser/shortlist string GB
+
+# Keyboard
+d-i console-setup/ask_detect boolean false
+d-i keyboard-configuration/layout select English (UK)
+d-i keyboard-configuration/layoutcode string gb
+d-i keyboard-configuration/model string Generic 105-key PC (intl.)
+d-i keyboard-configuration/modelcode string pc105
+d-i keyboard-configuration/store_defaults_in_debconf_db boolean true
+d-i keyboard-configuration/variant select English (UK)
+d-i keyboard-configuration/xkb-keymap select en
+
+# Packages
+d-i base-installer/install-recommends boolean false
+d-i popularity-contest/participate boolean false
+d-i ubiquity/download_updates boolean true
+d-i ubiquity/minimal_install boolean true
+d-i ubiquity/use_nonfree boolean false
+
+# Timezone
+d-i clock-setup/ntp boolean true
+d-i clock-setup/utc boolean true
+d-i clock-setup/utc-auto boolean true
+d-i time/zone string Europe/Budapest
+
+# User
+d-i passwd/auto-login boolean true
+d-i passwd/user-fullname string Zephyr
+d-i passwd/username string zephyr
+d-i passwd/user-password password fakepass
+d-i passwd/user-password-again password fakepass
+d-i ubiquity/login_use_directory boolean false

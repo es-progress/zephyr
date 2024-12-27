@@ -47,6 +47,19 @@ jobs:
         # Step need an id to be defined to later retrieve the output value
         id: modules
         run: |
+          if grep -qs .github/workflows/main.yml ~/changed.files; then
+            echo "::notice::Will run all modules"
+            echo apps=yes >> "$GITHUB_OUTPUT"
+            echo gnome=yes >> "$GITHUB_OUTPUT"
+            echo other=yes >> "$GITHUB_OUTPUT"
+            echo packages=yes >> "$GITHUB_OUTPUT"
+            echo services=yes >> "$GITHUB_OUTPUT"
+            echo shell=yes >> "$GITHUB_OUTPUT"
+            echo system=yes >> "$GITHUB_OUTPUT"
+            echo tools=yes >> "$GITHUB_OUTPUT"
+            echo post-install=yes >> "$GITHUB_OUTPUT"
+            echo remix=yes >> "$GITHUB_OUTPUT"
+          fi
           if grep -qs customize/apps ~/changed.files; then
             echo "::notice::Will run customize/apps"
             echo apps=yes >> "$GITHUB_OUTPUT"
@@ -98,7 +111,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Execute scripts (1st pass)
         run: |
@@ -123,7 +136,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Install GNOME
         run: |
@@ -160,7 +173,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Execute scripts (1st pass)
         run: |
@@ -183,7 +196,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Execute scripts (1st pass)
         run: |
@@ -212,7 +225,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Install dependencies
         run: ./bin/zephyrctl customize tester certificates
@@ -242,7 +255,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Execute scripts (1st pass)
         run: |
@@ -265,7 +278,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Install dependencies
         run: sudo chmod =0440 /etc/sudoers.d/runner
@@ -305,7 +318,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Execute scripts (1st pass)
         run: |
@@ -346,7 +359,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
 
       - name: Compile disk-map
         run: |
@@ -373,7 +386,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Link profiles
-        run: ln -s example profiles
+        run: ln -s example/profiles profiles
+
+      - name: Link remix config
+        run: ln -s example/remix remix
 
       - name: Download Ubuntu Live CD
         run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
