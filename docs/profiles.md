@@ -41,18 +41,18 @@ cd ZEPHYR_DIR
 mkdir -p profiles/foo
 ```
 
-You can also create from scratch, but an easier way is to copy the default profile in `/example` directory.
+You can also create from scratch, but an easier way is to copy the default profile in `/example/profiles` directory.
 
 ```bash
 # Use supplied default profile
 cd ZEPHYR_DIR
 mkdir -p profiles
-cp -r example/default profiles/
+cp -r example/profiles/default profiles/
 
 # Create a new profile called "bar" based on default
 cd ZEPHYR_DIR
 mkdir -p profiles
-cp -r example/default profiles/bar
+cp -r example/profiles/default profiles/bar
 ```
 
 ## Profile structure
@@ -72,7 +72,7 @@ You can mix global/local files in any profile (including default) to achieve you
 
 !!! abstract
 
-    Check profiles in `/example/default` and `/example/tester` for examples on using global and local config files.
+    Check profiles in `/example/profiles/default` and `/example/profiles/tester` for examples on using global and local config files.
 
     Also each available configuration is present in the default example profile with a short description.
     For more details about configurations see [Reference](reference/modules.md).

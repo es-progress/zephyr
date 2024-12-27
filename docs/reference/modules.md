@@ -21,7 +21,7 @@ Only the `global` files will be listed in the documentation for brevity.
 
 !!! note
 
-    For examples check the profiles in `example/default` and `example/tester`.
+    For examples check the profiles in `example/profiles` directory.
     A default profile and a named profile is provided with different types of configuration overrides mentioned above.
 
 ---
@@ -225,7 +225,7 @@ If you choose to write your module in Bash, you can use the functions from Zephy
 It's also possible to define new configuration sections in `other/global.cfg` and use them in your module.
 During execution the current working directory will be the script's directory, so you can use relative paths to access files should your module need extra files.
 
-For details check the example module in `example/default/other/local/global.d/` and study the core Zephyr modules in `bin/customize`.
+For details check the example module in `example/profiles/default/other/local/global.d/` and study the core Zephyr modules in `bin/customize`.
 
 **Configuration**
 
