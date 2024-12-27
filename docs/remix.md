@@ -48,14 +48,7 @@ The configuration files live in the `/remix` directory. This works similarly to 
     !!! tip
 
         In preseed files, an include directive is supported, so you can split your preseed configuration into multiple files.
-
-        **Example**
-        ```
-        # zephyr.seed
-
-        #!include default.seed
-        d-i ubiquity/custom_title_text string Custom Title Text only in zephyr.seed
-        ```
+        For examples check preseed files in `/example/remix/preseeds` directory.
 
 1.  (Optional) Customize GRUB menu of the remixed ISO.
 

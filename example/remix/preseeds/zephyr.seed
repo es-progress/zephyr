@@ -1,0 +1,13 @@
+#############
+## Zephyr  ##
+##         ##
+## Remix   ##
+## Preseed ##
+## ZEPHYR  ##
+#############
+
+# Include directive
+#!include default.seed
+
+d-i ubiquity/custom_title_text string Install - ZEPHYR
+d-i netcfg/get_hostname string ZEPHYR
