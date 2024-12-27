@@ -388,6 +388,9 @@ jobs:
       - name: Link profiles
         run: ln -s example/profiles profiles
 
+      - name: Link remix config
+        run: ln -s example/remix remix
+
       - name: Download Ubuntu Live CD
         run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
 
