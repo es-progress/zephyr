@@ -6,7 +6,7 @@ __zephyrctl_complete() {
     _init_completion
 
     command="${words[1]}"
-    commands=(extract-grub burn remix help partition format post-install customize install uninstall)
+    commands=(extract-grub burn remix help disk partition format post-install customize install uninstall)
     profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 2 -type f -executable -printf "%f\n~%f\n")
     categories=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 1 -maxdepth 1 -type d -printf "%f\n~%f\n")
@@ -26,7 +26,7 @@ __zephyrctl_complete() {
             case "${command}" in
                 extract-grub|remix|burn) __zephyr_gen_file ;;
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
-                post-install) __zephyr_gen_word "${profiles}" ;;
+                disk|post-install) __zephyr_gen_word "${profiles}" ;;
                 partition|format)
                     maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[2]}/install/disk-maps*" -printf "%f\n")
                     __zephyr_gen_word "${maps}"
@@ -37,7 +37,7 @@ __zephyrctl_complete() {
         *)
             case "${command}" in
                 customize) __zephyr_gen_word "${scripts}" "${categories}" ;;
-                post-install)
+                disk|post-install)
                     maps=$(find -L "{{ INSTALL_DIR }}/profiles" -type f -path "*${words[3]}/install/disk-maps*" -printf "%f\n")
                     __zephyr_gen_word "${maps}"
                     ;;
