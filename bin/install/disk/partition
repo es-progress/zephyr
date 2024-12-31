@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+##################
+## Zephyr       ##
+##              ##
+## Disk         ##
+## Partitioning ##
+##################
+
+###############
+## FUNCTIONS ##
+###############
+
+## Destroy partition table
+##
+## @param    $1  Device
+##########################
+_partition-zap() {
+    local device="${1:?Device missing}"
+    sgdisk --zap-all "${device}"
+
+    # Inform kernel about partitions
+    partprobe "${device}"
+    sleep 3
+}
+
+## Create partition
+##
+## @param    $1  Device
+## @param    $2  Partition number
+## @param    $3  Gap (free space before this partition)
+## @param    $4  Size
+## @param    $5  Type
+##               luks, efi, msr, win, linux, swap
+## @param    $6  Label
+#######################################################
+_partition-create() {
+    local device="${1:?Device missing}"
+    local number="${2:?Partition number missing}"
+    local gap="${3:?Gap size missing}"
+    local size="${4:?Partition size missing}"
+    local type="${5:?Partition type missing}"
+    local label="${6:?Partition label missing}"
+    local type_code
+
+    case "${type}" in
+        luks) type_code=8309 ;;
+        efi) type_code=ef00 ;;
+        msr) type_code=0c01 ;;
+        win) type_code=0700 ;;
+        linux) type_code=8300 ;;
+        swap) type_code=8200 ;;
+        *)  # Use type as is
+            type_code="${type}" ;;
+    esac
+
+    sgdisk --new="${number}:+${gap}:+${size}" --typecode="0:${type_code}" --change-name="0:${label}" "${device}"
+
+    # Inform kernel about partitions
+    partprobe "${device}"
+    sleep 3
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-root
+
+profile="${1:?Profile missing}"
+shift
+
+# Loop through maps, parse disk and partition definitions
+disks=()
+declare -A devices
+declare -A partitions
+for map in "${@}"; do
+    # shellcheck disable=SC2310,SC2311
+    if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
+        for line in $(cfg-read "${file}" partitions); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+
+            # This line is a disk definition
+            if [[ "${arguments[0],,}" == disk ]]; then
+                disk="${arguments[1]}"
+                device="${arguments[2]}"
+                disks+=("${disk}")
+                devices[${disk}]="${device}"
+                continue
+            fi
+
+            # Now this must be a partition definition
+            disk="${arguments[0]}"
+            unset "arguments[0]"
+            partition="$(implode , "${arguments[@]}")"
+            if [[ -z "${partitions[${disk}]:-}" ]]; then
+                partitions[${disk}]="${partition}"
+            else
+                partitions[${disk}]="${partitions[${disk}]};${partition}"
+            fi
+        done
+    else
+        error-exit Map not found: "${map}"
+    fi
+done
+
+# Show what we are going to do
+print-section Disks and partitions in the system
+lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
+echo
+print-warning "WARNING! The following disks will be erased!"
+for disk in "${disks[@]}"; do
+    print-warning "${devices[${disk}]}"
+done
+echo
+read -rp "Proceed? (yes/no): "
+[[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+# Do the partitioning
+for disk in "${disks[@]}"; do
+    device="${devices[${disk}]}"
+    print-section Partition "${device}"
+
+    print-header Destroy partition table on "${device}" "(${disk})..."
+    _partition-zap "${device}"
+    print-finish
+
+    IFS=";" read -r -a partitions_array <<<"${partitions[${disk}]}"
+    for partition in "${partitions_array[@]}"; do
+        IFS=, read -r number gap size type label <<< "${partition}"
+        print-header Create partition: "${label}..."
+        _partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
+        print-finish
+    done
+    print-finish Finished partitioning "${device}"
+done
+print-finish All partitioning finished.
+
+exit 0
