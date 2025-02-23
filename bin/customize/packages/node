@@ -74,4 +74,8 @@ if file=$(cfg-get "${profile}" packages/local.cfg); then
     _install local "${file}"
 fi
 
+print-header Update packages...
+sudo npm update --global --no-fund
+print-finish
+
 exit 0
