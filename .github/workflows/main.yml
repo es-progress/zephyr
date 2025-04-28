@@ -19,7 +19,7 @@ jobs:
     uses: es-progress/.github/.github/workflows/shellcheck.yml@main
   check:
     name: Check changed modules
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: linter
     outputs:
       apps: ${{ steps.modules.outputs.apps }}
@@ -103,7 +103,7 @@ jobs:
         shell: bash
   tests-apps:
     name: Integration tests (customize/apps)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.apps == 'yes'
     steps:
@@ -128,7 +128,7 @@ jobs:
         shell: bash
   tests-gnome:
     name: Integration tests (customize/gnome)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.gnome == 'yes'
     steps:
@@ -165,7 +165,7 @@ jobs:
         shell: bash
   tests-other:
     name: Integration tests (customize/other)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.other == 'yes'
     steps:
@@ -188,7 +188,7 @@ jobs:
         shell: bash
   tests-packages:
     name: Integration tests (customize/packages)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.packages == 'yes'
     steps:
@@ -217,7 +217,7 @@ jobs:
         shell: bash
   tests-services:
     name: Integration tests (customize/services)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.services == 'yes'
     steps:
@@ -247,7 +247,7 @@ jobs:
         shell: bash
   tests-shell:
     name: Integration tests (customize/shell)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.shell == 'yes'
     steps:
@@ -270,7 +270,7 @@ jobs:
         shell: bash
   tests-system:
     name: Integration tests (customize/system)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.system == 'yes'
     steps:
@@ -310,7 +310,7 @@ jobs:
         shell: bash
   tests-tools:
     name: Integration tests (customize/tools)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.tools == 'yes'
     steps:
@@ -351,7 +351,7 @@ jobs:
         shell: bash
   tests-post-install:
     name: Integration tests (post-install)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.post-install == 'yes'
     steps:
@@ -378,7 +378,7 @@ jobs:
 
   tests-remix:
     name: Integration tests (remix)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.remix == 'yes'
     steps:
