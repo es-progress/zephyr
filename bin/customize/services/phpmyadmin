@@ -60,12 +60,12 @@ print-finish
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then
     print-status Configure phpMyAdmin...
-    secret=$(openssl rand -hex 32)
+    secret=$(openssl rand -base64 32 | cut -c 1-32)
     sudo install --mode=0644 "${file}" "${target}/public/"
     sudo sed -i \
         -e "s/{{ pma_user_name }}/${service_user}/g" \
         -e "s/{{ pma_user_pass }}/${service_pass}/g" \
-        -e "s/{{ blowfish_secret }}/${secret}/g" \
+        -e "s@{{ blowfish_secret }}@${secret}@g" \
         -e "s@{{ destination }}@${target}@g" \
         "${target}/public/config.inc.php"
     print-finish
