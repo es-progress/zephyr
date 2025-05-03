@@ -13,10 +13,12 @@ jobs:
   format:
     name: Check format
     uses: es-progress/.github/.github/workflows/beautysh.yml@main
+
   linter:
     name: Linting
     needs: format
     uses: es-progress/.github/.github/workflows/shellcheck.yml@main
+
   check:
     name: Check changed modules
     runs-on: ubuntu-22.04
@@ -101,6 +103,7 @@ jobs:
             echo remix=yes >> "$GITHUB_OUTPUT"
           fi
         shell: bash
+
   tests-apps:
     name: Integration tests (customize/apps)
     runs-on: ubuntu-22.04
@@ -116,16 +119,18 @@ jobs:
       - name: Execute scripts (1st pass)
         run: |
           ./bin/zephyrctl customize tester jmeter
-          ./bin/zephyrctl customize tester pulse-effects
+          # Don't test soon-to-be-deprecated pulse-effects module
+          # ./bin/zephyrctl customize tester pulse-effects
           ./bin/zephyrctl customize tester vbox
         shell: bash
 
       - name: Execute scripts (2nd pass)
         run: |
           ./bin/zephyrctl customize tester jmeter
-          ./bin/zephyrctl customize tester pulse-effects
+          # ./bin/zephyrctl customize tester pulse-effects
           ./bin/zephyrctl customize tester vbox
         shell: bash
+
   tests-gnome:
     name: Integration tests (customize/gnome)
     runs-on: ubuntu-22.04
@@ -163,6 +168,7 @@ jobs:
           ./bin/zephyrctl customize tester user-dirs
           ./bin/zephyrctl customize tester wallpaper
         shell: bash
+
   tests-other:
     name: Integration tests (customize/other)
     runs-on: ubuntu-22.04
@@ -186,6 +192,7 @@ jobs:
           ./bin/zephyrctl customize tester cron
           ./bin/zephyrctl customize tester local
         shell: bash
+
   tests-packages:
     name: Integration tests (customize/packages)
     runs-on: ubuntu-22.04
@@ -215,6 +222,7 @@ jobs:
           ./bin/zephyrctl customize tester pip
           ./bin/zephyrctl customize tester snap
         shell: bash
+
   tests-services:
     name: Integration tests (customize/services)
     runs-on: ubuntu-22.04
@@ -245,6 +253,7 @@ jobs:
           ./bin/zephyrctl customize tester php
           ./bin/zephyrctl customize tester phpmyadmin
         shell: bash
+
   tests-shell:
     name: Integration tests (customize/shell)
     runs-on: ubuntu-22.04
@@ -268,6 +277,7 @@ jobs:
           ./bin/zephyrctl customize tester bash
           ./bin/zephyrctl customize tester scripts
         shell: bash
+
   tests-system:
     name: Integration tests (customize/system)
     runs-on: ubuntu-22.04
@@ -308,6 +318,7 @@ jobs:
           ./bin/zephyrctl customize tester systemd
           ./bin/zephyrctl customize tester users
         shell: bash
+
   tests-tools:
     name: Integration tests (customize/tools)
     runs-on: ubuntu-22.04
@@ -349,6 +360,7 @@ jobs:
           ./bin/zephyrctl customize tester ssh
           ./bin/zephyrctl customize tester tomb
         shell: bash
+
   tests-post-install:
     name: Integration tests (post-install)
     runs-on: ubuntu-22.04
