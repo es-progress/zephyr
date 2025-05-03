@@ -1,0 +1,42 @@
+########################
+## Zephyr             ##
+##                    ##
+## Install            ##
+## Disk map           ##
+## Classic partitions ##
+## LUKS encryption    ##
+########################
+
+# In this setup, we have a classic partitioning scheme with LUKS encryption.
+# The partitions for Linux are encrypted, while the NTFS partition remains unencrypted.
+
+# There are two disks in this system:
+#   - main: the main disk where Ubuntu is installed (20 GB)
+#   - store: a secondary disk for NTFS media storage and backups (5 GB)
+#
+# The main disk has the following partitions:
+#   - EFI: a small partition for the EFI bootloader
+#   - BOOT: a partition for the Linux bootloader
+#   - ROOT: the main partition where the root filesystem is mounted
+#   - SRV: a partition for served data
+#   - SWAP: a separate swap partition
+#
+# Secondary disk partitions:
+#   - MEDIA: an NTFS partition for media storage (can be used for Windows too)
+#   - BACKUP: a Linux partition for backup storage
+#
+# The partitioning scheme is as follows:
+[partitions]
+# DISK disk_name device
+DISK   main      /dev/sda
+DISK   store     /dev/sdb
+
+# disk_name num  gap  size type  label
+main          1    0  128M efi   EFI
+main          2    0  512M luks  BOOT
+main          3  32M   14G luks  ROOT
+main          4  32M    3G luks  SRV
+main          5  32M    1G luks  SWAP
+
+store         1    0    2G win   MEDIA
+store         2 512M    2G luks  BACKUP
