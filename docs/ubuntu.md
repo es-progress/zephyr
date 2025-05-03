@@ -46,7 +46,17 @@ At the end of this phase the actual install is not yet started, however the disk
     DISK_MAP           Disk-map to use
     ```
 
-1. Format partitions
+    or the new `disk partition` command (this uses the new Disk map format):
+
+    ```
+    zephyrctl disk partition PROFILE DISK_MAP...
+
+    where:
+    PROFILE            Selected customization profile
+    DISK_MAP           Disk-map to use
+    ```
+
+1. (Optional) Format partitions
 
     ```
     zephyrctl format PROFILE DISK_MAP...
