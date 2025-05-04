@@ -85,6 +85,7 @@ PROFILE            Customization profile to use
 MAP                Disk maps
 
 Subcommands:
+info               Show disk information
 partition          Partition disk
 ```
 

@@ -145,6 +145,7 @@ _usage() {
 
     # Show available subcommands for 'disk' command
     if [[ "${selector}" == disk ]]; then
+        subcommands+=("info:Show disk information")
         subcommands+=("partition:Partition disk")
         echo -e "\n${TXT_YELLOW}Subcommands:${TXT_NORM}"
         for line in "${subcommands[@]}"; do

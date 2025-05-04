@@ -60,6 +60,23 @@ _partition-create() {
     sleep 3
 }
 
+## Print disk info
+##################
+_disk_info() {
+    local disk
+    local devices=()
+    for disk in "${disks[@]}"; do
+        devices+=("${disk_device[${disk}]}")
+    done
+
+    print-section Disks
+    fdisk -l "${devices[@]}"
+
+    print-section Filesystems
+    # Exclude loopback devices (7) and cdrom devices (11)
+    lsblk --fs --exclude 7,11
+}
+
 ## Partition disks
 ##################
 _partition() {
@@ -170,6 +187,7 @@ done
 
 # Perform the requested action
 case "${subcommand}" in
+    info) _disk_info ;;
     partition) _partition ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
