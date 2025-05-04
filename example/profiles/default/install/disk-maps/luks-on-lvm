@@ -22,15 +22,33 @@
 #   - PV_STORE: physical volume for LVM on the secondary disk
 #
 # The partitioning scheme is as follows:
+[disks]
+# disk_name device   [part_prefix]
+main        /dev/sda
+store       /dev/sdb
 [partitions]
-# DISK disk_name device
-DISK   main      /dev/sda
-DISK   store     /dev/sdb
+# disk_name num  gap  size type  label    crypt volgroup filesystem
+main          1    0  128M efi   EFI      -     -        fat32
+main          2    0  512M luks  BOOT     luks1 -        ext4
+main          3  32M   18G 8e00  PV_MAIN  -     vg-main  -
 
-# disk_name num  gap  size type  label
-main          1    0  128M efi   EFI
-main          2    0  512M luks  BOOT
-main          3  32M   18G 8e00  PV_MAIN
+store         1    0    2G win   MEDIA    -     -        ntfs
+store         2 512M    2G 8e00  PV_STORE -     vg-main  -
 
-store         1    0    2G win   MEDIA
-store         2 512M    2G 8e00  PV_STORE
+# LVM structure
+#
+# We use one volume group (vg-main) for all logical volumes.
+# The volume group is created from the physical volumes on the main and store disks.
+#
+# The logical volumes are created as follows:
+#   - root: the main root filesystem (14 GB)
+#   - home: a separate home partition (3 GB)
+#   - swap: a swap partition (100% of the remaining space)
+[vol-groups]
+# vg-name  physical-volumes
+vg-main    PV_MAIN,PV_STORE
+[volumes]
+# vg-name name     size crypt filesystem
+vg-main   root      14G luks2 ext4
+vg-main   home       3G luks2 ext4
+vg-main   swap 100%FREE luks2 swap
