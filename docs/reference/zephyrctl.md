@@ -65,6 +65,31 @@ zephyrctl customize default ~apt packages
 
 ---
 
+## disk
+
+Manage disk layouts before installing Ubuntu.
+This command allows you to partition, format, or encrypt volumes based on disk maps.
+
+!!! danger "This operation is destructive!"
+
+    Ensure you back up your data before proceeding.
+
+**Usage**
+
+```
+zephyrctl disk SUBCOMMAND PROFILE MAP...
+
+Params:
+SUBCOMMAND         What to do with the disks
+PROFILE            Customization profile to use
+MAP                Disk maps
+
+Subcommands:
+partition          Partition disk
+```
+
+---
+
 ## extract-grub
 
 It is possible to override the GRUB configuration in the remixed ISO file.

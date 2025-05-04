@@ -19,6 +19,7 @@ _usage-main() {
     command+=("extract-grub:Extract grub.cfg from ISO")
     command+=("remix:Create Zephyr ISO")
     command+=("burn:Burn Zephyr ISO to USB")
+    command+=("disk:Manage disks and volumes (partition, encrypt, format, etc.)")
     command+=("partition:Partition disk")
     command+=("format:Format partitions")
     command+=("post-install:OS post-install steps")
@@ -50,6 +51,7 @@ _usage() {
     local selector="${1:-}"
     local description usage line name help path modules
     local options=()
+    local subcommands=()
 
     case "${selector}" in
         "")
@@ -74,6 +76,13 @@ _usage() {
             usage="burn ISO_FILE [DISK]"
             options+=("ISO_FILE:ISO file to burn (e.g. zephyr.iso)")
             options+=("DISK:USB flash drive device file (e.g. /dev/sdc). Interactive selection if not specified.")
+            ;;
+        disk)
+            description="Setup disk layout before installing Ubuntu: e.g. create, format or encrypt volumes. Be careful, as it's a dangerous operation. Create backups beforehand!"
+            usage="disk SUBCOMMAND PROFILE MAP..."
+            options+=("SUBCOMMAND:What to do with the disks")
+            options+=("PROFILE:Customization profile to use")
+            options+=("MAP:Disk maps")
             ;;
         partition)
             description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
@@ -121,17 +130,27 @@ _usage() {
             IFS=: read -r name help <<<"${line}"
             printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
         done
+    fi
 
-        # Show available categories and modules for 'customize' command
-        if [[ "${selector}" == customize ]]; then
-            echo -e "\n${TXT_YELLOW}Available categories and modules:${TXT_NORM}"
-            while IFS= read -r -d '' path; do
-                echo -ne "  ${TXT_GREEN}$(basename "${path}")${TXT_NORM}:"
-                modules=$(find "${path}" -type f -executable -printf " %f\n" | sort)
-                # shellcheck disable=SC2068
-                implode , ${modules[@]}
-            done < <(find "${PATH_SCRIPTS_CUSTOMIZE}" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z || true)
-        fi
+    # Show available categories and modules for 'customize' command
+    if [[ "${selector}" == customize ]]; then
+        echo -e "\n${TXT_YELLOW}Available categories and modules:${TXT_NORM}"
+        while IFS= read -r -d '' path; do
+            echo -ne "  ${TXT_GREEN}$(basename "${path}")${TXT_NORM}:"
+            modules=$(find "${path}" -type f -executable -printf " %f\n" | sort)
+            # shellcheck disable=SC2068
+            implode , ${modules[@]}
+        done < <(find "${PATH_SCRIPTS_CUSTOMIZE}" -mindepth 1 -maxdepth 1 -type d -print0 | sort -z || true)
+    fi
+
+    # Show available subcommands for 'disk' command
+    if [[ "${selector}" == disk ]]; then
+        subcommands+=("partition:Partition disk")
+        echo -e "\n${TXT_YELLOW}Subcommands:${TXT_NORM}"
+        for line in "${subcommands[@]}"; do
+            IFS=: read -r name help <<<"${line}"
+            printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
+        done
     fi
 }
 
@@ -255,6 +274,34 @@ _format() {
     sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/format" "${profile}" "${@}"
 }
 
+## Manage disks
+###############
+# shellcheck disable=SC2317
+_disk() {
+    local subcommand="${1:-}"
+    local profile="${2:-}"
+
+    if [[ -z "${subcommand}" ]]; then
+        print-error Subcommand missing!
+        _usage disk
+        exit 1
+    fi
+
+    if [[ -z "${profile}" ]]; then
+        print-error Profile missing!
+        _usage disk
+        exit 1
+    fi
+
+    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
+        print-error Profile: "${profile}" missing!
+        exit 1
+    fi
+    shift 2
+
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/disk/${subcommand}" "${profile}" "${@}"
+}
+
 ## Post-install
 ###############
 # shellcheck disable=SC2317
@@ -349,7 +396,7 @@ fi
 
 # Switch action
 case "${cmd}" in
-    extract-grub|remix|burn|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
+    extract-grub|remix|burn|disk|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac

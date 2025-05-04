@@ -1,0 +1,36 @@
+##############
+## Zephyr   ##
+##          ##
+## Install  ##
+## Disk map ##
+## LVM only ##
+##############
+
+# In this setup, we create unencrypted LVM managed volumes.
+
+# There are two disks in this system:
+#   - main: the main disk where Ubuntu is installed (20 GB)
+#   - store: a secondary disk for NTFS media storage and also for Ubuntu (5 GB)
+#
+# The main disk has the following partitions:
+#   - EFI: a small partition for the EFI bootloader
+#   - BOOT: a partition for the Linux bootloader
+#   - PV_MAIN: physical volume for LVM on the main disk
+#
+# Secondary disk partitions:
+#   - MEDIA: an NTFS partition for media storage (can be used for Windows too)
+#   - PV_STORE: physical volume for LVM on the secondary disk
+#
+# The partitioning scheme is as follows:
+[partitions]
+# DISK disk_name device
+DISK   main      /dev/sda
+DISK   store     /dev/sdb
+
+# disk_name num  gap  size type  label
+main          1    0  128M efi   EFI
+main          2    0  512M linux BOOT
+main          3  32M   18G 8e00  PV_MAIN
+
+store         1    0    2G win   MEDIA
+store         2 512M    2G 8e00  PV_STORE
