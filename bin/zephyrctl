@@ -299,7 +299,7 @@ _disk() {
     fi
     shift 2
 
-    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/disk/${subcommand}" "${profile}" "${@}"
+    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/disk" "${subcommand}" "${profile}" "${@}"
 }
 
 ## Post-install
