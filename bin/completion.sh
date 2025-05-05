@@ -19,7 +19,7 @@ __zephyrctl_complete() {
                 post-install) __zephyr_gen_word live install dev ;;
                 customize|partition|format) __zephyr_gen_word "${profiles}" ;;
                 extract-grub|remix|burn) __zephyr_gen_file ;;
-                disk) __zephyr_gen_word partition ;;
+                disk) __zephyr_gen_word info partition ;;
                 *) ;;
             esac
             ;;
