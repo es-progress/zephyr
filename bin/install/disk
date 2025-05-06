@@ -12,10 +12,10 @@
 
 ## Destroy partition table
 ##
-## @param    $1  Device
-##########################
+## @param    $1  Disk device
+############################
 _partition-zap() {
-    local device="${1:?Device missing}"
+    local device="${1:?Disk device missing}"
     sgdisk --zap-all "${device}"
 
     # Inform kernel about partitions
@@ -25,7 +25,7 @@ _partition-zap() {
 
 ## Create partition
 ##
-## @param    $1  Device
+## @param    $1  Disk device
 ## @param    $2  Partition number
 ## @param    $3  Gap (free space before this partition)
 ## @param    $4  Size
@@ -34,7 +34,7 @@ _partition-zap() {
 ## @param    $6  Label
 #######################################################
 _partition-create() {
-    local device="${1:?Device missing}"
+    local device="${1:?Disk device missing}"
     local number="${2:?Partition number missing}"
     local gap="${3:?Gap size missing}"
     local size="${4:?Partition size missing}"
@@ -60,13 +60,52 @@ _partition-create() {
     sleep 3
 }
 
+## Encrypt partition/volume with LUKS
+##
+## @param    $1  Partition/volume device
+## @param    $2  LUKS Type (luks1, luks2)
+## @param    $3  Label
+#########################################
+_encrypt-partition() {
+    local device="${1:?Partition device missing}"
+    local type="${2:?LUKS type missing}"
+    local label="${3:?Partition label missing}"
+    local luks2_options=()
+
+    [[ "${type}" == luks2 ]] && luks2_options=(--pbkdf=argon2id --pbkdf-memory=2097152)
+
+    cryptsetup luksFormat \
+        "--type=${type}" \
+        --hash=sha512 \
+        --cipher=aes-xts-plain64 \
+        --key-size=512 \
+        --use-urandom \
+        --iter-time=3000 \
+        "${luks2_options[@]}" -- "${device}"
+    _decrypt-partition "${device}" "${label}"
+}
+
+## Decrypt (open) partition/volume
+##
+## @param    $1  Partition/volume device
+## @param    $2  Label
+########################################
+_decrypt-partition() {
+    local device="${1:?Partition device missing}"
+    local label="${2:?Partition label missing}"
+
+    cryptsetup open \
+        --type luks \
+        "${device}" "${label}"
+}
+
 ## Print disk info
 ##################
 _disk_info() {
     local disk
     local devices=()
     for disk in "${disks[@]}"; do
-        devices+=("${disk_device[${disk}]}")
+        devices+=("${disk_devices[${disk}]}")
     done
 
     print-section Disks
@@ -80,7 +119,7 @@ _disk_info() {
 ## Partition disks
 ##################
 _partition() {
-    local disk device partition part_device number gap size type label crypt volgroup filesystem
+    local disk partition disk_device number gap size type label crypt volgroup filesystem
     local partitions_array=()
 
     # Print parsed disk map
@@ -91,8 +130,8 @@ _partition() {
         printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "#part_device" gap size type label crypt volgroup filesystem
         IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r part_device number gap size type label crypt volgroup filesystem <<< "${partition}"
-            printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "${part_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${volgroup}" "${filesystem}"
+            IFS=, read -r disk_device number gap size type label crypt volgroup filesystem <<< "${partition}"
+            printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${volgroup}" "${filesystem}"
         done
         echo --------------------------------------------------------------------------------
     done
@@ -103,7 +142,7 @@ _partition() {
     echo
     print-warning "WARNING! The following disks will be erased!"
     for disk in "${disks[@]}"; do
-        print-warning "${disk_device[${disk}]}"
+        print-warning "${disk_devices[${disk}]}"
     done
     echo
     read -rp "Proceed? (yes/no): "
@@ -111,23 +150,65 @@ _partition() {
 
     # Do the partitioning
     for disk in "${disks[@]}"; do
-        device="${disk_device[${disk}]}"
-        print-section Partition "${device}"
+        disk_device="${disk_devices[${disk}]}"
+        print-section Partition "${disk_device}"
 
-        print-header Destroy partition table on "${device}" "(${disk})..."
-        _partition-zap "${device}"
+        print-header Destroy partition table on "${disk_device}" "(${disk})..."
+        _partition-zap "${disk_device}"
         print-finish
 
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
             IFS=, read -r _ number gap size type label _ _ _ <<< "${partition}"
             print-header Create partition: "${label}..."
-            _partition-create "${device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
+            _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
         done
-        print-finish Finished partitioning "${device}"
+        print-finish Finished partitioning "${disk_device}"
     done
     print-finish All partitioning finished.
+}
+
+## Encrypt partitions/volumes
+#############################
+_encrypt() {
+    local disk partition disk_device number label crypt
+    local partitions_array=()
+
+    # Do the encryption
+    for disk in "${disks[@]}"; do
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header LUKS encrypting "${disk_device}${number} (${label})..."
+            _encrypt-partition "${disk_device}${number}" "${crypt}" "${label}"
+            print-finish
+        done
+    done
+    print-finish All encryption finished.
+}
+
+## Decrypt partitions/volumes
+#############################
+_decrypt() {
+    local disk partition disk_device number label crypt
+    local partitions_array=()
+
+    # Do the decryption
+    for disk in "${disks[@]}"; do
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header Open encrypted partition "${disk_device}${number} (${label})..."
+            _decrypt-partition "${disk_device}${number}" "${label}"
+            print-finish
+        done
+    done
+    print-finish All decryption finished.
 }
 
 ##################
@@ -147,8 +228,8 @@ shift 2
 
 # Parse disk maps
 disks=()
-declare -A disk_device
-declare -A disk_part_prefix
+declare -A disk_devices
+declare -A disk_part_prefixes
 declare -A disk_partitions
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
@@ -158,12 +239,12 @@ for map in "${@}"; do
         for line in $(cfg-read "${file}" disks); do
             IFS=$' \t' read -r -a arguments <<<"${line}"
             disk="${arguments[0]}"
-            device="${arguments[1]}"
-            part_prefix="${arguments[2]:-}"
+            disk_device="${arguments[1]}"
+            disk_part_prefix="${arguments[2]:-}"
 
             disks+=("${disk}")
-            disk_device["${disk}"]="${device}"
-            disk_part_prefix["${disk}"]="${part_prefix}"
+            disk_devices["${disk}"]="${disk_device}"
+            disk_part_prefixes["${disk}"]="${disk_part_prefix}"
         done
 
         # Parse partitions
@@ -171,7 +252,7 @@ for map in "${@}"; do
             IFS=$' \t' read -r -a arguments <<<"${line}"
             disk="${arguments[0]}"
             # Rewrite disk_name to disk_device with partition prefix
-            arguments[0]="${disk_device["${disk}"]}${disk_part_prefix["${disk}"]}"
+            arguments[0]="${disk_devices["${disk}"]}${disk_part_prefixes["${disk}"]}"
 
             partition_info="$(implode , "${arguments[@]}")"
             if [[ -z "${disk_partitions[${disk}]:-}" ]]; then
@@ -187,6 +268,8 @@ done
 
 # Perform the requested action
 case "${subcommand}" in
+    decrypt) _decrypt ;;
+    encrypt) _encrypt ;;
     info) _disk_info ;;
     partition) _partition ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
