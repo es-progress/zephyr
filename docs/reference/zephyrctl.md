@@ -85,6 +85,8 @@ PROFILE            Customization profile to use
 MAP                Disk maps
 
 Subcommands:
+decrypt            Open encrypted partitions and volumes
+encrypt            Encrypt partitions and volumes
 info               Show disk information
 partition          Partition disk
 ```

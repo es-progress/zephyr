@@ -145,6 +145,8 @@ _usage() {
 
     # Show available subcommands for 'disk' command
     if [[ "${selector}" == disk ]]; then
+        subcommands+=("decrypt:Open encrypted partitions and volumes")
+        subcommands+=("encrypt:Encrypt partitions and volumes")
         subcommands+=("info:Show disk information")
         subcommands+=("partition:Partition disk")
         echo -e "\n${TXT_YELLOW}Subcommands:${TXT_NORM}"

@@ -60,6 +60,45 @@ _partition-create() {
     sleep 3
 }
 
+## Encrypt partition/volume with LUKS
+##
+## @param    $1  Partition/volume device
+## @param    $2  LUKS Type (luks1, luks2)
+## @param    $3  Label
+#########################################
+_encrypt-partition() {
+    local device="${1:?Device file missing}"
+    local type="${2:?LUKS type missing}"
+    local label="${3:?Partition label missing}"
+    local luks2_options=()
+
+    [[ "${type}" == luks2 ]] && luks2_options=(--pbkdf=argon2id --pbkdf-memory=2097152)
+
+    cryptsetup luksFormat \
+        "--type=${type}" \
+        --hash=sha512 \
+        --cipher=aes-xts-plain64 \
+        --key-size=512 \
+        --use-urandom \
+        --iter-time=3000 \
+        "${luks2_options[@]}" -- "${device}"
+    _decrypt-partition "${device}" "${label}"
+}
+
+## Decrypt (open) partition/volume
+##
+## @param    $1  Partition/volume device
+## @param    $2  Label
+########################################
+_decrypt-partition() {
+    local device="${1:?Device file missing}"
+    local label="${2:?Partition label missing}"
+
+    cryptsetup open \
+        --type luks \
+        "${device}" "${label}"
+}
+
 ## Print disk info
 ##################
 _disk_info() {
@@ -130,6 +169,48 @@ _partition() {
     print-finish All partitioning finished.
 }
 
+## Encrypt partitions/volumes
+#############################
+_encrypt() {
+    local disk partition part_device number label crypt
+    local partitions_array=()
+
+    # Do the encryption
+    for disk in "${disks[@]}"; do
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r part_device number _ _ _ label crypt _ _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header LUKS encrypting "${label}..."
+            _encrypt-partition "${part_device}${number}" "${crypt}" "${label}"
+            print-finish
+        done
+    done
+    print-finish All encryption finished.
+}
+
+## Decrypt partitions/volumes
+#############################
+_decrypt() {
+    local disk partition part_device number label crypt
+    local partitions_array=()
+
+    # Do the decryption
+    for disk in "${disks[@]}"; do
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r part_device number _ _ _ label crypt _ _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header Open encrypted partition "${part_device}${number} (${label})..."
+            _decrypt-partition "${part_device}${number}" "${label}"
+            print-finish
+        done
+    done
+    print-finish All decryption finished.
+}
+
 ##################
 ## SCRIPT START ##
 ##################
@@ -187,6 +268,8 @@ done
 
 # Perform the requested action
 case "${subcommand}" in
+    decrypt) _decrypt ;;
+    encrypt) _encrypt ;;
     info) _disk_info ;;
     partition) _partition ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
