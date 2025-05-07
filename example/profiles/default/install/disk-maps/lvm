@@ -15,11 +15,13 @@
 # The main disk has the following partitions:
 #   - EFI: a small partition for the EFI bootloader
 #   - BOOT: a partition for the Linux bootloader
-#   - PV_MAIN: physical volume for LVM on the main disk
+#   - PV_MAIN_1: physical volume #1 for LVM on the main disk
+#   - PV_MAIN_2: physical volume #2 for LVM on the main disk
 #
 # Secondary disk partitions:
 #   - MEDIA: an NTFS partition for media storage (can be used for Windows too)
-#   - PV_STORE: physical volume for LVM on the secondary disk
+#   - PV_STORE_1: physical volume #1 for LVM on the secondary disk
+#   - PV_STORE_2: physical volume #2 for LVM on the secondary disk
 #
 # The partitioning scheme is as follows:
 [disks]
@@ -27,13 +29,15 @@
 main        /dev/sda
 store       /dev/sdb
 [partitions]
-# disk_name num  gap  size type  label    crypt filesystem
-main          1    0  128M efi   EFI      -     fat32
-main          2    0  512M linux BOOT     -     ext4
-main          3  32M   18G 8e00  PV_MAIN  -     -
+# disk_name num  gap  size type  label      crypt filesystem
+main          1    0  128M efi   EFI        -     fat32
+main          2    0  512M linux BOOT       -     ext4
+main          3  32M   17G 8e00  PV_MAIN_1  -     -
+main          4  32M    1G 8e00  PV_MAIN_2  -     -
 
-store         1    0    2G win   MEDIA    -     ntfs
-store         2 512M    2G 8e00  PV_STORE -     -
+store         1    0    2G win   MEDIA      -     ntfs
+store         2 512M    1G 8e00  PV_STORE_1 -     -
+store         3  32M    1G 8e00  PV_STORE_2 -     -
 
 # LVM structure
 #
@@ -46,9 +50,11 @@ store         2 512M    2G 8e00  PV_STORE -     -
 #   - swap: a swap partition (100% of the remaining space)
 [vol-groups]
 # vg-name  physical-volumes
-vg-main    PV_MAIN,PV_STORE
+vg-main    PV_MAIN_1,PV_STORE_1
+vg-server  PV_MAIN_2,PV_STORE_2
 [volumes]
 # vg-name name     size crypt filesystem
 vg-main   root      14G -     ext4
-vg-main   home       3G -     ext4
+vg-main   home       2G -     ext4
 vg-main   swap 100%FREE -     swap
+vg-server srv  100%FREE -     ext4
