@@ -31,12 +31,12 @@
 main        /dev/sda
 store       /dev/sdb
 [partitions]
-# disk_name num  gap  size type  label  crypt volgroup filesystem
-main          1    0  128M efi   EFI    -     -        fat32
-main          2    0  512M luks  BOOT   luks1 -        ext4
-main          3  32M   14G luks  ROOT   luks2 -        ext4
-main          4  32M    3G luks  SRV    luks2 -        ext4
-main          5  32M    1G luks  SWAP   luks2 -        swap
+# disk_name num  gap  size type  label  crypt filesystem
+main          1    0  128M efi   EFI    -     fat32
+main          2    0  512M luks  BOOT   luks1 ext4
+main          3  32M   14G luks  ROOT   luks2 ext4
+main          4  32M    3G luks  SRV    luks2 ext4
+main          5  32M    1G luks  SWAP   luks2 swap
 
-store         1    0    2G win   MEDIA  -     -        ntfs
-store         2 512M    2G luks  BACKUP luks2 -        ext4
+store         1    0    2G win   MEDIA  -     ntfs
+store         2 512M    2G luks  BACKUP luks2 ext4

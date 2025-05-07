@@ -119,7 +119,7 @@ _disk_info() {
 ## Partition disks
 ##################
 _partition() {
-    local disk partition disk_device number gap size type label crypt volgroup filesystem
+    local disk partition disk_device number gap size type label crypt filesystem
     local partitions_array=()
 
     # Print parsed disk map
@@ -127,13 +127,13 @@ _partition() {
     for disk in "${disks[@]}"; do
         echo "Disk: ${disk}"
         echo Partitions:
-        printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "#part_device" gap size type label crypt volgroup filesystem
+        printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "#part_device" gap size type label crypt filesystem
         IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number gap size type label crypt volgroup filesystem <<< "${partition}"
-            printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${volgroup}" "${filesystem}"
+            IFS=, read -r disk_device number gap size type label crypt filesystem <<< "${partition}"
+            printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${filesystem}"
         done
-        echo --------------------------------------------------------------------------------
+        echo -----------------------------------------------------------------
     done
 
     # Show what we are going to do
@@ -159,7 +159,7 @@ _partition() {
 
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r _ number gap size type label _ _ _ <<< "${partition}"
+            IFS=, read -r _ number gap size type label _ _ <<< "${partition}"
             print-header Create partition: "${label}..."
             _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
@@ -179,7 +179,7 @@ _encrypt() {
     for disk in "${disks[@]}"; do
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
 
             print-header LUKS encrypting "${disk_device}${number} (${label})..."
@@ -200,7 +200,7 @@ _decrypt() {
     for disk in "${disks[@]}"; do
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
 
             print-header Open encrypted partition "${disk_device}${number} (${label})..."
