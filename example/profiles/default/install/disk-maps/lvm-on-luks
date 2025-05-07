@@ -27,13 +27,13 @@
 main        /dev/sda
 store       /dev/sdb
 [partitions]
-# disk_name num  gap  size type  label    crypt filesystem
-main          1    0  128M efi   EFI      -     fat32
-main          2    0  512M luks  BOOT     luks1 ext4
-main          3  32M   18G luks  PV_MAIN  luks2 -
+# disk_name num  gap  size type  label          crypt filesystem
+main          1    0  128M efi   EFI            -     fat32
+main          2    0  512M luks  CRYPT_BOOT     luks1 ext4
+main          3  32M   18G luks  CRYPT_PV_MAIN  luks2 -
 
-store         1    0    2G win   MEDIA    -     ntfs
-store         2 512M    2G luks  PV_STORE luks2 -
+store         1    0    2G win   MEDIA          -     ntfs
+store         2 512M    2G luks  CRYPT_PV_STORE luks2 -
 
 # LVM structure
 #
@@ -46,7 +46,7 @@ store         2 512M    2G luks  PV_STORE luks2 -
 #   - swap: a swap partition (100% of the remaining space)
 [vol-groups]
 # vg-name  physical-volumes
-vg-main    PV_MAIN,PV_STORE
+vg-main    CRYPT_PV_MAIN,CRYPT_PV_STORE
 [volumes]
 # vg-name name     size crypt filesystem
 vg-main   root      14G -     ext4
