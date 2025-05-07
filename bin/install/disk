@@ -163,6 +163,14 @@ _disk_info() {
     print-section Disks
     fdisk -l "${devices[@]}"
 
+    print-section LVM
+    print-header Volume groups
+    vgs
+    print-header Physical volumes
+    pvs
+    print-header Logical volumes
+    lvs
+
     print-section Filesystems
     # Exclude loopback devices (7) and cdrom devices (11)
     lsblk --fs --exclude 7,11
