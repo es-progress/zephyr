@@ -88,6 +88,7 @@ Subcommands:
 decrypt            Open encrypted partitions and volumes
 encrypt            Encrypt partitions and volumes
 info               Show disk information
+lvm                Setup LVM (volume groups, physical and logical volumes)
 partition          Partition disk
 ```
 

@@ -148,6 +148,7 @@ _usage() {
         subcommands+=("decrypt:Open encrypted partitions and volumes")
         subcommands+=("encrypt:Encrypt partitions and volumes")
         subcommands+=("info:Show disk information")
+        subcommands+=("lvm:Setup LVM (volume groups, physical and logical volumes)")
         subcommands+=("partition:Partition disk")
         echo -e "\n${TXT_YELLOW}Subcommands:${TXT_NORM}"
         for line in "${subcommands[@]}"; do
