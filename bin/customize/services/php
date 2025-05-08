@@ -79,10 +79,9 @@ for php_version in "${versions[@]}"; do
         _config local "${dir}"
     fi
 
-    print-header Restart services...
+    print-header Restart PHP-FPM "${php_version}"...
     sudo systemctl enable "php${php_version}-fpm.service"
     sudo systemctl restart "php${php_version}-fpm.service"
-    sudo a2enconf "php${php_version}-fpm"
     print-finish
 done
 
