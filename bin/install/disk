@@ -108,6 +108,15 @@ _pv-create() {
     pvcreate "${device}"
 }
 
+## Remove LVM physical volume
+##
+## @param    $1  Device
+#############################
+_pv-remove() {
+    local device="${1:?PV device missing}"
+    pvremove "${device}"
+}
+
 ## Create LVM volume group
 ##
 ## @param    $1  Volume group name
@@ -127,6 +136,32 @@ _vg-create() {
     done
 
     vgcreate --autobackup y "${vg}" "${pv_devices_array[@]}"
+}
+
+## Remove LVM volume group
+##
+## @param    $1  Volume group name
+## @param    $2  Comma-separated list of PV devices
+###################################################
+_vg-remove() {
+    local vg="${1:?VG name missing}"
+    local pv_devices="${2:?PV devices missing}"
+    local pv_devices_array=()
+    local pv_device pvs
+
+    vgremove "${vg}"
+
+    pvs=$(pvs --noheadings --options pv_name)
+    IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
+    for pv_device in "${pv_devices_array[@]}"; do
+        print-header Remove PV from "${pv_device}"...
+        if grep -qsx "${pv_device}" <<<"${pvs}"; then
+            _pv-remove "${pv_device}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
 }
 
 ## Create LVM logical volume
@@ -174,6 +209,37 @@ _disk_info() {
     print-section Filesystems
     # Exclude loopback devices (7) and cdrom devices (11)
     lsblk --fs --exclude 7,11
+}
+
+## Delete all partitions and LVM structures
+###########################################
+_zap() {
+    local vg vgs disk disk_device
+
+    print-status Closing all open LUKS containers...
+    dmsetup ls --target crypt --exec "cryptsetup close"
+    print-finish
+
+    vgs=$(vgs --noheadings --options vg_name)
+    for vg in "${vol_groups[@]}"; do
+        print-header Destroy volume group "${vg}"...
+        if grep -qsx "${vg}" <<<"${vgs}"; then
+            _vg-remove "${vg}" "${vol_group_pvs[${vg}]}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
+
+    for disk in "${disks[@]}"; do
+        disk_device="${disk_devices[${disk}]}"
+        read -rp "Do you really want to delete all partitions from ${disk_device} (${disk}) disk? (yes/no): "
+        [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+        print-header Destroy partition table on "${disk_device}" "(${disk})..."
+        _partition-zap "${disk_device}"
+        print-finish
+    done
 }
 
 ## Partition disks
@@ -452,6 +518,7 @@ case "${subcommand}" in
     info) _disk_info ;;
     lvm) _lvm ;;
     partition) _partition ;;
+    zap) _zap ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
 
