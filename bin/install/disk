@@ -176,6 +176,10 @@ _disk_info() {
     lsblk --fs --exclude 7,11
 }
 
+_zap() {
+    return 0
+}
+
 ## Partition disks
 ##################
 _partition() {
@@ -452,6 +456,7 @@ case "${subcommand}" in
     info) _disk_info ;;
     lvm) _lvm ;;
     partition) _partition ;;
+    zap) _zap ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
 

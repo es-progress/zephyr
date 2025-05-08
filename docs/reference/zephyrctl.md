@@ -90,6 +90,7 @@ encrypt            Encrypt partitions and volumes
 info               Show disk information
 lvm                Setup LVM (volume groups, physical and logical volumes)
 partition          Partition disk
+zap                Delete all partitions and LVM structures on a disk
 ```
 
 ---
