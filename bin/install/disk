@@ -232,7 +232,7 @@ _partition() {
 ## Encrypt partitions/volumes
 #############################
 _encrypt() {
-    local disk partition disk_device number label crypt
+    local disk partition vg lvs_array lv disk_device number label name crypt
     local partitions_array=()
 
     # Do the encryption
@@ -247,13 +247,24 @@ _encrypt() {
             print-finish
         done
     done
+    for vg in "${vol_groups[@]}"; do
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name _ crypt _ <<< "${lv}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header LUKS encrypting "/dev/${vg}/${name} (${name})..."
+            _encrypt-partition "/dev/${vg}/${name}" "${crypt}" "${name}"
+            print-finish
+        done
+    done
     print-finish All encryption finished.
 }
 
 ## Decrypt partitions/volumes
 #############################
 _decrypt() {
-    local disk partition disk_device number label crypt
+    local disk partition vg lvs_array lv disk_device number label name crypt
     local partitions_array=()
 
     # Do the decryption
@@ -265,6 +276,17 @@ _decrypt() {
 
             print-header Open encrypted partition "${disk_device}${number} (${label})..."
             _decrypt-partition "${disk_device}${number}" "${label}"
+            print-finish
+        done
+    done
+    for vg in "${vol_groups[@]}"; do
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name _ crypt _ <<< "${lv}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            print-header Open encrypted partition "/dev/${vg}/${name} (${name})..."
+            _decrypt-partition "/dev/${vg}/${name}" "${name}"
             print-finish
         done
     done
