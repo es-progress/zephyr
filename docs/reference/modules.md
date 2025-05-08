@@ -360,7 +360,8 @@ This module will install and configure [PHP](https://www.php.net/){target=\_blan
 - `services/php/global.d`: directory for PHP's `.ini` configuration files.
 - `services/global.cfg`:
     - `php`: php script settings. Format: INI-file format.
-        - `version`: PHP version
+        - `version`: comma-separated list of PHP versions to install
+        - `cli_version`: Single PHP version to be used by PHP CLI
 
 ---
 

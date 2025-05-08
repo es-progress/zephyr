@@ -86,6 +86,8 @@ if file=$(cfg-get "${profile}" packages/local.cfg); then
     _parse-remove-packages local "${file}"
 fi
 
+# Deduplicate list of repositories
+mapfile -t repos < <(printf "%s\n" "${repos[@]}" | sort -u || true)
 for apt_repo in "${repos[@]}"; do
     print-status Add apt repo: "${apt_repo}..."
     sudo add-apt-repository --yes --no-update "${apt_repo}"
