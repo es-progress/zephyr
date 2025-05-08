@@ -99,15 +99,6 @@ _decrypt-partition() {
         "${device}" "${label}"
 }
 
-## Create LVM physical volume
-##
-## @param    $1  Device
-#############################
-_pv-create() {
-    local device="${1:?PV device missing}"
-    pvcreate "${device}"
-}
-
 ## Create LVM volume group
 ##
 ## @param    $1  Volume group name
@@ -122,11 +113,37 @@ _vg-create() {
     IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
     for pv_device in "${pv_devices_array[@]}"; do
         print-header Create PV from "${pv_device}"...
-        _pv-create "${pv_device}"
+        pvcreate "${pv_device}"
         print-finish
     done
 
     vgcreate --autobackup y "${vg}" "${pv_devices_array[@]}"
+}
+
+## Remove LVM volume group
+##
+## @param    $1  Volume group name
+## @param    $2  Comma-separated list of PV devices
+###################################################
+_vg-remove() {
+    local vg="${1:?VG name missing}"
+    local pv_devices="${2:?PV devices missing}"
+    local pv_devices_array=()
+    local pv_device pvs
+
+    vgremove "${vg}"
+
+    pvs=$(pvs --noheadings --options pv_name | sed -r 's/^[[:space:]]+//')
+    IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
+    for pv_device in "${pv_devices_array[@]}"; do
+        print-header Remove PV from "${pv_device}"...
+        if grep -qsx "${pv_device}" <<<"${pvs}"; then
+            pvremove "${pv_device}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
 }
 
 ## Create LVM logical volume
@@ -176,6 +193,51 @@ _disk_info() {
     lsblk --fs --exclude 7,11
 }
 
+## Delete all partitions and LVM structures
+###########################################
+_zap() {
+    local vg vgs disk disk_device
+
+    # Show what we are going to do
+    print-section Disks to delete all partitions
+    printf "%-20s%s\n" "#disk_name" disk_device
+    for disk in "${disks[@]}"; do
+        printf "%-20s%s\n" "${disk}" "${disk_devices["${disk}"]}"
+    done
+
+    print-section Volume groups and PV devices to remove
+    printf "%-20s%s\n" "#volume_group" pv_devices
+    for vg in "${vol_groups[@]}"; do
+        printf "%-20s%s\n" "${vg}" "${vol_group_pvs[${vg}]}"
+    done
+
+    echo
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+    print-status Closing all open LUKS containers...
+    dmsetup ls --target crypt --exec "cryptsetup close"
+    print-finish
+
+    vgs=$(vgs --noheadings --options vg_name | sed -r 's/^[[:space:]]+//')
+    for vg in "${vol_groups[@]}"; do
+        print-header Destroy volume group "${vg}"...
+        if grep -qsx "${vg}" <<<"${vgs}"; then
+            _vg-remove "${vg}" "${vol_group_pvs[${vg}]}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
+
+    for disk in "${disks[@]}"; do
+        disk_device="${disk_devices["${disk}"]}"
+        print-header Destroy partition table on "${disk_device}" "(${disk})..."
+        _partition-zap "${disk_device}"
+        print-finish
+    done
+}
+
 ## Partition disks
 ##################
 _partition() {
@@ -196,15 +258,6 @@ _partition() {
         echo -----------------------------------------------------------------
     done
 
-    # Show what we are going to do
-    print-section Disks and partitions in the system
-    lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
-    echo
-    print-warning "WARNING! The following disks will be erased!"
-    for disk in "${disks[@]}"; do
-        print-warning "${disk_devices[${disk}]}"
-    done
-    echo
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
@@ -212,10 +265,6 @@ _partition() {
     for disk in "${disks[@]}"; do
         disk_device="${disk_devices[${disk}]}"
         print-section Partition "${disk_device}"
-
-        print-header Destroy partition table on "${disk_device}" "(${disk})..."
-        _partition-zap "${disk_device}"
-        print-finish
 
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
@@ -452,6 +501,7 @@ case "${subcommand}" in
     info) _disk_info ;;
     lvm) _lvm ;;
     partition) _partition ;;
+    zap) _zap ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
 
