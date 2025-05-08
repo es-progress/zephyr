@@ -240,17 +240,18 @@ jobs:
 
       - name: Execute scripts (1st pass)
         run: |
+          # Run php first to install PHP-FPM required by Apache
+          ./bin/zephyrctl customize tester php
           ./bin/zephyrctl customize tester apache
           ./bin/zephyrctl customize tester mariadb
-          ./bin/zephyrctl customize tester php
           ./bin/zephyrctl customize tester phpmyadmin
         shell: bash
 
       - name: Execute scripts (2nd pass)
         run: |
+          ./bin/zephyrctl customize tester php
           ./bin/zephyrctl customize tester apache
           ./bin/zephyrctl customize tester mariadb
-          ./bin/zephyrctl customize tester php
           ./bin/zephyrctl customize tester phpmyadmin
         shell: bash
 

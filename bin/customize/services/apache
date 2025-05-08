@@ -34,6 +34,30 @@ _install-module() {
     print-finish
 }
 
+## Enable Apache configs
+##
+## @param   $1  Global/Local
+## @param   $2  Config file
+############################
+_enable-conf() {
+    local selector="${1:?Selector missing}"
+    local cfg_file="${2:?Config file missing}"
+    local config configs=()
+
+    # shellcheck disable=SC2310
+    if is-empty-section "${cfg_file}" apache-conf; then
+        return 0
+    fi
+
+    print-header Enable Apache configs "[${selector}]..."
+    # shellcheck disable=SC2310,SC2311
+    for config in $(cfg-read "${cfg_file}" apache-conf); do
+        configs+=("${config}")
+    done
+    sudo a2enconf "${configs[@]}"
+    print-finish
+}
+
 ## Copy Apache config file
 ##
 ## @param   $1  Global/Local
@@ -83,11 +107,13 @@ fi
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/global.cfg); then
     _install-module global "${file}"
+    _enable-conf global "${file}"
     cfg-eval "${file}" apache
 fi
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/local.cfg); then
     _install-module local "${file}"
+    _enable-conf local "${file}"
     cfg-eval "${file}" apache
 fi
 

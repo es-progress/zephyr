@@ -329,6 +329,7 @@ The module is for installation and the configuration of the [Apache web server](
         - `def_virt_host_name`: name for default vhost (which will also be used for certificate and key filenames)
         - `def_virt_host_subject`: default virtual host certificate subject
     - `apache-module`: list of Apache modules to enable. Format: "module_name" (one per line).
+    - `apache-conf`: list of Apache configuration files to enable. Format: "conf_name" (one per line).
 
 ---
 
