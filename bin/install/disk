@@ -99,6 +99,58 @@ _decrypt-partition() {
         "${device}" "${label}"
 }
 
+## Create LVM physical volume
+##
+## @param    $1  Device
+#############################
+_pv-create() {
+    local device="${1:?PV device missing}"
+    pvcreate "${device}"
+}
+
+## Create LVM volume group
+##
+## @param    $1  Volume group name
+## @param    $2  Comma-separated list of PV devices
+###################################################
+_vg-create() {
+    local vg="${1:?VG name missing}"
+    local pv_devices="${2:?PV devices missing}"
+    local pv_devices_array=()
+    local pv_device
+
+    IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
+    for pv_device in "${pv_devices_array[@]}"; do
+        print-header Create PV from "${pv_device}"...
+        _pv-create "${pv_device}"
+        print-finish
+    done
+
+    vgcreate --autobackup y "${vg}" "${pv_devices_array[@]}"
+}
+
+## Create LVM logical volume
+##
+## @param    $1  Volume group name
+## @param    $2  Logical volume name
+## @param    $3  Size, in exact bytes or percentage
+###################################################
+_lv-create() {
+    local vg="${1:?VG name missing}"
+    local lv="${2:?LV name missing}"
+    local size="${3:?Size missing}"
+    local size_param=()
+
+    # Check if size has a percentage
+    if [[ "${size}" =~ ^[0-9]+% ]]; then
+        size_param=(--extents "${size}")
+    else
+        size_param=(--size "${size}")
+    fi
+
+    lvcreate --autobackup y --name "${lv}" "${size_param[@]}" "${vg}"
+}
+
 ## Print disk info
 ##################
 _disk_info() {
@@ -111,6 +163,14 @@ _disk_info() {
     print-section Disks
     fdisk -l "${devices[@]}"
 
+    print-section LVM
+    print-header Volume groups
+    vgs
+    print-header Physical volumes
+    pvs
+    print-header Logical volumes
+    lvs
+
     print-section Filesystems
     # Exclude loopback devices (7) and cdrom devices (11)
     lsblk --fs --exclude 7,11
@@ -119,7 +179,7 @@ _disk_info() {
 ## Partition disks
 ##################
 _partition() {
-    local disk partition disk_device number gap size type label crypt volgroup filesystem
+    local disk partition disk_device number gap size type label crypt filesystem
     local partitions_array=()
 
     # Print parsed disk map
@@ -127,13 +187,13 @@ _partition() {
     for disk in "${disks[@]}"; do
         echo "Disk: ${disk}"
         echo Partitions:
-        printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "#part_device" gap size type label crypt volgroup filesystem
+        printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "#part_device" gap size type label crypt filesystem
         IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number gap size type label crypt volgroup filesystem <<< "${partition}"
-            printf "%-15s%6s%6s %-6s%-15s%-6s%-15s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${volgroup}" "${filesystem}"
+            IFS=, read -r disk_device number gap size type label crypt filesystem <<< "${partition}"
+            printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${filesystem}"
         done
-        echo --------------------------------------------------------------------------------
+        echo -----------------------------------------------------------------
     done
 
     # Show what we are going to do
@@ -159,7 +219,7 @@ _partition() {
 
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r _ number gap size type label _ _ _ <<< "${partition}"
+            IFS=, read -r _ number gap size type label _ _ <<< "${partition}"
             print-header Create partition: "${label}..."
             _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
@@ -179,7 +239,7 @@ _encrypt() {
     for disk in "${disks[@]}"; do
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
 
             print-header LUKS encrypting "${disk_device}${number} (${label})..."
@@ -200,7 +260,7 @@ _decrypt() {
     for disk in "${disks[@]}"; do
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number _ _ _ label crypt _ _ <<< "${partition}"
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
 
             print-header Open encrypted partition "${disk_device}${number} (${label})..."
@@ -209,6 +269,52 @@ _decrypt() {
         done
     done
     print-finish All decryption finished.
+}
+
+## Setup LVM
+############
+_lvm() {
+    local vg pvs_array pv lvs_array lv name size crypt filesystem
+
+    # Print parsed disk map
+    print-section Parsed disk map
+    for vg in "${vol_groups[@]}"; do
+        echo "Volume group: ${vg}"
+
+        echo Physical volumes:
+        IFS="," read -r -a pvs_array <<<"${vol_group_pvs["${vg}"]}"
+        for pv in "${pvs_array[@]}"; do
+            echo "${pv}"
+        done
+
+        echo Logical volumes:
+        printf "%-15s%10s %-6s%-8s\n" name size crypt filesystem
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name size crypt filesystem <<< "${lv}"
+            printf "%-15s%10s %-6s%-8s\n" "${name}" "${size}" "${crypt}" "${filesystem}"
+        done
+        echo ------------------------------------------
+    done
+
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+    # Do the LVM setup
+    for vg in "${vol_groups[@]}"; do
+        print-header Create volume group "${vg}"...
+        _vg-create "${vg}" "${vol_group_pvs[${vg}]}"
+        print-finish
+
+        # Create logical volumes
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name size _ _ <<< "${lv}"
+            print-header Create logical volume "${name}"...
+            _lv-create "${vg}" "${name}" "${size}"
+            print-finish
+        done
+    done
 }
 
 ##################
@@ -231,6 +337,9 @@ disks=()
 declare -A disk_devices
 declare -A disk_part_prefixes
 declare -A disk_partitions
+vol_groups=()
+declare -A vol_group_pvs
+declare -A vol_group_lvs
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
@@ -261,6 +370,54 @@ for map in "${@}"; do
                 disk_partitions[${disk}]="${disk_partitions[${disk}]};${partition_info}"
             fi
         done
+
+        # Parse vol-groups
+        for line in $(cfg-read "${file}" vol-groups); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            vol_group="${arguments[0]}"
+
+            # Rewrite PV labels to device files
+            pv_devices=()
+            IFS="," read -r -a pvs_array <<<"${arguments[1]}"
+            for pv in "${pvs_array[@]}"; do
+                # Find partition definition for PV
+                for disk in "${disks[@]}"; do
+                    IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+                    for partition in "${partitions_array[@]}"; do
+                        IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
+
+                        [[ "${pv}" != "${label}" ]] && continue
+
+                        # Check partition is encrypted
+                        if [[ "${crypt}" == luks* ]]; then
+                            # Rewrite to LUKS device
+                            pv_devices+=("/dev/mapper/${label}")
+                        else
+                            # Rewrite to partition device
+                            pv_devices+=("${disk_device}${number}")
+                        fi
+                    done
+                done
+            done
+
+            vol_groups+=("${vol_group}")
+            vol_group_pvs["${vol_group}"]="$(implode , "${pv_devices[@]}")"
+        done
+
+        # Parse volumes
+        for line in $(cfg-read "${file}" volumes); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            vol_group="${arguments[0]}"
+            # Remove vol-group name from arguments
+            unset "arguments[0]"
+
+            volume_info="$(implode , "${arguments[@]}")"
+            if [[ -z "${vol_group_lvs[${vol_group}]:-}" ]]; then
+                vol_group_lvs[${vol_group}]="${volume_info}"
+            else
+                vol_group_lvs[${vol_group}]="${vol_group_lvs[${vol_group}]};${volume_info}"
+            fi
+        done
     else
         error-exit Map not found: "${map}"
     fi
@@ -271,6 +428,7 @@ case "${subcommand}" in
     decrypt) _decrypt ;;
     encrypt) _encrypt ;;
     info) _disk_info ;;
+    lvm) _lvm ;;
     partition) _partition ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
