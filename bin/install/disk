@@ -147,15 +147,20 @@ _vg-remove() {
     local vg="${1:?VG name missing}"
     local pv_devices="${2:?PV devices missing}"
     local pv_devices_array=()
-    local pv_device
+    local pv_device pvs
 
     vgremove "${vg}"
 
+    pvs=$(pvs --noheadings --options pv_name)
     IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
     for pv_device in "${pv_devices_array[@]}"; do
         print-header Remove PV from "${pv_device}"...
-        _pv-remove "${pv_device}"
-        print-finish
+        if grep -qsx "${pv_device}" <<<"${pvs}"; then
+            _pv-remove "${pv_device}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
     done
 }
 
@@ -209,16 +214,21 @@ _disk_info() {
 ## Delete all partitions and LVM structures
 ###########################################
 _zap() {
-    local vg disk disk_device
+    local vg vgs disk disk_device
 
     print-status Closing all open LUKS containers...
     dmsetup ls --target crypt --exec "cryptsetup close"
     print-finish
 
+    vgs=$(vgs --noheadings --options vg_name)
     for vg in "${vol_groups[@]}"; do
         print-header Destroy volume group "${vg}"...
-        _vg-remove "${vg}" "${vol_group_pvs[${vg}]}"
-        print-finish
+        if grep -qsx "${vg}" <<<"${vgs}"; then
+            _vg-remove "${vg}" "${vol_group_pvs[${vg}]}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
     done
 
     for disk in "${disks[@]}"; do
