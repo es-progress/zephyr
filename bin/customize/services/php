@@ -20,12 +20,12 @@ _config() {
     local cfg_dir="${2:?Config dir missing}"
     local ini_file ini_file_name
 
-    print-status Config PHP "[${selector}]..."
+    print-status Config PHP "${php_version} [${selector}]..."
     while IFS= read -r -d '' ini_file; do
         ini_file_name=$(basename "${ini_file}")
-        sudo install --mode=0644 --no-target-directory "${ini_file}" "/etc/php/${version}/mods-available/${ini_file_name}"
-        [[ -e "/etc/php/${version}/fpm/conf.d/${ini_file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${ini_file_name}" "/etc/php/${version}/fpm/conf.d/${ini_file_name}"
-        [[ -e "/etc/php/${version}/cli/conf.d/${ini_file_name}" ]] || sudo ln -s "/etc/php/${version}/mods-available/${ini_file_name}" "/etc/php/${version}/cli/conf.d/${ini_file_name}"
+        sudo install --mode=0644 --no-target-directory "${ini_file}" "/etc/php/${php_version}/mods-available/${ini_file_name}"
+        [[ -e "/etc/php/${php_version}/fpm/conf.d/${ini_file_name}" ]] || sudo ln -s "/etc/php/${php_version}/mods-available/${ini_file_name}" "/etc/php/${php_version}/fpm/conf.d/${ini_file_name}"
+        [[ -e "/etc/php/${php_version}/cli/conf.d/${ini_file_name}" ]] || sudo ln -s "/etc/php/${php_version}/mods-available/${ini_file_name}" "/etc/php/${php_version}/cli/conf.d/${ini_file_name}"
     done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 || true)
     print-finish
 }
@@ -44,6 +44,7 @@ check-not-root
 # Options
 profile="${1:?Profile missing}"
 version=
+cli_version=
 
 # Read config file, get options
 # shellcheck disable=SC2310,SC2311
@@ -60,26 +61,33 @@ print-status Add apt repo: ppa:ondrej/php...
 sudo add-apt-repository --yes --no-update ppa:ondrej/php
 print-finish
 
-install-apt "php${version}" "php${version}-fpm"
+# Install and configure each PHP version
+IFS=',' read -r -a versions <<< "${version}"
+for php_version in "${versions[@]}"; do
+    # cli_version defaults to first version to install
+    [[ -z "${cli_version}" ]] && cli_version="${php_version}"
 
-# shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" services/php/global.d); then
-    _config global "${dir}"
-fi
-# shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" services/php/local.d); then
-    _config local "${dir}"
-fi
+    print-header Installing PHP "${php_version}"...
+    install-apt "php${php_version}" "php${php_version}-fpm"
 
-print-header Set "/usr/bin/php${version}" to serve php CLI...
-sudo update-alternatives --set php "/usr/bin/php${version}"
-print-finish
+    # shellcheck disable=SC2310,SC2311
+    if dir=$(cfg-get "${profile}" services/php/global.d); then
+        _config global "${dir}"
+    fi
+    # shellcheck disable=SC2310,SC2311
+    if dir=$(cfg-get "${profile}" services/php/local.d); then
+        _config local "${dir}"
+    fi
 
-print-header Restart services...
-sudo systemctl enable "php${version}-fpm.service"
-sudo systemctl restart "php${version}-fpm.service"
-sudo a2enconf "php${version}-fpm"
-sudo systemctl restart apache2.service
+    print-header Restart services...
+    sudo systemctl enable "php${php_version}-fpm.service"
+    sudo systemctl restart "php${php_version}-fpm.service"
+    sudo a2enconf "php${php_version}-fpm"
+    print-finish
+done
+
+print-header Set "/usr/bin/php${cli_version}" to serve php CLI...
+sudo update-alternatives --set php "/usr/bin/php${cli_version}"
 print-finish
 
 exit 0
