@@ -150,6 +150,7 @@ _usage() {
         subcommands+=("info:Show disk information")
         subcommands+=("lvm:Setup LVM (volume groups, physical and logical volumes)")
         subcommands+=("partition:Partition disk")
+        subcommands+=("zap:Delete all partitions and LVM structures on a disk")
         echo -e "\n${TXT_YELLOW}Subcommands:${TXT_NORM}"
         for line in "${subcommands[@]}"; do
             IFS=: read -r name help <<<"${line}"

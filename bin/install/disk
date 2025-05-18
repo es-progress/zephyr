@@ -99,15 +99,6 @@ _decrypt-partition() {
         "${device}" "${label}"
 }
 
-## Create LVM physical volume
-##
-## @param    $1  Device
-#############################
-_pv-create() {
-    local device="${1:?PV device missing}"
-    pvcreate "${device}"
-}
-
 ## Create LVM volume group
 ##
 ## @param    $1  Volume group name
@@ -122,11 +113,37 @@ _vg-create() {
     IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
     for pv_device in "${pv_devices_array[@]}"; do
         print-header Create PV from "${pv_device}"...
-        _pv-create "${pv_device}"
+        pvcreate "${pv_device}"
         print-finish
     done
 
     vgcreate --autobackup y "${vg}" "${pv_devices_array[@]}"
+}
+
+## Remove LVM volume group
+##
+## @param    $1  Volume group name
+## @param    $2  Comma-separated list of PV devices
+###################################################
+_vg-remove() {
+    local vg="${1:?VG name missing}"
+    local pv_devices="${2:?PV devices missing}"
+    local pv_devices_array=()
+    local pv_device pvs
+
+    vgremove "${vg}"
+
+    pvs=$(pvs --noheadings --options pv_name | sed -r 's/^[[:space:]]+//')
+    IFS="," read -r -a pv_devices_array <<<"${pv_devices}"
+    for pv_device in "${pv_devices_array[@]}"; do
+        print-header Remove PV from "${pv_device}"...
+        if grep -qsx "${pv_device}" <<<"${pvs}"; then
+            pvremove "${pv_device}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
 }
 
 ## Create LVM logical volume
@@ -157,7 +174,7 @@ _disk_info() {
     local disk
     local devices=()
     for disk in "${disks[@]}"; do
-        devices+=("${disk_devices[${disk}]}")
+        devices+=("${disk_devices["${disk}"]}")
     done
 
     print-section Disks
@@ -176,55 +193,97 @@ _disk_info() {
     lsblk --fs --exclude 7,11
 }
 
+## Delete all partitions and LVM structures
+###########################################
+_zap() {
+    local todo vg vgs disk disk_device
+
+    # Show what we are going to do
+    todo=
+    print-section Disks to delete all partitions
+    printf "%-20s%s\n" "#disk_name" disk_device
+    for disk in "${disks[@]}"; do
+        printf "%-20s%s\n" "${disk}" "${disk_devices["${disk}"]}"
+        todo=1
+    done
+
+    print-section Volume groups and PV devices to remove
+    printf "%-20s%s\n" "#volume_group" pv_devices
+    for vg in "${vol_groups[@]}"; do
+        printf "%-20s%s\n" "${vg}" "${vol_group_pvs["${vg}"]}"
+        todo=1
+    done
+
+    if [[ -z "${todo}" ]]; then
+        print-finish Nothing to do.
+        exit 0
+    fi
+
+    echo
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+    print-status Closing all open LUKS containers...
+    dmsetup ls --target crypt --exec "cryptsetup close"
+    print-finish
+
+    vgs=$(vgs --noheadings --options vg_name | sed -r 's/^[[:space:]]+//')
+    for vg in "${vol_groups[@]}"; do
+        print-header Destroy volume group "${vg}"...
+        if grep -qsx "${vg}" <<<"${vgs}"; then
+            _vg-remove "${vg}" "${vol_group_pvs["${vg}"]}"
+            print-finish
+        else
+            print-finish Not found, skip.
+        fi
+    done
+
+    for disk in "${disks[@]}"; do
+        disk_device="${disk_devices["${disk}"]}"
+        print-header Destroy partition table on "${disk_device}" "(${disk})..."
+        _partition-zap "${disk_device}"
+        print-finish
+    done
+}
+
 ## Partition disks
 ##################
 _partition() {
-    local disk partition disk_device number gap size type label crypt filesystem
+    local todo disk partition disk_device number gap size type label
     local partitions_array=()
 
-    # Print parsed disk map
-    print-section Parsed disk map
+    # Show what we are going to do
+    todo=
+    print-section Partitions to create
+    printf "%-20s%8s%8s %-8s%s\n" "#part_device" gap size type label
     for disk in "${disks[@]}"; do
-        echo "Disk: ${disk}"
-        echo Partitions:
-        printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "#part_device" gap size type label crypt filesystem
+        echo -----------------------------------------------------------------
         IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number gap size type label crypt filesystem <<< "${partition}"
-            printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${filesystem}"
+            IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
+            printf "%-20s%8s%8s %-8s%s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}"
+            todo=1
         done
-        echo -----------------------------------------------------------------
     done
 
-    # Show what we are going to do
-    print-section Disks and partitions in the system
-    lsblk -o NAME,LABEL,FSTYPE,SIZE,MODEL -e7,11
-    echo
-    print-warning "WARNING! The following disks will be erased!"
-    for disk in "${disks[@]}"; do
-        print-warning "${disk_devices[${disk}]}"
-    done
+    if [[ -z "${todo}" ]]; then
+        print-finish Nothing to do.
+        exit 0
+    fi
+
     echo
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the partitioning
     for disk in "${disks[@]}"; do
-        disk_device="${disk_devices[${disk}]}"
-        print-section Partition "${disk_device}"
-
-        print-header Destroy partition table on "${disk_device}" "(${disk})..."
-        _partition-zap "${disk_device}"
-        print-finish
-
-        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r _ number gap size type label _ _ <<< "${partition}"
+            IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
             print-header Create partition: "${label}..."
             _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
         done
-        print-finish Finished partitioning "${disk_device}"
     done
     print-finish All partitioning finished.
 }
@@ -232,12 +291,49 @@ _partition() {
 ## Encrypt partitions/volumes
 #############################
 _encrypt() {
-    local disk partition vg lvs_array lv disk_device number label name crypt
+    local todo disk partition vg lvs_array lv disk_device number label name crypt
     local partitions_array=()
+
+    # Show what we are going to do
+    todo=
+    print-section Partitions and volumes to encrypt
+    printf "%-30s%-10s%s\n" "#device" type label
+
+    for disk in "${disks[@]}"; do
+        echo -----------------------------------------------------------------
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            printf "%-30s%-10s%s\n" "${disk_device}${number}" "${crypt}" "${label}"
+            todo=1
+        done
+    done
+    for vg in "${vol_groups[@]}"; do
+        echo -----------------------------------------------------------------
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name _ crypt _ <<< "${lv}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            printf "%-30s%-10s%s\n" "/dev/${vg}/${name}" "${crypt}" "${name}"
+            todo=1
+        done
+    done
+
+    if [[ -z "${todo}" ]]; then
+        print-finish Nothing to do.
+        exit 0
+    fi
+
+    echo
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the encryption
     for disk in "${disks[@]}"; do
-        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
             IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
@@ -269,7 +365,7 @@ _decrypt() {
 
     # Do the decryption
     for disk in "${disks[@]}"; do
-        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
             IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
             [[ "${crypt}" != luks* ]] && continue
@@ -296,36 +392,42 @@ _decrypt() {
 ## Setup LVM
 ############
 _lvm() {
-    local vg pvs_array pv lvs_array lv name size crypt filesystem
+    local todo vg lvs_array lv name size
 
-    # Print parsed disk map
-    print-section Parsed disk map
+    # Show what we are going to do
+    todo=
+    print-section Volume groups to create
+    printf "%-20s%s\n" "#volume_group" "pv_devices"
     for vg in "${vol_groups[@]}"; do
-        echo "Volume group: ${vg}"
-
-        echo Physical volumes:
-        IFS="," read -r -a pvs_array <<<"${vol_group_pvs["${vg}"]}"
-        for pv in "${pvs_array[@]}"; do
-            echo "${pv}"
-        done
-
-        echo Logical volumes:
-        printf "%-15s%10s %-6s%-8s\n" name size crypt filesystem
-        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
-        for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name size crypt filesystem <<< "${lv}"
-            printf "%-15s%10s %-6s%-8s\n" "${name}" "${size}" "${crypt}" "${filesystem}"
-        done
-        echo ------------------------------------------
+        printf "%-20s%s\n" "${vg}" "${vol_group_pvs["${vg}"]}"
+        todo=1
     done
 
+    print-section Logical volumes to create
+    printf "%-20s%-30s%10s\n" "#volume_group" lv_name size
+    for vg in "${vol_groups[@]}"; do
+        echo ------------------------------------------------------------
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name size _ _ <<< "${lv}"
+            printf "%-20s%-30s%10s\n" "${vg}" "${name}" "${size}"
+            todo=1
+        done
+    done
+
+    if [[ -z "${todo}" ]]; then
+        print-finish Nothing to do.
+        exit 0
+    fi
+
+    echo
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the LVM setup
     for vg in "${vol_groups[@]}"; do
         print-header Create volume group "${vg}"...
-        _vg-create "${vg}" "${vol_group_pvs[${vg}]}"
+        _vg-create "${vg}" "${vol_group_pvs["${vg}"]}"
         print-finish
 
         # Create logical volumes
@@ -386,10 +488,10 @@ for map in "${@}"; do
             arguments[0]="${disk_devices["${disk}"]}${disk_part_prefixes["${disk}"]}"
 
             partition_info="$(implode , "${arguments[@]}")"
-            if [[ -z "${disk_partitions[${disk}]:-}" ]]; then
-                disk_partitions[${disk}]="${partition_info}"
+            if [[ -z "${disk_partitions["${disk}"]:-}" ]]; then
+                disk_partitions["${disk}"]="${partition_info}"
             else
-                disk_partitions[${disk}]="${disk_partitions[${disk}]};${partition_info}"
+                disk_partitions["${disk}"]="${disk_partitions["${disk}"]};${partition_info}"
             fi
         done
 
@@ -404,7 +506,7 @@ for map in "${@}"; do
             for pv in "${pvs_array[@]}"; do
                 # Find partition definition for PV
                 for disk in "${disks[@]}"; do
-                    IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+                    IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
                     for partition in "${partitions_array[@]}"; do
                         IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
 
@@ -434,10 +536,10 @@ for map in "${@}"; do
             unset "arguments[0]"
 
             volume_info="$(implode , "${arguments[@]}")"
-            if [[ -z "${vol_group_lvs[${vol_group}]:-}" ]]; then
-                vol_group_lvs[${vol_group}]="${volume_info}"
+            if [[ -z "${vol_group_lvs["${vol_group}"]:-}" ]]; then
+                vol_group_lvs["${vol_group}"]="${volume_info}"
             else
-                vol_group_lvs[${vol_group}]="${vol_group_lvs[${vol_group}]};${volume_info}"
+                vol_group_lvs["${vol_group}"]="${vol_group_lvs["${vol_group}"]};${volume_info}"
             fi
         done
     else
@@ -452,6 +554,7 @@ case "${subcommand}" in
     info) _disk_info ;;
     lvm) _lvm ;;
     partition) _partition ;;
+    zap) _zap ;;
     *) error-exit Invalid subcommand: "${subcommand}" ;;
 esac
 
