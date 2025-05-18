@@ -241,39 +241,34 @@ _zap() {
 ## Partition disks
 ##################
 _partition() {
-    local disk partition disk_device number gap size type label crypt filesystem
+    local disk partition disk_device number gap size type label
     local partitions_array=()
 
-    # Print parsed disk map
-    print-section Parsed disk map
+    # Show what we are going to do
+    print-section Partitions to create
+    printf "%-20s%8s%8s %-8s%s\n" "#part_device" gap size type label
     for disk in "${disks[@]}"; do
-        echo "Disk: ${disk}"
-        echo Partitions:
-        printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "#part_device" gap size type label crypt filesystem
+        echo -----------------------------------------------------------------
         IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number gap size type label crypt filesystem <<< "${partition}"
-            printf "%-15s%6s%6s %-6s%-15s%-6s%-8s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}" "${crypt}" "${filesystem}"
+            IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
+            printf "%-20s%8s%8s %-8s%s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}"
         done
-        echo -----------------------------------------------------------------
     done
 
+    echo
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the partitioning
     for disk in "${disks[@]}"; do
-        disk_device="${disk_devices[${disk}]}"
-        print-section Partition "${disk_device}"
-
         IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
         for partition in "${partitions_array[@]}"; do
-            IFS=, read -r _ number gap size type label _ _ <<< "${partition}"
+            IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
             print-header Create partition: "${label}..."
             _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
             print-finish
         done
-        print-finish Finished partitioning "${disk_device}"
     done
     print-finish All partitioning finished.
 }
@@ -283,6 +278,35 @@ _partition() {
 _encrypt() {
     local disk partition vg lvs_array lv disk_device number label name crypt
     local partitions_array=()
+
+    # Show what we are going to do
+    print-section Partitions and volumes to encrypt
+    printf "%-30s%-10s%s\n" "#device" type label
+
+    for disk in "${disks[@]}"; do
+        echo -----------------------------------------------------------------
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions[${disk}]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            printf "%-30s%-10s%s\n" "${disk_device}${number}" "${crypt}" "${label}"
+        done
+    done
+    for vg in "${vol_groups[@]}"; do
+        echo -----------------------------------------------------------------
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name _ crypt _ <<< "${lv}"
+            [[ "${crypt}" != luks* ]] && continue
+
+            printf "%-30s%-10s%s\n" "/dev/${vg}/${name}" "${crypt}" "${name}"
+        done
+    done
+
+    echo
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the encryption
     for disk in "${disks[@]}"; do
@@ -345,29 +369,27 @@ _decrypt() {
 ## Setup LVM
 ############
 _lvm() {
-    local vg pvs_array pv lvs_array lv name size crypt filesystem
+    local vg lvs_array lv name size
 
-    # Print parsed disk map
-    print-section Parsed disk map
+    # Show what we are going to do
+    print-section Volume groups to create
+    printf "%-20s%s\n" "#volume_group" "pv_devices"
     for vg in "${vol_groups[@]}"; do
-        echo "Volume group: ${vg}"
-
-        echo Physical volumes:
-        IFS="," read -r -a pvs_array <<<"${vol_group_pvs["${vg}"]}"
-        for pv in "${pvs_array[@]}"; do
-            echo "${pv}"
-        done
-
-        echo Logical volumes:
-        printf "%-15s%10s %-6s%-8s\n" name size crypt filesystem
-        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
-        for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name size crypt filesystem <<< "${lv}"
-            printf "%-15s%10s %-6s%-8s\n" "${name}" "${size}" "${crypt}" "${filesystem}"
-        done
-        echo ------------------------------------------
+        printf "%-20s%s\n" "${vg}" "${vol_group_pvs[${vg}]}"
     done
 
+    print-section Logical volumes to create
+    printf "%-20s%-30s%10s\n" "#volume_group" lv_name size
+    for vg in "${vol_groups[@]}"; do
+        echo ------------------------------------------------------------
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r name size _ _ <<< "${lv}"
+            printf "%-20s%-30s%10s\n" "${vg}" "${name}" "${size}"
+        done
+    done
+
+    echo
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
