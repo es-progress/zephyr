@@ -274,11 +274,11 @@ _zap() {
 ## Partition disks
 ##################
 _partition() {
-    local todo disk partition disk_device number gap size type label
+    local job disk partition disk_device number gap size type label
     local partitions_array=()
+    local jobs=()
 
     # Show what we are going to do
-    todo=
     print-section Partitions to create
     printf "%-20s%8s%8s %-8s%s\n" "#part_device" gap size type label
     for disk in "${disks[@]}"; do
@@ -287,11 +287,11 @@ _partition() {
         for partition in "${partitions_array[@]}"; do
             IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
             printf "%-20s%8s%8s %-8s%s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}"
-            todo=1
+            jobs+=("${disk_device},${number},${gap},${size},${type},${label}")
         done
     done
 
-    if [[ -z "${todo}" ]]; then
+    if [[ -z "${jobs[*]}" ]]; then
         print-finish Nothing to do.
         exit 0
     fi
@@ -301,14 +301,11 @@ _partition() {
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the partitioning
-    for disk in "${disks[@]}"; do
-        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
-        for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
-            print-header Create partition: "${label}..."
-            _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
-            print-finish
-        done
+    for job in "${jobs[@]}"; do
+        IFS=, read -r disk_device number gap size type label <<< "${job}"
+        print-header Create partition: "${label}..."
+        _partition-create "${disk_device}" "${number}" "${gap}" "${size}" "${type}" "${label}"
+        print-finish
     done
     print-finish All partitioning finished.
 }
@@ -316,11 +313,11 @@ _partition() {
 ## Encrypt partitions/volumes
 #############################
 _encrypt() {
-    local todo disk partition vg lvs_array lv disk_device number label name crypt
+    local job disk partition vg lvs_array lv disk_device number label name crypt device
     local partitions_array=()
+    local jobs=()
 
     # Show what we are going to do
-    todo=
     print-section Partitions and volumes to encrypt
     printf "%-30s%-10s%s\n" "#device" type label
 
@@ -332,7 +329,7 @@ _encrypt() {
             [[ "${crypt}" != luks* ]] && continue
 
             printf "%-30s%-10s%s\n" "${disk_device}${number}" "${crypt}" "${label}"
-            todo=1
+            jobs+=("${disk_device}${number},${crypt},${label}")
         done
     done
     for vg in "${vol_groups[@]}"; do
@@ -343,11 +340,11 @@ _encrypt() {
             [[ "${crypt}" != luks* ]] && continue
 
             printf "%-30s%-10s%s\n" "/dev/${vg}/${name}" "${crypt}" "${name}"
-            todo=1
+            jobs+=("/dev/${vg}/${name},${crypt},${name}")
         done
     done
 
-    if [[ -z "${todo}" ]]; then
+    if [[ -z "${jobs[*]}" ]]; then
         print-finish Nothing to do.
         exit 0
     fi
@@ -357,27 +354,11 @@ _encrypt() {
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
     # Do the encryption
-    for disk in "${disks[@]}"; do
-        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
-        for partition in "${partitions_array[@]}"; do
-            IFS=, read -r disk_device number _ _ _ label crypt _ <<< "${partition}"
-            [[ "${crypt}" != luks* ]] && continue
-
-            print-header LUKS encrypting "${disk_device}${number} (${label})..."
-            _encrypt-partition "${disk_device}${number}" "${crypt}" "${label}"
-            print-finish
-        done
-    done
-    for vg in "${vol_groups[@]}"; do
-        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
-        for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name _ crypt _ <<< "${lv}"
-            [[ "${crypt}" != luks* ]] && continue
-
-            print-header LUKS encrypting "/dev/${vg}/${name} (${name})..."
-            _encrypt-partition "/dev/${vg}/${name}" "${crypt}" "${name}"
-            print-finish
-        done
+    for job in "${jobs[@]}"; do
+        IFS=, read -r device crypt label <<< "${job}"
+        print-header LUKS encrypting "${device} (${label})..."
+        _encrypt-partition "${device}" "${crypt}" "${label}"
+        print-finish
     done
     print-finish All encryption finished.
 }
