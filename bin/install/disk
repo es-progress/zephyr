@@ -168,6 +168,31 @@ _lv-create() {
     lvcreate --autobackup y --name "${lv}" "${size_param[@]}" "${vg}"
 }
 
+## Format partition/volume
+##
+## @param    $1  Partition/volume device
+## @param    $2  Filesystem type
+##               fat32, ext4, swap, ntfs, msr
+## @param    $3  Filesystem label
+#############################################
+_format-partition() {
+    local device="${1:?Partition device missing}"
+    local type="${2:?Type missing}"
+    local label="${3:?Filesystem label missing}"
+
+    case "${type}" in
+        fat32) mkfs.fat -F 32 -n "${label}" "${device}" ;;
+        ext4) mkfs.ext4 -L "${label}" "${device}" ;;
+        swap) mkswap -L "${label}" "${device}" ;;
+        ntfs) mkntfs --fast -L "${label}" "${device}" ;;
+        msr) dd if=/dev/zero "of=${device}" status=progress || true ;;
+        *)
+            print-error Unsupported type: "${type}"
+            return 1
+            ;;
+    esac
+}
+
 ## Print disk info
 ##################
 _disk_info() {
@@ -441,6 +466,71 @@ _lvm() {
     done
 }
 
+## Format filesystem
+####################
+_format() {
+    local job disk partitions_array partition disk_device number label crypt filesystem vg lvs_array lv device
+    local jobs=()
+
+    # Show what we are going to do
+    print-section Filesystems to format
+    printf "%-30s%-20s%s\n" "#device" label type
+    for disk in "${disks[@]}"; do
+        echo -------------------------------------------------------
+        IFS=";" read -r -a partitions_array <<<"${disk_partitions["${disk}"]}"
+        for partition in "${partitions_array[@]}"; do
+            IFS=, read -r disk_device number _ _ _ label crypt filesystem <<< "${partition}"
+            [[ "${filesystem}" == - ]] && continue
+
+            # Rewrite device to dm-crypt device if encrypted
+            if [[ "${crypt}" == luks* ]]; then
+                device="/dev/mapper/${label}"
+            else
+                device="${disk_device}${number}"
+            fi
+
+            printf "%-30s%-20s%s\n" "${device}" "${label}" "${filesystem}"
+            jobs+=("${device},${filesystem},${label}")
+        done
+    done
+    for vg in "${vol_groups[@]}"; do
+        echo -------------------------------------------------------
+        IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
+        for lv in "${lvs_array[@]}"; do
+            IFS=, read -r label _ crypt filesystem <<< "${lv}"
+            [[ "${filesystem}" == - ]] && continue
+
+            # Rewrite device to dm-crypt device if encrypted
+            if [[ "${crypt}" == luks* ]]; then
+                device="/dev/mapper/${label}"
+            else
+                device="/dev/${vg}/${label}"
+            fi
+
+            printf "%-30s%-20s%s\n" "${device}" "${label}" "${filesystem}"
+            jobs+=("${device},${filesystem},${label}")
+        done
+    done
+
+    if [[ -z "${jobs[*]}" ]]; then
+        print-finish Nothing to do.
+        exit 0
+    fi
+
+    echo
+    read -rp "Proceed? (yes/no): "
+    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+
+    # Do the formatting
+    for job in "${jobs[@]}"; do
+        IFS=, read -r device filesystem label <<< "${job}"
+        print-header Format "${label}" to "${filesystem}..."
+        _format-partition "${device}" "${filesystem}" "${label}"
+        print-finish
+    done
+    print-finish All formatting finished.
+}
+
 ##################
 ## SCRIPT START ##
 ##################
@@ -551,6 +641,7 @@ done
 case "${subcommand}" in
     decrypt) _decrypt ;;
     encrypt) _encrypt ;;
+    format) _format ;;
     info) _disk_info ;;
     lvm) _lvm ;;
     partition) _partition ;;

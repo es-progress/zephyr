@@ -147,6 +147,7 @@ _usage() {
     if [[ "${selector}" == disk ]]; then
         subcommands+=("decrypt:Open encrypted partitions and volumes")
         subcommands+=("encrypt:Encrypt partitions and volumes")
+        subcommands+=("format:Format filesystems on a partition or volume")
         subcommands+=("info:Show disk information")
         subcommands+=("lvm:Setup LVM (volume groups, physical and logical volumes)")
         subcommands+=("partition:Partition disk")

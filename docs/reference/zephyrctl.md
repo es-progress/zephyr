@@ -87,6 +87,7 @@ MAP                Disk maps
 Subcommands:
 decrypt            Open encrypted partitions and volumes
 encrypt            Encrypt partitions and volumes
+format             Format filesystems on a partition or volume
 info               Show disk information
 lvm                Setup LVM (volume groups, physical and logical volumes)
 partition          Partition disk
