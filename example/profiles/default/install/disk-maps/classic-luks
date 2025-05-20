@@ -9,6 +9,11 @@
 
 # In this setup, we have a classic partitioning scheme with LUKS encryption.
 # The partitions for Linux are encrypted, while the NTFS partition remains unencrypted.
+#
+# Run the following 'zephyrctl disk' commands to setup this disk structure:
+#   1. zephyrctl disk partition
+#   2. zephyrctl disk encrypt
+#   3. zephyrctl disk format
 
 # There are two disks in this system:
 #   - main: the main disk where Ubuntu is installed (20 GB)
