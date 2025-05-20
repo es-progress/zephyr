@@ -7,6 +7,12 @@
 #################
 
 # In this setup, we create LVM managed volumes and then encrypt them individually using LUKS.
+#
+# Run the following 'zephyrctl disk' commands to setup this disk structure:
+#   1. zephyrctl disk partition
+#   2. zephyrctl disk lvm
+#   3. zephyrctl disk encrypt
+#   4. zephyrctl disk format
 
 # There are two disks in this system:
 #   - main: the main disk where Ubuntu is installed (20 GB)

@@ -8,6 +8,10 @@
 ########################
 
 # In this setup, we have a classic partitioning scheme without LVM or LUKS.
+#
+# Run the following 'zephyrctl disk' commands to setup this disk structure:
+#   1. zephyrctl disk partition
+#   2. zephyrctl disk format
 
 # There are two disks in this system:
 #   - main: the main disk where Ubuntu is installed (20 GB)
