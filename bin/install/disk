@@ -215,7 +215,7 @@ _disk_info() {
 
     print-section Filesystems
     # Exclude loopback devices (7) and cdrom devices (11)
-    lsblk --fs --exclude 7,11
+    lsblk -o NAME,MODEL,LABEL,FSTYPE,SIZE --exclude 7,11
 }
 
 ## Delete all partitions and LVM structures
