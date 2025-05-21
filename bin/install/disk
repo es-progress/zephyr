@@ -248,8 +248,8 @@ _zap() {
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
-    print-status Closing all open LUKS containers...
-    dmsetup ls --target crypt --exec "cryptsetup close"
+    print-header Closing all open LUKS containers...
+    dmsetup ls --target crypt --exec "cryptsetup close --deferred"
     print-finish
 
     vgs=$(vgs --noheadings --options vg_name | sed -r 's/^[[:space:]]+//')
