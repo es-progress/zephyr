@@ -18,7 +18,7 @@
 _gpt-backup() {
     local device="${1:?Device missing}"
     local backup_file="${2:?Backup filename missing}"
-    sgdisk -b "${backup_file}" "${device}"
+    sgdisk --backup "${backup_file}" "${device}"
 }
 
 ##################
@@ -48,27 +48,44 @@ fi
 
 [[ -z "${backup_dir}" ]] && error-exit Missing backup_dir
 
-# Maps
-map_files=()
+# Parse disk maps
+disks=()
+declare -A disk_devices
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
-        map_files+=("${file}")
+        # Parse disks
+        for line in $(cfg-read "${file}" disks); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            disk="${arguments[0]}"
+            disks+=("${disk}")
+            disk_devices["${disk}"]="${arguments[1]}"
+        done
+
+        # Parse disks (legacy format)
+        for line in $(cfg-read "${file}" DISKS); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            disk="${arguments[0]}"
+            disks+=("${disk}")
+            disk_devices["${disk}"]="${arguments[1]}"
+        done
+    else
+        print-warning Map not found: "${map}", ignoring.
     fi
 done
-[[ -z "${map_files[*]}" ]] && error-exit No maps found
+
+if [[ -z "${disks[*]}" ]]; then
+    print-finish Nothing to do.
+    exit 0
+fi
 
 mkdir -p "${backup_dir}"
 
-# Loop through maps
-for map_file in "${map_files[@]}"; do
-    # Loop through disks
-    for line in $(cfg-read "${map_file}" DISKS); do
-        IFS=$' \t' read -r name device _ <<< "${line}"
-        print-header Backup partition table for "${name}..."
-        _gpt-backup "${device}" "${backup_dir}/${name}"
-        print-finish
-    done
+# Do the backup
+for disk in "${disks[@]}"; do
+    print-header Backup partition table for "${disk}..."
+    _gpt-backup "${disk_devices[${disk}]}" "${backup_dir}/${disk}.gpt"
+    print-finish
 done
 
 exit 0
