@@ -10,37 +10,46 @@
 ## FUNCTIONS ##
 ###############
 
-## Add key to a LUKS partition
+## Add key to a LUKS container
 ##
-## @param    $1  LUKS partition
+## @param    $1  Device
 ## @param    $2  Key file
 ## @param    $3  Key slot
-###############################
+##############################
 _luks-add-key() {
-    local partition="${1:?Partition missing}"
+    local device="${1:?Device missing}"
     local key_file="${2:?Key file missing}"
     local key_slot="${3:?Key slot missing}"
+    local luks2_options=()
+
+    if cryptsetup isLuks --type luks2 "${device}"; then
+        luks2_options=(--pbkdf=argon2id --pbkdf-memory=2097152)
+    fi
 
     # Deleting previous key
-    cryptsetup luksKillSlot -q "${partition}" "${key_slot}" || true
+    cryptsetup luksKillSlot --batch-mode "${device}" "${key_slot}" || true
     # Add new
-    cryptsetup luksAddKey --iter-time 3000 --key-slot "${key_slot}" "${partition}" "${key_file}"
+    cryptsetup luksAddKey \
+        --key-slot "${key_slot}" \
+        --hash=sha512 \
+        --iter-time 3000 \
+        "${luks2_options[@]}" -- "${device}" "${key_file}"
 }
 
 ## Update /etc/crypttab
 ##
-## @param    $1  LUKS partition
+## @param    $1  Device
 ## @param    $2  Label
 ## @param    $3  Key file
-###############################
+#########################
 _luks-crypttab() {
-    local partition="${1:?Partition missing}"
+    local device="${1:?Device missing}"
     local label="${2:?Label missing}"
     local key_file="${3:?Key file missing}"
 
-    UUID=$(blkid -s UUID -o value "${partition}")
+    UUID=$(cryptsetup luksUUID "${device}")
     if ! grep -qs "${UUID}" /etc/crypttab; then
-        echo "LUKS_${label} UUID=${UUID} ${key_file} luks,discard" >>/etc/crypttab
+        echo "${label} UUID=${UUID} ${key_file} luks,discard" >>/etc/crypttab
     fi
 }
 
@@ -87,16 +96,75 @@ fi
 [[ -z "${key_dir}" ]] && error-exit Missing key_dir
 [[ -z "${key_slot}" ]] && error-exit Missing key_slot
 
-# Maps
-map_files=()
+# Parse disk maps
+jobs=()
+declare -A disk_devices
+declare -A disk_part_prefixes
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
-        map_files+=("${file}")
+        # Parse disks
+        for line in $(cfg-read "${file}" disks); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            disk="${arguments[0]}"
+            disk_device="${arguments[1]}"
+            disk_part_prefix="${arguments[2]:-}"
+
+            disk_devices["${disk}"]="${disk_device}"
+            disk_part_prefixes["${disk}"]="${disk_part_prefix}"
+        done
+
+        # Parse partitions
+        for line in $(cfg-read "${file}" partitions); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            disk="${arguments[0]}"
+            part_number="${arguments[1]}"
+            label="${arguments[5]}"
+            crypt="${arguments[6]}"
+
+            [[ "${crypt}" != luks* ]] && continue
+
+            device="${disk_devices["${disk}"]}${disk_part_prefixes["${disk}"]}${part_number}"
+            jobs+=("${device},${label}")
+        done
+
+        # Parse volumes
+        for line in $(cfg-read "${file}" volumes); do
+            IFS=$' \t' read -r -a arguments <<<"${line}"
+            vol_group="${arguments[0]}"
+            name="${arguments[1]}"
+            crypt="${arguments[3]}"
+
+            [[ "${crypt}" != luks* ]] && continue
+
+            device="/dev/${vol_group}/${name}"
+            jobs+=("${device},${name}")
+        done
+
+        # Parse disks and partitions (legacy format)
+        for line in $(cfg-read "${file}" DISKS); do
+            IFS=$' \t' read -r name disk_device part_prefix <<< "${line}"
+            # Loop through partitions
+            for part_line in $(cfg-read "${file}" "PARTITIONS_${name}"); do
+                IFS=$' \t' read -r number _ _ type label <<< "${part_line}"
+
+                [[ "${type}" != luks* ]] && continue
+
+                device="${disk_device}${part_prefix}${number}"
+                jobs+=("${device},${label}")
+            done
+        done
+    else
+        print-warning Map not found: "${map}", ignoring.
     fi
 done
-[[ -z "${map_files[*]}" ]] && error-exit No maps found
 
+if [[ -z "${jobs[*]}" ]]; then
+    print-finish Nothing to do.
+    exit 0
+fi
+
+# Prepare
 install-apt cryptsetup-initramfs
 
 print-status Config cryptsetup-initramfs...
@@ -114,37 +182,26 @@ fi
 
 print-status Create LUKS keys dir...
 mkdir -p "${key_dir}"
-chmod o-rwx "${key_dir}"
+chmod 0700 "${key_dir}"
 print-finish
 
-# Loop through maps
-for map_file in "${map_files[@]}"; do
-    # Loop through disks
-    for line in $(cfg-read "${map_file}" DISKS); do
-        IFS=$' \t' read -r name device part_prefix <<< "${line}"
-        # Loop through partitions
-        for part_line in $(cfg-read "${map_file}" "PARTITIONS_${name}"); do
-            IFS=$' \t' read -r number _ _ type label <<< "${part_line}"
+# Do the auto-mounting
+for job in "${jobs[@]}"; do
+    IFS=, read -r device label <<< "${job}"
+    key_file="${key_dir}/${label}.key"
 
-            partition="${device}${part_prefix}${number}"
-            partition_key_file="${key_dir}/${partition#/dev/}-${label}.key"
+    print-header Create key file for "${label}..."
+    dd if=/dev/urandom of="${key_file}" bs=4096 count=1
+    chmod 0600 "${key_file}"
+    print-finish
 
-            if [[ "${type}" == luks* ]]; then
-                print-header Create key file for "${partition}..."
-                dd if=/dev/urandom of="${partition_key_file}" bs=4096 count=1
-                chmod go-rwx "${partition_key_file}"
-                print-finish
+    print-header Add key file to LUKS container "${label}..."
+    _luks-add-key "${device}" "${key_file}" "${key_slot}"
+    print-finish
 
-                print-header Add machine key to LUKS "${label}..."
-                _luks-add-key "${partition}" "${partition_key_file}" "${key_slot}"
-                print-finish
-
-                print-status Update crypttab with "${label}..."
-                _luks-crypttab "${partition}" "${label}" "${partition_key_file}"
-                print-finish
-            fi
-        done
-    done
+    print-status Update crypttab with "${label}..."
+    _luks-crypttab "${device}" "${label}" "${key_file}"
+    print-finish
 done
 
 exit 0

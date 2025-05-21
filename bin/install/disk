@@ -248,8 +248,8 @@ _zap() {
     read -rp "Proceed? (yes/no): "
     [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
 
-    print-status Closing all open LUKS containers...
-    dmsetup ls --target crypt --exec "cryptsetup close"
+    print-header Closing all open LUKS containers...
+    dmsetup ls --target crypt --exec "cryptsetup close --deferred"
     print-finish
 
     vgs=$(vgs --noheadings --options vg_name | sed -r 's/^[[:space:]]+//')
@@ -538,7 +538,6 @@ declare -A vol_group_lvs
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
-
         # Parse disks
         for line in $(cfg-read "${file}" disks); do
             IFS=$' \t' read -r -a arguments <<<"${line}"
@@ -614,7 +613,7 @@ for map in "${@}"; do
             fi
         done
     else
-        error-exit Map not found: "${map}"
+        print-warning Map not found: "${map}", ignoring.
     fi
 done
 
