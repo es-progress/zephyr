@@ -528,6 +528,17 @@ Configure `sudo`.
 
 ---
 
+### sysctl
+
+You can tweak Linux kernel parameters with this module via `sysctl` configuration files. These changes are permanent, they will survive reboots.
+
+**Configuration**
+
+- `system/sysctl/global.d`: place your `sysctl` configuration files here (`.conf`).
+  All files in this directory will be installed to `/etc/sysctl.d/`.
+
+---
+
 ### systemd
 
 This module can install new `systemd` units (services, timers, etc.) and can override existing units (e.g. `fstrim.service`).
