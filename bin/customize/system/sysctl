@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+############
+## Zephyr ##
+##        ##
+## Config ##
+## sysctl ##
+############
+
+###############
+## FUNCTIONS ##
+###############
+
+## Copy sysctl config files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+############################
+_config() {
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
+    local file
+
+    print-status Config sysctl "[${selector}]..."
+    while IFS= read -r -d '' file; do
+        sudo install --mode=0644 "${file}" /etc/sysctl.d/
+    done < <(find -L "${cfg_dir}" -mindepth 1 -maxdepth 1 -type f -print0 || true)
+    print-finish
+}
+
+##################
+## SCRIPT START ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-not-root
+
+profile="${1:?Profile missing}"
+
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/sysctl/global.d); then
+    _config global "${dir}"
+fi
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" system/sysctl/local.d); then
+    _config local "${dir}"
+fi
+
+print-header Reload sysctl...
+sudo sysctl --system
+print-finish
+
+exit 0
