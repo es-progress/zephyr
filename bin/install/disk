@@ -538,7 +538,6 @@ declare -A vol_group_lvs
 for map in "${@}"; do
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" "install/disk-maps/${map}"); then
-
         # Parse disks
         for line in $(cfg-read "${file}" disks); do
             IFS=$' \t' read -r -a arguments <<<"${line}"
@@ -614,7 +613,7 @@ for map in "${@}"; do
             fi
         done
     else
-        error-exit Map not found: "${map}"
+        print-warning Map not found: "${map}", ignoring.
     fi
 done
 
