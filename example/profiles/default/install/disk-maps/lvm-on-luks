@@ -54,7 +54,7 @@ store         2 512M    2G luks  CRYPT_PV_STORE luks2 -
 # vg-name  physical-volumes
 vg-main    CRYPT_PV_MAIN,CRYPT_PV_STORE
 [volumes]
-# vg-name name     size crypt filesystem
-vg-main   root      14G -     ext4
-vg-main   home       3G -     ext4
-vg-main   swap 100%FREE -     swap
+# vg-name name type       size crypt filesystem
+vg-main   root linear      14G -     ext4
+vg-main   home linear       3G -     ext4
+vg-main   swap linear 100%FREE -     swap

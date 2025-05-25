@@ -51,18 +51,19 @@ store         3  32M    1G 8e00  PV_STORE_2 -     -
 #
 # The logical volumes are created as follows:
 #   - vg-main:
-#     - root: the main root filesystem (14 GB)
-#     - home: a separate /home (3 GB)
-#     - swap: a swap volume (100% of the remaining space)
+#     - root: linear volume for the main root filesystem (14 GB)
+#     - home: a linear volume for separate /home (3 GB)
+#     - swap: a linear swap volume (100% of the remaining space)
 #   - vg-server:
-#     - srv: served data (100% of the remaining space)
+#     - srv: RAID1 volume for served data (100% of the remaining space).
+#            Data is mirrored between two devices (PV_MAIN_2 and PV_STORE_2).
 [vol-groups]
 # vg-name  physical-volumes
 vg-main    PV_MAIN_1,PV_STORE_1
 vg-server  PV_MAIN_2,PV_STORE_2
 [volumes]
-# vg-name name     size crypt filesystem
-vg-main   root      14G -     ext4
-vg-main   home       2G -     ext4
-vg-main   swap 100%FREE -     swap
-vg-server srv  100%FREE -     ext4
+# vg-name name type       size crypt filesystem
+vg-main   root linear      14G -     ext4
+vg-main   home linear       2G -     ext4
+vg-main   swap linear 100%FREE -     swap
+vg-server srv  raid1  100%FREE -     ext4
