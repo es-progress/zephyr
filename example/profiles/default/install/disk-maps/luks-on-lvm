@@ -20,7 +20,7 @@
 #
 # The main disk has the following partitions:
 #   - EFI: a small partition for the EFI bootloader
-#   - BOOT: a partition for the Linux bootloader
+#   - CRYPT_BOOT: a partition for the Linux bootloader
 #   - PV_MAIN: physical volume for LVM on the main disk
 #
 # Secondary disk partitions:
@@ -47,9 +47,9 @@ store         2 512M    2G 8e00  PV_STORE   -     -
 # The volume group is created from the physical volumes on the main and store disks.
 #
 # The logical volumes are created as follows:
-#   - root: the main root filesystem (14 GB)
-#   - home: a separate home partition (3 GB)
-#   - swap: a swap partition (100% of the remaining space)
+#   - crypt-root: the main root filesystem (14 GB)
+#   - crypt-home: a separate /home (3 GB)
+#   - crypt-swap: a swap volume (100% of the remaining space)
 [vol-groups]
 # vg-name  physical-volumes
 vg-main    PV_MAIN,PV_STORE

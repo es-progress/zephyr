@@ -46,13 +46,16 @@ store         3  32M    1G 8e00  PV_STORE_2 -     -
 
 # LVM structure
 #
-# We use one volume group (vg-main) for all logical volumes.
-# The volume group is created from the physical volumes on the main and store disks.
+# We use two distinct volume groups (vg-main and vg-server).
+# The volume groups are created from the physical volumes on the main and store disks.
 #
 # The logical volumes are created as follows:
-#   - root: the main root filesystem (14 GB)
-#   - home: a separate home partition (3 GB)
-#   - swap: a swap partition (100% of the remaining space)
+#   - vg-main:
+#     - root: the main root filesystem (14 GB)
+#     - home: a separate /home (3 GB)
+#     - swap: a swap volume (100% of the remaining space)
+#   - vg-server:
+#     - srv: served data (100% of the remaining space)
 [vol-groups]
 # vg-name  physical-volumes
 vg-main    PV_MAIN_1,PV_STORE_1
