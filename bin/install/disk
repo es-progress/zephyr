@@ -150,12 +150,15 @@ _vg-remove() {
 ##
 ## @param    $1  Volume group name
 ## @param    $2  Logical volume name
-## @param    $3  Size, in exact bytes or percentage
+## @param    $3  Logical volume type
+##               e.g. linear, raid1, raid5
+## @param    $4  Size, in exact bytes or percentage
 ###################################################
 _lv-create() {
     local vg="${1:?VG name missing}"
     local lv="${2:?LV name missing}"
-    local size="${3:?Size missing}"
+    local type="${3:?Type missing}"
+    local size="${4:?Size missing}"
     local size_param=()
 
     # Check if size has a percentage
@@ -165,7 +168,7 @@ _lv-create() {
         size_param=(--size "${size}")
     fi
 
-    lvcreate --autobackup y --name "${lv}" "${size_param[@]}" "${vg}"
+    lvcreate --autobackup y --name "${lv}" --type "${type}" "${size_param[@]}" "${vg}"
 }
 
 ## Format partition/volume
@@ -336,7 +339,7 @@ _encrypt() {
         echo -----------------------------------------------------------------
         IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
         for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name _ crypt _ <<< "${lv}"
+            IFS=, read -r name _ _ crypt _ <<< "${lv}"
             [[ "${crypt}" != luks* ]] && continue
 
             printf "%-30s%-10s%s\n" "/dev/${vg}/${name}" "${crypt}" "${name}"
@@ -384,7 +387,7 @@ _decrypt() {
     for vg in "${vol_groups[@]}"; do
         IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
         for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name _ crypt _ <<< "${lv}"
+            IFS=, read -r name _ _ crypt _ <<< "${lv}"
             [[ "${crypt}" != luks* ]] && continue
 
             print-header Open encrypted partition "/dev/${vg}/${name} (${name})..."
@@ -398,7 +401,7 @@ _decrypt() {
 ## Setup LVM
 ############
 _lvm() {
-    local todo vg lvs_array lv name size
+    local todo vg lvs_array lv name type size
 
     # Show what we are going to do
     todo=
@@ -410,13 +413,13 @@ _lvm() {
     done
 
     print-section Logical volumes to create
-    printf "%-20s%-30s%10s\n" "#volume_group" lv_name size
+    printf "%-20s%-30s%-10s%10s\n" "#volume_group" lv_name type size
     for vg in "${vol_groups[@]}"; do
-        echo ------------------------------------------------------------
+        echo ----------------------------------------------------------------------
         IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
         for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name size _ _ <<< "${lv}"
-            printf "%-20s%-30s%10s\n" "${vg}" "${name}" "${size}"
+            IFS=, read -r name type size _ _ <<< "${lv}"
+            printf "%-20s%-30s%-10s%10s\n" "${vg}" "${name}" "${type}" "${size}"
             todo=1
         done
     done
@@ -439,9 +442,9 @@ _lvm() {
         # Create logical volumes
         IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
         for lv in "${lvs_array[@]}"; do
-            IFS=, read -r name size _ _ <<< "${lv}"
+            IFS=, read -r name type size _ _ <<< "${lv}"
             print-header Create logical volume "${name}"...
-            _lv-create "${vg}" "${name}" "${size}"
+            _lv-create "${vg}" "${name}" "${type}" "${size}"
             print-finish
         done
     done
@@ -478,7 +481,7 @@ _format() {
         echo -------------------------------------------------------
         IFS=";" read -r -a lvs_array <<<"${vol_group_lvs["${vg}"]}"
         for lv in "${lvs_array[@]}"; do
-            IFS=, read -r label _ crypt filesystem <<< "${lv}"
+            IFS=, read -r label _ _ crypt filesystem <<< "${lv}"
             [[ "${filesystem}" == - ]] && continue
 
             # Rewrite device to dm-crypt device if encrypted

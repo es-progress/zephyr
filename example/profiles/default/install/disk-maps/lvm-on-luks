@@ -20,12 +20,12 @@
 #
 # The main disk has the following partitions:
 #   - EFI: a small partition for the EFI bootloader
-#   - BOOT: a partition for the Linux bootloader
-#   - PV_MAIN: physical volume for LVM on the main disk
+#   - CRYPT_BOOT: a partition for the Linux bootloader
+#   - CRYPT_PV_MAIN: physical volume for LVM on the main disk
 #
 # Secondary disk partitions:
 #   - MEDIA: an NTFS partition for media storage (can be used for Windows too)
-#   - PV_STORE: physical volume for LVM on the secondary disk
+#   - CRYPT_PV_STORE: physical volume for LVM on the secondary disk
 #
 # The partitioning scheme is as follows:
 [disks]
@@ -48,13 +48,13 @@ store         2 512M    2G luks  CRYPT_PV_STORE luks2 -
 #
 # The logical volumes are created as follows:
 #   - root: the main root filesystem (14 GB)
-#   - home: a separate home partition (3 GB)
-#   - swap: a swap partition (100% of the remaining space)
+#   - home: a separate /home (3 GB)
+#   - swap: a swap volume (100% of the remaining space)
 [vol-groups]
 # vg-name  physical-volumes
 vg-main    CRYPT_PV_MAIN,CRYPT_PV_STORE
 [volumes]
-# vg-name name     size crypt filesystem
-vg-main   root      14G -     ext4
-vg-main   home       3G -     ext4
-vg-main   swap 100%FREE -     swap
+# vg-name name type       size crypt filesystem
+vg-main   root linear      14G -     ext4
+vg-main   home linear       3G -     ext4
+vg-main   swap linear 100%FREE -     swap

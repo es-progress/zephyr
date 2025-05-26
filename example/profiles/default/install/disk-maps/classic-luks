@@ -21,14 +21,14 @@
 #
 # The main disk has the following partitions:
 #   - EFI: a small partition for the EFI bootloader
-#   - BOOT: a partition for the Linux bootloader
-#   - ROOT: the main partition where the root filesystem is mounted
-#   - SRV: a partition for served data
-#   - SWAP: a separate swap partition
+#   - CRYPT_BOOT: a partition for the Linux bootloader
+#   - CRYPT_ROOT: the main partition where the root filesystem is mounted
+#   - CRYPT_SRV: a partition for served data
+#   - CRYPT_SWAP: a separate swap partition
 #
 # Secondary disk partitions:
 #   - MEDIA: an NTFS partition for media storage (can be used for Windows too)
-#   - BACKUP: a Linux partition for backup storage
+#   - CRYPT_BACKUP: a Linux partition for backup storage
 #
 # The partitioning scheme is as follows:
 [disks]
