@@ -64,7 +64,12 @@ This is the standard Ubuntu install process.
 
 **Installation steps**
 
-1. :computer_mouse: **Install Ubuntu**
+1. Start installation
+
+    ```shell
+    zephyrctl launch
+    ```
+
 1. Complete forms, settings in GUI
 1. After installation ready, :computer_mouse: **Continue Testing**
 1. **DO NOT REBOOT!** :warning:

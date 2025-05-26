@@ -162,6 +162,18 @@ zephyrctl install
 
 ---
 
+## launch
+
+Launch Ubuntu installer (ubiquity) in Automatic mode. Use this command on the liveCD to start the installation GUI.
+
+**Usage**
+
+```
+zephyrctl launch
+```
+
+---
+
 ## partition
 
 Partition a drive according to the provided profile and disk maps.

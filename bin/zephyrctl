@@ -20,6 +20,7 @@ _usage-main() {
     command+=("remix:Create Zephyr ISO")
     command+=("burn:Burn Zephyr ISO to USB")
     command+=("disk:Manage disks and volumes (partition, encrypt, format, etc.)")
+    command+=("launch:Launch Ubuntu GUI installer")
     command+=("partition:Partition disk")
     command+=("format:Format partitions")
     command+=("post-install:OS post-install steps")
@@ -95,6 +96,10 @@ _usage() {
             usage="format PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Disk maps")
+            ;;
+        launch)
+            description="Launch Ubuntu installer (ubiquity) in Automatic mode. Use this command on the liveCD to start the installation GUI."
+            usage="launch"
             ;;
         post-install)
             description="Perform various OS post-install steps (e.g. GRUB configuration, backup GPT)"
@@ -308,6 +313,13 @@ _disk() {
     sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/disk" "${subcommand}" "${profile}" "${@}"
 }
 
+## Launch ubiquity GUI
+######################
+# shellcheck disable=SC2317
+_launch() {
+    sudo --preserve-env=DBUS_SESSION_BUS_ADDRESS,XDG_RUNTIME_DIR sh -c "ubiquity --automatic gtk_ui"
+}
+
 ## Post-install
 ###############
 # shellcheck disable=SC2317
@@ -402,7 +414,7 @@ fi
 
 # Switch action
 case "${cmd}" in
-    extract-grub|remix|burn|disk|partition|format|post-install|customize|install|uninstall) "_${cmd}" "${@}" ;;
+    extract-grub|remix|burn|disk|partition|format|post-install|customize|install|uninstall|launch) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
