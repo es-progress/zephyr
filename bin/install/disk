@@ -290,6 +290,8 @@ _partition() {
         for partition in "${partitions_array[@]}"; do
             IFS=, read -r disk_device number gap size type label _ _ <<< "${partition}"
             printf "%-20s%8s%8s %-8s%s\n" "${disk_device}${number}" "${gap}" "${size}" "${type}" "${label}"
+            # Rewrite disk_device without partition prefix
+            disk_device="${disk_devices["${disk}"]}"
             jobs+=("${disk_device},${number},${gap},${size},${type},${label}")
         done
     done
