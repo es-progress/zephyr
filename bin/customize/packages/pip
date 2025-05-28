@@ -64,6 +64,13 @@ sudo "python${python_version}" "${tmp_file}" --root-user-action ignore --target 
 sudo "python${python_version}" -m pip install --upgrade pip --root-user-action ignore
 print-finish
 
+# Workaround for Ubuntu 20.04 to solve pip error:
+# Cannot uninstall PyYaml, it is a distutils installed project...
+# QUICKFIX: Remove after Ubuntu 22.04 upgrade
+print-header Reinstall PyYAML...
+sudo "python${python_version}" -m pip install --root-user-action ignore --ignore-installed PyYAML
+print-finish
+
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/pip.global); then
     _install global "${file}"
