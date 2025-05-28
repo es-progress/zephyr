@@ -20,7 +20,12 @@ _install() {
     local cfg_file="${2:?Config file missing}"
 
     print-header Install pip packages "[${selector}]..."
-    pip install --upgrade --upgrade-strategy eager --no-warn-script-location -r "${cfg_file}"
+    sudo "python${python_version}" -m pip install \
+        --upgrade \
+        --upgrade-strategy eager \
+        --no-warn-script-location \
+        --root-user-action ignore \
+        -r "${cfg_file}"
     print-finish
 }
 
@@ -36,12 +41,27 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?Profile missing}"
+python_version=
+
+# Read config file, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" packages/global.cfg); then
+    cfg-eval "${file}" managers
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" packages/local.cfg); then
+    cfg-eval "${file}" managers
+fi
+
+[[ -z "${python_version}" ]] && error-exit Missing python_version
+
+install-apt curl "python${python_version}" python3-distutils
 
 print-header Install pip...
 tmp_file=$(mktemp)
 curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
-sudo python3 "${tmp_file}" --root-user-action ignore --target "$(python3 -c 'import sys; print(sys.path[-1])' || true)"
-sudo python3 -m pip install --upgrade pip --root-user-action ignore
+sudo "python${python_version}" "${tmp_file}" --root-user-action ignore --target "$("python${python_version}" -c 'import sys; print(sys.path[-1])' || true)"
+sudo "python${python_version}" -m pip install --upgrade pip --root-user-action ignore
 print-finish
 
 # shellcheck disable=SC2310,SC2311
