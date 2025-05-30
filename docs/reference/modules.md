@@ -285,6 +285,9 @@ This module is used to manage Python packages installed via pip.
 
 **Configuration**
 
+- `packages/global.cfg`:
+    - `managers`: package manager settings. Format: INI-file format.
+        - `python_version`: Python version to install (e.g. `3.9`).
 - `packages/pip.global`: pip requirements file.
 
 ---
