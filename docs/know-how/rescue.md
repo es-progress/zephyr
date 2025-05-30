@@ -16,11 +16,11 @@ Now let's see how to do these.
 1. (If encrypted) Open LUKS container
 
     ```
-    cryptsetup open DEVICE LUKS_DEVICE_NAME
+    cryptsetup open DEVICE LUKS_CONTAINER
 
     where:
     DEVICE              Hard-drive device file (e.g. /dev/sdb)
-    LUKS_DEVICE_NAME    Name of the LUKS device (e.g. LUKS_sdb)
+    LUKS_CONTAINER      Name of the LUKS device (e.g. CRYPT_sdb)
     ```
 
 1. Mount drive
@@ -29,7 +29,7 @@ Now let's see how to do these.
     mount DRIVE MOUNT_POINT
 
     where:
-    DRIVE               Hard-drive device file (e.g. /dev/sdb or /dev/mapper/LUKS_sdb)
+    DRIVE               Hard-drive device file (e.g. /dev/sdb or /dev/mapper/CRYPT_sdb)
     MOUNT_POINT         Mount point (e.g. /mnt/backup)
     ```
 
@@ -56,11 +56,11 @@ Basically you boot from a live USB and chroot to the installed system.
     1. (If encrypted) Open LUKS container
 
         ```
-        cryptsetup open DEVICE LUKS_DEVICE_NAME
+        cryptsetup open DEVICE LUKS_CONTAINER
 
         where:
         DEVICE              Hard-drive device file (e.g. /dev/sdb)
-        LUKS_DEVICE_NAME    Name of the LUKS device (e.g. LUKS_sdb)
+        LUKS_CONTAINER      Name of the LUKS device (e.g. CRYPT_sdb)
         ```
 
     1. Create mount point
@@ -73,7 +73,7 @@ Basically you boot from a live USB and chroot to the installed system.
         mount DRIVE /target
 
         where:
-        DRIVE               Hard-drive device file (e.g. /dev/sdb or /dev/mapper/LUKS_sdb)
+        DRIVE               Hard-drive device file (e.g. /dev/sdb or /dev/mapper/CRYPT_sdb)
         ```
 
 1. Mount device filesystems, so your installed system can access them
