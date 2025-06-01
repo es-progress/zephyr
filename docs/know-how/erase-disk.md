@@ -43,7 +43,14 @@ This has the additional benefit, that the original write performance might be ac
     DEVICE              SSD drive device file (e.g. /dev/sdb)
     ```
 
-1. If frozen :arrow_right: suspend & wake-up computer
+1. If frozen
+    - on a laptop: suspend & wake-up computer
+    - on a desktop:
+        1. Make SATA port hot-pluggable in BIOS
+        1. Power off the computer
+        1. Unplug SATA cable from the drive
+        1. Boot Ubuntu
+        1. Plug SATA cable back in
 1. Enable security by setting a user password
 
     ```
