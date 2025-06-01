@@ -15,6 +15,8 @@ check-not-root
 
 print-status Copy files to SquashFS...
 target="${PATH_EXTRACT}/squashfs-root/${INSTALL_DIR}"
+# Purge target directory
+sudo rm -rf "${target}"
 sudo mkdir -p "${target}"
 # General project files
 sudo cp \
