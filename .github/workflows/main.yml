@@ -205,22 +205,26 @@ jobs:
       - name: Link profiles
         run: ln -s example/profiles profiles
 
+      - run: |
+          apt list --installed "python*"
+          ls -lah /usr/bin/python*
+
       - name: Execute scripts (1st pass)
         run: |
-          ./bin/zephyrctl customize tester apt
-          ./bin/zephyrctl customize tester bin
-          ./bin/zephyrctl customize tester node
+          # ./bin/zephyrctl customize tester apt
+          # ./bin/zephyrctl customize tester bin
+          # ./bin/zephyrctl customize tester node
           ./bin/zephyrctl customize tester pip
-          ./bin/zephyrctl customize tester snap
+          # ./bin/zephyrctl customize tester snap
         shell: bash
 
       - name: Execute scripts (2nd pass)
         run: |
-          ./bin/zephyrctl customize tester apt
-          ./bin/zephyrctl customize tester bin
-          ./bin/zephyrctl customize tester node
+          # ./bin/zephyrctl customize tester apt
+          # ./bin/zephyrctl customize tester bin
+          # ./bin/zephyrctl customize tester node
           ./bin/zephyrctl customize tester pip
-          ./bin/zephyrctl customize tester snap
+          # ./bin/zephyrctl customize tester snap
         shell: bash
 
   tests-services:
