@@ -36,10 +36,18 @@ At the end of this phase the actual install is not yet started, however the disk
 1. :computer_mouse: **Try Ubuntu**
 1. Open Terminal
 1. (Optional) This is a good time to [securely wipe disks](know-how/erase-disk.md#securely-wipe-disk) or perform [memory cell clearing](know-how/erase-disk.md#memory-cell-clearing-only-for-ssds) (only for SSD). This is a manual process.
-1. (Optional) Partition disk(s). If you don't want to change existing partitions this can be skipped.
+1. (Optional) Manage disk structure. Partition disks, setup LVM, encrypt with LUKS.
+   If you don't want to change the disk layout, skip this step.
 
-    ```
-    zephyrctl partition PROFILE DISK_MAP...
+    ```shell
+    # Necessary commands and their order depends on the desired disk architecture
+    zephyrctl disk zap PROFILE DISK_MAP...
+    zephyrctl disk partition PROFILE DISK_MAP...
+    zephyrctl disk encrypt PROFILE DISK_MAP...
+    zephyrctl disk lvm PROFILE DISK_MAP...
+
+    # Confirm disk structure
+    zephyrctl disk info PROFILE DISK_MAP...
 
     where:
     PROFILE            Selected customization profile
@@ -48,8 +56,12 @@ At the end of this phase the actual install is not yet started, however the disk
 
 1. (Optional) Format partitions
 
-    ```
-    zephyrctl format PROFILE DISK_MAP...
+    ```shell
+    # Maybe need to open LUKS containers first
+    zephyrctl disk decrypt PROFILE DISK_MAP...
+
+    # Then format filesystems
+    zephyrctl disk format PROFILE DISK_MAP...
 
     where:
     PROFILE            Selected customization profile
