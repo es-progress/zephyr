@@ -12,7 +12,7 @@ Disk maps are simple text files. Blank lines and lines starting with `#` are ign
 Zephyr :eight_spoked_asterisk: supports two disk map formats:
 
 1. **New Format**: Used by the `zephyrctl disk` command, providing comprehensive disk management capabilities.
-2. **Legacy Format**: Used by the `zephyrctl partition` and `zephyrctl format` commands.
+2. **Legacy Format**: Used by the `zephyrctl partition` and `zephyrctl format` commands. This format is deprecated!
 
 The following sections document both formats.
 
@@ -144,6 +144,10 @@ vg-home   home  raid1  100%FREE -     ext4
 ## Legacy Format
 
 This format is used by the older `zephyrctl partition` and `zephyrctl format` commands.
+
+!!! warning "Deprecated"
+
+    This format is deprecated and will be removed in the future.
 
 ### Disks
 

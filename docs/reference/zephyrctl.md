@@ -122,6 +122,11 @@ Format partitions as per the provided profile and disk maps.
 
     Don't forget to back up your data!
 
+!!! note "Deprecated"
+
+    This command is deprecated and will be removed in the future.
+    Use `zephyrctl disk format` instead.
+
 **Usage**
 
 ```
@@ -181,6 +186,11 @@ Partition a drive according to the provided profile and disk maps.
 !!! danger "This will delete all files on selected partitions!"
 
     Please watch out for possible data-loss and back up your data beforehand!
+
+!!! note "Deprecated"
+
+    This command is deprecated and will be removed in the future.
+    Use `zephyrctl disk partition` instead.
 
 **Usage**
 
