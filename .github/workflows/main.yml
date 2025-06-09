@@ -113,8 +113,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -140,8 +140,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Install GNOME
         run: |
@@ -178,8 +178,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -202,8 +202,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -232,8 +232,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Install dependencies
         run: ./bin/zephyrctl customize tester certificates
@@ -264,8 +264,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -288,11 +288,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
-
-      - name: Install dependencies
-        run: sudo chmod =0440 /etc/sudoers.d/runner
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -331,8 +328,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Execute scripts (1st pass)
         run: |
@@ -373,19 +370,8 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
-
-      - name: Compile disk-map
-        run: |
-          # Get where / is mounted
-          partition=$(findmnt --noheadings --output=SOURCE /)
-          # Get disk device file from partition device file
-          device=$(lsblk --noheadings --output PKNAME "${partition}")
-          # Update disk-map
-          sed -i "s@{{ DEVICE }}@${device}@g" profiles/tester/install/disk-maps/github-actions
-          echo Compiled disk-map:
-          cat profiles/tester/install/disk-maps/github-actions
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Run post-install
         run: ./bin/zephyrctl post-install live tester github-actions
@@ -400,14 +386,11 @@ jobs:
       - name: Self checkout
         uses: actions/checkout@v4
 
-      - name: Link profiles
-        run: ln -s example/profiles profiles
-
-      - name: Link remix config
-        run: ln -s example/remix remix
+      - name: Install Zephyr
+        uses: ./.github/actions/install-zephyr
 
       - name: Download Ubuntu Live CD
-        run: wget -O ubuntu.iso --quiet https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
+        run: wget -O ubuntu.iso --quiet --show-progress --progress=dot:giga https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
 
       - name: Create remix
         run: ./bin/zephyrctl remix ubuntu.iso
