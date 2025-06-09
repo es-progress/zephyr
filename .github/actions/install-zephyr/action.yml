@@ -1,0 +1,28 @@
+name: Install Zephyr
+description: Install Zephyr on the runner
+runs:
+  using: composite
+  steps:
+    - name: Link profiles
+      run: ln -s example/profiles profiles
+      shell: bash
+
+    - name: Link remix config
+      run: ln -s example/remix remix
+      shell: bash
+
+    - name: Compile disk-map
+      run: |
+        # Get where / is mounted
+        partition=$(findmnt --noheadings --output=SOURCE /)
+        # Get disk device file from partition device file
+        device=$(lsblk --noheadings --output PKNAME "${partition}")
+        # Update disk-map
+        sed -i "s@{{ DEVICE }}@${device}@g" profiles/tester/install/disk-maps/github-actions
+        echo Compiled disk-map:
+        cat profiles/tester/install/disk-maps/github-actions
+      shell: bash
+
+    - name: Set permissions for sudoers
+      run: sudo chmod =0440 /etc/sudoers.d/runner
+      shell: bash
