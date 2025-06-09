@@ -49,7 +49,14 @@ jobs:
         # Step need an id to be defined to later retrieve the output value
         id: modules
         run: |
+          run_all=
           if grep -qs .github/workflows/main.yml ~/changed.files; then
+            run_all=1
+          fi
+          if grep -qs .github/actions ~/changed.files; then
+            run_all=1
+          fi
+          if [[ -n "${run_all}" ]]; then
             echo "::notice::Will run all modules"
             echo apps=yes >> "$GITHUB_OUTPUT"
             echo gnome=yes >> "$GITHUB_OUTPUT"
@@ -62,6 +69,7 @@ jobs:
             echo post-install=yes >> "$GITHUB_OUTPUT"
             echo remix=yes >> "$GITHUB_OUTPUT"
           fi
+
           if grep -qs customize/apps ~/changed.files; then
             echo "::notice::Will run customize/apps"
             echo apps=yes >> "$GITHUB_OUTPUT"
