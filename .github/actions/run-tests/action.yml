@@ -1,0 +1,21 @@
+name: Run tests
+description: Execute modules
+inputs:
+  modules:
+    description: Space-separated list of modules to run
+    type: string
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Execute scripts (1st pass)
+      run: |
+        . ./bin/library.sh && print-section "1st pass on: ${{ inputs.modules }}"
+        ./bin/zephyrctl customize tester ${{ inputs.modules }}
+      shell: bash
+
+    - name: Execute scripts (2nd pass)
+      run: |
+        . ./bin/library.sh && print-section "2nd pass on: ${{ inputs.modules }}"
+        ./bin/zephyrctl customize tester ${{ inputs.modules }}
+      shell: bash
