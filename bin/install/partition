@@ -73,6 +73,8 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-root
 
+print-warning "DEPRECATED! This command will be removed, use 'zephyrctl disk partition' instead!"
+
 profile="${1:?Profile missing}"
 shift
 

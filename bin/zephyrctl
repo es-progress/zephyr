@@ -21,8 +21,8 @@ _usage-main() {
     command+=("burn:Burn Zephyr ISO to USB")
     command+=("disk:Manage disks and volumes (partition, encrypt, format, etc.)")
     command+=("launch:Launch Ubuntu GUI installer")
-    command+=("partition:Partition disk")
-    command+=("format:Format partitions")
+    command+=("partition:Partition disk (DEPRECATED)")
+    command+=("format:Format partitions (DEPRECATED)")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("install:Install Zephyr")
@@ -86,13 +86,13 @@ _usage() {
             options+=("MAP:Disk maps")
             ;;
         partition)
-            description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand!"
+            description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand! Deprecated, use 'zephyrctl disk partition' instead."
             usage="partition PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Disk maps")
             ;;
         format)
-            description="(Re)format partitions. Be careful, as it's a dangerous operation. Create backups beforehand!"
+            description="(Re)format partitions. Be careful, as it's a dangerous operation. Create backups beforehand! Deprecated, use 'zephyrctl disk format' instead."
             usage="format PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Disk maps")

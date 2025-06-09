@@ -9,7 +9,7 @@ However, it's the simplest task. :wink:
 
 Customizations are organized into _Modules_.
 Each module is responsible for configuring a specific application, tool, Linux subsystem, system administration job (or even a single setting), or installs a package from a package manager.
-For a comprehensive list of modules see [Reference](reference/modules.md) or the example profile in `example/profiles/default` directory.
+For a comprehensive list of modules see [Reference](reference/modules.md) or the example profile in `/example/profiles/default` directory.
 
 It's also possible to create custom modules if your tools (apps, etc.) are not covered by Zephyr.
 For details on how to create a module check the [`other/local` module](reference/modules.md#local).
