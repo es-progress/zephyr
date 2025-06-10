@@ -36,6 +36,8 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
+print-warning DEPRECATED! This module will be removed!
+
 profile="${1:?Profile missing}"
 
 print-status Add apt repo: ppa:mikhailnov/pulseeffects...
