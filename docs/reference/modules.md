@@ -48,6 +48,10 @@ Installation of [Apache JMeter](https://jmeter.apache.org/){target=\_blank}, a l
 
 Install [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank} and manage output audio presets.
 
+!!! warning "Deprecated"
+
+    This module is deprecated and will be removed in the future.
+
 **Configuration**
 
 - `apps/pulse-effects/global.d`: output presets.
