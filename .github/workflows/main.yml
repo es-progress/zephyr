@@ -124,20 +124,11 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester jmeter
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
           # Don't test soon-to-be-deprecated pulse-effects module
-          # ./bin/zephyrctl customize tester pulse-effects
-          ./bin/zephyrctl customize tester vbox
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester jmeter
-          # ./bin/zephyrctl customize tester pulse-effects
-          ./bin/zephyrctl customize tester vbox
-        shell: bash
+          modules: jmeter vbox
 
   tests-gnome:
     name: Integration tests (customize/gnome)
@@ -156,26 +147,11 @@ jobs:
           sudo apt-get update
           sudo apt-get --quiet install --yes --no-install-recommends gnome-session gnome-software gnome-system-monitor gdm3 nautilus
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester autostart
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
           # Dash-to-panel needs a running GNOME, was unable to do it in CI --> skip
-          # ./bin/zephyrctl customize tester dash-to-panel
-          ./bin/zephyrctl customize tester fonts
-          ./bin/zephyrctl customize tester gnome-config
-          ./bin/zephyrctl customize tester user-dirs
-          ./bin/zephyrctl customize tester wallpaper
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester autostart
-          # ./bin/zephyrctl customize tester dash-to-panel
-          ./bin/zephyrctl customize tester fonts
-          ./bin/zephyrctl customize tester gnome-config
-          ./bin/zephyrctl customize tester user-dirs
-          ./bin/zephyrctl customize tester wallpaper
-        shell: bash
+          modules: autostart fonts gnome-config user-dirs wallpaper
 
   tests-other:
     name: Integration tests (customize/other)
@@ -189,17 +165,10 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester cron
-          ./bin/zephyrctl customize tester local
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester cron
-          ./bin/zephyrctl customize tester local
-        shell: bash
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
+          modules: cron local
 
   tests-packages:
     name: Integration tests (customize/packages)
@@ -213,23 +182,10 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester apt
-          ./bin/zephyrctl customize tester bin
-          ./bin/zephyrctl customize tester node
-          ./bin/zephyrctl customize tester pip
-          ./bin/zephyrctl customize tester snap
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester apt
-          ./bin/zephyrctl customize tester bin
-          ./bin/zephyrctl customize tester node
-          ./bin/zephyrctl customize tester pip
-          ./bin/zephyrctl customize tester snap
-        shell: bash
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
+          modules: apt bin node pip snap
 
   tests-services:
     name: Integration tests (customize/services)
@@ -246,22 +202,11 @@ jobs:
       - name: Install dependencies
         run: ./bin/zephyrctl customize tester certificates
 
-      - name: Execute scripts (1st pass)
-        run: |
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
           # Run php first to install PHP-FPM required by Apache
-          ./bin/zephyrctl customize tester php
-          ./bin/zephyrctl customize tester apache
-          ./bin/zephyrctl customize tester mariadb
-          ./bin/zephyrctl customize tester phpmyadmin
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester php
-          ./bin/zephyrctl customize tester apache
-          ./bin/zephyrctl customize tester mariadb
-          ./bin/zephyrctl customize tester phpmyadmin
-        shell: bash
+          modules: php apache mariadb phpmyadmin
 
   tests-shell:
     name: Integration tests (customize/shell)
@@ -275,17 +220,10 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester bash
-          ./bin/zephyrctl customize tester scripts
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester bash
-          ./bin/zephyrctl customize tester scripts
-        shell: bash
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
+          modules: bash scripts
 
   tests-system:
     name: Integration tests (customize/system)
@@ -299,33 +237,10 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester certificates
-          ./bin/zephyrctl customize tester dirs
-          ./bin/zephyrctl customize tester locale
-          ./bin/zephyrctl customize tester netplan
-          ./bin/zephyrctl customize tester resolved
-          ./bin/zephyrctl customize tester shorewall
-          ./bin/zephyrctl customize tester sudo
-          ./bin/zephyrctl customize tester sysctl
-          ./bin/zephyrctl customize tester systemd
-          ./bin/zephyrctl customize tester users
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester certificates
-          ./bin/zephyrctl customize tester dirs
-          ./bin/zephyrctl customize tester locale
-          ./bin/zephyrctl customize tester netplan
-          ./bin/zephyrctl customize tester resolved
-          ./bin/zephyrctl customize tester shorewall
-          ./bin/zephyrctl customize tester sudo
-          ./bin/zephyrctl customize tester sysctl
-          ./bin/zephyrctl customize tester systemd
-          ./bin/zephyrctl customize tester users
-        shell: bash
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
+          modules: certificates dirs locale netplan resolved shorewall sudo sysctl systemd users
 
   tests-tools:
     name: Integration tests (customize/tools)
@@ -339,35 +254,10 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
-      - name: Execute scripts (1st pass)
-        run: |
-          ./bin/zephyrctl customize tester composer
-          ./bin/zephyrctl customize tester dig
-          ./bin/zephyrctl customize tester gh
-          ./bin/zephyrctl customize tester git
-          ./bin/zephyrctl customize tester gpg
-          ./bin/zephyrctl customize tester mc
-          ./bin/zephyrctl customize tester nano
-          ./bin/zephyrctl customize tester nmap
-          ./bin/zephyrctl customize tester pass-update
-          ./bin/zephyrctl customize tester ssh
-          ./bin/zephyrctl customize tester tomb
-        shell: bash
-
-      - name: Execute scripts (2nd pass)
-        run: |
-          ./bin/zephyrctl customize tester composer
-          ./bin/zephyrctl customize tester dig
-          ./bin/zephyrctl customize tester gh
-          ./bin/zephyrctl customize tester git
-          ./bin/zephyrctl customize tester gpg
-          ./bin/zephyrctl customize tester mc
-          ./bin/zephyrctl customize tester nano
-          ./bin/zephyrctl customize tester nmap
-          ./bin/zephyrctl customize tester pass-update
-          ./bin/zephyrctl customize tester ssh
-          ./bin/zephyrctl customize tester tomb
-        shell: bash
+      - name: Run tests
+        uses: ./.github/actions/run-tests
+        with:
+          modules: composer dig gh git gpg mc nano nmap pass-update ssh tomb
 
   tests-post-install:
     name: Integration tests (post-install)
