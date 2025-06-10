@@ -11,11 +11,15 @@ runs:
     - name: Execute scripts (1st pass)
       run: |
         . ./bin/library.sh && print-section "1st pass on: ${{ inputs.modules }}"
-        ./bin/zephyrctl customize tester ${{ inputs.modules }}
+        for module in ${{ inputs.modules }}; do
+          ./bin/zephyrctl customize tester "${module}"
+        done
       shell: bash
 
     - name: Execute scripts (2nd pass)
       run: |
         . ./bin/library.sh && print-section "2nd pass on: ${{ inputs.modules }}"
-        ./bin/zephyrctl customize tester ${{ inputs.modules }}
+        for module in ${{ inputs.modules }}; do
+          ./bin/zephyrctl customize tester "${module}"
+        done
       shell: bash
