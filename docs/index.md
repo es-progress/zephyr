@@ -10,14 +10,14 @@ It separates the generalized scripts that apply the customizations (**Modules**)
 
 Let's see these two core concepts as they tell the most about Zephyr and how it helps.
 
-**Profiles**
+### Profiles
 
 You can store your configurations organized into profiles.
 It's possible to create many different profiles and a default one.
 If a configuration value is not specified in the selected profile, it falls back to the default.
 This provides flexibility so you can tailor customization to your needs.
 
-**Modules**
+### Modules
 
 Zephyr relies on modules to apply specific configurations and customizations to your system.
 These modules perform a wide range of tasks, for example:
@@ -36,9 +36,15 @@ Additionally, `zephyrctl` is included, a handy tool to accomplish these jobs.
 
 Also, as Zephyr was written in Bash, there's no dependency (other than Bash :smile:).
 
-Now that you have a glimpse of what Zephyr is and how it works at its core, let's explore the different sections of our documentation to help you get started on your journey with Zephyr.
+### Supported Ubuntu versions
+
+| Zephyr version | Ubuntu releases supported |  Released  | End of life |
+| :------------: | :-----------------------: | :--------: | :---------: |
+|      1.x       |         20.04 LTS         | 2024-03-10 |     TBD     |
 
 ## Documentation Sections
+
+Now that you have a glimpse of what Zephyr is and how it works at its core, let's explore the different sections of our documentation to help you get started on your journey with Zephyr.
 
 The [Installation Guide](install.md) will walk you through the process of getting Zephyr up and running on your computer.
 

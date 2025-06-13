@@ -12,14 +12,14 @@ Let's see these two core concepts as they tell the most about Zephyr and how it 
 
 For more detailed information, please refer to the online [documentation](https://zephyr.es-progress.hu/).
 
-## Profiles
+### Profiles
 
 You can store your configurations organized into profiles.
 It's possible to create many different profiles and a default one.
 If a configuration value is not specified in the selected profile, it falls back to the default.
 This provides flexibility so you can tailor customization to your needs.
 
-## Modules
+### Modules
 
 Zephyr relies on modules to apply specific configurations and customizations to your system.
 These modules perform a wide range of tasks, for example:
@@ -33,6 +33,12 @@ These modules perform a wide range of tasks, for example:
 
 As you might see, the core modules should cover the needs of a web developer, sysadmin, or power user.
 If you're missing a module, you can roll your own to extend Zephyr's capabilities!
+
+### Supported Ubuntu versions
+
+| Zephyr version | Ubuntu releases supported |  Released  | End of life |
+| :------------: | :-----------------------: | :--------: | :---------: |
+|      1.x       |         20.04 LTS         | 2024-03-10 |     TBD     |
 
 ## Installation
 
