@@ -317,7 +317,7 @@ _disk() {
 ######################
 # shellcheck disable=SC2317
 _launch() {
-    sudo --preserve-env=DBUS_SESSION_BUS_ADDRESS,XDG_RUNTIME_DIR sh -c "ubiquity --automatic gtk_ui"
+    sudo --preserve-env=DBUS_SESSION_BUS_ADDRESS,XDG_DATA_DIRS,XDG_RUNTIME_DIR sh -c "ubiquity --automatic gtk_ui"
 }
 
 ## Post-install
