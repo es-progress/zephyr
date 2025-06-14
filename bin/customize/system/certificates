@@ -14,6 +14,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?Profile missing}"
+root_ca_key=RSA,rsa_keygen_bits:4096
 root_ca_name=
 root_ca_subject=
 mok_key_name=
@@ -92,10 +93,15 @@ key_created=
 cert_created=
 print-status Create ROOT CA private key...
 if sudo test ! -e "/etc/ssl/private/${root_ca_name}.key"; then
-    sudo openssl genpkey \
-        -algorithm rsa \
-        -pkeyopt rsa_keygen_bits:4096 \
-        -out "/etc/ssl/private/${root_ca_name}.key"
+    # Parse comma-separated config string
+    IFS=',' read -ra key_opts <<< "${root_ca_key}"
+    options=(-algorithm "${key_opts[0]}")
+    unset 'key_opts[0]'
+    for option in "${key_opts[@]}"; do
+        options+=(-pkeyopt "${option}")
+    done
+
+    sudo openssl genpkey "${options[@]}" -out "/etc/ssl/private/${root_ca_name}.key"
     key_created=1
     print-finish
 else
