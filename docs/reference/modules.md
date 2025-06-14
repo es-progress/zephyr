@@ -447,6 +447,7 @@ Certificates signed by this CA are used by the `services/apache` and the `servic
 - `system/firefox-policies.json`: Firefox policy file.
 - `system/global.cfg`:
     - `certificate`: certificates script settings. Format: INI-file format.
+        - `root_ca_key`: key configuration for the root CA in format "algorithm,option1,option2,...". If not specified, defaults to 4096 bit RSA.
         - `root_ca_name`: self-signed Root Certificate Authority (CA) name
         - `root_ca_subject`: root CA subject
         - `mok_key_name`: Machine Owner Key (MOK) name
