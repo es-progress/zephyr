@@ -36,6 +36,9 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 profile="${1:?Profile missing}"
+
+install-apt nano
+
 # shellcheck disable=SC2310,SC2311
 if dir=$(cfg-get "${profile}" tools/nano/global.d); then
     _config global "${dir}"
