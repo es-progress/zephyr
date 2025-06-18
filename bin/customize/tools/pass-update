@@ -32,8 +32,7 @@ install-apt git make
 
 print-header Install pass-update...
 tmp_dir=$(mktemp -d)
-git clone https://github.com/roddhjav/pass-update.git "${tmp_dir}"
-git -C "${tmp_dir}" checkout "${version}"
+git clone --depth 1 --branch "${version}" https://github.com/roddhjav/pass-update.git "${tmp_dir}"
 sudo make -C "${tmp_dir}" install
 print-finish
 
