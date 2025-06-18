@@ -59,10 +59,23 @@ tmp_dir=$(mktemp -d)
 git clone --depth 1 --branch "${version}" https://github.com/home-sweet-gnome/dash-to-panel.git "${tmp_dir}"
 # Install
 make -C "${tmp_dir}" install
-gnome-extensions enable dash-to-panel@jderose9.github.com
-# Restart GNOME
-busctl --user call org.gnome.Shell /org/gnome/Shell org.gnome.Shell Eval s "Meta.restart('Restarting...')"
 print-finish
+
+print-status Enable Dash-to-panel...
+uuid=dash-to-panel@jderose9.github.com
+if gnome-extensions info --quiet "${uuid}" >/dev/null; then
+    gnome-extensions enable "${uuid}"
+    print-finish
+elif [[ "${XDG_SESSION_TYPE:-}" == x11 ]]; then
+    # Restart Gnome Shell
+    killall -3 gnome-shell
+    gnome-extensions enable "${uuid}"
+    print-finish
+else
+    print-error Not found, skip.
+    print-error On Wayland, you need to perform a logout/login cycle or reboot to make it available.
+    print-error After that, run this module again to enable.
+fi
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" gnome/dash-to-panel/global.dconf); then
