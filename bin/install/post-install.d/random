@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+##################
+## Zephyr       ##
+##              ##
+## Post-install ##
+## Random       ##
+##################
+
+# Strict mode
+set -eufo pipefail
+IFS=$'\n\t'
+
+source "${PROJECT_ROOT}/bin/bootstrap.sh"
+check-root
+
+profile="${1:?Profile missing}"
+window_system=wayland
+shift
+
+# Read config file, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" install/global.cfg); then
+    cfg-eval "${file}" random
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" install/local.cfg); then
+    cfg-eval "${file}" random
+fi
+
+[[ -z "${window_system}" ]] && error-exit Missing window_system
+
+print-status Set Display Manager to "${window_system}..."
+cfg_file=/etc/gdm3/custom.conf
+if [[ -r "${cfg_file}" ]]; then
+    value=True
+    [[ "${window_system}" == x11 ]] && value=False
+    sed -i -r "/^#?WaylandEnable=/ c WaylandEnable=${value}" "${cfg_file}"
+    print-finish
+else
+    print-error "Configuration file ${cfg_file} not found, skip."
+fi
+
+exit 0
