@@ -239,7 +239,7 @@ _uninstall() {
     print-finish
 
     print-status Remove Zephyr files...
-    sudo rm -rf "${INSTALL_DIR}"
+    sudo rm -rf "${PROJECT_ROOT}"
     print-finish
 }
 
