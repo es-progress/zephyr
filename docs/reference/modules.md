@@ -202,6 +202,22 @@ You can configure `initramfs` also.
 
 ---
 
+### random
+
+Assortment of random, non-categorized post-installation tasks.
+
+**Tasks**
+
+- select Windowing System to use (e.g. X11 or Wayland)
+
+**Configuration**
+
+- `install/global.cfg`:
+    - `random`: random script settings. Format: INI-file format.
+        - `window_system`: Window System for GNOME, default is `wayland`
+
+---
+
 ## Other modules
 
 Random, non-categorized modules.
