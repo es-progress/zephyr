@@ -40,7 +40,7 @@ print-warning DEPRECATED! This module will be removed!
 
 profile="${1:?Profile missing}"
 
-print-status Add apt repo: ppa:mikhailnov/pulseeffects...
+print-status Add APT repo: ppa:mikhailnov/pulseeffects...
 sudo add-apt-repository --yes --no-update ppa:mikhailnov/pulseeffects
 print-finish
 

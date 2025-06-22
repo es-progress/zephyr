@@ -3,7 +3,7 @@
 ## Zephyr ##
 ##        ##
 ## Config ##
-## apt    ##
+## APT    ##
 ############
 
 ###############
@@ -94,7 +94,7 @@ for apt_repo in "${repos[@]}"; do
     print-finish
 done
 
-print-header Update apt cache...
+print-header Update APT cache...
 sudo apt-get update
 print-finish
 
@@ -114,7 +114,7 @@ print-header Upgrade packages...
 sudo apt-get upgrade --yes
 print-finish
 
-print-header Run apt clean...
+print-header Run APT clean...
 sudo apt-get clean
 print-finish
 
