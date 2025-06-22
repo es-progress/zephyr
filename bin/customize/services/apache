@@ -88,9 +88,10 @@ profile="${1:?Profile missing}"
 web_root=
 def_virt_host_name=
 def_virt_host_subject=
+def_virt_host_cert_key=RSA,rsa_keygen_bits:4096
 root_ca_name=
 
-print-status Add apt repo: ppa:ondrej/apache2...
+print-header Add apt repo: ppa:ondrej/apache2...
 sudo add-apt-repository --yes --no-update ppa:ondrej/apache2
 print-finish
 
@@ -139,12 +140,20 @@ fi
 
 print-header Create certificate for default vhost...
 if sudo test ! -e "/etc/ssl/private/${def_virt_host_name}.key" -o ! -e "/etc/ssl/certs/${def_virt_host_name}.pem"; then
+    # Parse comma-separated config string
+    IFS=',' read -ra key_opts <<< "${def_virt_host_cert_key}"
+    priv_key_options=(-newkey "${key_opts[0]}")
+    unset 'key_opts[0]'
+    for option in "${key_opts[@]}"; do
+        priv_key_options+=(-pkeyopt "${option}")
+    done
+
     # Create CSR
     csr=$(sudo mktemp)
     sudo openssl req \
         -new \
         -sha512 \
-        -newkey rsa:4096 \
+        "${priv_key_options[@]}" \
         -nodes \
         -keyout "/etc/ssl/private/${def_virt_host_name}.key" \
         -out "${csr}" \
