@@ -91,7 +91,7 @@ def_virt_host_subject=
 def_virt_host_cert_key=RSA,rsa_keygen_bits:4096
 root_ca_name=
 
-print-header Add apt repo: ppa:ondrej/apache2...
+print-header Add APT repo: ppa:ondrej/apache2...
 sudo add-apt-repository --yes --no-update ppa:ondrej/apache2
 print-finish
 

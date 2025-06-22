@@ -57,7 +57,7 @@ if file=$(cfg-get "${profile}" services/local.cfg); then
 fi
 [[ -z "${version}" ]] && error-exit Missing version
 
-print-header Add apt repo: ppa:ondrej/php...
+print-header Add APT repo: ppa:ondrej/php...
 sudo add-apt-repository --yes --no-update ppa:ondrej/php
 print-finish
 
