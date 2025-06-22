@@ -25,4 +25,8 @@ if file=$(cfg-get "${profile}" tools/gpg-agent.conf); then
     print-finish
 fi
 
+print-status Set permissions for ~/.gnupg...
+chmod -R go-rwx ~/.gnupg
+print-finish
+
 exit 0

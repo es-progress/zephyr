@@ -82,4 +82,8 @@ for line in $(snap list --all | awk '/disabled/{print $1, $3}'); do
 done
 print-finish
 
+print-status Purge cache...
+sudo find /var/lib/snapd/cache -type f -delete
+print-finish
+
 exit 0
