@@ -135,8 +135,8 @@ if [[ -n "${cert_created}" ]]; then
     # shellcheck disable=SC2310,SC2311
     if file=$(cfg-get "${profile}" system/firefox-policies.json); then
         print-status Install root CA certificate to Firefox...
-        sudo mkdir -p /usr/lib/firefox/distribution
-        sudo install --mode=0644 --no-target-directory "${file}" /usr/lib/firefox/distribution/policies.json
+        sudo mkdir -p /etc/firefox/policies
+        sudo install --mode=0644 --no-target-directory "${file}" /etc/firefox/policies/policies.json
         print-finish
     fi
 fi
