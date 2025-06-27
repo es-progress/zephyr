@@ -280,6 +280,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: check
     if: needs.check.outputs.remix == 'yes'
+    env:
+      ZEPHYR_WORKSPACE: /mnt/zephyr
     steps:
       - name: Self checkout
         uses: actions/checkout@v4
@@ -287,9 +289,14 @@ jobs:
       - name: Install Zephyr
         uses: ./.github/actions/install-zephyr
 
+      - name: Create working directory
+        run: |
+          sudo mkdir -p "${ZEPHYR_WORKSPACE}"
+          sudo chown -R "${USER}:${USER}" "${ZEPHYR_WORKSPACE}"
+
       - name: Download Ubuntu Live CD
-        run: wget -O ubuntu.iso --quiet --show-progress --progress=dot:giga https://releases.ubuntu.com/20.04.5/ubuntu-20.04.5-desktop-amd64.iso
+        run: wget -O "${ZEPHYR_WORKSPACE}/ubuntu.iso" --quiet --show-progress --progress=dot:giga https://releases.ubuntu.com/jammy/ubuntu-22.04.5-desktop-amd64.iso
 
       - name: Create remix
-        run: ./bin/zephyrctl remix ubuntu.iso
+        run: ./bin/zephyrctl remix "${ZEPHYR_WORKSPACE}/ubuntu.iso" "${ZEPHYR_WORKSPACE}/zephyr.iso"
         shell: bash
