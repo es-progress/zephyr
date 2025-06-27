@@ -25,6 +25,7 @@ if file=$(cfg-get "${profile}" gnome/wallpaper.jpg); then
 
     print-status Set wallpaper image...
     dconf write /org/gnome/desktop/background/picture-uri "'file://${ASSETS_DIR}/wallpaper.jpg'"
+    dconf write /org/gnome/desktop/background/picture-uri-dark "'file://${ASSETS_DIR}/wallpaper.jpg'"
     dconf write /org/gnome/desktop/screensaver/picture-uri "'file://${ASSETS_DIR}/wallpaper.jpg'"
     print-finish
 fi
