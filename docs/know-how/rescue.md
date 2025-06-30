@@ -52,7 +52,6 @@ Basically you boot from a live USB and chroot to the installed system.
 
 1. :red_circle: Boot from live USB
 1. Mount root partition. You can mount anywhere, but I'll use `/target` in this example.
-
     1. (If encrypted) Open LUKS container
 
         ```

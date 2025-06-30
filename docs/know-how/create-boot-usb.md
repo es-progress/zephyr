@@ -16,7 +16,6 @@ Before you start, check your USB stick is empty or you've already backed up the 
 1. Download Ubuntu image (ISO file) that you want to install
 1. Plug in USB stick, open it and ensure it actually contains what you believe! :wink:
 1. Create a bootable USB drive for Ubuntu.
-
     - on Windows: use [Rufus](https://rufus.ie/en/){target=\_blank}. Usage is pretty straight-forward, but you can find instructions on the site.
     - on Ubuntu
 
@@ -34,10 +33,8 @@ Before you start, check your USB stick is empty or you've already backed up the 
 
 1. Plug in USB stick, open and confirm its contents match your expectation! :wink:
 1. Create Windows bootable USB drive
-
     - on Windows: use "MediaCreationTool", the native Windows tool for this purpose
     - on Ubuntu: it's a bit complicated, but you can use [WoeUSB](https://github.com/WoeUSB/WoeUSB){target=\_blank}
-
         1. Download Bash script from [WoeUSB releases](https://github.com/WoeUSB/WoeUSB/releases){target=\_blank} and make executable
             ```bash
             wget https://github.com/WoeUSB/WoeUSB/releases/download/v5.2.4/woeusb-5.2.4.bash

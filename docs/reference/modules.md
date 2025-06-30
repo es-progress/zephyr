@@ -70,12 +70,16 @@ The module is for installation and the configuration of [VirtualBox virtualizati
 
 **Configuration**
 
-- `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
-
 - `apps/global.cfg`:
+    - `virtualbox`:
+        - `repo`: Oracle VirtualBox APT repository
+        - `gpg_key_url`: URL to the GPG key file for the repo
+        - `gpg_key_fingerprint`: Expected GPG key fingerprint
+        - `version`: VirtualBox version to install
     - `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
     - `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
     - `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
+- `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
 
 ---
 
@@ -584,7 +588,6 @@ Create users (normal and system users too) and optionally add them to groups.
 **Configuration**
 
 - `system/global.cfg`:
-
     - `users`: users to add to the system. Format: "user_name type groups" (one per line), "type" can be `normal` or `system` if omitted defaults to `normal`, "groups" is an optional comma-separated list of groups to add the user to. Groups will be created if not exist.
       For normal users login will be disabled (so the module can run unattented), to enable the account you will be need to manually set a password later with `passwd`.
 
