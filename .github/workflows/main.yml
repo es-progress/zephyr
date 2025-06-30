@@ -127,8 +127,7 @@ jobs:
       - name: Run tests
         uses: ./.github/actions/run-tests
         with:
-          # Don't test soon-to-be-deprecated pulse-effects module
-          modules: jmeter vbox
+          modules: jmeter pulse-effects vbox
 
   tests-gnome:
     name: Integration tests (customize/gnome)
