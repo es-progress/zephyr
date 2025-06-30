@@ -70,12 +70,16 @@ The module is for installation and the configuration of [VirtualBox virtualizati
 
 **Configuration**
 
-- `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
-
 - `apps/global.cfg`:
+    - `virtualbox`:
+        - `repo`: Oracle VirtualBox APT repository
+        - `gpg_key_url`: URL to the GPG key file for the repo
+        - `gpg_key_fingerprint`: Expected GPG key fingerprint
+        - `version`: VirtualBox version to install
     - `virtualbox-vboxmanage`: Virtualbox settings to apply. Format: "config_name value" (one setting per line).
     - `virtualbox-settings`: parameters for vbox script. Currently only `VM_LOCAL_DIR` (directory for virtual machines) is supported.
     - `virtualbox-virtmachines`: virtual machines definitions. Format: "virtmachines+=(vm_dir@UUID)".
+- `apps/vbox/vm.global.d`: virtual machines definitions. You need to create a sub-directory for each VM and put `.vbox` files in it.
 
 ---
 

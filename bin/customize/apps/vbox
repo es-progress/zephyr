@@ -79,14 +79,53 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
+# Options
 profile="${1:?Profile missing}"
+repo=
+version=
+gpg_key_url=
+gpg_key_fingerprint=
+gpg_key_path=
 
-install-apt virtualbox
+# Read config file, get options
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" apps/global.cfg); then
+    cfg-eval "${file}" virtualbox
+fi
+# shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" apps/local.cfg); then
+    cfg-eval "${file}" virtualbox
+fi
+[[ -z "${repo}" ]] && error-exit Missing repo
+[[ -z "${version}" ]] && error-exit Missing version
+if grep -qs signed-by= <<<"${repo}"; then
+    gpg_key_path=$(sed -r 's@.*\[(.*)\].*@\1@' <<<"${repo}" | sed -r 's@.*signed-by=(\S+).*$@\1@')
+fi
 
-print-status Load vbox modules to kernel...
-sudo modprobe vboxdrv
-sudo modprobe vboxnetadp
-sudo modprobe vboxnetflt
+print-header Add Oracle VirtualBox GPG key...
+if [[ -n "${gpg_key_path}" && -n "${gpg_key_url}" ]]; then
+    tmp_file=$(mktemp)
+    curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
+    fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10)
+    if [[ -n "${gpg_key_fingerprint}" && "${fpr}" != "${gpg_key_fingerprint}" ]]; then
+        error-exit Bad GPG key fingerprint, exiting
+    fi
+    sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"
+    print-finish
+else
+    print-finish GPG key not provided, skip.
+fi
+
+print-header Add Oracle VirtualBox repo...
+# We need to manually write sources, as add-apt-repository does not support the signed-by option
+echo "${repo}" | sudo tee /etc/apt/sources.list.d/oracle-virtualbox.list > /dev/null
+sudo apt update
+print-finish
+
+install-apt "virtualbox-${version}"
+
+print-header Load vbox modules to kernel...
+sudo /sbin/vboxconfig
 print-finish
 
 virtmachines=()
