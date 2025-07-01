@@ -114,31 +114,6 @@ EXTRACTED          Path to save the extracted 'grub.cfg'.
 
 ---
 
-## format
-
-Format partitions as per the provided profile and disk maps.
-
-!!! danger "This will delete all files on selected partitions!"
-
-    Don't forget to back up your data!
-
-!!! note "Deprecated"
-
-    This command is deprecated and will be removed in the future.
-    Use `zephyrctl disk format` instead.
-
-**Usage**
-
-```
-zephyrctl format PROFILE MAP...
-
-Params:
-PROFILE            Customization profile to use
-MAP                Disk maps
-```
-
----
-
 ## help
 
 Obtain information on how to use `zephyrctl` commands.
@@ -175,31 +150,6 @@ Launch Ubuntu installer (ubiquity) in Automatic mode. Use this command on the li
 
 ```
 zephyrctl launch
-```
-
----
-
-## partition
-
-Partition a drive according to the provided profile and disk maps.
-
-!!! danger "This will delete all files on selected partitions!"
-
-    Please watch out for possible data-loss and back up your data beforehand!
-
-!!! note "Deprecated"
-
-    This command is deprecated and will be removed in the future.
-    Use `zephyrctl disk partition` instead.
-
-**Usage**
-
-```
-zephyrctl partition PROFILE MAP...
-
-Params:
-PROFILE            Customization profile to use
-MAP                Disk maps
 ```
 
 ---
