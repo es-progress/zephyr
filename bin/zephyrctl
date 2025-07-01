@@ -112,7 +112,7 @@ _usage() {
             description="Update/customize a module. This command plays a key role in customizing your Ubuntu installation."
             usage="customize PROFILE [MODULE]..."
             options+=("PROFILE:Customization profile to use")
-            options+=("MODULE:Module/category to run (eg. apt, system). If prefixed with '~', then the module or the whole category is skipped (e.g ~apt, ~system). If none given, all modules will be executed.")
+            options+=("MODULE:Module/category to run (eg. apt, system). If prefixed with '^', then the module or the whole category is skipped (e.g ^apt, ^system). If none given, all modules will be executed.")
             ;;
         install)
             description="Install Zephyr on your computer"

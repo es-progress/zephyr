@@ -10,8 +10,8 @@ __zephyrctl_complete() {
     profiles=
     [[ -r "{{ INSTALL_DIR }}/profiles" ]] && profiles=$(find -L "{{ INSTALL_DIR }}/profiles" -mindepth 1 -maxdepth 1 -type d -printf "%f\n")
     maps=
-    scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 2 -type f -executable -printf "%f\n~%f\n")
-    categories=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 1 -maxdepth 1 -type d -printf "%f\n~%f\n")
+    scripts=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 2 -type f -executable -printf "%f\n^%f\n")
+    categories=$(find "{{ INSTALL_DIR }}/bin/customize" -mindepth 1 -maxdepth 1 -type d -printf "%f\n^%f\n")
 
     case "${cword}" in
         1) __zephyr_gen_word "${commands[*]}" ;;
