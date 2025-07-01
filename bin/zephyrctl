@@ -38,8 +38,6 @@ _usage-main() {
         IFS=: read -r name help <<<"${line}"
         printf "  ${TXT_GREEN}%-20s${TXT_NORM}%s\n" "${name}" "${help}"
     done
-
-    exit 1
 }
 
 ## Print usage
@@ -360,7 +358,12 @@ fi
 case "${cmd}" in
     extract-grub|remix|burn|disk|post-install|customize|install|uninstall|launch) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
-    *) _usage-main ;;
+    "") _usage-main ;;
+    *)
+        print-error "Unknown command: ${cmd}"
+        _usage-main
+        exit 1
+        ;;
 esac
 
 exit 0
