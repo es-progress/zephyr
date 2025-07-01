@@ -21,8 +21,6 @@ _usage-main() {
     command+=("burn:Burn Zephyr ISO to USB")
     command+=("disk:Manage disks and volumes (partition, encrypt, format, etc.)")
     command+=("launch:Launch Ubuntu GUI installer")
-    command+=("partition:Partition disk (DEPRECATED)")
-    command+=("format:Format partitions (DEPRECATED)")
     command+=("post-install:OS post-install steps")
     command+=("customize:Customize Ubuntu")
     command+=("install:Install Zephyr")
@@ -82,18 +80,6 @@ _usage() {
             description="Setup disk layout before installing Ubuntu: e.g. create, format or encrypt volumes. Be careful, as it's a dangerous operation. Create backups beforehand!"
             usage="disk SUBCOMMAND PROFILE MAP..."
             options+=("SUBCOMMAND:What to do with the disks")
-            options+=("PROFILE:Customization profile to use")
-            options+=("MAP:Disk maps")
-            ;;
-        partition)
-            description="Partition a drive. Be careful, as it's a dangerous operation. Create backups beforehand! Deprecated, use 'zephyrctl disk partition' instead."
-            usage="partition PROFILE MAP..."
-            options+=("PROFILE:Customization profile to use")
-            options+=("MAP:Disk maps")
-            ;;
-        format)
-            description="(Re)format partitions. Be careful, as it's a dangerous operation. Create backups beforehand! Deprecated, use 'zephyrctl disk format' instead."
-            usage="format PROFILE MAP..."
             options+=("PROFILE:Customization profile to use")
             options+=("MAP:Disk maps")
             ;;
@@ -243,48 +229,6 @@ _uninstall() {
     print-finish
 }
 
-## Partition disks
-##################
-# shellcheck disable=SC2317
-_partition() {
-    local profile
-
-    if [[ -z "${1:-}" ]]; then
-        print-error Profile missing!
-        _usage partition
-        exit 1
-    fi
-    profile="${1}"
-    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error Profile: "${profile}" missing!
-        exit 1
-    fi
-    shift
-
-    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/partition" "${profile}" "${@}"
-}
-
-## Format partitions
-####################
-# shellcheck disable=SC2317
-_format() {
-    local profile
-
-    if [[ -z "${1:-}" ]]; then
-        print-error Profile missing!
-        _usage format
-        exit 1
-    fi
-    profile="${1}"
-    if [[ ! -e "${PATH_PROFILES}/${profile}" ]]; then
-        print-error Profile: "${profile}" missing!
-        exit 1
-    fi
-    shift
-
-    sudo env PROJECT_ROOT="${PROJECT_ROOT}" "${PATH_SCRIPTS_INSTALL}/format" "${profile}" "${@}"
-}
-
 ## Manage disks
 ###############
 # shellcheck disable=SC2317
@@ -414,7 +358,7 @@ fi
 
 # Switch action
 case "${cmd}" in
-    extract-grub|remix|burn|disk|partition|format|post-install|customize|install|uninstall|launch) "_${cmd}" "${@}" ;;
+    extract-grub|remix|burn|disk|post-install|customize|install|uninstall|launch) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
     *) _usage-main ;;
 esac
