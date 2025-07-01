@@ -38,7 +38,8 @@ If you're missing a module, you can roll your own to extend Zephyr's capabilitie
 
 | Zephyr version | Ubuntu releases supported |  Released  | End of life |
 | :------------: | :-----------------------: | :--------: | :---------: |
-|      1.x       |         20.04 LTS         | 2024-03-10 |     TBD     |
+|      1.x       |         20.04 LTS         | 2024-03-10 | 2025-07-01  |
+|      2.x       |         22.04 LTS         | 2025-07-01 |     TBD     |
 
 ## Installation
 
