@@ -32,7 +32,7 @@ blacklist=()
 # Get white/blacklist from CLI
 for arg in "${@}"; do
     # Check first character
-    if [[ "${arg:0:1}" == "~" ]]; then
+    if [[ "${arg:0:1}" == ^ ]]; then
         # Remove first char
         arg="${arg#?}"
         blacklist+=("${arg}")
