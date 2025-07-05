@@ -137,6 +137,7 @@ if [[ -n "${cert_created}" ]]; then
         print-status Install root CA certificate to Firefox...
         sudo mkdir -p /etc/firefox/policies
         # Hard link the certificate to Firefox directory so Firefox can access it
+        [[ -e "/etc/firefox/${root_ca_name}.crt" ]] && sudo rm "/etc/firefox/${root_ca_name}.crt"
         sudo link "/usr/local/share/ca-certificates/${root_ca_name}.crt" "/etc/firefox/${root_ca_name}.crt"
         sudo install --mode=0644 --no-target-directory "${file}" /etc/firefox/policies/policies.json
         print-finish
