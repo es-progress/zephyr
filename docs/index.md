@@ -59,6 +59,8 @@ The [Ubuntu Installation](ubuntu.md) section provides guidance on the pre-instal
 [Customization](customize.md) is at the heart of Zephyr.
 In this section, you'll learn how to use modules to customize your system.
 
+The _Know-how_ section provides practical system administration guides that complement your Zephyr workflow.
+
 Finally, the Reference sections provide detailed information about [Zephyr settings](reference/configs.md), [zephyrctl](reference/zephyrctl.md) and the [modules](reference/modules.md).
 
 !!! note
