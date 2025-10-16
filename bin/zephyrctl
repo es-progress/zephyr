@@ -151,7 +151,7 @@ _usage() {
 
 ## Extract GRUB config from ISO
 ###############################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _extract-grub() {
     if [[ -z "${1:-}" ]]; then
         print-error ISO image missing!
@@ -170,7 +170,7 @@ _extract-grub() {
 
 ## Create ISO
 #############
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _remix() {
     if [[ -z "${1:-}" ]]; then
         print-error ISO image missing!
@@ -185,7 +185,7 @@ _remix() {
 
 ## Burn ISO
 ###########
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _burn() {
     if [[ -z "${1:-}" ]]; then
         print-error ISO image missing!
@@ -197,7 +197,7 @@ _burn() {
 
 ## Install Zephyr
 #################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _install() {
     print-status Set up Bash completion...
     completion_file=/usr/share/bash-completion/completions/zephyrctl
@@ -213,7 +213,7 @@ _install() {
 
 ## Uninstall Zephyr
 #################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _uninstall() {
     print-status Remove Bash completion...
     sudo rm /etc/bash_completion.d/zephyrctl
@@ -230,7 +230,7 @@ _uninstall() {
 
 ## Manage disks
 ###############
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _disk() {
     local subcommand="${1:-}"
     local profile="${2:-}"
@@ -258,14 +258,14 @@ _disk() {
 
 ## Launch ubiquity GUI
 ######################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _launch() {
     sudo --preserve-env=DBUS_SESSION_BUS_ADDRESS,XDG_DATA_DIRS,XDG_RUNTIME_DIR sh -c "ubiquity --automatic gtk_ui"
 }
 
 ## Post-install
 ###############
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _post-install() {
     local environment profile
 
@@ -294,7 +294,7 @@ _post-install() {
 ##
 ## @param   $1  Profile
 #######################
-# shellcheck disable=SC2317
+# shellcheck disable=SC2329
 _customize() {
     local profile
     local module_selected=
