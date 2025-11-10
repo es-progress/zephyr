@@ -14,7 +14,7 @@ source "${PROJECT_ROOT}/bin/bootstrap.sh"
 check-not-root
 
 # Options
-iso_image="${1?:ISO file missing}"
+iso_image="${1:?ISO file missing}"
 disk="${2:-}"
 
 # Select device
