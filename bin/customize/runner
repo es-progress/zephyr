@@ -25,7 +25,7 @@ IFS=$'\n\t'
 source "${PROJECT_ROOT}/bin/bootstrap.sh"
 
 # Parse options
-profile="${1?:Profile missing}"
+profile="${1:?Profile missing}"
 shift
 whitelist=()
 blacklist=()
