@@ -50,8 +50,6 @@ _usage() {
     local options=()
     local subcommands=()
 
-    # @formatter:off
-    # TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
     case "${selector}" in
         "")
             description="Display help for a command"
@@ -110,7 +108,6 @@ _usage() {
             ;;
         *) _usage-main ;;
     esac
-    # @formatter:on
 
     echo -e "${TXT_YELLOW}Description:${TXT_NORM}"
     echo -e "  ${description}\n"
@@ -359,8 +356,6 @@ if [[ "${cmd}" != help ]]; then
 fi
 
 # Switch action
-# @formatter:off
-# TEMP: remove when https://github.com/lovesegfault/beautysh/issues/265 is fixed
 case "${cmd}" in
     extract-grub|remix|burn|disk|post-install|customize|install|uninstall|launch) "_${cmd}" "${@}" ;;
     help) _usage "${1:-}" ;;
@@ -371,6 +366,5 @@ case "${cmd}" in
         exit 1
         ;;
 esac
-# @formatter:on
 
 exit 0
