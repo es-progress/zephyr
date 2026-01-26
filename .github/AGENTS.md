@@ -22,7 +22,7 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 - Use appropriate privilege checks (`check-root`, `check-not-root`)
 - Maintain compatibility with Zephyr's bootstrap system
 
-**Instructions**: See [shell.instructions.md](.github/instructions/shell.instructions.md) for detailed coding standards.
+**Instructions**: See [shell.instructions.md](instructions/shell.instructions.md) for detailed coding standards.
 
 ---
 
@@ -42,7 +42,7 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 - Keep reference materials in sync with code changes
 - Write clear, concise, and accurate content
 
-**Instructions**: See [docs.instructions.md](.github/instructions/docs.instructions.md) for detailed documentation standards.
+**Instructions**: See [docs.instructions.md](instructions/docs.instructions.md) for detailed documentation standards.
 
 ---
 
@@ -63,7 +63,7 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 - Check for security implications
 - Validate adherence to coding standards
 
-**Instructions**: See [copilot-instructions.md](.github/copilot-instructions.md) for project overview and conventions.
+**Instructions**: See [copilot-instructions.md](copilot-instructions.md) for project overview and conventions.
 
 ---
 
