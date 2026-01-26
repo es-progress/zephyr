@@ -4,6 +4,8 @@ applyTo: "bin/**"
 
 # Project coding standards for Shell scripts
 
+> **Context**: These standards apply to all Bash scripts in the `bin/` directory. See [copilot-instructions.md](../copilot-instructions.md) for general project conventions and [AGENTS.md](../AGENTS.md) for specialized agent information.
+
 ## Standards
 
 - always use `#!/usr/bin/env bash` shebang
@@ -35,9 +37,8 @@ applyTo: "bin/**"
         1. read configuration values from profile files (global and local), e.g.
             ```bash
             if file=$(cfg-get "${profile}" services/global.cfg); then
-            cfg-eval "${file}" php
+                cfg-eval "${file}" php
             fi
-            # shellcheck disable=SC2310,SC2311
             if file=$(cfg-get "${profile}" services/local.cfg); then
                 cfg-eval "${file}" php
             fi
@@ -62,3 +63,10 @@ applyTo: "bin/**"
 - follow existing function naming conventions: `kebab-case` for functions, `UPPER_CASE` for constants
 - use double quotes around variable expansions to prevent word splitting and globbing, e.g. `"${var}"`
 - use shellcheck-compliant code (see `.shellcheckrc` for project rules)
+
+## Additional resources
+
+- [Main Copilot Instructions](../copilot-instructions.md) - project overview and general conventions
+- [AGENTS.md](../AGENTS.md) - Shell Script Expert agent for specialized assistance
+- [bin/library.sh](../../bin/library.sh) - shared utility functions
+- [Project Documentation](https://zephyr.es-progress.hu/reference/modules/) - module reference documentation

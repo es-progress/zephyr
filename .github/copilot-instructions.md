@@ -1,5 +1,10 @@
 # Zephyr
 
+> **Note**: This file provides high-level project context and coding conventions. For path-specific standards and specialized agent information, see:
+> - [Shell Script Standards](instructions/shell.instructions.md) - for `bin/**` files
+> - [Documentation Standards](instructions/docs.instructions.md) - for `docs/**` files
+> - [Custom Agents](AGENTS.md) - specialized Copilot agents for this project
+
 ## Overview
 
 Zephyr is a powerful Bash-based framework designed to simplify and improve Ubuntu installation and configuration.
@@ -89,3 +94,12 @@ This provides flexibility so you can tailor customization to your needs.
 
 - commit messages should be short but descriptive and prefixed with the affected module, e.g. `customize/gnome/wallpaper: set background for dark mode also`, `zephyrctl/remix: use + in find not \;` or `docs/index: Add note about Know-how section`
 - PR titles should be short but descriptive (no emojis), PR description should contain a short summary of changes, motivation, and any relevant links
+
+## Additional resources
+
+- **Path-Specific Standards**:
+  - [Shell Script Standards](instructions/shell.instructions.md) - coding standards for Bash scripts in `bin/**`
+  - [Documentation Standards](instructions/docs.instructions.md) - writing guidelines for `docs/**`
+- **Specialized Agents**: [AGENTS.md](AGENTS.md) - custom Copilot agents for shell scripts, documentation, and code review
+- **Project Documentation**: [Online Docs](https://zephyr.es-progress.hu/) - complete user and developer documentation
+- **Quick Start**: [README](../README.md) - project introduction and installation guide
