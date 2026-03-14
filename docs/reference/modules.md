@@ -50,7 +50,8 @@ Install [PulseEffects](https://github.com/wwmm/easyeffects){target=\_blank} and 
 
 **Configuration**
 
-- `apps/pulse-effects/global.d`: output presets.
+- `apps/pulse-effects/preset/global.d`: output presets.
+- `apps/pulse-effects/config/global.d`: system-wide PulseAudio config files (`*.pa`).
 
 ---
 

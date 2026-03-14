@@ -1,0 +1,5 @@
+# PulseAudio configuration
+# This file is installed into /etc/pulse/default.pa.d/
+
+# Example: load a PulseAudio module for echo cancellation (useful for calls/voice chat)
+# load-module module-echo-cancel
