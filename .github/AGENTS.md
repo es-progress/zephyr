@@ -9,6 +9,7 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 **Role**: Expert in Bash scripting for Zephyr modules
 
 **Expertise**:
+
 - Bash 5 scripting with strict mode
 - Zephyr module development patterns
 - Configuration file handling (INI format)
@@ -16,6 +17,7 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 - Shell best practices and ShellCheck compliance
 
 **Responsibilities**:
+
 - Create and modify shell scripts in `bin/` directory
 - Follow Zephyr's module structure and conventions
 - Implement idempotent operations
@@ -31,12 +33,14 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 **Role**: Expert in Zephyr documentation and MkDocs
 
 **Expertise**:
+
 - Markdown formatting and best practices
 - MkDocs documentation structure
 - Technical writing for developers and users
 - Zephyr's documentation organization
 
 **Responsibilities**:
+
 - Create and update documentation in `docs/` directory
 - Maintain documentation structure and navigation
 - Keep reference materials in sync with code changes
@@ -51,12 +55,14 @@ This file defines specialized GitHub Copilot agents for the Zephyr project. Each
 **Role**: Code reviewer for Zephyr modules
 
 **Expertise**:
+
 - Zephyr architecture and design patterns
 - Module testing and CI integration
 - Security best practices for system configuration
 - Profile and configuration management
 
 **Responsibilities**:
+
 - Review module changes for correctness
 - Ensure modules are idempotent and testable
 - Verify proper error handling and logging

@@ -1,6 +1,7 @@
 # Zephyr
 
 > **Note**: This file provides high-level project context and coding conventions. For path-specific standards and specialized agent information, see:
+>
 > - [Shell Script Standards](instructions/shell.instructions.md) - for `bin/**` files
 > - [Documentation Standards](instructions/docs.instructions.md) - for `docs/**` files
 > - [Custom Agents](AGENTS.md) - specialized Copilot agents for this project
@@ -98,8 +99,8 @@ This provides flexibility so you can tailor customization to your needs.
 ## Additional resources
 
 - **Path-Specific Standards**:
-  - [Shell Script Standards](instructions/shell.instructions.md) - coding standards for Bash scripts in `bin/**`
-  - [Documentation Standards](instructions/docs.instructions.md) - writing guidelines for `docs/**`
+    - [Shell Script Standards](instructions/shell.instructions.md) - coding standards for Bash scripts in `bin/**`
+    - [Documentation Standards](instructions/docs.instructions.md) - writing guidelines for `docs/**`
 - **Specialized Agents**: [AGENTS.md](AGENTS.md) - custom Copilot agents for shell scripts, documentation, and code review
 - **Project Documentation**: [Online Docs](https://zephyr.es-progress.hu/) - complete user and developer documentation
 - **Quick Start**: [README](../README.md) - project introduction and installation guide
