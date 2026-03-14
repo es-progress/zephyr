@@ -10,6 +10,20 @@
 ## FUNCTIONS ##
 ###############
 
+## Install PulseAudio .pa config files
+##
+## @param   $1  Global/Local
+## @param   $2  Config dir
+######################################
+_config-pulseaudio() {
+    local selector="${1:?Selector missing}"
+    local cfg_dir="${2:?Config dir missing}"
+
+    print-status Configure pulse-audio "[${selector}]..."
+    find -L "${cfg_dir}" -name "*.pa" -exec sudo install --mode=0644 {} /etc/pulse/default.pa.d/ \;
+    print-finish
+}
+
 ## Copy presets
 ##
 ## @param   $1  Global/Local
@@ -41,11 +55,20 @@ profile="${1:?Profile missing}"
 install-apt pulseaudio pulseeffects
 
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" apps/pulse-effects/global.d); then
+if dir=$(cfg-get "${profile}" apps/pulse-effects/config/global.d); then
+    _config-pulseaudio global "${dir}"
+fi
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" apps/pulse-effects/config/local.d); then
+    _config-pulseaudio local "${dir}"
+fi
+
+# shellcheck disable=SC2310,SC2311
+if dir=$(cfg-get "${profile}" apps/pulse-effects/preset/global.d); then
     _copy-presets global "${dir}"
 fi
 # shellcheck disable=SC2310,SC2311
-if dir=$(cfg-get "${profile}" apps/pulse-effects/local.d); then
+if dir=$(cfg-get "${profile}" apps/pulse-effects/preset/local.d); then
     _copy-presets local "${dir}"
 fi
 
