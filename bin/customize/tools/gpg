@@ -18,8 +18,15 @@ profile="${1:?Profile missing}"
 install-apt gpg
 
 # shellcheck disable=SC2310,SC2311
+if file=$(cfg-get "${profile}" tools/gpg.conf); then
+    print-status Copy gnupg config file...
+    mkdir -p ~/.gnupg
+    install --mode=0600 --no-target-directory "${file}" ~/.gnupg/gpg.conf
+    print-finish
+fi
+# shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" tools/gpg-agent.conf); then
-    print-status Copy gnupg config files...
+    print-status Copy gnupg-agent config file...
     mkdir -p ~/.gnupg
     install --mode=0600 --no-target-directory "${file}" ~/.gnupg/gpg-agent.conf
     print-finish

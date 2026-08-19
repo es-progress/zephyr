@@ -650,6 +650,7 @@ This provides configuration settings for the GPG encryption program.
 
 **Configuration**
 
+- `tools/gpg.conf`: your custom `gpg.conf` file.
 - `tools/gpg-agent.conf`: your custom `gpg-agent.conf` file.
 
 ---
