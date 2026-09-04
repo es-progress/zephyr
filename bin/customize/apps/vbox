@@ -107,9 +107,7 @@ if [[ -n "${gpg_key_path}" && -n "${gpg_key_url}" ]]; then
     tmp_file=$(mktemp)
     curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
     fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10)
-    if [[ -n "${gpg_key_fingerprint}" && "${fpr}" != "${gpg_key_fingerprint}" ]]; then
-        error-exit Bad GPG key fingerprint, exiting
-    fi
+    [[ -n "${gpg_key_fingerprint}" && "${fpr}" != "${gpg_key_fingerprint}" ]] && error-exit Bad GPG key fingerprint, exiting
     sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"
     print-finish
 else
