@@ -41,10 +41,14 @@ if [[ -e /sys/firmware/efi ]]; then
     install-apt mokutil
 
     # Check SecureBoot is enabled
-    echo -n "SecureBoot state: "
-    if ! mokutil --sb-state; then
-        print-finish SecureBoot not enabled/available, skip MOK certificate.
-    else
+    # Need to check the output for "SecureBoot enabled" because mokutil returns 0 even if SecureBoot is disabled
+    secure_boot=
+    if out=$(mokutil --sb-state) && grep -qs "SecureBoot enabled" <<<"${out}"; then
+        secure_boot=1
+    fi
+
+    print-header Setup MOK certificate...
+    if [[ -n "${secure_boot}" ]]; then
         key_created=
         print-status Create MOK private key...
         if sudo test ! -e "/etc/ssl/private/${mok_key_name}.key"; then
@@ -84,6 +88,9 @@ if [[ -e /sys/firmware/efi ]]; then
         else
             print-finish Already enrolled, skip.
         fi
+        print-finish
+    else
+        print-finish SecureBoot not enabled/available, skip MOK certificate.
     fi
 fi
 
