@@ -53,13 +53,36 @@ fi
 [[ -z "${repo}" ]] && error-exit Missing repo
 [[ -z "${admin_name}" ]] && error-exit Missing admin_name
 [[ -z "${admin_pass}" ]] && error-exit Missing admin_pass
+if grep -qs signed-by= <<<"${repo}"; then
+    gpg_key_path=$(sed -r 's@.*\[(.*)\].*@\1@' <<<"${repo}" | sed -r 's@.*signed-by=(\S+).*$@\1@')
+else
+    print-warning "DEPRECATED! Using a repo without the signed-by option is deprecated, see apt-key(8) for details."
+    gpg_key_path=
+fi
 
 print-header Add MariaDB GPG key...
-sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+if [[ -n "${gpg_key_path}" ]]; then
+    gpg_key_url=https://mariadb.org/mariadb_release_signing_key.pgp
+    gpg_key_fingerprint=177F4010FE56CA3336300305F1656F24C74CD1D8
+
+    tmp_file=$(mktemp)
+    curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
+    fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10)
+    [[ "${fpr}" != "${gpg_key_fingerprint}" ]] && error-exit Bad GPG key fingerprint, exiting
+    sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"
+else
+    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+fi
 print-finish
 
 print-header Add MariaDB APT repo...
-sudo add-apt-repository --yes "${repo}"
+if [[ -n "${gpg_key_path}" ]]; then
+    # We need to manually write sources, as add-apt-repository does not support the signed-by option
+    echo "${repo}" | sudo tee /etc/apt/sources.list.d/mariadb.list > /dev/null
+    sudo apt-get update
+else
+    sudo add-apt-repository --yes "${repo}"
+fi
 print-finish
 
 install-apt mariadb-server mariadb-backup python3-pymysql
