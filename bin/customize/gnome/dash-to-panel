@@ -52,17 +52,27 @@ fi
 
 install-apt git make gettext
 
+uuid=dash-to-panel@jderose9.github.com
+install_dir="${HOME}/.local/share/gnome-shell/extensions/${uuid}"
+marker_file="${install_dir}/.zephyr-version"
+
 print-header Install Dash-to-panel...
-# Create temp dir
-tmp_dir=$(mktemp -d)
-# Get source
-git clone --depth 1 --branch "${version}" https://github.com/home-sweet-gnome/dash-to-panel.git "${tmp_dir}"
-# Install
-make -C "${tmp_dir}" install
-print-finish
+if [[ -r "${marker_file}" ]] && grep -qsx "${version}" "${marker_file}"; then
+    print-finish Already installed, skip.
+else
+    # Create temp dir
+    tmp_dir=$(mktemp -d)
+    # Get source
+    git clone --depth 1 --branch "${version}" https://github.com/home-sweet-gnome/dash-to-panel.git "${tmp_dir}"
+    # Install
+    make -C "${tmp_dir}" install
+    mkdir -p "${install_dir}"
+    echo "${version}" > "${marker_file}"
+    rm -rf "${tmp_dir}"
+    print-finish
+fi
 
 print-status Enable Dash-to-panel...
-uuid=dash-to-panel@jderose9.github.com
 if gnome-extensions info --quiet "${uuid}" >/dev/null; then
     gnome-extensions enable "${uuid}"
     print-finish
