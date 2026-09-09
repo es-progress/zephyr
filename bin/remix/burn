@@ -48,8 +48,7 @@ for mount_point in $(lsblk --noheadings -o mountpoint "${disk}"); do
 done
 
 print-header Burn ISO to USB...
-read -r -p "Are you sure? (y/n) ";
-[[ ${REPLY} == y || ${REPLY} == Y ]] || error-exit Aborted.
+confirm
 sudo dd if="${iso_image}" bs=1M of="${disk}" oflag=sync,noatime status=progress
 print-finish
 

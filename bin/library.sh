@@ -86,6 +86,27 @@ print-finish() {
     echo -e ${TXT_GREEN}${TXT_BOLD}${*:-Done.}${TXT_NORM}
 }
 
+## Ask for confirmation
+##
+## @param    $*  Prompt
+## @default      Are you sure? (y/n)
+####################################
+confirm() {
+    read -r -p "${*:-Are you sure? (y/n) }"
+    [[ ${REPLY} == y || ${REPLY} == Y ]]
+}
+
+## Pause script execution
+##
+## @param    $*  Prompt
+## @default      Press enter to continue...
+###########################################
+pause() {
+    # If stdin is not a terminal, don't wait for user
+    [[ ! -t 0 ]] && return 0
+    read -r -p "${*:-Press enter to continue...}"
+}
+
 ## Print error message and exit
 ##
 ## @param    $1  Error message

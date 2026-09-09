@@ -248,8 +248,7 @@ _zap() {
     fi
 
     echo
-    read -rp "Proceed? (yes/no): "
-    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+    confirm "Proceed? (y/n): "
 
     print-header Closing all open LUKS containers...
     dmsetup ls --target crypt --exec "cryptsetup close --deferred"
@@ -302,8 +301,7 @@ _partition() {
     fi
 
     echo
-    read -rp "Proceed? (yes/no): "
-    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+    confirm "Proceed? (y/n): "
 
     # Do the partitioning
     for job in "${jobs[@]}"; do
@@ -355,8 +353,7 @@ _encrypt() {
     fi
 
     echo
-    read -rp "Proceed? (yes/no): "
-    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+    confirm "Proceed? (y/n): "
 
     # Do the encryption
     for job in "${jobs[@]}"; do
@@ -432,8 +429,7 @@ _lvm() {
     fi
 
     echo
-    read -rp "Proceed? (yes/no): "
-    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+    confirm "Proceed? (y/n): "
 
     # Do the LVM setup
     for vg in "${vol_groups[@]}"; do
@@ -504,8 +500,7 @@ _format() {
     fi
 
     echo
-    read -rp "Proceed? (yes/no): "
-    [[ ${REPLY,,} != yes && ${REPLY,,} != y ]] && error-exit Aborted.
+    confirm "Proceed? (y/n): "
 
     # Do the formatting
     for job in "${jobs[@]}"; do
