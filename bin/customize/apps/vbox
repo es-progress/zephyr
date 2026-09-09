@@ -105,7 +105,7 @@ fi
 print-header Add Oracle VirtualBox GPG key...
 if [[ -n "${gpg_key_path}" && -n "${gpg_key_url}" ]]; then
     tmp_file=$(mktemp)
-    curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
+    curl-get "${gpg_key_url}" "${tmp_file}" --progress-meter --progress-bar
     fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10)
     [[ -n "${gpg_key_fingerprint}" && "${fpr}" != "${gpg_key_fingerprint}" ]] && error-exit Bad GPG key fingerprint, exiting
     sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"

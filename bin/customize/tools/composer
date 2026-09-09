@@ -53,7 +53,7 @@ if [[ -e "${bin_global}/composer" ]]; then
 fi
 # Download phar
 tmp_file=$(mktemp)
-curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
+curl-get "${url}" "${tmp_file}" --progress-meter --progress-bar
 if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; then
     error-exit Bad checksum, exiting
 fi

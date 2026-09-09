@@ -39,7 +39,7 @@ profile="${1:?Profile missing}"
 
 print-header Install pip...
 tmp_file=$(mktemp)
-curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
+curl-get https://bootstrap.pypa.io/get-pip.py "${tmp_file}" --progress-meter --progress-bar
 sudo python3 "${tmp_file}" --root-user-action ignore --target "$(python3 -c 'import sys; print(sys.path[-1])' || true)"
 sudo python3 -m pip install --root-user-action ignore --upgrade pip
 print-finish

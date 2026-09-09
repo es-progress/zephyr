@@ -43,7 +43,7 @@ _install() {
         fi
 
         tmp_file=$(mktemp)
-        curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"
+        curl-get "${url}" "${tmp_file}" --progress-meter --progress-bar
 
         if [[ -n "${checksum}" ]]; then
             if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; then
