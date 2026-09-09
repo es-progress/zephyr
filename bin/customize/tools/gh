@@ -33,6 +33,12 @@ fi
 install-apt curl git
 
 print-header Install github-cli...
+marker_dir=/usr/local/lib/zephyr
+marker_file="${marker_dir}/gh.sha256"
+if command -v gh >/dev/null 2>&1 && sudo test -r "${marker_file}" && sudo grep -qsx "${checksum}" "${marker_file}"; then
+    print-finish Already installed, skip.
+    exit 0
+fi
 # Download deb
 tmp_file=$(mktemp)
 curl --disable --progress-bar --location -o "${tmp_file}" --url "${url}"
@@ -41,6 +47,9 @@ if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; th
 fi
 # Install
 sudo dpkg -i "${tmp_file}"
+sudo install -d --mode=0755 "${marker_dir}"
+echo "${checksum}" | sudo tee "${marker_file}" >/dev/null
+rm -f "${tmp_file}"
 # Bash completion
 gh completion -s bash | sudo tee /usr/share/bash-completion/completions/gh >/dev/null
 print-finish

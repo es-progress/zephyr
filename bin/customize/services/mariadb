@@ -65,15 +65,26 @@ if [[ -n "${gpg_key_path}" ]]; then
     gpg_key_url=https://mariadb.org/mariadb_release_signing_key.pgp
     gpg_key_fingerprint=177F4010FE56CA3336300305F1656F24C74CD1D8
 
-    tmp_file=$(mktemp)
-    curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
-    fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10)
-    [[ "${fpr}" != "${gpg_key_fingerprint}" ]] && error-exit Bad GPG key fingerprint, exiting
-    sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"
+    if sudo test -r "${gpg_key_path}"; then
+        fpr=$(gpg --show-keys --with-colons "${gpg_key_path}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10 || true)
+    else
+        fpr=
+    fi
+    if [[ "${fpr}" == "${gpg_key_fingerprint}" ]]; then
+        print-finish Already installed, skip.
+    else
+        tmp_file=$(mktemp)
+        curl --disable --progress-bar -o "${tmp_file}" --url "${gpg_key_url}"
+        fpr=$(gpg --show-keys --with-colons "${tmp_file}" | sed -n '/^pub:/,+1 p' | grep '^fpr' | cut -d: -f10 || true)
+        [[ "${fpr}" != "${gpg_key_fingerprint}" ]] && error-exit Bad GPG key fingerprint, exiting
+        sudo install --mode=0644 --no-target-directory "${tmp_file}" "${gpg_key_path}"
+        rm -f "${tmp_file}"
+        print-finish
+    fi
 else
     sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+    print-finish
 fi
-print-finish
 
 print-header Add MariaDB APT repo...
 if [[ -n "${gpg_key_path}" ]]; then

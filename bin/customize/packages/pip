@@ -38,11 +38,16 @@ check-not-root
 profile="${1:?Profile missing}"
 
 print-header Install pip...
-tmp_file=$(mktemp)
-curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
-sudo python3 "${tmp_file}" --root-user-action ignore --target "$(python3 -c 'import sys; print(sys.path[-1])' || true)"
-sudo python3 -m pip install --root-user-action ignore --upgrade pip
-print-finish
+if command -v pip3 >/dev/null 2>&1; then
+    print-finish Already installed, skip bootstrap.
+else
+    tmp_file=$(mktemp)
+    curl --disable --progress-bar --location -o "${tmp_file}" --url https://bootstrap.pypa.io/get-pip.py
+    sudo python3 "${tmp_file}" --root-user-action ignore --target "$(python3 -c 'import sys; print(sys.path[-1])' || true)"
+    sudo python3 -m pip install --root-user-action ignore --upgrade pip
+    rm -f "${tmp_file}"
+    print-finish
+fi
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" packages/pip.global); then

@@ -37,25 +37,32 @@ fi
 [[ -z "${service_user}" ]] && error-exit Missing service_user
 [[ -z "${service_pass}" ]] && error-exit Missing service_pass
 [[ -z "${web_root}" ]] && error-exit Missing web_root
+target="${web_root}/phpmyadmin"
+marker_file="${target}/.zephyr-phpmyadmin-sha256"
 
 install-apt curl
 
 print-header Install phpMyAdmin...
-# Download tar
-tmp_file=$(mktemp)
-curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
-if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; then
-    error-exit Bad checksum, exiting
+if [[ -d "${target}/public" ]] && sudo test -r "${marker_file}" && sudo grep -qsx "${checksum}" "${marker_file}"; then
+    print-finish Already installed, skip.
+else
+    # Download tar
+    tmp_file=$(mktemp)
+    curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
+    if ! echo "${checksum}  ${tmp_file}" | sha256sum --check --status --strict -; then
+        error-exit Bad checksum, exiting
+    fi
+    # Unpack archive
+    sudo rm -rf "${target}"
+    sudo mkdir -p "${target}"
+    sudo tar -C "${target}" -xf "${tmp_file}"
+    [[ $(find "${target}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit Not single top level dir in archive
+    unpack_dir=$(find "${target}" -mindepth 1 -maxdepth 1 -type d)
+    sudo mv "${unpack_dir}" "${target}/public"
+    echo "${checksum}" | sudo tee "${marker_file}" >/dev/null
+    rm -f "${tmp_file}"
+    print-finish
 fi
-# Unpack archive
-target="${web_root}/phpmyadmin"
-sudo rm -rf "${target}"
-sudo mkdir -p "${target}"
-sudo tar -C "${target}" -xf "${tmp_file}"
-[[ $(find "${target}" -mindepth 1 -maxdepth 1 -type d | wc -l || true) -eq 1 ]] || error-exit Not single top level dir in archive
-unpack_dir=$(find "${target}" -mindepth 1 -maxdepth 1 -type d)
-sudo mv "${unpack_dir}" "${target}/public"
-print-finish
 
 # shellcheck disable=SC2310,SC2311
 if file=$(cfg-get "${profile}" services/phpmyadmin/config.inc.php); then

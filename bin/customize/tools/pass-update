@@ -31,9 +31,18 @@ fi
 install-apt git make
 
 print-header Install pass-update...
-tmp_dir=$(mktemp -d)
-git clone --depth 1 --branch "${version}" https://github.com/roddhjav/pass-update.git "${tmp_dir}"
-sudo make -C "${tmp_dir}" install
-print-finish
+marker_dir=/usr/local/lib/zephyr
+marker_file="${marker_dir}/pass-update.version"
+if command -v pass-update >/dev/null 2>&1 && sudo test -r "${marker_file}" && sudo grep -qsx "${version}" "${marker_file}"; then
+    print-finish Already installed, skip.
+else
+    tmp_dir=$(mktemp -d)
+    git clone --depth 1 --branch "${version}" https://github.com/roddhjav/pass-update.git "${tmp_dir}"
+    sudo make -C "${tmp_dir}" install
+    sudo install -d --mode=0755 "${marker_dir}"
+    echo "${version}" | sudo tee "${marker_file}" >/dev/null
+    rm -rf "${tmp_dir}"
+    print-finish
+fi
 
 exit 0
