@@ -225,6 +225,19 @@ implode() {
     echo "${*}"
 }
 
+## Download a file using curl
+##
+## @param    $1  URL
+## @param    $2  Output file
+## @param    $*  Additional curl options
+########################################
+curl-get() {
+    local url="${1:?URL missing}"
+    local output="${2:?Output file missing}"
+    shift 2
+    curl --disable --fail --no-progress-meter --location --output "${output}" --url "${url}" "${@}"
+}
+
 ## Install package via APT
 ##
 ## @param    $*  Packages

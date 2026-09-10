@@ -39,7 +39,7 @@ print-header Install jmeter...
 # Download tar
 tmp_file=$(mktemp)
 tmp_dir=$(mktemp -d)
-curl --disable --progress-bar -o "${tmp_file}" --url "${url}"
+curl-get "${url}" "${tmp_file}" --progress-meter --progress-bar
 if ! echo "${checksum}  ${tmp_file}" | sha512sum --check --status --strict -; then
     error-exit Bad checksum, exiting
 fi
